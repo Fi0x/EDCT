@@ -1,47 +1,25 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.dbconnection.InaraCalls;
 import javafx.fxml.FXML;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
+import java.util.Map;
 
-public class ControllerMain implements Observer
+public class ControllerMain
 {
-    private int currentResult;
+    private int minCargo = 1000;
 
     @FXML
-    private TextField input;
-    @FXML
-    private CheckBox caesar;
-    @FXML
-    private CheckBox skytale;
-    @FXML
-    private TextField possibleDecryptions;
-    @FXML
-    private Label running;
-    @FXML
-    private TextField result;
+    private void calculate()
+    {
+        Map<String, String> commodities = InaraCalls.getAllCommodities();
+        for(Map.Entry<String, String> entry : commodities.entrySet())
+        {
+            ArrayList<String[]> sellPrices = InaraCalls.getCommodityPrices(entry.getKey(), true);
+            ArrayList<String[]> buyPrices = InaraCalls.getCommodityPrices(entry.getKey(), false);
 
-    @FXML
-    private void start()
-    {
-    }
-    @FXML
-    private void cancel()
-    {
-    }
-    @FXML
-    private void showResult()
-    {
-    }
-    @Override
-    public void update(Observable o, Object running)
-    {
-        this.running.setVisible((int) running > 0);
-        this.running.setText("running");
+            //TODO: Filter out stations that do not match search criteria (pad-size, quantity)
+        }
     }
 }

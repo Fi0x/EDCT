@@ -7,9 +7,9 @@ public enum ENDPOINTS
     Commodities("https://inara.cz/galaxy-commodities/", "GET"),
     Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2");
 
-    private final String url;
-    private final String type;
-    private final String[] parameter;
+    public final String url;
+    public final String type;
+    public final String[] parameter;
 
     private ENDPOINTS(String url, String type, String... parameter)
     {

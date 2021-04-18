@@ -1,58 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.ControllerMain">
-    <Pane prefHeight="400.0" prefWidth="600.0">
-        <TextField id="input" fx:id="input" layoutX="59.0" layoutY="39.0" prefHeight="25.0" prefWidth="483.0" />
-        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="159.0" layoutY="14.0" prefHeight="17.0" prefWidth="282.0" text="Please enter the encrypted text">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <Button id="start" layoutX="59.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#start" prefHeight="37.0" prefWidth="234.0" text="Start decrypting" textAlignment="CENTER">
+    <GridPane alignment="CENTER">
+        <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Get best trades" textAlignment="CENTER">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
-        <Button id="cancel" layoutX="308.0" layoutY="70.0" mnemonicParsing="false" onMouseClicked="#cancel" prefHeight="37.0" prefWidth="234.0" text="Cancel decryption process" textAlignment="CENTER">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Button>
-        <Label layoutX="14.0" layoutY="107.0" prefHeight="25.0" prefWidth="173.0" text="Advanced options">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <CheckBox id="caesar" fx:id="caesar" layoutX="14.0" layoutY="132.0" mnemonicParsing="false" selected="true" text="Try Caesar cipher">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </CheckBox>
-        <CheckBox id="skytale" fx:id="skytale" layoutX="14.0" layoutY="152.0" mnemonicParsing="false" selected="true" text="Try Skytale cipher">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </CheckBox>
-        <Label layoutX="14.0" layoutY="336.0" prefHeight="25.0" prefWidth="173.0" text="Possible decryptions">
-            <font>
-                <Font name="System Bold" size="16.0" />
-            </font>
-        </Label>
-        <TextField id="result" fx:id="result" editable="false" layoutX="14.0" layoutY="361.0" prefHeight="25.0" prefWidth="483.0" />
-        <Button id="next" layoutX="510.0" layoutY="355.0" mnemonicParsing="false" onMouseClicked="#showResult" prefHeight="37.0" prefWidth="75.0" text="Next">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Button>
-        <Label id="running" fx:id="running" alignment="CENTER" layoutX="422.0" layoutY="336.0" prefHeight="25.0" prefWidth="75.0" text="running" textFill="#068617" visible="false">
-            <font>
-                <Font size="16.0" />
-            </font>
-        </Label>
-        <TextField id="possibleDecryptions" fx:id="possibleDecryptions" editable="false" layoutX="187.0" layoutY="336.0" prefHeight="25.0" prefWidth="75.0" />
-    </Pane>
+      <columnConstraints>
+         <ColumnConstraints />
+      </columnConstraints>
+      <rowConstraints>
+         <RowConstraints />
+      </rowConstraints>
+    </GridPane>
 </AnchorPane>
