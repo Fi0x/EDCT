@@ -19,3 +19,4 @@ _Since inara does not provide any API endpoints for trade-data, EDCT gathers the
   - Stations that have a minimum supply / demand (useful for fleet carriers)
   - Stations with large landing pads
   - Orbital stations
+  - Fleet carriers
