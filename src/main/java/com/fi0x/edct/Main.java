@@ -26,7 +26,7 @@ public class Main extends Application
             return;
         }
 
-        primaryStage.setTitle("Decryption Program");
+        primaryStage.setTitle("Elite: Dangerous Carrier Trader");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }

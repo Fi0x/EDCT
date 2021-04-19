@@ -1,5 +1,8 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.enums.PADSIZE;
+import com.fi0x.edct.enums.STATIONTYPE;
+
 public class STATION
 {
     ;
@@ -18,31 +21,4 @@ public class STATION
         PRICE = price;
         TYPE = stationtype;
     }
-}
-
-enum PADSIZE
-{
-    S,
-    M,
-    L;
-
-    public static PADSIZE getFromString(String name)
-    {
-        switch(name)
-        {
-            case "S":
-                return S;
-            case "M":
-                return M;
-            default:
-                return L;
-        }
-    }
-}
-
-enum STATIONTYPE
-{
-    ORBIT,
-    CARRIER,
-    SURFACE
 }

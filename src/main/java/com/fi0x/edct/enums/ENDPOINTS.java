@@ -1,4 +1,4 @@
-package com.fi0x.edct.dbconnection;
+package com.fi0x.edct.enums;
 
 import com.sun.deploy.net.HttpRequest;
 

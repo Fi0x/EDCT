@@ -1,5 +1,7 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.enums.PADSIZE;
+import com.fi0x.edct.enums.STATIONTYPE;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
