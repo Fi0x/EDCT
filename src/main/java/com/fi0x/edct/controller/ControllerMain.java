@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.dbconnection.InaraCalls;
+import com.fi0x.edct.dbconnection.STATION;
 import javafx.fxml.FXML;
 
 import java.util.ArrayList;
@@ -14,12 +15,19 @@ public class ControllerMain
     private void calculate()
     {
         Map<String, String> commodities = InaraCalls.getAllCommodities();
+
         for(Map.Entry<String, String> entry : commodities.entrySet())
         {
-            ArrayList<String[]> sellPrices = InaraCalls.getCommodityPrices(entry.getKey(), true);
-            ArrayList<String[]> buyPrices = InaraCalls.getCommodityPrices(entry.getKey(), false);
+            ArrayList<STATION> sellPrices = InaraCalls.getCommodityPrices(entry.getKey(), true);
+            ArrayList<STATION> buyPrices = InaraCalls.getCommodityPrices(entry.getKey(), false);
 
             //TODO: Filter out stations that do not match search criteria (pad-size, quantity)
         }
+    }
+
+    @FXML
+    private void test()
+    {
+        InaraCalls.getCommodityPrices("10268", true);
     }
 }

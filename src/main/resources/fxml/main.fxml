@@ -5,16 +5,23 @@
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.ControllerMain">
-    <GridPane alignment="CENTER">
-        <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Get best trades" textAlignment="CENTER">
+    <GridPane alignment="CENTER" prefHeight="400.0" prefWidth="600.0">
+        <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Get best trades" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <font>
+                <Font size="16.0" />
+            </font>
+        </Button>
+        <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#test" text="Test stuff" textAlignment="CENTER" GridPane.rowIndex="1">
             <font>
                 <Font size="16.0" />
             </font>
         </Button>
       <columnConstraints>
          <ColumnConstraints />
+         <ColumnConstraints />
       </columnConstraints>
       <rowConstraints>
+         <RowConstraints />
          <RowConstraints />
       </rowConstraints>
     </GridPane>

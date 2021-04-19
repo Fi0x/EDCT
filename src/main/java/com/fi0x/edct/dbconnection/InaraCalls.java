@@ -26,7 +26,7 @@ public class InaraCalls
         return null;
     }
 
-    public static ArrayList<String[]> getCommodityPrices(String commodityRefID, boolean sell)
+    public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell)
     {
         Map<String, String> parameters = new HashMap<>();
         for(String param : ENDPOINTS.Prices.parameter)
@@ -53,12 +53,11 @@ public class InaraCalls
         try
         {
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters);
-            System.out.println(html);
+            return HTMLCleanup.getCommodityPrices(html);
         } catch(IOException ignored)
         {
+            Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR().print();
         }
-
-        //TODO: Return array with commodity information (station, pad-size, quantity, sell/buy-price)
         return null;
     }
 }

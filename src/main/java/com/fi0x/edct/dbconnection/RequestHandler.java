@@ -12,15 +12,10 @@ public class RequestHandler
 {
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws IOException
     {
+        endpoint += getParamsString(parameters);
         URL url = new URL(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(requestType);
-
-        con.setDoOutput(true);
-        DataOutputStream out = new DataOutputStream(con.getOutputStream());
-        out.writeBytes(ParameterStringBuilder.getParamsString(parameters));
-        out.flush();
-        out.close();
 
         con.setConnectTimeout(5000);
         con.setReadTimeout(5000);
@@ -42,11 +37,8 @@ public class RequestHandler
 
         return content.toString();
     }
-}
 
-class ParameterStringBuilder
-{
-    public static String getParamsString(Map<String, String> params) throws UnsupportedEncodingException
+    private static String getParamsString(Map<String, String> params) throws UnsupportedEncodingException
     {
         StringBuilder result = new StringBuilder();
 
@@ -59,6 +51,6 @@ class ParameterStringBuilder
         }
 
         String resultString = result.toString();
-        return resultString.length() > 0 ? resultString.substring(0, resultString.length() - 1) : resultString;
+        return resultString.length() > 0 ? "?" + resultString.substring(0, resultString.length() - 1) : "";
     }
 }
