@@ -33,7 +33,7 @@ public class RequestHandler
             in.close();
         } else
         {
-            //TODO: Handle 429 response (wait a few seconds and try again)
+            //TODO: Handle 429 response (wait a few seconds (retry-again-header) and try again)
             Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
         }
 

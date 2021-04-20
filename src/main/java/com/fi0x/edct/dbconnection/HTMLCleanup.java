@@ -22,6 +22,7 @@ public class HTMLCleanup
 
         Element body = doc.body();
         Element div = body.getElementsByClass("formelement formselect").first();
+        if(div == null) return commodities;
 
         Elements options = div.select("select > option");
         for(Element option : options)

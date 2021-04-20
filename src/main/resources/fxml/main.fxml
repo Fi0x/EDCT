@@ -12,14 +12,14 @@
                 <children>
                     <VBox styleClass="borderless">
                         <children>
+                            <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000" />
                             <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers" />
                             <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations" />
-                            <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000" />
                             <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads" />
                             <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand" />
                         </children>
                     </VBox>
-                    <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" prefHeight="93.0" prefWidth="130.0" text="Get best trades" textAlignment="CENTER">
+                    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" prefHeight="93.0" prefWidth="130.0" text="Get best trades" textAlignment="CENTER" visible="false">
                         <font>
                             <Font size="16.0" />
                         </font>

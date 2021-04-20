@@ -5,8 +5,13 @@ import com.fi0x.edct.dbconnection.InaraCalls;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATIONTYPE;
+import com.fi0x.edct.dbconnection.RequestThread;
+import com.sun.istack.internal.Nullable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,9 +21,10 @@ import java.util.*;
 
 public class ControllerMain implements Initializable
 {
-    private final Map<String, String> commodities = InaraCalls.getAllCommodities();
-    private Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
-    private Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
+    @Nullable
+    public Map<String, String> commodities;
+    public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
+    public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
 
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
@@ -35,6 +41,8 @@ public class ControllerMain implements Initializable
     private CheckBox cbLandingPad;
     @FXML
     private CheckBox cbDemand;
+    @FXML
+    public Button btnStart;
 
     @FXML
     private Label lblCommodity;
@@ -54,32 +62,28 @@ public class ControllerMain implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        Thread threadReq = new Thread(new RequestThread(this, 0));
+        threadReq.start();
+
         quantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
             if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else
-            {
-                updateFilters();
-            }
+            else updateFilters();
+
         });
+        cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
+        cbSurface.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
+        cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
+        cbDemand.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
     }
 
     @FXML
     private void calculate()
     {
-        sellPrices = new HashMap<>();
-        buyPrices = new HashMap<>();
+        btnStart.setVisible(false);
 
-        for(Map.Entry<String, String> entry : commodities.entrySet())
-        {
-            ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
-            if(tmp != null) sellPrices.put(entry.getValue(), tmp);
-
-            tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
-            if(tmp != null) buyPrices.put(entry.getValue(), tmp);
-        }
-
-        updateFilters();
+        Thread threadReq = new Thread(new RequestThread(this, 1));
+        threadReq.start();
     }
     @FXML
     private void nextCommodity()
@@ -124,7 +128,7 @@ public class ControllerMain implements Initializable
         displayResults();
     }
 
-    private void updateFilters()
+    public void updateFilters()
     {
         int amount = Integer.parseInt(quantity.getText());
         boolean noSmall = !cbLandingPad.isSelected();
@@ -144,6 +148,7 @@ public class ControllerMain implements Initializable
 
     private void displayResults()
     {
+        if(trades.size() == 0) return;
         lblCommodity.setText(trades.get(currentCommodity).NAME);
 
         STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);

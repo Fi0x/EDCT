@@ -1,5 +1,6 @@
 package com.fi0x.edct;
 
+import com.fi0x.edct.dbconnection.RequestThread;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 
 public class Main extends Application
 {
+    public Thread threadCalc;
+
     @Override
     public void start(Stage primaryStage)
     {
