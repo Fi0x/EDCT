@@ -48,6 +48,7 @@ public class HTMLCleanup
         {
             Element stationDescriptor = entry.getElementsByClass("wrap").first().getElementsByClass("inverse").first();
             String stationName = stationDescriptor.getElementsByClass("normal").first().ownText();
+            if(stationName.length() > 2) stationName = stationName.substring(0, stationName.length() - 2);
 
             String padSizeName = entry.getElementsByClass("minor").first().ownText();
 

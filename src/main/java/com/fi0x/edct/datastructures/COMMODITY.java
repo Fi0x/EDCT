@@ -55,7 +55,11 @@ public class COMMODITY
 
     private void calculateBestProfit()
     {
-        if(BUY_PRICES.size() == 0 || SELL_PRICES.size() == 0) return;
+        if(BUY_PRICES == null || SELL_PRICES == null || BUY_PRICES.size() == 0 || SELL_PRICES.size() == 0)
+        {
+            profit = 0;
+            return;
+        }
 
         int buy = BUY_PRICES.get(0).PRICE;
         int sell = SELL_PRICES.get(0).PRICE;

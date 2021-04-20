@@ -2,6 +2,7 @@ package com.fi0x.edct.dbconnection;
 
 import com.fi0x.edct.controller.ControllerMain;
 import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.util.Out;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class RequestThread implements Runnable
         CONTROLLER.sellPrices = new HashMap<>();
         CONTROLLER.buyPrices = new HashMap<>();
 
+        int i = 0;
         for(Map.Entry<String, String> entry : CONTROLLER.commodities.entrySet())
         {
             ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
@@ -60,7 +62,8 @@ public class RequestThread implements Runnable
             if(tmp != null) CONTROLLER.buyPrices.put(entry.getValue(), tmp);
 
             wait(500);
-            break;//TODO: REMOVE
+            i++;
+            Out.newBuilder("Downloaded data for " + i + "/" + CONTROLLER.commodities.size() + " commodities").always().print();
         }
 
         CONTROLLER.updateFilters();

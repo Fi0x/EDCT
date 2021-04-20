@@ -5,6 +5,7 @@ import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATIONTYPE;
 import com.fi0x.edct.dbconnection.RequestThread;
+import com.fi0x.edct.util.Out;
 import com.sun.istack.internal.Nullable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -55,6 +56,8 @@ public class ControllerMain implements Initializable
     private Label lblSupply;
     @FXML
     private Label lblDemand;
+    @FXML
+    private Label lblProfit;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -147,21 +150,33 @@ public class ControllerMain implements Initializable
     {
         if(trades.size() == 0) return;
         lblCommodity.setText(trades.get(currentCommodity).NAME);//TODO: use properties and binding
+        lblProfit.setText(trades.get(currentCommodity).profit + " credits");
+
+        Out.newBuilder("COMMODITY: \t" + trades.get(currentCommodity).NAME).always().print();
+        Out.newBuilder("PROFIT: \t" + trades.get(currentCommodity).profit).always().print();
 
         if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
         {
             STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-            lblBuyStation.setText(buyStation.NAME);
-            lblBuyPrice.setText("" + buyStation.PRICE);
-            lblSupply.setText("" + buyStation.QUANTITY);
+            lblBuyStation.setText(buyStation.NAME);//TODO: use properties and binding
+            lblBuyPrice.setText(buyStation.PRICE + " credits");//TODO: use properties and binding
+            lblSupply.setText(buyStation.QUANTITY + " tons");//TODO: use properties and binding
+
+            Out.newBuilder("BUY AT: \t" + buyStation.NAME).always().print();
+            Out.newBuilder("\tPRICE: \t" + buyStation.PRICE).always().print();
+            Out.newBuilder("\tSUPPLY:\t" + buyStation.QUANTITY).always().print();
         }
 
         if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
         {
             STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
             lblSellStation.setText(sellStation.NAME);//TODO: use properties and binding
-            lblSellPrice.setText("" + sellStation.PRICE);//TODO: use properties and binding
-            lblDemand.setText("" + sellStation.QUANTITY);//TODO: use properties and binding
+            lblSellPrice.setText(sellStation.PRICE + " credits");//TODO: use properties and binding
+            lblDemand.setText(sellStation.QUANTITY + " tons");//TODO: use properties and binding
+
+            Out.newBuilder("SELL AT: \t" + sellStation.NAME).always().print();
+            Out.newBuilder("\tPRICE: \t" + sellStation.PRICE).always().print();
+            Out.newBuilder("\tDEMAND: \t" + sellStation.QUANTITY).always().print();
         }
     }
 

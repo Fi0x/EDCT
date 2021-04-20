@@ -2,7 +2,10 @@ package com.fi0x.edct.dbconnection;
 
 import com.fi0x.edct.util.Out;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -31,11 +34,8 @@ public class RequestHandler
                 content.append(inputLine);
             }
             in.close();
-        } else
-        {
-            //TODO: Handle 429 response (wait a few seconds (retry-again-header) and try again)
-            Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
-        }
+        } else if(status == 429) Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR().print();
+        else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
 
         con.disconnect();
 
