@@ -1,14 +1,11 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.datastructures.COMMODITY;
-import com.fi0x.edct.dbconnection.InaraCalls;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATIONTYPE;
 import com.fi0x.edct.dbconnection.RequestThread;
 import com.sun.istack.internal.Nullable;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -171,8 +168,7 @@ public class ControllerMain implements Initializable
             ArrayList<STATION> filteredStations = new ArrayList<>();
             for(STATION station : commodity.getValue())
             {
-                boolean validStation = true;
-                if(noSmall && station.PAD != PADSIZE.L) validStation = false;
+                boolean validStation = !noSmall || station.PAD == PADSIZE.L;
                 if(noCarrier && station.TYPE == STATIONTYPE.CARRIER) validStation = false;
                 if(noSurface && station.TYPE == STATIONTYPE.SURFACE) validStation = false;
                 if(amount > station.QUANTITY) validStation = false;

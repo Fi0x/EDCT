@@ -1,6 +1,5 @@
 package com.fi0x.edct;
 
-import com.fi0x.edct.dbconnection.RequestThread;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,18 +10,17 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class Main extends Application
 {
-    public Thread threadCalc;
-
     @Override
     public void start(Stage primaryStage)
     {
         Parent root;
         try
         {
-            root = FXMLLoader.load(getClass().getResource("/fxml/main.fxml"));
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("/fxml/main.fxml")));
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not load GUI. Shutting down").always().WARNING().print();

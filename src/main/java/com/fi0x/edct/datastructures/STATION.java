@@ -1,8 +1,5 @@
 package com.fi0x.edct.datastructures;
 
-import com.fi0x.edct.datastructures.PADSIZE;
-import com.fi0x.edct.datastructures.STATIONTYPE;
-
 public class STATION
 {
     public final String NAME;

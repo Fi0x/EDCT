@@ -9,7 +9,7 @@ public enum ENDPOINTS
     public final String type;
     public final String[] parameter;
 
-    private ENDPOINTS(String url, String type, String... parameter)
+    ENDPOINTS(String url, String type, String... parameter)
     {
         this.url = url;
         this.type = type;

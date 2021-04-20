@@ -78,9 +78,8 @@ public class Out
 
     public void print()
     {
-        boolean allowed = false;
+        boolean allowed = always;
 
-        if(always) allowed = true;
         if(debug && d) allowed = true;
         if(verbose && (v || vv)) allowed = true;
         if(veryVerbose && vv) allowed = true;

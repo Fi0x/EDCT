@@ -32,7 +32,7 @@ public class RequestThread implements Runnable
                 while(tries > 0 && (CONTROLLER.commodities == null || CONTROLLER.commodities.size() == 0))
                 {
                     tries--;
-                    wait(500);
+                    wait(1000);
                     CONTROLLER.commodities = InaraCalls.getAllCommodities();
                 }
                 if(CONTROLLER.commodities == null)
