@@ -60,6 +60,7 @@ public class RequestThread implements Runnable
             if(tmp != null) CONTROLLER.buyPrices.put(entry.getValue(), tmp);
 
             wait(500);
+            break;//TODO: REMOVE
         }
 
         CONTROLLER.updateFilters();

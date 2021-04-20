@@ -146,17 +146,23 @@ public class ControllerMain implements Initializable
     private void displayResults()
     {
         if(trades.size() == 0) return;
-        lblCommodity.setText(trades.get(currentCommodity).NAME);
+        lblCommodity.setText(trades.get(currentCommodity).NAME);//TODO: use properties and binding
 
-        STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-        lblBuyStation.setText(buyStation.NAME);
-        lblBuyPrice.setText("" + buyStation.PRICE);
-        lblSupply.setText("" + buyStation.QUANTITY);
+        if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
+        {
+            STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+            lblBuyStation.setText(buyStation.NAME);
+            lblBuyPrice.setText("" + buyStation.PRICE);
+            lblSupply.setText("" + buyStation.QUANTITY);
+        }
 
-        STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
-        lblSellStation.setText(sellStation.NAME);
-        lblSellPrice.setText("" + sellStation.PRICE);
-        lblDemand.setText("" + sellStation.QUANTITY);
+        if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
+        {
+            STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+            lblSellStation.setText(sellStation.NAME);//TODO: use properties and binding
+            lblSellPrice.setText("" + sellStation.PRICE);//TODO: use properties and binding
+            lblDemand.setText("" + sellStation.QUANTITY);//TODO: use properties and binding
+        }
     }
 
     private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, Map<String, ArrayList<STATION>> inputPrices)

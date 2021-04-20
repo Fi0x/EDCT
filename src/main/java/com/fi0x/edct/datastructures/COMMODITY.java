@@ -20,27 +20,33 @@ public class COMMODITY
 
     public void sortPrices()
     {
-        for(int i = 1; i < SELL_PRICES.size(); i++)
+        if(SELL_PRICES != null)
         {
-            int j = i - 1;
-            while(SELL_PRICES.get(j + 1).PRICE > SELL_PRICES.get(j).PRICE)
+            for(int i = 1; i < SELL_PRICES.size(); i++)
             {
-                Collections.swap(SELL_PRICES, j + 1, j);
+                int j = i - 1;
+                while(SELL_PRICES.get(j + 1).PRICE > SELL_PRICES.get(j).PRICE)
+                {
+                    Collections.swap(SELL_PRICES, j + 1, j);
 
-                if(j == 0) break;
-                j--;
+                    if(j == 0) break;
+                    j--;
+                }
             }
         }
 
-        for(int i = 1; i < BUY_PRICES.size(); i++)
+        if(BUY_PRICES != null)
         {
-            int j = i - 1;
-            while(BUY_PRICES.get(j + 1).PRICE < BUY_PRICES.get(j).PRICE)
+            for(int i = 1; i < BUY_PRICES.size(); i++)
             {
-                Collections.swap(BUY_PRICES, j + 1, j);
+                int j = i - 1;
+                while(BUY_PRICES.get(j + 1).PRICE < BUY_PRICES.get(j).PRICE)
+                {
+                    Collections.swap(BUY_PRICES, j + 1, j);
 
-                if(j == 0) break;
-                j--;
+                    if(j == 0) break;
+                    j--;
+                }
             }
         }
 
