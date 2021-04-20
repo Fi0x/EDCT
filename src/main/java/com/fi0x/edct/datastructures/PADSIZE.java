@@ -1,4 +1,4 @@
-package com.fi0x.edct.enums;
+package com.fi0x.edct.datastructures;
 
 public enum PADSIZE
 {

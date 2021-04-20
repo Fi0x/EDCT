@@ -1,6 +1,7 @@
 package com.fi0x.edct.dbconnection;
 
-import com.fi0x.edct.enums.ENDPOINTS;
+import com.fi0x.edct.datastructures.ENDPOINTS;
+import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import com.sun.istack.internal.Nullable;
 

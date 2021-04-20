@@ -1,7 +1,8 @@
 package com.fi0x.edct.dbconnection;
 
-import com.fi0x.edct.enums.PADSIZE;
-import com.fi0x.edct.enums.STATIONTYPE;
+import com.fi0x.edct.datastructures.PADSIZE;
+import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.datastructures.STATIONTYPE;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -49,7 +50,7 @@ public class HTMLCleanup
             Elements tradeElements = entry.getElementsByClass("alignright lineright");
             Element quantityElement = tradeElements.first().getAllElements().first();
             int quantity = Integer.parseInt(quantityElement.getAllElements().first().ownText());
-            int price = Integer.parseInt(tradeElements.last().ownText().replace(',', '.'));
+            int price = Integer.parseInt(tradeElements.last().ownText().replace(",", ""));
 
             STATIONTYPE type = STATIONTYPE.ORBIT;
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;

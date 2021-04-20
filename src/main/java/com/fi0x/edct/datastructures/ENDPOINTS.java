@@ -1,6 +1,4 @@
-package com.fi0x.edct.enums;
-
-import com.sun.deploy.net.HttpRequest;
+package com.fi0x.edct.datastructures;
 
 public enum ENDPOINTS
 {

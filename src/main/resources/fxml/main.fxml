@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
-<?import java.net.URL?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.ControllerMain">
     <VBox>
         <children>
             <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-                <CheckBox id="carriers" fx:id="cbCarrier" layoutX="8.0" layoutY="76.0" mnemonicParsing="false" text="Include Fleet Carriers"/>
+                <CheckBox id="carriers" fx:id="cbCarrier" layoutX="8.0" layoutY="76.0" mnemonicParsing="false" text="Include Fleet Carriers" />
                 <Button id="start" alignment="CENTER" contentDisplay="CENTER" layoutX="278.0" layoutY="17.0" onMouseClicked="#calculate" prefHeight="96.0" prefWidth="149.0" text="Get best trades" textAlignment="CENTER">
                     <font>
-                        <Font size="16.0"/>
+                        <Font size="16.0" />
                     </font>
                 </Button>
-                <CheckBox id="surface" fx:id="cbSurface" layoutX="8.0" layoutY="48.0" mnemonicParsing="false" text="Include Surface Stations"/>
-                <TextField fx:id="quantity" layoutX="14.0" layoutY="14.0" promptText="Minimum quantity to trade" text="1000"/>
-                <CheckBox fx:id="cbLandingPad" layoutX="8.0" layoutY="100.0" mnemonicParsing="false" text="Include small pads"/>
+                <CheckBox id="surface" fx:id="cbSurface" layoutX="8.0" layoutY="48.0" mnemonicParsing="false" text="Include Surface Stations" />
+                <TextField fx:id="quantity" layoutX="14.0" layoutY="14.0" promptText="Minimum quantity to trade" text="1000" />
+                <CheckBox fx:id="cbLandingPad" layoutX="8.0" layoutY="100.0" mnemonicParsing="false" text="Include small pads" />
+            <CheckBox fx:id="cbDemand" layoutX="8.0" layoutY="121.0" mnemonicParsing="false" selected="true" text="Allow 0 Demand" />
             </Pane>
             <Pane>
                 <children>
-                    <Button layoutX="137.0" layoutY="10.0" mnemonicParsing="false" text="Next Commodity"/>
-                    <Label layoutX="318.0" layoutY="99.0" text="Demand"/>
-                    <Label layoutX="21.0" layoutY="99.0" text="Supply"/>
-                    <Label layoutX="24.0" layoutY="125.0" text="Price"/>
-                    <Label layoutX="328.0" layoutY="125.0" text="Price"/>
-                    <Label layoutX="322.0" layoutY="76.0" text="Station"/>
-                    <Label layoutX="20.0" layoutY="76.0" text="Station"/>
-                    <Label layoutX="21.0" layoutY="49.0" text="Sell at"/>
-                    <Label layoutX="22.0" layoutY="14.0" text="Commodity"/>
-                    <Label layoutX="431.0" layoutY="51.0" text="Buy at"/>
-                    <Button layoutX="14.0" layoutY="156.0" mnemonicParsing="false" text="Next Station to buy"/>
-                    <Button layoutX="306.0" layoutY="158.0" mnemonicParsing="false" text="Next Station to sell"/>
+                    <Button layoutX="137.0" layoutY="10.0" mnemonicParsing="false" text="Next Commodity" />
+                    <Label layoutX="318.0" layoutY="99.0" text="Demand" />
+                    <Label layoutX="21.0" layoutY="99.0" text="Supply" />
+                    <Label layoutX="24.0" layoutY="125.0" text="Price" />
+                    <Label layoutX="328.0" layoutY="125.0" text="Price" />
+                    <Label layoutX="322.0" layoutY="76.0" text="Station" />
+                    <Label layoutX="20.0" layoutY="76.0" text="Station" />
+                    <Label layoutX="21.0" layoutY="49.0" text="Sell at" />
+                    <Label layoutX="22.0" layoutY="14.0" text="Commodity" />
+                    <Label layoutX="431.0" layoutY="51.0" text="Buy at" />
+                    <Button layoutX="14.0" layoutY="156.0" mnemonicParsing="false" text="Next Station to buy" />
+                    <Button layoutX="306.0" layoutY="158.0" mnemonicParsing="false" text="Next Station to sell" />
                 </children>
             </Pane>
         </children>
     </VBox>
     <stylesheets>
-        <URL value="@../css/main.css"/>
+        <URL value="@../css/main.css" />
     </stylesheets>
 </AnchorPane>

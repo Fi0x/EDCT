@@ -1,19 +1,17 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.datastructures.COMMODITY;
 import com.fi0x.edct.dbconnection.InaraCalls;
-import com.fi0x.edct.dbconnection.STATION;
-import com.fi0x.edct.enums.PADSIZE;
-import com.fi0x.edct.enums.STATIONTYPE;
+import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.datastructures.PADSIZE;
+import com.fi0x.edct.datastructures.STATIONTYPE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class ControllerMain implements Initializable
 {
@@ -29,6 +27,8 @@ public class ControllerMain implements Initializable
     private CheckBox cbSurface;
     @FXML
     private CheckBox cbLandingPad;
+    @FXML
+    private CheckBox cbDemand;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -61,14 +61,12 @@ public class ControllerMain implements Initializable
         boolean noCarrier = !cbCarrier.isSelected();
         boolean noSurface = !cbSurface.isSelected();
 
-        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(amount, noSmall, noCarrier, noSurface, buyPrices);
+        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(cbDemand.isSelected() ? 0 : amount, noSmall, noCarrier, noSurface, buyPrices);
         Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, buyPrices);
 
-        for(Map.Entry<String, ArrayList<STATION>> commodity : filteredSellPrices.entrySet())
-        {
-            ArrayList<STATION> sellingStations = commodity.getValue();
-            ArrayList<STATION> buyingStations = filteredBuyPrices.get(commodity.getKey());
-        }
+        ArrayList<COMMODITY> trades = getTrades(filteredSellPrices, filteredBuyPrices);
+
+        //TODO: Trade-list is already sorted and only needs to be displayed in a nice way
     }
 
     private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, Map<String, ArrayList<STATION>> inputPrices)
@@ -92,5 +90,36 @@ public class ControllerMain implements Initializable
         }
 
         return filteredPrices;
+    }
+
+    private static ArrayList<COMMODITY> getTrades(Map<String, ArrayList<STATION>> sellPrices, Map<String, ArrayList<STATION>> buyPrices)
+    {
+        ArrayList<COMMODITY> trades = new ArrayList<>();
+
+        for(Map.Entry<String, ArrayList<STATION>> commodity : sellPrices.entrySet())
+        {
+            COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()));
+            commodityTrade.sortPrices();
+            trades.add(commodityTrade);
+        }
+
+        return sortTrades(trades);
+    }
+
+    private static ArrayList<COMMODITY> sortTrades(ArrayList<COMMODITY> trades)
+    {
+        for(int i = 1; i < trades.size(); i++)
+        {
+            int j = i - 1;
+            while(trades.get(j + 1).profit > trades.get(j).profit)
+            {
+                Collections.swap(trades, j + 1, j);
+
+                if(j == 0) break;
+                j--;
+            }
+        }
+
+        return trades;
     }
 }
