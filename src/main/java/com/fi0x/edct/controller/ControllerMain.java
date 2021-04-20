@@ -8,6 +8,7 @@ import com.fi0x.edct.datastructures.STATIONTYPE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -21,8 +22,8 @@ public class ControllerMain implements Initializable
 
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
-    private int sellStation;
-    private int buyStation;
+    private int currentSellStation;
+    private int currentBuyStation;
 
     @FXML
     private TextField quantity;
@@ -35,13 +36,31 @@ public class ControllerMain implements Initializable
     @FXML
     private CheckBox cbDemand;
 
+    @FXML
+    private Label lblCommodity;
+    @FXML
+    private Label lblBuyStation;
+    @FXML
+    private Label lblSellStation;
+    @FXML
+    private Label lblBuyPrice;
+    @FXML
+    private Label lblSellPrice;
+    @FXML
+    private Label lblSupply;
+    @FXML
+    private Label lblDemand;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         quantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
             if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else displayResults();
+            else
+            {
+                updateFilters();
+            }
         });
     }
 
@@ -57,22 +76,52 @@ public class ControllerMain implements Initializable
             buyPrices.put(entry.getValue(), InaraCalls.getCommodityPrices(entry.getKey(), false));
         }
 
-        displayResults();
+        updateFilters();
     }
     @FXML
     private void nextCommodity()
     {
+        currentCommodity++;
+        if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
+        displayResults();
+    }
+    @FXML
+    private void previousCommodity()
+    {
+        currentCommodity--;
+        if(currentCommodity < 0) currentCommodity = 0;
+        displayResults();
     }
     @FXML
     private void nextSellStation()
     {
+        currentSellStation++;
+        if(currentSellStation >= trades.get(currentCommodity).SELL_PRICES.size()) currentSellStation = trades.get(currentCommodity).SELL_PRICES.size() - 1;
+        displayResults();
+    }
+    @FXML
+    private void previousSellStation()
+    {
+        currentSellStation--;
+        if(currentSellStation < 0) currentSellStation = 0;
+        displayResults();
     }
     @FXML
     private void nextBuyStation()
     {
+        currentBuyStation++;
+        if(currentBuyStation >= trades.get(currentCommodity).BUY_PRICES.size()) currentBuyStation = trades.get(currentCommodity).BUY_PRICES.size() - 1;
+        displayResults();
+    }
+    @FXML
+    private void previousBuyStation()
+    {
+        currentBuyStation--;
+        if(currentBuyStation < 0) currentBuyStation = 0;
+        displayResults();
     }
 
-    private void displayResults()
+    private void updateFilters()
     {
         int amount = Integer.parseInt(quantity.getText());
         boolean noSmall = !cbLandingPad.isSelected();
@@ -84,10 +133,25 @@ public class ControllerMain implements Initializable
 
         trades = getTrades(filteredSellPrices, filteredBuyPrices);
         currentCommodity = 0;
-        sellStation = 0;
-        buyStation = 0;
+        currentSellStation = 0;
+        currentBuyStation = 0;
 
-        //TODO: Trade-list is already sorted and only needs to be displayed in a nice way
+        displayResults();
+    }
+
+    private void displayResults()
+    {
+        lblCommodity.setText(trades.get(currentCommodity).NAME);
+
+        STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+        lblBuyStation.setText(buyStation.NAME);
+        lblBuyPrice.setText("" + buyStation.PRICE);
+        lblSupply.setText("" + buyStation.QUANTITY);
+
+        STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+        lblSellStation.setText(sellStation.NAME);
+        lblSellPrice.setText("" + sellStation.PRICE);
+        lblDemand.setText("" + sellStation.QUANTITY);
     }
 
     private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, Map<String, ArrayList<STATION>> inputPrices)

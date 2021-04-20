@@ -8,72 +8,73 @@
 <AnchorPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.ControllerMain">
     <VBox>
         <children>
-            <Pane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-            <HBox>
-               <children>
-                  <VBox>
-                     <children>
+            <HBox styleClass="borderless">
+                <children>
+                    <VBox styleClass="borderless">
+                        <children>
                             <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers" />
                             <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations" />
                             <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000" />
                             <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads" />
-                        <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand" />
-                     </children>
-                  </VBox>
-                      <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" prefHeight="93.0" prefWidth="130.0" text="Get best trades" textAlignment="CENTER">
-                          <font>
-                              <Font size="16.0" />
-                          </font>
-                      </Button>
-               </children></HBox>
-            </Pane>
-            <Pane>
-                <children>
-               <VBox>
-                  <children>
-                     <HBox>
-                        <children>
-                           <Button mnemonicParsing="false" text="Previous Commodity" />
-                                <Label text="Commodity" />
-                                <Button mnemonicParsing="false" text="Next Commodity" />
+                            <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand" />
                         </children>
-                     </HBox>
-                     <HBox>
-                        <children>
-                           <VBox>
-                              <children>
-                                      <Label text="Supply" />
-                                      <Label text="Price" />
-                                      <Label text="Station" />
-                                      <Label text="Buy at" />
-                                 <HBox>
-                                    <children>
-                                       <Button mnemonicParsing="false" text="Previous Station" />
-                                            <Button mnemonicParsing="false" text="Next Station" />
-                                    </children>
-                                 </HBox>
-                              </children>
-                           </VBox>
-                           <VBox>
-                              <children>
-                                      <Label text="Demand" />
-                                      <Label text="Price" />
-                                      <Label text="Station" />
-                                      <Label text="Sell at" />
-                                 <HBox>
-                                    <children>
-                                       <Button mnemonicParsing="false" text="Previous Station" />
-                                            <Button mnemonicParsing="false" text="Next Station" />
-                                    </children>
-                                 </HBox>
-                              </children>
-                           </VBox>
-                        </children>
-                     </HBox>
-                  </children>
-               </VBox>
+                    </VBox>
+                    <Button id="start" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" prefHeight="93.0" prefWidth="130.0" text="Get best trades" textAlignment="CENTER">
+                        <font>
+                            <Font size="16.0" />
+                        </font>
+                    </Button>
                 </children>
-            </Pane>
+            </HBox>
+            <VBox styleClass="borderless">
+                <children>
+                    <HBox styleClass="borderless">
+                        <children>
+                            <Button mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" />
+                            <Label fx:id="lblCommodity" text="Commodity" />
+                            <Button mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" />
+                        </children>
+                    </HBox>
+                    <HBox styleClass="borderless">
+                        <children>
+                            <VBox styleClass="borderless">
+                                <children>
+                                    <Label text="Buy at">
+                              <font>
+                                 <Font name="System Bold" size="12.0" />
+                              </font></Label>
+                                    <Label fx:id="lblBuyStation" text="Station" />
+                                    <Label fx:id="lblBuyPrice" text="Price" />
+                                    <Label fx:id="lblSupply" text="Supply" />
+                                    <HBox styleClass="borderless">
+                                        <children>
+                                            <Button mnemonicParsing="false" onAction="#previousBuyStation" text="Previous Station" />
+                                            <Button mnemonicParsing="false" onAction="#nextBuyStation" text="Next Station" />
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+                            <VBox styleClass="borderless">
+                                <children>
+                                    <Label text="Sell at">
+                              <font>
+                                 <Font name="System Bold" size="12.0" />
+                              </font></Label>
+                                    <Label fx:id="lblSellStation" text="Station" />
+                                    <Label fx:id="lblSellPrice" text="Price" />
+                                    <Label fx:id="lblDemand" text="Demand" />
+                                    <HBox styleClass="borderless">
+                                        <children>
+                                            <Button mnemonicParsing="false" onAction="#previousSellStation" text="Previous Station" />
+                                            <Button mnemonicParsing="false" onAction="#nextSellStation" text="Next Station" />
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
         </children>
     </VBox>
     <stylesheets>
