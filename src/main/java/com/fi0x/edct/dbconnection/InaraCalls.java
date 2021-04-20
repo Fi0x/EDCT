@@ -3,6 +3,7 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
+import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ import java.util.Map;
 
 public class InaraCalls
 {
+    @Nullable
     public static Map<String, String> getAllCommodities()
     {
         Map<String, String> parameters = new HashMap<>();
@@ -26,6 +28,7 @@ public class InaraCalls
         return null;
     }
 
+    @Nullable
     public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell)
     {
         Map<String, String> parameters = new HashMap<>();

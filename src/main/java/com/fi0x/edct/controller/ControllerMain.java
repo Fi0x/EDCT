@@ -5,6 +5,7 @@ import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATIONTYPE;
 import com.fi0x.edct.dbconnection.RequestThread;
+import com.sun.istack.internal.Nullable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import java.util.*;
 
 public class ControllerMain implements Initializable
 {
+    @Nullable
     public Map<String, String> commodities;
     public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
     public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();

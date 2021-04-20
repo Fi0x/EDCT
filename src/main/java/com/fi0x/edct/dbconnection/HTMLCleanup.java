@@ -3,6 +3,7 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.STATIONTYPE;
+import com.sun.istack.internal.Nullable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -32,6 +33,7 @@ public class HTMLCleanup
         return commodities;
     }
 
+    @Nullable
     public static ArrayList<STATION> getCommodityPrices(String inputHTML)
     {
         ArrayList<STATION> stations = new ArrayList<>();
