@@ -28,6 +28,7 @@ public class InaraCalls
         return null;
     }
 
+    @Nullable
     public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell)
     {
         Map<String, String> parameters = new HashMap<>();

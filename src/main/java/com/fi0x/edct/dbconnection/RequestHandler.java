@@ -31,7 +31,11 @@ public class RequestHandler
                 content.append(inputLine);
             }
             in.close();
-        } else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
+        } else
+        {
+            //TODO: Handle 429 response (wait a few seconds and try again)
+            Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
+        }
 
         con.disconnect();
 

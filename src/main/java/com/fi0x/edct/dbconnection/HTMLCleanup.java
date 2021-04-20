@@ -3,6 +3,7 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.STATIONTYPE;
+import com.sun.istack.internal.Nullable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,12 +32,14 @@ public class HTMLCleanup
         return commodities;
     }
 
+    @Nullable
     public static ArrayList<STATION> getCommodityPrices(String inputHTML)
     {
         ArrayList<STATION> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
 
         Element table = doc.getElementsByClass("tablesorterintab").first();
+        if(table == null) return null;
         Element tbody = table.getElementsByTag("tbody").first();
         Elements entries = tbody.getElementsByTag("tr");
 
@@ -49,8 +52,14 @@ public class HTMLCleanup
 
             Elements tradeElements = entry.getElementsByClass("alignright lineright");
             Element quantityElement = tradeElements.first().getAllElements().first();
-            int quantity = Integer.parseInt(quantityElement.getAllElements().first().ownText());
-            int price = Integer.parseInt(tradeElements.last().ownText().replace(",", ""));
+
+            String quantityText = quantityElement.getAllElements().first().ownText().replace(",", "");
+            int quantity = 0;
+            if(quantityText.length() > 0) quantity = Integer.parseInt(quantityText);
+
+            String priceText = tradeElements.last().ownText().replace(",", "");
+            int price = 0;
+            if(priceText.length() > 0) price = Integer.parseInt(priceText);
 
             STATIONTYPE type = STATIONTYPE.ORBIT;
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;

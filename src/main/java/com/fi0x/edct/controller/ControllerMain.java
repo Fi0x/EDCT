@@ -72,8 +72,11 @@ public class ControllerMain implements Initializable
 
         for(Map.Entry<String, String> entry : commodities.entrySet())
         {
-            sellPrices.put(entry.getValue(), InaraCalls.getCommodityPrices(entry.getKey(), true));
-            buyPrices.put(entry.getValue(), InaraCalls.getCommodityPrices(entry.getKey(), false));
+            ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
+            if(tmp != null) sellPrices.put(entry.getValue(), tmp);
+
+            tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
+            if(tmp != null) buyPrices.put(entry.getValue(), tmp);
         }
 
         updateFilters();
