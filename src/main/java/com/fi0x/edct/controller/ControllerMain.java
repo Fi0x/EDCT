@@ -15,9 +15,14 @@ import java.util.*;
 
 public class ControllerMain implements Initializable
 {
-    private Map<String, String> commodities = InaraCalls.getAllCommodities();
+    private final Map<String, String> commodities = InaraCalls.getAllCommodities();
     private Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
     private Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
+
+    private ArrayList<COMMODITY> trades;
+    private int currentCommodity;
+    private int sellStation;
+    private int buyStation;
 
     @FXML
     private TextField quantity;
@@ -39,6 +44,7 @@ public class ControllerMain implements Initializable
             else displayResults();
         });
     }
+
     @FXML
     private void calculate()
     {
@@ -53,6 +59,18 @@ public class ControllerMain implements Initializable
 
         displayResults();
     }
+    @FXML
+    private void nextCommodity()
+    {
+    }
+    @FXML
+    private void nextSellStation()
+    {
+    }
+    @FXML
+    private void nextBuyStation()
+    {
+    }
 
     private void displayResults()
     {
@@ -61,10 +79,13 @@ public class ControllerMain implements Initializable
         boolean noCarrier = !cbCarrier.isSelected();
         boolean noSurface = !cbSurface.isSelected();
 
-        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(cbDemand.isSelected() ? 0 : amount, noSmall, noCarrier, noSurface, buyPrices);
+        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(cbDemand.isSelected() ? 0 : amount, noSmall, noCarrier, noSurface, sellPrices);
         Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, buyPrices);
 
-        ArrayList<COMMODITY> trades = getTrades(filteredSellPrices, filteredBuyPrices);
+        trades = getTrades(filteredSellPrices, filteredBuyPrices);
+        currentCommodity = 0;
+        sellStation = 0;
+        buyStation = 0;
 
         //TODO: Trade-list is already sorted and only needs to be displayed in a nice way
     }
