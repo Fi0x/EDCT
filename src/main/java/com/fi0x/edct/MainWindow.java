@@ -1,5 +1,7 @@
 package com.fi0x.edct;
 
+import com.fi0x.edct.controller.Interaction;
+import com.fi0x.edct.controller.Results;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,10 +14,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class MainWindow extends Application
 {
+    private static MainWindow instance;
+    public Interaction interactionController;
+    public Results resultsController;
+
     @Override
     public void start(Stage primaryStage)
     {
@@ -57,6 +62,8 @@ public class MainWindow extends Application
         try
         {
             interactionBox = loader.load();
+            interactionController = loader.getController();
+            interactionController.setMainController(parentLoader.getController());
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not load interaction GUI elements").always().ERROR().print();
@@ -74,6 +81,8 @@ public class MainWindow extends Application
         try
         {
             interactionBox = loader.load();
+            resultsController = loader.getController();
+            resultsController.setMainController(parentLoader.getController());
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not load result GUI elements").always().ERROR().print();
@@ -82,5 +91,11 @@ public class MainWindow extends Application
 
         VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
         mainBox.getChildren().add(interactionBox);
+    }
+
+    public MainWindow getInstance()
+    {
+        if(instance == null) instance = new MainWindow();
+        return instance;
     }
 }

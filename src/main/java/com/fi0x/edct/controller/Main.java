@@ -4,93 +4,31 @@ import com.fi0x.edct.datastructures.COMMODITY;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATIONTYPE;
-import com.fi0x.edct.dbconnection.RequestThread;
-import com.fi0x.edct.util.Out;
-import com.sun.istack.internal.Nullable;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 
-import java.net.URL;
 import java.util.*;
 
-public class Main implements Initializable
+public class Main
 {
-    @Nullable
-    public Map<String, String> commodities;
-    public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
-    public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
+    private Results resultsController;
+    private Interaction interactionController;
 
-    private ArrayList<COMMODITY> trades;
-    private int currentCommodity;
-    private int currentSellStation;
-    private int currentBuyStation;
-
-    @FXML
-    private VBox vbMain;
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources)
+    public void setResultController(Results controller)
     {
-        Thread threadReq = new Thread(new RequestThread(this, 0));
-        threadReq.start();
+        resultsController = controller;
+    }
+    public void setInteractionController(Interaction controller)
+    {
+        interactionController = controller;
     }
 
     public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface)
     {
-        amount = Integer.parseInt(quantity.getText());
-        noSmall = !cbLandingPad.isSelected();
-        noCarrier = !cbCarrier.isSelected();
-        noSurface = !cbSurface.isSelected();
-        ignoreDemand = cbDemand.isSelected;
+        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, interactionController.sellPrices);
+        Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, interactionController.buyPrices);
 
-        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, sellPrices);
-        Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, buyPrices);
+        resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
-        trades = getTrades(filteredSellPrices, filteredBuyPrices);
-        currentCommodity = 0;
-        currentSellStation = 0;
-        currentBuyStation = 0;
-
-        displayResults();
-    }
-
-    private void displayResults()
-    {
-        if(trades.size() == 0) return;
-        lblCommodity.setText(trades.get(currentCommodity).NAME);
-        lblProfit.setText(trades.get(currentCommodity).profit + " credits");
-
-        Out.newBuilder("COMMODITY: \t" + trades.get(currentCommodity).NAME).veryVerbose().print();
-        Out.newBuilder("PROFIT: \t" + trades.get(currentCommodity).profit).veryVerbose().print();
-
-        if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
-        {
-            STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-            lblBuyStation.setText(buyStation.NAME);
-            lblBuyPrice.setText(buyStation.PRICE + " credits");
-            lblSupply.setText(buyStation.QUANTITY + " tons");
-
-            Out.newBuilder("BUY AT: \t" + buyStation.NAME).veryVerbose().print();
-            Out.newBuilder("\tPRICE: \t" + buyStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tSUPPLY:\t" + buyStation.QUANTITY).veryVerbose().print();
-        }
-
-        if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
-        {
-            STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
-            lblSellStation.setText(sellStation.NAME);
-            lblSellPrice.setText(sellStation.PRICE + " credits");
-            lblDemand.setText(sellStation.QUANTITY + " tons");
-
-            Out.newBuilder("SELL AT: \t" + sellStation.NAME).veryVerbose().print();
-            Out.newBuilder("\tPRICE: \t" + sellStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tDEMAND: \t" + sellStation.QUANTITY).veryVerbose().print();
-        }
+        resultsController.displayResults();
     }
 
     private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, Map<String, ArrayList<STATION>> inputPrices)

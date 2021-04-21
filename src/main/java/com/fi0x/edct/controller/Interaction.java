@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.dbconnection.RequestThread;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,10 +9,18 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Interaction implements Initializable
 {
+    private Main mainController;
+    public Map<String, String> commodities;
+    public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
+    public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
+
     @FXML
     private TextField quantity;
     @FXML
@@ -34,7 +43,7 @@ public class Interaction implements Initializable
         quantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
             if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else updateFilters();
+            else mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
 
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
@@ -50,5 +59,16 @@ public class Interaction implements Initializable
 
         Thread threadReq = new Thread(new RequestThread(this, 1));
         threadReq.start();
+    }
+
+    public void updateFilters()
+    {
+        mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+    }
+
+    public void setMainController(Main controller)
+    {
+        mainController = controller;
+        mainController.setInteractionController(this);
     }
 }

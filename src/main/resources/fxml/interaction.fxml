@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Interaction" alignment="CENTER">
     <children>
-        <VBox alignment="CENTER">
+        <VBox fx:id="vbFilters" alignment="CENTER">
             <children>
                 <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000" />
                 <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers" />
