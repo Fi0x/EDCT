@@ -3,6 +3,7 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.controller.ControllerMain;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
+import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,8 +67,11 @@ public class RequestThread implements Runnable
             Out.newBuilder("Downloaded data for " + i + "/" + CONTROLLER.commodities.size() + " commodities").always().print();
         }
 
-        CONTROLLER.updateFilters();
-        CONTROLLER.btnStart.setVisible(true);
+        Platform.runLater(() ->
+        {
+            CONTROLLER.updateFilters();
+            CONTROLLER.btnStart.setVisible(true);
+        });
     }
 
     private void wait(int millis)
