@@ -6,6 +6,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.text.Font?>
+<?import java.net.URL?>
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Interaction" alignment="CENTER">
     <children>
         <VBox fx:id="vbFilters" alignment="CENTER">
@@ -23,4 +24,7 @@
             </font>
         </Button>
     </children>
+    <stylesheets>
+        <URL value="@../css/interaction.css" />
+    </stylesheets>
 </HBox>

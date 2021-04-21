@@ -3,6 +3,7 @@
 
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.CheckBox?>
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
     <children>
         <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000"/>
@@ -11,4 +12,7 @@
         <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>
         <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand"/>
     </children>
+    <stylesheets>
+        <URL value="@../css/filters.css" />
+    </stylesheets>
 </VBox>

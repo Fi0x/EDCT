@@ -4,6 +4,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Results" alignment="CENTER">
     <children>
         <HBox alignment="CENTER">
@@ -49,4 +50,7 @@
             </children>
         </HBox>
     </children>
+    <stylesheets>
+        <URL value="@../css/results.css" />
+    </stylesheets>
 </VBox>
