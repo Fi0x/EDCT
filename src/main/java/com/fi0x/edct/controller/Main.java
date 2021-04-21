@@ -13,11 +13,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.*;
 
-public class ControllerMain implements Initializable
+public class Main implements Initializable
 {
     @Nullable
     public Map<String, String> commodities;
@@ -30,112 +31,24 @@ public class ControllerMain implements Initializable
     private int currentBuyStation;
 
     @FXML
-    private TextField quantity;
-    @FXML
-    private CheckBox cbCarrier;
-    @FXML
-    private CheckBox cbSurface;
-    @FXML
-    private CheckBox cbLandingPad;
-    @FXML
-    private CheckBox cbDemand;
-    @FXML
-    public Button btnStart;
-
-    @FXML
-    private Label lblCommodity;
-    @FXML
-    private Label lblBuyStation;
-    @FXML
-    private Label lblSellStation;
-    @FXML
-    private Label lblBuyPrice;
-    @FXML
-    private Label lblSellPrice;
-    @FXML
-    private Label lblSupply;
-    @FXML
-    private Label lblDemand;
-    @FXML
-    private Label lblProfit;
+    private VBox vbMain;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
         Thread threadReq = new Thread(new RequestThread(this, 0));
         threadReq.start();
-
-        quantity.textProperty().addListener((observable, oldValue, newValue) ->
-        {
-            if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else updateFilters();
-
-        });
-        cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbSurface.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbDemand.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
     }
 
-    @FXML
-    private void calculate()
+    public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface)
     {
-        btnStart.setVisible(false);
+        amount = Integer.parseInt(quantity.getText());
+        noSmall = !cbLandingPad.isSelected();
+        noCarrier = !cbCarrier.isSelected();
+        noSurface = !cbSurface.isSelected();
+        ignoreDemand = cbDemand.isSelected;
 
-        Thread threadReq = new Thread(new RequestThread(this, 1));
-        threadReq.start();
-    }
-    @FXML
-    private void nextCommodity()
-    {
-        currentCommodity++;
-        if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
-        displayResults();
-    }
-    @FXML
-    private void previousCommodity()
-    {
-        currentCommodity--;
-        if(currentCommodity < 0) currentCommodity = 0;
-        displayResults();
-    }
-    @FXML
-    private void nextSellStation()
-    {
-        currentSellStation++;
-        if(currentSellStation >= trades.get(currentCommodity).SELL_PRICES.size()) currentSellStation = trades.get(currentCommodity).SELL_PRICES.size() - 1;
-        displayResults();
-    }
-    @FXML
-    private void previousSellStation()
-    {
-        currentSellStation--;
-        if(currentSellStation < 0) currentSellStation = 0;
-        displayResults();
-    }
-    @FXML
-    private void nextBuyStation()
-    {
-        currentBuyStation++;
-        if(currentBuyStation >= trades.get(currentCommodity).BUY_PRICES.size()) currentBuyStation = trades.get(currentCommodity).BUY_PRICES.size() - 1;
-        displayResults();
-    }
-    @FXML
-    private void previousBuyStation()
-    {
-        currentBuyStation--;
-        if(currentBuyStation < 0) currentBuyStation = 0;
-        displayResults();
-    }
-
-    public void updateFilters()
-    {
-        int amount = Integer.parseInt(quantity.getText());
-        boolean noSmall = !cbLandingPad.isSelected();
-        boolean noCarrier = !cbCarrier.isSelected();
-        boolean noSurface = !cbSurface.isSelected();
-
-        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(cbDemand.isSelected() ? 0 : amount, noSmall, noCarrier, noSurface, sellPrices);
+        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, sellPrices);
         Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, buyPrices);
 
         trades = getTrades(filteredSellPrices, filteredBuyPrices);

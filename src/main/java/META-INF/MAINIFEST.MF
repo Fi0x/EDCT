@@ -1,2 +1,2 @@
 Manifest-Version: 1.0
-Main-Class: com.fi0x.edct.Main
+Main-Class: com.fi0x.edct.MainWindow

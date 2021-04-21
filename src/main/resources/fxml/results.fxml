@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Results" alignment="CENTER">
+    <children>
+        <HBox alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" />
+                <Label fx:id="lblCommodity" text="Commodity" />
+                <Button mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER">
+            <children>
+                <VBox alignment="CENTER">
+                    <children>
+                        <Label text="Buy at">
+                        </Label>
+                        <Label fx:id="lblBuyStation" text="Station" />
+                        <Label fx:id="lblBuyPrice" text="Price" />
+                        <Label fx:id="lblSupply" text="Supply" />
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#previousBuyStation" text="Previous Station" />
+                                <Button mnemonicParsing="false" onAction="#nextBuyStation" text="Next Station" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER">
+                    <children>
+                        <Label text="Sell at">
+                        </Label>
+                        <Label fx:id="lblSellStation" text="Station" />
+                        <Label fx:id="lblSellPrice" text="Price" />
+                        <Label fx:id="lblDemand" text="Demand" />
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Button mnemonicParsing="false" onAction="#previousSellStation" text="Previous Station" />
+                                <Button mnemonicParsing="false" onAction="#nextSellStation" text="Next Station" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+                <Label fx:id="lblProfit" text="Profit" />
+            </children>
+        </HBox>
+    </children>
+</VBox>

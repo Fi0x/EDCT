@@ -1,6 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
-import com.fi0x.edct.controller.ControllerMain;
+import com.fi0x.edct.controller.Main;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
@@ -12,9 +12,9 @@ import java.util.Map;
 public class RequestThread implements Runnable
 {
     private final int TYPE;
-    private final ControllerMain CONTROLLER;
+    private final Main CONTROLLER;
 
-    public RequestThread(ControllerMain controller, int type)
+    public RequestThread(Main controller, int type)
     {
         CONTROLLER = controller;
         TYPE = type;
