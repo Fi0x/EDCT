@@ -1,6 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
-import com.fi0x.edct.controller.ControllerMain;
+import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
@@ -12,11 +12,11 @@ import java.util.Map;
 public class RequestThread implements Runnable
 {
     private final int TYPE;
-    private final ControllerMain CONTROLLER;
+    private final Interaction INT_CONTROLLER;
 
-    public RequestThread(ControllerMain controller, int type)
+    public RequestThread(Interaction intController, int type)
     {
-        CONTROLLER = controller;
+        INT_CONTROLLER = intController;
         TYPE = type;
     }
 
@@ -26,20 +26,20 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                CONTROLLER.commodities = InaraCalls.getAllCommodities();
-                CONTROLLER.btnStart.setVisible(true);
+                INT_CONTROLLER.commodities = InaraCalls.getAllCommodities();
+                INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 break;
             case 1:
                 int tries = 3;
-                while(tries > 0 && (CONTROLLER.commodities == null || CONTROLLER.commodities.size() == 0))
+                while(tries > 0 && (INT_CONTROLLER.commodities == null || INT_CONTROLLER.commodities.size() == 0))
                 {
                     tries--;
                     wait(1000);
-                    CONTROLLER.commodities = InaraCalls.getAllCommodities();
+                    INT_CONTROLLER.commodities = InaraCalls.getAllCommodities();
                 }
-                if(CONTROLLER.commodities == null)
+                if(INT_CONTROLLER.commodities == null)
                 {
-                    CONTROLLER.btnStart.setVisible(true);
+                    INT_CONTROLLER.storageController.btnStart.setVisible(true);
                     break;
                 }
 
@@ -50,27 +50,27 @@ public class RequestThread implements Runnable
 
     private void requestPrices()
     {
-        CONTROLLER.sellPrices = new HashMap<>();
-        CONTROLLER.buyPrices = new HashMap<>();
+        INT_CONTROLLER.sellPrices = new HashMap<>();
+        INT_CONTROLLER.buyPrices = new HashMap<>();
 
         int i = 0;
-        for(Map.Entry<String, String> entry : CONTROLLER.commodities.entrySet())
+        for(Map.Entry<String, String> entry : INT_CONTROLLER.commodities.entrySet())
         {
             ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
-            if(tmp != null) CONTROLLER.sellPrices.put(entry.getValue(), tmp);
+            if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue(), tmp);
 
             tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
-            if(tmp != null) CONTROLLER.buyPrices.put(entry.getValue(), tmp);
+            if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue(), tmp);
 
             wait(500);
             i++;
-            Out.newBuilder("Downloaded data for " + i + "/" + CONTROLLER.commodities.size() + " commodities").always().print();
+            Out.newBuilder("Downloaded data for " + i + "/" + INT_CONTROLLER.commodities.size() + " commodities").always().print();
         }
 
         Platform.runLater(() ->
         {
-            CONTROLLER.updateFilters();
-            CONTROLLER.btnStart.setVisible(true);
+            INT_CONTROLLER.filterController.updateFilters();
+            INT_CONTROLLER.storageController.btnStart.setVisible(true);
         });
     }
 

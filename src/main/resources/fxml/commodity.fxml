@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Commodity">
+    <Button mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity"/>
+    <Label fx:id="lblCommodity" text="Commodity"/>
+    <Button mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity"/>
+    <Label fx:id="lblProfit" text="Profit"/>
+    <stylesheets>
+        <URL value="@../css/commodity.css"/>
+    </stylesheets>
+</HBox>

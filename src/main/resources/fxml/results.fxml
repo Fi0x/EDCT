@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Results" alignment="CENTER">
+    <AnchorPane fx:id="apCommodity"/>
+    <HBox fx:id="hbStations" alignment="CENTER"/>
+    <stylesheets>
+        <URL value="@../css/results.css"/>
+    </stylesheets>
+</VBox>

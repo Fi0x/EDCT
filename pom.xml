@@ -52,7 +52,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.fi0x.edct.Main</mainClass>
+                            <mainClass>com.fi0x.edct.MainWindow</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -62,7 +62,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.fi0x.edct.Main</mainClass>
+                            <mainClass>com.fi0x.edct.MainWindow</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
