@@ -4,8 +4,16 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.CheckBox?>
 <?import java.net.URL?>
+<?import javafx.scene.control.Label?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
-    <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000"/>
+    <HBox>
+        <Label text="Min profit" />
+        <TextField fx:id="profit" text="5000"/>
+    </HBox>
+    <HBox>
+        <Label text="Min quantity" />
+        <TextField fx:id="quantity" text="10000"/>
+    </HBox>
     <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
     <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
     <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>

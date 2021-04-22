@@ -15,6 +15,8 @@ public class Filters implements Initializable
     @FXML
     private TextField quantity;
     @FXML
+    private TextField profit;
+    @FXML
     private CheckBox cbCarrier;
     @FXML
     private CheckBox cbSurface;
@@ -29,7 +31,13 @@ public class Filters implements Initializable
         quantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
             if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+            else updateFilters();
+
+        });
+        profit.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(!newValue.matches("\\d*")) profit.setText(newValue.replaceAll("[^\\d]", ""));
+            else updateFilters();
 
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
@@ -40,7 +48,7 @@ public class Filters implements Initializable
 
     public void updateFilters()
     {
-        mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+        mainController.updateFilters(Integer.parseInt(quantity.getText()), Integer.parseInt(profit.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
     }
 
     public void setMainController(Main controller)
