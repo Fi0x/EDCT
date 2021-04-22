@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.*?>
-<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Main">
-    <VBox alignment="CENTER" fx:id="vbMain">
-        <children>
-        </children>
-    </VBox>
+<VBox fx:id="vbMain" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Main" alignment="CENTER">
     <stylesheets>
-        <URL value="@../css/main.css" />
+        <URL value="@../css/main.css"/>
     </stylesheets>
-</AnchorPane>
+</VBox>

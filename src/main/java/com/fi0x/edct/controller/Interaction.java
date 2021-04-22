@@ -2,12 +2,17 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.dbconnection.RequestThread;
+import com.fi0x.edct.util.Out;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,53 +22,61 @@ import java.util.ResourceBundle;
 public class Interaction implements Initializable
 {
     private Main mainController;
+    public Datastorage storageController;
+    public Filters filterController;
+
     public Map<String, String> commodities;
     public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
     public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
 
     @FXML
-    private TextField quantity;
-    @FXML
-    private CheckBox cbCarrier;
-    @FXML
-    private CheckBox cbSurface;
-    @FXML
-    private CheckBox cbLandingPad;
-    @FXML
-    private CheckBox cbDemand;
-    @FXML
-    public Button btnStart;
+    private HBox hbInteraction;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        loadFilters();
+        loadDatastorage();
+
         Thread threadReq = new Thread(new RequestThread(this, 0));
         threadReq.start();
+    }
 
-        quantity.textProperty().addListener((observable, oldValue, newValue) ->
+    private void loadDatastorage()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/datastorage.fxml"));
+        VBox storageBox;
+
+        try
         {
-            if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+            storageBox = loader.load();
+            storageController = loader.getController();
+            storageController.setInteractionController(this);
+        } catch(IOException ignored)
+        {
+            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR().print();
+            return;
+        }
 
-        });
-        cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbSurface.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
-        cbDemand.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
+        hbInteraction.getChildren().add(storageBox);
     }
-
-    @FXML
-    private void calculate()
+    private void loadFilters()
     {
-        btnStart.setVisible(false);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filters.fxml"));
+        VBox filterBox;
 
-        Thread threadReq = new Thread(new RequestThread(this, 1));
-        threadReq.start();
-    }
+        try
+        {
+            filterBox = loader.load();
+            filterController = loader.getController();
+            filterController.setMainController(mainController);
+        } catch(IOException ignored)
+        {
+            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR().print();
+            return;
+        }
 
-    public void updateFilters()
-    {
-        mainController.updateFilters(Integer.parseInt(quantity.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+        hbInteraction.getChildren().add(filterBox);
     }
 
     public void setMainController(Main controller)

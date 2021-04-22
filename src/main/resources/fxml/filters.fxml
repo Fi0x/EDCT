@@ -5,14 +5,12 @@
 <?import javafx.scene.control.CheckBox?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
-    <children>
-        <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000"/>
-        <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
-        <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
-        <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>
-        <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand"/>
-    </children>
+    <TextField fx:id="quantity" promptText="Minimum quantity to trade" text="1000"/>
+    <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
+    <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
+    <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>
+    <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand"/>
     <stylesheets>
-        <URL value="@../css/filters.css" />
+        <URL value="@../css/filters.css"/>
     </stylesheets>
 </VBox>

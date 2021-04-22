@@ -1,7 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
 import com.fi0x.edct.controller.Interaction;
-import com.fi0x.edct.controller.Main;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
@@ -28,7 +27,7 @@ public class RequestThread implements Runnable
         {
             case 0:
                 INT_CONTROLLER.commodities = InaraCalls.getAllCommodities();
-                INT_CONTROLLER.btnStart.setVisible(true);
+                INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 break;
             case 1:
                 int tries = 3;
@@ -40,7 +39,7 @@ public class RequestThread implements Runnable
                 }
                 if(INT_CONTROLLER.commodities == null)
                 {
-                    INT_CONTROLLER.btnStart.setVisible(true);
+                    INT_CONTROLLER.storageController.btnStart.setVisible(true);
                     break;
                 }
 
@@ -70,8 +69,8 @@ public class RequestThread implements Runnable
 
         Platform.runLater(() ->
         {
-            INT_CONTROLLER.updateFilters();
-            INT_CONTROLLER.btnStart.setVisible(true);
+            INT_CONTROLLER.filterController.updateFilters();
+            INT_CONTROLLER.storageController.btnStart.setVisible(true);
         });
     }
 
