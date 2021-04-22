@@ -69,7 +69,6 @@ public class Interaction implements Initializable
         {
             filterBox = loader.load();
             filterController = loader.getController();
-            filterController.setMainController(mainController);
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not load datastorage GUI elements").always().ERROR().print();
@@ -83,5 +82,6 @@ public class Interaction implements Initializable
     {
         mainController = controller;
         mainController.setInteractionController(this);
+        filterController.setMainController(mainController);
     }
 }
