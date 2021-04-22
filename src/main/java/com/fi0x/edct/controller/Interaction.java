@@ -25,7 +25,6 @@ public class Interaction implements Initializable
     public Datastorage storageController;
     public Filters filterController;
 
-    public Map<String, String> commodities;
     public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
     public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
 

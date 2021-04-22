@@ -3,33 +3,44 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.datastructures.STATIONTYPE;
+import com.fi0x.edct.util.Out;
 import com.sun.istack.internal.Nullable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HTMLCleanup
 {
-    public static Map<String, String> getCommodityIDs(String inputHTML)
+    public static Map<String, Map.Entry<String, Integer>> getCommodityIDs(String inputHTML)
     {
-        Map<String, String> commodities = new HashMap<>();
+        Map<String, Map.Entry<String, Integer>> commodities = new HashMap<>();
         Document doc = Jsoup.parse(inputHTML);
 
         Element body = doc.body();
-        Element div = body.getElementsByClass("formelement formselect").first();
-        if(div == null) return commodities;
+        Element table = body.getElementsByClass("tablesorter").first();
+        if(table == null) return commodities;
+        Elements entries = table.getElementsByTag("tbody").first().getElementsByTag("tr");
+        entries.remove(0);
 
-        Elements options = div.select("select > option");
-        for(Element option : options)
+        for(Element entry : entries)
         {
-            commodities.put(option.attr("value"), option.text());
+            Element commodityInfo = entry.getElementsByClass("lineright paddingleft wrap").first();
+            if(commodityInfo == null) continue;
+            String commodityID = commodityInfo.getElementsByTag("a").first().attr("href");
+            String commodityName = commodityInfo.text();
+
+            int maxProfit = Integer.parseInt(entry.getElementsByTag("td").last().ownText().replace(",", ""));
+
+            commodities.put(commodityID, new AbstractMap.SimpleEntry<>(commodityName, maxProfit));
         }
 
+        Out.newBuilder("Found " + commodities.size() + " commodities");
         return commodities;
     }
 

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpRetryException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -34,8 +35,11 @@ public class RequestHandler
                 content.append(inputLine);
             }
             in.close();
-        } else if(status == 429) Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR().print();
-        else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
+        } else if(status == 429)
+        {
+            Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR().print();
+            throw new HttpRetryException("Too many requests exception, wait a while", status);
+        } else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
 
         con.disconnect();
 

@@ -5,14 +5,17 @@ import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
+import java.net.HttpRetryException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RequestThread implements Runnable
 {
-    private final int TYPE;
     private final Interaction INT_CONTROLLER;
+
+    private final int TYPE;
+    private Map<String, Map.Entry<String, Integer>> commodities;
 
     public RequestThread(Interaction intController, int type)
     {
@@ -26,18 +29,18 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                INT_CONTROLLER.commodities = InaraCalls.getAllCommodities();
+                commodities = InaraCalls.getAllCommodities();
                 INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 break;
             case 1:
                 int tries = 3;
-                while(tries > 0 && (INT_CONTROLLER.commodities == null || INT_CONTROLLER.commodities.size() == 0))
+                while(tries > 0 && (commodities == null || commodities.size() == 0))
                 {
                     tries--;
                     wait(1000);
-                    INT_CONTROLLER.commodities = InaraCalls.getAllCommodities();
+                    commodities = InaraCalls.getAllCommodities();
                 }
-                if(INT_CONTROLLER.commodities == null)
+                if(commodities == null)
                 {
                     INT_CONTROLLER.storageController.btnStart.setVisible(true);
                     break;
@@ -54,17 +57,30 @@ public class RequestThread implements Runnable
         INT_CONTROLLER.buyPrices = new HashMap<>();
 
         int i = 0;
-        for(Map.Entry<String, String> entry : INT_CONTROLLER.commodities.entrySet())
+        for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
         {
-            ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
-            if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue(), tmp);
-
-            tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
-            if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue(), tmp);
-
-            wait(500);
             i++;
-            Out.newBuilder("Downloaded data for " + i + "/" + INT_CONTROLLER.commodities.size() + " commodities").always().print();
+            if(entry.getValue().getValue() > INT_CONTROLLER.filterController.getMinProfit())
+            {
+                try
+                {
+                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
+                    if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
+
+                    tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
+                    if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue().getKey(), tmp);
+                } catch(HttpRetryException e)
+                {
+                    if(e.responseCode() == 429)
+                    {
+                        Out.newBuilder("Received a 429 response code. Please wait a while.").always().WARNING().print();
+                        break;
+                    }
+                }
+
+                Out.newBuilder("Downloaded data for " + i + "/" + commodities.size() + " commodities").verbose().print();
+                wait(500);
+            } else Out.newBuilder("Skipped commodity " + i + " because of too low profit").verbose().print();
         }
 
         Platform.runLater(() ->

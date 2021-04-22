@@ -6,6 +6,7 @@ import com.fi0x.edct.util.Out;
 import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
+import java.net.HttpRetryException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class InaraCalls
 {
     @Nullable
-    public static Map<String, String> getAllCommodities()
+    public static Map<String, Map.Entry<String, Integer>> getAllCommodities()
     {
         Map<String, String> parameters = new HashMap<>();
 
@@ -21,7 +22,7 @@ public class InaraCalls
         {
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
             return HTMLCleanup.getCommodityIDs(html);
-        } catch(IOException ignored)
+        } catch(Exception ignored)
         {
             Out.newBuilder("Could not get commodity-list").always().ERROR().print();
         }
@@ -29,7 +30,7 @@ public class InaraCalls
     }
 
     @Nullable
-    public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell)
+    public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell) throws HttpRetryException
     {
         Map<String, String> parameters = new HashMap<>();
         for(String param : ENDPOINTS.Prices.parameter)
@@ -57,6 +58,9 @@ public class InaraCalls
         {
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters);
             return HTMLCleanup.getCommodityPrices(html);
+        } catch(HttpRetryException e)
+        {
+            throw e;
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR().print();

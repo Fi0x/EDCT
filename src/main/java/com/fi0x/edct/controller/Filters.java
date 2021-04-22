@@ -51,6 +51,11 @@ public class Filters implements Initializable
         mainController.updateFilters(Integer.parseInt(quantity.getText()), Integer.parseInt(profit.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
     }
 
+    public int getMinProfit()
+    {
+        return Integer.parseInt(profit.getText());
+    }
+
     public void setMainController(Main controller)
     {
         mainController = controller;
