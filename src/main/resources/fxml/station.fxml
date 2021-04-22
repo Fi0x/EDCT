@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Button?>
+<?import java.net.URL?>
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Station">
+    <Label fx:id="lblAction" text="Sell at"/>
+    <Label fx:id="lblStationName" text="Station"/>
+    <Label fx:id="lblPrice" text="Price"/>
+    <Label fx:id="lblAmount" text="Amount"/>
+    <HBox>
+        <Button mnemonicParsing="false" onAction="#previousStation" text="Previous Station"/>
+        <Button mnemonicParsing="false" onAction="#nextStation" text="Next Station"/>
+    </HBox>
+    <stylesheets>
+        <URL value="@../css/station.css"/>
+    </stylesheets>
+</VBox>

@@ -17,7 +17,6 @@ import java.util.Arrays;
 
 public class MainWindow extends Application
 {
-    private static MainWindow instance;
     public Interaction interactionController;
     public Results resultsController;
 
@@ -82,7 +81,7 @@ public class MainWindow extends Application
         {
             interactionBox = loader.load();
             resultsController = loader.getController();
-            resultsController.setMainController(parentLoader.getController());
+            resultsController.updateResultController(parentLoader.getController());
         } catch(IOException ignored)
         {
             Out.newBuilder("Could not load result GUI elements").always().ERROR().print();
@@ -91,11 +90,5 @@ public class MainWindow extends Application
 
         VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
         mainBox.getChildren().add(interactionBox);
-    }
-
-    public MainWindow getInstance()
-    {
-        if(instance == null) instance = new MainWindow();
-        return instance;
     }
 }
