@@ -44,14 +44,13 @@ public class HTMLCleanup
         return commodities;
     }
 
-    @Nullable
     public static ArrayList<STATION> getCommodityPrices(String inputHTML)
     {
         ArrayList<STATION> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
 
         Element table = doc.getElementsByClass("tablesorterintab").first();
-        if(table == null) return null;
+        if(table == null) return stations;
         Element tbody = table.getElementsByTag("tbody").first();
         Elements entries = tbody.getElementsByTag("tr");
 
@@ -78,6 +77,7 @@ public class HTMLCleanup
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
             else if(entry.hasClass("filterable3")) type = STATIONTYPE.SURFACE;
 
+            //TODO: get station system and distance to star from html
             STATION station = new STATION(stationName, PADSIZE.getFromString(padSizeName), quantity, price, type);
             stations.add(station);
         }

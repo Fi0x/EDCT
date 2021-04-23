@@ -50,6 +50,7 @@ public class RequestThread implements Runnable
                 }
 
                 requestPrices();
+                //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 1h (waits 10s before each request)
                 break;
         }
     }
@@ -67,10 +68,10 @@ public class RequestThread implements Runnable
             {
                 try
                 {
-                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true);
+                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true, false);
                     if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
 
-                    tmp = InaraCalls.getCommodityPrices(entry.getKey(), false);
+                    tmp = InaraCalls.getCommodityPrices(entry.getKey(), false, false);
                     if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue().getKey(), tmp);
                 } catch(HttpRetryException e)
                 {
