@@ -32,7 +32,7 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                setCommodities(InaraCalls.getAllCommodities());
+                setCommodities(InaraCalls.getAllCommodities(false));
                 INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 break;
             case 1:
@@ -41,7 +41,7 @@ public class RequestThread implements Runnable
                 {
                     tries--;
                     wait(1000);
-                    setCommodities(InaraCalls.getAllCommodities());
+                    setCommodities(InaraCalls.getAllCommodities(false));
                 }
                 if(commodities == null)
                 {
@@ -104,7 +104,7 @@ public class RequestThread implements Runnable
 
             for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
             {
-                String commodityEntry = entry.getKey() + "+++" + entry.getValue().getKey() + "+++" + entry.getValue().getValue();
+                String commodityEntry = entry.getKey() + "___" + entry.getValue().getKey() + "___" + entry.getValue().getValue();
                 writer.write(commodityEntry + "\n");
             }
 

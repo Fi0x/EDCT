@@ -1,5 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
@@ -7,32 +8,42 @@ import com.sun.istack.internal.Nullable;
 
 import java.io.IOException;
 import java.net.HttpRetryException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class InaraCalls
 {
-    @Nullable
-    public static Map<String, Map.Entry<String, Integer>> getAllCommodities()
+    public static Map<String, Map.Entry<String, Integer>> getAllCommodities(boolean fromServer)
     {
         Map<String, String> parameters = new HashMap<>();
+        Map<String, Map.Entry<String, Integer>> commodities = new HashMap<>();
 
         try
         {
-            if(true)//TODO: Only request from server if local file is older than 1h (add GUI option to update local file (Button))
+            long ageInMillis = System.currentTimeMillis() - MainWindow.commodityList.lastModified();
+            Scanner fileReader = new Scanner(MainWindow.commodityList);
+            if(fromServer || ageInMillis > 3600000 || !fileReader.hasNextLine())
             {
                 String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
-                return HTMLCleanup.getCommodityIDs(html);
+                commodities =  HTMLCleanup.getCommodityIDs(html);
+                Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS().print();
             } else
             {
-                //TODO: Read commodities from file
+                while(fileReader.hasNextLine())
+                {
+                    String line = fileReader.nextLine();
+                    String[] parts = line.split("___");
+                    if(parts.length != 3) continue;
+
+                    commodities.put(parts[0], new AbstractMap.SimpleEntry<>(parts[1], Integer.parseInt(parts[2])));
+                }
+                Out.newBuilder("Commodity list loaded from local file").verbose().SUCCESS().print();
             }
         } catch(Exception ignored)
         {
             Out.newBuilder("Could not get commodity-list").always().ERROR().print();
         }
-        return null;
+
+        return commodities;
     }
 
     @Nullable

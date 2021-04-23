@@ -10,6 +10,7 @@ public class Datastorage
 
     @FXML
     public Button btnStart;
+    //TODO: add a button to force update local commodity file with website data
 
     @FXML
     private void calculate()
