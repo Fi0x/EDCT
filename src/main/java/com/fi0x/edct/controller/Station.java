@@ -43,7 +43,7 @@ public class Station
 
     public void setStation(STATION station)
     {
-        lblStationName.setText(station.NAME);
+        lblStationName.setText("Station: " + station.NAME);
         lblPrice.setText("Price: " + station.PRICE + " credits");
         lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
     }
@@ -52,6 +52,10 @@ public class Station
     {
         resultsController = controller;
         this.isBuying = isBuying;
-        if(isBuying) lblAction.setText("Buy at");
+        if(isBuying)
+        {
+            lblAction.setText("Sell at");
+            lblAmount.setText("Demand: ---");
+        }
     }
 }

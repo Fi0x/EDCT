@@ -6,10 +6,14 @@
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Station">
-    <Label fx:id="lblAction" text="Sell at"/>
-    <Label fx:id="lblStationName" text="Station"/>
-    <Label fx:id="lblPrice" text="Price"/>
-    <Label fx:id="lblAmount" text="Amount"/>
+    <Label fx:id="lblAction" text="Buy at"/>
+    <Label text="System: ---"/>
+    <Label fx:id="lblStationName" text="Station: ---"/>
+    <Label text="Type: ---"/>
+    <Label text="Landing Pad: ---"/>
+    <Label text="Distance to Star: ---"/>
+    <Label fx:id="lblPrice" text="Price: ---"/>
+    <Label fx:id="lblAmount" text="Supply: ---"/>
     <HBox>
         <Button mnemonicParsing="false" onAction="#previousStation" text="Previous Station"/>
         <Button mnemonicParsing="false" onAction="#nextStation" text="Next Station"/>

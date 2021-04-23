@@ -8,11 +8,11 @@
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
     <HBox>
         <Label text="Min profit" />
-        <TextField fx:id="profit" text="5000"/>
+        <TextField fx:id="profit" text="5000" alignment="CENTER_RIGHT"/>
     </HBox>
     <HBox>
         <Label text="Min quantity" />
-        <TextField fx:id="quantity" text="10000"/>
+        <TextField fx:id="quantity" text="10000" alignment="CENTER_RIGHT"/>
     </HBox>
     <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
     <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
