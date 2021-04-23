@@ -1,10 +1,13 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.HttpRetryException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,7 +32,7 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                commodities = InaraCalls.getAllCommodities();
+                setCommodities(InaraCalls.getAllCommodities());
                 INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 break;
             case 1:
@@ -38,7 +41,7 @@ public class RequestThread implements Runnable
                 {
                     tries--;
                     wait(1000);
-                    commodities = InaraCalls.getAllCommodities();
+                    setCommodities(InaraCalls.getAllCommodities());
                 }
                 if(commodities == null)
                 {
@@ -88,6 +91,29 @@ public class RequestThread implements Runnable
             INT_CONTROLLER.filterController.updateFilters();
             INT_CONTROLLER.storageController.btnStart.setVisible(true);
         });
+    }
+
+    private void setCommodities(Map<String, Map.Entry<String, Integer>> newCommodities)
+    {
+        commodities = newCommodities;
+        if(newCommodities == null || commodities.size() == 0) return;
+
+        try
+        {
+            FileWriter writer = new FileWriter(MainWindow.commodityList.toString());
+
+            for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
+            {
+                String commodityEntry = entry.getKey() + "+++" + entry.getValue().getKey() + "+++" + entry.getValue().getValue();
+                writer.write(commodityEntry + "\n");
+            }
+
+            writer.close();
+            Out.newBuilder("Successfully wrote commodity-entries to file").verbose().SUCCESS().print();
+        } catch(IOException e)
+        {
+            Out.newBuilder("Something went wrong when writing commodity data to local storage").debug().ERROR().print();
+        }
     }
 
     private void wait(int millis)

@@ -70,7 +70,7 @@ public class Out
         color = RED;
         return this;
     }
-    public Out ALERT()
+    public Out SUCCESS()
     {
         color = GREEN;
         return this;

@@ -20,8 +20,14 @@ public class InaraCalls
 
         try
         {
-            String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
-            return HTMLCleanup.getCommodityIDs(html);
+            if(true)//TODO: Only request from server if local file is older than 1h (add GUI option to update local file (Button))
+            {
+                String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
+                return HTMLCleanup.getCommodityIDs(html);
+            } else
+            {
+                //TODO: Read commodities from file
+            }
         } catch(Exception ignored)
         {
             Out.newBuilder("Could not get commodity-list").always().ERROR().print();

@@ -32,7 +32,7 @@ public class HTMLCleanup
         {
             Element commodityInfo = entry.getElementsByClass("lineright paddingleft wrap").first();
             if(commodityInfo == null) continue;
-            String commodityID = commodityInfo.getElementsByTag("a").first().attr("href");
+            String commodityID = commodityInfo.getElementsByTag("a").first().attr("href").replace("commodity", "").replace("/", "");
             String commodityName = commodityInfo.text();
 
             int maxProfit = Integer.parseInt(entry.getElementsByTag("td").last().ownText().replace(",", ""));

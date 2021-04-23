@@ -11,12 +11,16 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainWindow extends Application
 {
+    public static File localStorage;
+    public static File commodityList;
+
     public Interaction interactionController;
     public Results resultsController;
 
@@ -49,8 +53,42 @@ public class MainWindow extends Application
         if(arguments.contains("-vv")) Out.vv = true;
         if(arguments.contains("-d")) Out.d = true;
 
-        Out.newBuilder("Starting Program").veryVerbose().print();
+        setupLocalFiles();
+
+        Out.newBuilder("Starting Program").verbose().print();
         launch(args);
+    }
+
+    private static void setupLocalFiles()
+    {
+        Out.newBuilder("Setting up local storage").veryVerbose().print();
+        localStorage = new File(System.getenv("APPDATA") + File.separator + "EDCT");
+
+        if(!localStorage.exists())
+        {
+            if(localStorage.mkdir()) Out.newBuilder("Created local storage directory").SUCCESS().verbose().print();
+            else
+            {
+                Out.newBuilder("Could not create local storage directory").origin("MainWindow").WARNING().debug().print();
+                return;
+            }
+        }
+
+        commodityList = new File(localStorage.getPath() + File.separator + "CommodityList");
+        if(!commodityList.exists())
+        {
+            try
+            {
+                if(commodityList.createNewFile())
+                {
+                    Out.newBuilder("Created commodityList-file").SUCCESS().verbose().print();
+                    return;
+                }
+            } catch(IOException ignored)
+            {
+            }
+            Out.newBuilder("Could not create commodityList-file").origin("MainWindow").WARNING().debug().print();
+        }
     }
 
     private void loadInteraction(FXMLLoader parentLoader)
