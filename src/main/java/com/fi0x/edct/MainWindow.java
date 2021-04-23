@@ -74,6 +74,27 @@ public class MainWindow extends Application
             }
         }
 
+        File commodityFolder1 = new File(localStorage.getPath() + File.separator + "CommoditySells");
+        if(!commodityFolder1.exists())
+        {
+            if(commodityFolder1.mkdir()) Out.newBuilder("Created directory for commodity data").SUCCESS().verbose().print();
+            else
+            {
+                Out.newBuilder("Could not create directory for commodity data").origin("MainWindow").WARNING().debug().print();
+                return;
+            }
+        }
+        File commodityFolder2 = new File(localStorage.getPath() + File.separator + "CommodityBuys");
+        if(!commodityFolder2.exists())
+        {
+            if(commodityFolder2.mkdir()) Out.newBuilder("Created directory for commodity data").SUCCESS().verbose().print();
+            else
+            {
+                Out.newBuilder("Could not create directory for commodity data").origin("MainWindow").WARNING().debug().print();
+                return;
+            }
+        }
+
         commodityList = new File(localStorage.getPath() + File.separator + "CommodityList");
         if(!commodityList.exists())
         {

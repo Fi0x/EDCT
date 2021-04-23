@@ -57,6 +57,7 @@ public class HTMLCleanup
         for(Element entry : entries)
         {
             Element stationDescriptor = entry.getElementsByClass("wrap").first().getElementsByClass("inverse").first();
+            String system = stationDescriptor.getElementsByClass("uppercase").first().ownText();
             String stationName = stationDescriptor.getElementsByClass("normal").first().ownText();
             if(stationName.length() > 2) stationName = stationName.substring(0, stationName.length() - 2);
 
@@ -77,8 +78,11 @@ public class HTMLCleanup
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
             else if(entry.hasClass("filterable3")) type = STATIONTYPE.SURFACE;
 
-            //TODO: get station system and distance to star from html
-            STATION station = new STATION(stationName, PADSIZE.getFromString(padSizeName), quantity, price, type);
+            String starDistanceText = entry.getElementsByClass("minor alignright lineright").first().ownText().replace(",", "").replace(" Ls", "");
+            int starDistance = 0;
+            if(starDistanceText.length() > 0 && !starDistanceText.equals("---")) starDistance = Integer.parseInt(starDistanceText);
+
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance);
             stations.add(station);
         }
 

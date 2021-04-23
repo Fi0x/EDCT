@@ -78,7 +78,8 @@ public class InaraCalls
         ArrayList<STATION> stationList = new ArrayList<>();
         try
         {
-            File commodityFile = new File(MainWindow.localStorage.getPath() + File.separator + "CommodityFiles" + File.separator + commodityRefID);
+            String folder = sell ? "CommoditySells" : "CommodityBuys";
+            File commodityFile = new File(MainWindow.localStorage.getPath() + File.separator + folder + File.separator + commodityRefID);
 
             boolean outdatedFile;
             if(commodityFile.exists())
