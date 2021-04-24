@@ -110,7 +110,7 @@ public class InaraCalls
                     }
                     Out.newBuilder("Could not create commodity-file " + commodityRefID).origin("InaraCalls").WARNING().debug().print();
                 } else writeCommodityDataToFile(commodityFile, stationList);
-            } else readCommodityDataFromFile(commodityFile);
+            } else stationList = readCommodityDataFromFile(commodityFile);
 
         } catch(HttpRetryException e)
         {
@@ -148,7 +148,7 @@ public class InaraCalls
 
         try
         {
-            Scanner fileReader = new Scanner(MainWindow.commodityList);
+            Scanner fileReader = new Scanner(file);
             while(fileReader.hasNextLine())
             {
                 String line = fileReader.nextLine();
