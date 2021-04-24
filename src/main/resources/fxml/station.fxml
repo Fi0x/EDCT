@@ -7,11 +7,11 @@
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Station">
     <Label fx:id="lblAction" text="Buy at"/>
-    <Label text="System: ---"/>
+    <Label fx:id="lblSystem" text="System: ---"/>
     <Label fx:id="lblStationName" text="Station: ---"/>
-    <Label text="Type: ---"/>
-    <Label text="Landing Pad: ---"/>
-    <Label text="Distance to Star: ---"/>
+    <Label fx:id="lblType" text="Type: ---"/>
+    <Label fx:id="lblPad" text="Landing Pad: ---"/>
+    <Label fx:id="lblDistance" text="Distance to Star: ---"/>
     <Label fx:id="lblPrice" text="Price: ---"/>
     <Label fx:id="lblAmount" text="Supply: ---"/>
     <HBox>

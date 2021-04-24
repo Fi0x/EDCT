@@ -14,7 +14,15 @@ public class Station
     @FXML
     private Label lblAction;
     @FXML
+    private Label lblSystem;
+    @FXML
     private Label lblStationName;
+    @FXML
+    private Label lblType;
+    @FXML
+    private Label lblPad;
+    @FXML
+    private Label lblDistance;
     @FXML
     private Label lblPrice;
     @FXML
@@ -43,7 +51,11 @@ public class Station
 
     public void setStation(STATION station)
     {
+        lblSystem.setText("System: " + station.SYSTEM);
         lblStationName.setText("Station: " + station.NAME);
+        lblType.setText("Type: " + station.TYPE);
+        lblPad.setText("Pad: " + station.PAD);
+        lblDistance.setText("Distance to star: " + station.STAR_DISTANCE);
         lblPrice.setText("Price: " + station.PRICE + " credits");
         lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
     }

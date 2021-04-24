@@ -16,6 +16,7 @@ public class RequestHandler
 {
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws IOException
     {
+        requestWait();
         endpoint += getParamsString(parameters);
         URL url = new URL(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -60,5 +61,15 @@ public class RequestHandler
 
         String resultString = result.toString();
         return resultString.length() > 0 ? "?" + resultString.substring(0, resultString.length() - 1) : "";
+    }
+
+    private static void requestWait()
+    {
+        try
+        {
+            Thread.sleep(500);
+        } catch(InterruptedException ignored)
+        {
+        }
     }
 }

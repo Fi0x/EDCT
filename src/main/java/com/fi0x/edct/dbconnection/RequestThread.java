@@ -64,7 +64,7 @@ public class RequestThread implements Runnable
         for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
         {
             i++;
-            if(entry.getValue().getValue() > INT_CONTROLLER.filterController.getMinProfit())
+            if(entry.getValue().getValue() >= INT_CONTROLLER.filterController.getMinProfit())
             {
                 try
                 {
@@ -82,8 +82,6 @@ public class RequestThread implements Runnable
                     }
                 }
 
-                Out.newBuilder("Downloaded data for " + i + "/" + commodities.size() + " commodities").verbose().print();
-                wait(500);
             } else Out.newBuilder("Skipped commodity " + i + " because of too low profit").verbose().print();
         }
 

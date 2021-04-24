@@ -86,12 +86,16 @@ public class Results implements Initializable
 
     public void nextCommodity()
     {
+        if(trades == null) return;
+
         currentCommodity++;
         if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
         displayResults();
     }
     public void previousCommodity()
     {
+        if(trades == null) return;
+
         currentCommodity--;
         if(currentCommodity < 0) currentCommodity = 0;
         displayResults();
