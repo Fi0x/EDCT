@@ -15,8 +15,8 @@
     <Label fx:id="lblPrice" text="Price: ---"/>
     <Label fx:id="lblAmount" text="Supply: ---"/>
     <HBox>
-        <Button mnemonicParsing="false" onAction="#previousStation" text="Previous Station"/>
-        <Button mnemonicParsing="false" onAction="#nextStation" text="Next Station"/>
+        <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" visible="false"/>
+        <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" visible="false"/>
     </HBox>
     <stylesheets>
         <URL value="@../css/station.css"/>

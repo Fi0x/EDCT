@@ -3,7 +3,6 @@ package com.fi0x.edct.dbconnection;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
-import com.fi0x.edct.datastructures.STATIONTYPE;
 import com.fi0x.edct.util.Out;
 import com.sun.istack.internal.Nullable;
 
@@ -25,7 +24,7 @@ public class InaraCalls
         {
             long ageInMillis = System.currentTimeMillis() - MainWindow.commodityList.lastModified();
             Scanner fileReader = new Scanner(MainWindow.commodityList);
-            if(fromServer || ageInMillis > 3600000 || !fileReader.hasNextLine())
+            if(fromServer || ageInMillis > 10800000 || !fileReader.hasNextLine())
             {
                 String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
                 commodities = HTMLCleanup.getCommodityIDs(html);
@@ -51,7 +50,7 @@ public class InaraCalls
     }
 
     @Nullable
-    public static ArrayList<STATION> getCommodityPrices(String commodityRefID, boolean sell, boolean forceHTTP) throws HttpRetryException
+    public static ArrayList<STATION> getCommodityPrices(RequestThread caller, String commodityRefID, boolean sell, boolean forceHTTP) throws HttpRetryException
     {
         Map<String, String> parameters = new HashMap<>();
         for(String param : ENDPOINTS.Prices.parameter)
@@ -85,9 +84,11 @@ public class InaraCalls
             if(commodityFile.exists())
             {
                 long ageInMillis = System.currentTimeMillis() - commodityFile.lastModified();
+                if(ageInMillis > caller.oldestFileAge) caller.oldestFileAge = ageInMillis;
+
                 Scanner fileReader = new Scanner(MainWindow.commodityList);
 
-                outdatedFile = !fileReader.hasNextLine() || ageInMillis > 3600000;
+                outdatedFile = !fileReader.hasNextLine() || ageInMillis > 10800000;
             } else outdatedFile = true;
 
             if(forceHTTP || outdatedFile)

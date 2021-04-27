@@ -2,6 +2,7 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.datastructures.STATION;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 public class Station
@@ -27,6 +28,10 @@ public class Station
     private Label lblPrice;
     @FXML
     private Label lblAmount;
+    @FXML
+    private Button btnPrevStation;
+    @FXML
+    private Button btnNextStation;
 
     @FXML
     private void nextStation()
@@ -39,6 +44,9 @@ public class Station
         {
             stationID = resultsController.getCurrentTrade().SELL_PRICES.size() - 1;
         }
+
+        if(isBuying) resultsController.currentBuyStation = stationID;
+        else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
     }
     @FXML
@@ -46,18 +54,24 @@ public class Station
     {
         stationID--;
         if(stationID < 0) stationID = 0;
+
+        if(isBuying) resultsController.currentBuyStation = stationID;
+        else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
     }
 
-    public void setStation(STATION station)
+    public void setStation(STATION station, boolean hasPrev, boolean hasNext)
     {
         lblSystem.setText("System: " + station.SYSTEM);
         lblStationName.setText("Station: " + station.NAME);
         lblType.setText("Type: " + station.TYPE);
         lblPad.setText("Pad: " + station.PAD);
-        lblDistance.setText("Distance to star: " + station.STAR_DISTANCE);
+        lblDistance.setText("Distance to star: " + station.STAR_DISTANCE + "Ls");
         lblPrice.setText("Price: " + station.PRICE + " credits");
         lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
+
+        btnPrevStation.setVisible(hasPrev);
+        btnNextStation.setVisible(hasNext);
     }
 
     public void setResultsController(Results controller, boolean isBuying)

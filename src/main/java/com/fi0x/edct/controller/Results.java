@@ -3,6 +3,7 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.datastructures.COMMODITY;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
+import com.sun.xml.internal.ws.encoding.MtomCodec;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -23,8 +24,8 @@ public class Results implements Initializable
 
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
-    private int currentSellStation;
-    private int currentBuyStation;
+    public int currentSellStation;
+    public int currentBuyStation;
 
     @FXML
     private HBox hbStations;
@@ -34,6 +35,10 @@ public class Results implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        currentCommodity = 0;
+        currentSellStation = 0;
+        currentBuyStation = 0;
+
         loadCommodity();
         loadStation(false);
         loadStation(true);
@@ -90,6 +95,12 @@ public class Results implements Initializable
 
         currentCommodity++;
         if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
+        else
+        {
+            currentSellStation = 0;
+            currentBuyStation = 0;
+        }
+
         displayResults();
     }
     public void previousCommodity()
@@ -98,6 +109,12 @@ public class Results implements Initializable
 
         currentCommodity--;
         if(currentCommodity < 0) currentCommodity = 0;
+        else
+        {
+            currentSellStation = 0;
+            currentBuyStation = 0;
+        }
+
         displayResults();
     }
 
@@ -109,37 +126,44 @@ public class Results implements Initializable
     public void setTrades(ArrayList<COMMODITY> newTrades)
     {
         trades = newTrades;
-        currentCommodity = 0;
-        currentSellStation = 0;
-        currentBuyStation = 0;
+        if(currentCommodity < trades.size())
+        {
+            currentSellStation = Math.min(currentSellStation, trades.get(currentCommodity).SELL_PRICES.size() - 1);
+            currentBuyStation = Math.min(currentBuyStation, trades.get(currentCommodity).BUY_PRICES.size() - 1);
+        } else
+        {
+            currentCommodity = trades.size();
+            currentSellStation = 0;
+            currentBuyStation = 0;
+        }
     }
 
     public void displayResults()
     {
         if(trades == null || trades.size() == 0) return;
-        commodityController.updateDisplay();
+        commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1);
 
         Out.newBuilder("COMMODITY: \t" + trades.get(currentCommodity).NAME).veryVerbose().print();
         Out.newBuilder("PROFIT: \t" + trades.get(currentCommodity).profit).veryVerbose().print();
 
-        if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
-        {
-            STATION buyStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-            buyController.setStation(buyStation);
-
-            Out.newBuilder("BUY AT: \t" + buyStation.NAME).veryVerbose().print();
-            Out.newBuilder("\tPRICE: \t" + buyStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tSUPPLY:\t" + buyStation.QUANTITY).veryVerbose().print();
-        }
-
         if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
         {
-            STATION sellStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
-            sellController.setStation(sellStation);
+            STATION buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+            sellController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
 
-            Out.newBuilder("SELL AT: \t" + sellStation.NAME).veryVerbose().print();
+            Out.newBuilder("SELL AT: \t" + buyStation.NAME).veryVerbose().print();
+            Out.newBuilder("\tPRICE: \t" + buyStation.PRICE).veryVerbose().print();
+            Out.newBuilder("\tDEMAND: \t" + buyStation.QUANTITY).veryVerbose().print();
+        }
+
+        if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
+        {
+            STATION sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+            buyController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
+
+            Out.newBuilder("BUY AT: \t" + sellStation.NAME).veryVerbose().print();
             Out.newBuilder("\tPRICE: \t" + sellStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tDEMAND: \t" + sellStation.QUANTITY).veryVerbose().print();
+            Out.newBuilder("\tSUPPLY:\t" + sellStation.QUANTITY).veryVerbose().print();
         }
     }
 

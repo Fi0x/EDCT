@@ -18,12 +18,15 @@ public class RequestThread implements Runnable
     private final Interaction INT_CONTROLLER;
 
     private final int TYPE;
+    private final boolean FORCE;
     private Map<String, Map.Entry<String, Integer>> commodities;
+    public long oldestFileAge;
 
-    public RequestThread(Interaction intController, int type)
+    public RequestThread(Interaction intController, int type, boolean force)
     {
         INT_CONTROLLER = intController;
         TYPE = type;
+        FORCE = force;
     }
 
     @Override
@@ -32,8 +35,9 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                setCommodities(InaraCalls.getAllCommodities(false));
+                setCommodities(InaraCalls.getAllCommodities(FORCE));
                 INT_CONTROLLER.storageController.btnStart.setVisible(true);
+                INT_CONTROLLER.storageController.btnUpdateLocalFiles.setVisible(true);
                 break;
             case 1:
                 int tries = 3;
@@ -41,7 +45,7 @@ public class RequestThread implements Runnable
                 {
                     tries--;
                     wait(1000);
-                    setCommodities(InaraCalls.getAllCommodities(false));
+                    setCommodities(InaraCalls.getAllCommodities(FORCE));
                 }
                 if(commodities == null)
                 {
@@ -60,6 +64,8 @@ public class RequestThread implements Runnable
         INT_CONTROLLER.sellPrices = new HashMap<>();
         INT_CONTROLLER.buyPrices = new HashMap<>();
 
+        oldestFileAge = 0;
+
         int i = 0;
         for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
         {
@@ -68,10 +74,10 @@ public class RequestThread implements Runnable
             {
                 try
                 {
-                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(entry.getKey(), true, false);
+                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), true, FORCE);
                     if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
 
-                    tmp = InaraCalls.getCommodityPrices(entry.getKey(), false, false);
+                    tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), false, FORCE);
                     if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue().getKey(), tmp);
                 } catch(HttpRetryException e)
                 {
@@ -89,6 +95,8 @@ public class RequestThread implements Runnable
         {
             INT_CONTROLLER.filterController.updateFilters();
             INT_CONTROLLER.storageController.btnStart.setVisible(true);
+            INT_CONTROLLER.storageController.btnUpdateLocalFiles.setVisible(true);
+            INT_CONTROLLER.storageController.setDataAge(oldestFileAge);
         });
     }
 

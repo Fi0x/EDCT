@@ -9,7 +9,6 @@ public class STATION
     public final int PRICE;
     public final STATIONTYPE TYPE;
     public final int STAR_DISTANCE;
-    //TODO: Use ALL information
 
     public STATION(String systemName, String name, PADSIZE padsize, int quantity, int price, STATIONTYPE stationtype, int distanceToStar)
     {

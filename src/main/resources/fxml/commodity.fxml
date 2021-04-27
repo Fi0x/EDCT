@@ -5,12 +5,12 @@
 
 <?import java.net.URL?>
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Commodity" alignment="CENTER">
-    <Button mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity"/>
+    <Button fx:id="btnPrevComm" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" visible="false"/>
     <VBox>
         <Label fx:id="lblCommodity" text="?Commodity?"/>
         <Label fx:id="lblProfit" text="Profit: ---"/>
     </VBox>
-    <Button mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity"/>
+    <Button fx:id="btnNextComm" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" visible="false"/>
     <stylesheets>
         <URL value="@../css/commodity.css"/>
     </stylesheets>
