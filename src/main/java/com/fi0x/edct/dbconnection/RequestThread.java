@@ -54,7 +54,7 @@ public class RequestThread implements Runnable
                 }
 
                 requestPrices();
-                //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 1h (waits 10s before each request)
+                //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 3h (waits 10-30s before each request)
                 break;
         }
     }

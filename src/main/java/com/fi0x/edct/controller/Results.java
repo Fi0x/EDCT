@@ -141,30 +141,28 @@ public class Results implements Initializable
     public void displayResults()
     {
         if(trades == null || trades.size() == 0) return;
-        commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1);
 
-        Out.newBuilder("COMMODITY: \t" + trades.get(currentCommodity).NAME).veryVerbose().print();
-        Out.newBuilder("PROFIT: \t" + trades.get(currentCommodity).profit).veryVerbose().print();
-
-        if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
-        {
-            STATION buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
-            sellController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
-
-            Out.newBuilder("SELL AT: \t" + buyStation.NAME).veryVerbose().print();
-            Out.newBuilder("\tPRICE: \t" + buyStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tDEMAND: \t" + buyStation.QUANTITY).veryVerbose().print();
-        }
+        int profit = 0;
 
         if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
         {
             STATION sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-            buyController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
+            sellController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
 
-            Out.newBuilder("BUY AT: \t" + sellStation.NAME).veryVerbose().print();
-            Out.newBuilder("\tPRICE: \t" + sellStation.PRICE).veryVerbose().print();
-            Out.newBuilder("\tSUPPLY:\t" + sellStation.QUANTITY).veryVerbose().print();
+            profit -= sellStation.PRICE;
         }
+
+        if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
+        {
+            STATION buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+            buyController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
+
+            if(profit < 0) profit += buyStation.PRICE;
+        }
+
+        trades.get(currentCommodity).profit = profit;
+
+        commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1);
     }
 
     public COMMODITY getCurrentTrade()
