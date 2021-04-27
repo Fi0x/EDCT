@@ -3,7 +3,6 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.datastructures.COMMODITY;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
-import com.sun.xml.internal.ws.encoding.MtomCodec;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;

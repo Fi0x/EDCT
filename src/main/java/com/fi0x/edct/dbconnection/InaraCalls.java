@@ -4,7 +4,6 @@ import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
-import com.sun.istack.internal.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +48,6 @@ public class InaraCalls
         return commodities;
     }
 
-    @Nullable
     public static ArrayList<STATION> getCommodityPrices(RequestThread caller, String commodityRefID, boolean sell, boolean forceHTTP) throws HttpRetryException
     {
         Map<String, String> parameters = new HashMap<>();
