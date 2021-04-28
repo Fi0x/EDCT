@@ -68,7 +68,7 @@ public class InaraCalls
             if(commodityFile.exists())
             {
                 long ageInMillis = System.currentTimeMillis() - commodityFile.lastModified();
-                if(ageInMillis > caller.oldestFileAge) caller.oldestFileAge = ageInMillis;
+                if(caller != null && ageInMillis > caller.oldestFileAge) caller.oldestFileAge = ageInMillis;
             }
 
             if(forceHTTP || !commodityFile.exists())

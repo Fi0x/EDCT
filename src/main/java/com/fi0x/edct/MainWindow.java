@@ -2,6 +2,7 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.Results;
+import com.fi0x.edct.dbconnection.UpdateThread;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,10 @@ import java.util.Arrays;
 
 public class MainWindow extends Application
 {
+    public static MainWindow instance;
+    public Thread updaterThread;
+    public static Thread downloadThread;
+
     public static File localStorage;
     public static File commodityList;
 
@@ -27,6 +32,7 @@ public class MainWindow extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        instance = this;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root;
         try
@@ -45,9 +51,17 @@ public class MainWindow extends Application
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
 
-        //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 3h (waits 10-30s before each request)
+        updaterThread = new Thread(new UpdateThread());
+        updaterThread.start();
     }
 
+    @Override
+    public void stop() throws Exception
+    {
+        if(updaterThread != null) updaterThread.interrupt();
+        if(downloadThread != null) downloadThread.interrupt();
+        super.stop();
+    }
     public static void main(String[] args)
     {
         ArrayList<String> arguments = new ArrayList<>(Arrays.asList(args));
@@ -59,6 +73,12 @@ public class MainWindow extends Application
 
         Out.newBuilder("Starting Program").verbose().print();
         launch(args);
+    }
+
+    public static MainWindow getInstance()
+    {
+        if(instance == null) instance = new MainWindow();
+        return instance;
     }
 
     private static void setupLocalFiles()

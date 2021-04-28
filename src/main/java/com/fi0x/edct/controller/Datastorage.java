@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.dbconnection.RequestThread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -21,9 +22,10 @@ public class Datastorage
     {
         btnStart.setVisible(false);
         btnUpdateLocalFiles.setVisible(false);
+        lblDataAge.setText("Loading data from storage");
 
-        Thread threadReq = new Thread(new RequestThread(interactionController, 1, false));
-        threadReq.start();
+        MainWindow.downloadThread = new Thread(new RequestThread(interactionController, 1, false));
+        MainWindow.downloadThread.start();
     }
     @FXML
     private void updateStorage()
