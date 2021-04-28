@@ -44,6 +44,8 @@ public class MainWindow extends Application
         primaryStage.setTitle("Elite: Dangerous Carrier Trader");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+
+        //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 3h (waits 10-30s before each request)
     }
 
     public static void main(String[] args)

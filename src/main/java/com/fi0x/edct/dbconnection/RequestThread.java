@@ -35,7 +35,7 @@ public class RequestThread implements Runnable
         switch(TYPE)
         {
             case 0:
-                setCommodities(InaraCalls.getAllCommodities(FORCE));
+                setCommodities(InaraCalls.getAllCommodities());
                 INT_CONTROLLER.storageController.btnStart.setVisible(true);
                 INT_CONTROLLER.storageController.btnUpdateLocalFiles.setVisible(true);
                 break;
@@ -45,7 +45,7 @@ public class RequestThread implements Runnable
                 {
                     tries--;
                     wait(1000);
-                    setCommodities(InaraCalls.getAllCommodities(FORCE));
+                    setCommodities(InaraCalls.getAllCommodities());
                 }
                 if(commodities == null)
                 {
@@ -54,7 +54,6 @@ public class RequestThread implements Runnable
                 }
 
                 requestPrices();
-                //TODO: Add updater thread that iterates through stored files and makes HTTP requests if it finds a file that is older than 3h (waits 10-30s before each request)
                 break;
         }
     }

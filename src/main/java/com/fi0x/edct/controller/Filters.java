@@ -13,9 +13,9 @@ public class Filters implements Initializable
     private Main mainController;
 
     @FXML
-    private TextField quantity;
+    private TextField txtQuantity;
     @FXML
-    private TextField profit;
+    private TextField txtProfit;
     @FXML
     private CheckBox cbCarrier;
     @FXML
@@ -28,15 +28,17 @@ public class Filters implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
-        quantity.textProperty().addListener((observable, oldValue, newValue) ->
+        txtQuantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if(!newValue.matches("\\d*")) quantity.setText(newValue.replaceAll("[^\\d]", ""));
+            if(newValue.length() > 9) txtQuantity.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtQuantity.setText(newValue.replaceAll("[^\\d]", ""));
             else updateFilters();
 
         });
-        profit.textProperty().addListener((observable, oldValue, newValue) ->
+        txtProfit.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if(!newValue.matches("\\d*")) profit.setText(newValue.replaceAll("[^\\d]", ""));
+            if(newValue.length() > 9) txtProfit.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtProfit.setText(newValue.replaceAll("[^\\d]", ""));
             else updateFilters();
 
         });
@@ -48,12 +50,14 @@ public class Filters implements Initializable
 
     public void updateFilters()
     {
-        mainController.updateFilters(Integer.parseInt(quantity.getText()), Integer.parseInt(profit.getText()), cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+        int amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
+        int profit = Integer.parseInt(txtProfit.getText().length() > 0 ? txtProfit.getText() : "0");
+        mainController.updateFilters(amount, profit, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
     }
 
     public int getMinProfit()
     {
-        return Integer.parseInt(profit.getText());
+        return Integer.parseInt(txtProfit.getText());
     }
 
     public void setMainController(Main controller)

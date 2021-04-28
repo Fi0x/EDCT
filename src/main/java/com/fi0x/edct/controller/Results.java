@@ -129,6 +129,9 @@ public class Results implements Initializable
         {
             currentSellStation = Math.min(currentSellStation, trades.get(currentCommodity).SELL_PRICES.size() - 1);
             currentBuyStation = Math.min(currentBuyStation, trades.get(currentCommodity).BUY_PRICES.size() - 1);
+
+            currentSellStation = Math.max(currentSellStation, 0);
+            currentBuyStation = Math.max(currentBuyStation, 0);
         } else
         {
             currentCommodity = trades.size();

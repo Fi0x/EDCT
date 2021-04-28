@@ -10,36 +10,23 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.HttpRetryException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
 public class InaraCalls
 {
-    public static Map<String, Map.Entry<String, Integer>> getAllCommodities(boolean fromServer)
+    public static Map<String, Map.Entry<String, Integer>> getAllCommodities()
     {
         Map<String, String> parameters = new HashMap<>();
         Map<String, Map.Entry<String, Integer>> commodities = new HashMap<>();
 
         try
         {
-            long ageInMillis = System.currentTimeMillis() - MainWindow.commodityList.lastModified();
-            Scanner fileReader = new Scanner(MainWindow.commodityList);
-            if(fromServer || ageInMillis > 10800000 || !fileReader.hasNextLine())
-            {
-                String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
-                commodities = HTMLCleanup.getCommodityIDs(html);
-                Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS().print();
-            } else
-            {
-                while(fileReader.hasNextLine())
-                {
-                    String line = fileReader.nextLine();
-                    String[] parts = line.split("___");
-                    if(parts.length != 3) continue;
-
-                    commodities.put(parts[0], new AbstractMap.SimpleEntry<>(parts[1], Integer.parseInt(parts[2])));
-                }
-                Out.newBuilder("Commodity list loaded from local file").verbose().SUCCESS().print();
-            }
+            String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
+            commodities = HTMLCleanup.getCommodityIDs(html);
+            Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS().print();
         } catch(Exception ignored)
         {
             Out.newBuilder("Could not get commodity-list").always().ERROR().print();
@@ -78,18 +65,13 @@ public class InaraCalls
             String folder = sell ? "CommoditySells" : "CommodityBuys";
             File commodityFile = new File(MainWindow.localStorage.getPath() + File.separator + folder + File.separator + commodityRefID);
 
-            boolean outdatedFile;
             if(commodityFile.exists())
             {
                 long ageInMillis = System.currentTimeMillis() - commodityFile.lastModified();
                 if(ageInMillis > caller.oldestFileAge) caller.oldestFileAge = ageInMillis;
+            }
 
-                Scanner fileReader = new Scanner(MainWindow.commodityList);
-
-                outdatedFile = !fileReader.hasNextLine() || ageInMillis > 10800000;
-            } else outdatedFile = true;
-
-            if(forceHTTP || outdatedFile)
+            if(forceHTTP || !commodityFile.exists())
             {
                 String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters);
                 stationList = HTMLCleanup.getCommodityPrices(html);
