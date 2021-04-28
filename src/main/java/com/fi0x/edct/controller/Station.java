@@ -37,15 +37,15 @@ public class Station
     private void nextStation()
     {
         stationID++;
-        if(isBuying && stationID >= resultsController.getCurrentTrade().BUY_PRICES.size())
+        if(!isBuying && stationID >= resultsController.getCurrentTrade().BUY_PRICES.size())
         {
             stationID = resultsController.getCurrentTrade().BUY_PRICES.size() - 1;
-        } else if(!isBuying && stationID >= resultsController.getCurrentTrade().SELL_PRICES.size())
+        } else if(isBuying && stationID >= resultsController.getCurrentTrade().SELL_PRICES.size())
         {
             stationID = resultsController.getCurrentTrade().SELL_PRICES.size() - 1;
         }
 
-        if(isBuying) resultsController.currentBuyStation = stationID;
+        if(!isBuying) resultsController.currentBuyStation = stationID;
         else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
     }
@@ -55,7 +55,7 @@ public class Station
         stationID--;
         if(stationID < 0) stationID = 0;
 
-        if(isBuying) resultsController.currentBuyStation = stationID;
+        if(!isBuying) resultsController.currentBuyStation = stationID;
         else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
     }
@@ -70,8 +70,8 @@ public class Station
         lblPrice.setText("Price: " + station.PRICE + " credits");
         lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
 
-        btnPrevStation.setVisible(hasPrev);
-        btnNextStation.setVisible(hasNext);
+        btnPrevStation.setDisable(!hasPrev);
+        btnNextStation.setDisable(!hasNext);
     }
 
     public void setResultsController(Results controller, boolean isBuying)

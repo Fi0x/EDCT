@@ -33,8 +33,8 @@ public class Commodity
         lblCommodity.setText(resultsController.getCurrentTrade().NAME);
         lblProfit.setText(resultsController.getCurrentTrade().profit + " credits");
 
-        btnPrevComm.setVisible(hasPrev);
-        btnNextComm.setVisible(hasNext);
+        btnPrevComm.setDisable(!hasPrev);
+        btnNextComm.setDisable(!hasNext);
     }
 
     public void setResultsController(Results controller)
