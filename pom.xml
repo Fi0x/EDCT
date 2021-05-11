@@ -18,10 +18,37 @@
             <artifactId>jsoup</artifactId>
             <version>1.13.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.akathist.maven.plugins.launch4j</groupId>
+            <artifactId>launch4j-maven-plugin</artifactId>
+            <version>2.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.fi0x.edct.Main</mainClass>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.akathist.maven.plugins.launch4j</groupId>
                 <artifactId>launch4j-maven-plugin</artifactId>
@@ -33,46 +60,32 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <headerType>gui</headerType>
-                            <outfile>target/edct.exe</outfile>
-                            <jar>target/edct.jar</jar>
-                            <errTitle>edct</errTitle>
+                            <dontWrapJar>false</dontWrapJar>
+                            <headerType>console</headerType>
+                            <jar>target/EliteDangerousCarrierTrader-0.1-alpha.jar</jar>
+                            <outfile>target/EDCT.exe</outfile>
+                            <downloadUrl>https://jdk.java.net/java-se-ri/11</downloadUrl>
                             <classPath>
                                 <mainClass>com.fi0x.edct.MainWindow</mainClass>
-                                <addDependencies>true</addDependencies>
-                                <preCp>anything</preCp>
                             </classPath>
                             <jre>
-                                <minVersion>1.5.0</minVersion>
+                                <bundledJre64Bit>true</bundledJre64Bit>
+                                <path>C:\\Program Files\\Java\\jdk-11.0.2</path>
+                                <bundledJreAsFallback>false</bundledJreAsFallback>
+                                <runtimeBits>64</runtimeBits>
                             </jre>
                             <versionInfo>
-                                <fileVersion>1.0</fileVersion>
-                                <txtFileVersion>1.0</txtFileVersion>
-                                <fileDescription>elite dangerous carrier trader</fileDescription>
-                                <copyright>fi0x</copyright>
-                                <productVersion>1.0</productVersion>
-                                <txtProductVersion>1.0</txtProductVersion>
-                                <productName>EDCT</productName>
-                                <internalName>edct</internalName>
-                                <originalFilename>original.exe</originalFilename>
+                                <fileVersion>0.1.0.0</fileVersion>
+                                <txtFileVersion>0.1.0.0</txtFileVersion>
+                                <fileDescription>EDCT</fileDescription>
+                                <copyright>Copyright (c) 2021 Fi0x</copyright>
+                                <productVersion>0.1.0.0</productVersion>
+                                <txtProductVersion>0.1.0.0</txtProductVersion>
+                                <productName>EliteDangerousCarrierTrader</productName>
+                                <companyName>Fi0x</companyName>
+                                <internalName>EDCT</internalName>
+                                <originalFilename>EDCT.exe</originalFilename>
                             </versionInfo>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <descriptors>
-                                <descriptor>assembly.xml</descriptor>
-                            </descriptors>
                         </configuration>
                     </execution>
                 </executions>
