@@ -1,12 +1,20 @@
 .root {
-    -fx-font-size: 15;
-    -fx-background-color: #949494;
+    -fx-font-size: 16;
+    -fx-background-color: #565656;
+}
+.label {
+    -fx-text-fill: #eeeeee;
+}
+.check-box {
+    -fx-text-fill: #eeeeee;
 }
 .button {
-    -fx-background-color: #c1c1c1;
-    -fx-text-fill: #454545;
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #1c1c1c;
+    -fx-font-weight: bold;
 }
 .button:hover {
-    -fx-background-color: #2b2b2b;
-    -fx-text-fill: #b7b7b7;
+    -fx-background-color: #1c1c1c;
+    -fx-text-fill: #eeeeee;
+    -fx-font-weight: bold;
 }

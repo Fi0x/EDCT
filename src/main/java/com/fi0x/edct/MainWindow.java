@@ -2,7 +2,6 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.Results;
-import com.fi0x.edct.dbconnection.UpdateThread;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,8 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class MainWindow extends Application
 {
@@ -43,6 +40,9 @@ public class MainWindow extends Application
 
         primaryStage.setTitle("Elite: Dangerous Carrier Trader");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setMinHeight(540);
+        primaryStage.setMinWidth(960);
+        primaryStage.setResizable(false);
         primaryStage.show();
 
         Main.updaterThread.start();

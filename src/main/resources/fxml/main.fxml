@@ -3,7 +3,7 @@
 <?import java.net.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="vbMain" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Main" alignment="CENTER">
+<VBox fx:id="vbMain" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Main" alignment="TOP_CENTER">
     <stylesheets>
         <URL value="@../css/main.css"/>
     </stylesheets>
