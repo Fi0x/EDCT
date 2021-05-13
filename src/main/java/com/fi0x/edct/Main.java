@@ -2,7 +2,6 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.dbconnection.UpdateThread;
 import com.fi0x.edct.util.Out;
-import javafx.application.Application;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +34,8 @@ public class Main
 
     public static void stopProgram()
     {
-        if(updaterThread != null) updaterThread.interrupt();
-        if(downloadThread != null) downloadThread.interrupt();
+        if(updaterThread != null) updaterThread.stop();
+        if(downloadThread != null) downloadThread.stop();
     }
 
     private static void setupLocalFiles()

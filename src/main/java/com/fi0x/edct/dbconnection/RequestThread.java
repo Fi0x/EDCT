@@ -89,8 +89,6 @@ public class RequestThread implements Runnable
                 }
 
             } else Out.newBuilder("Skipped commodity " + i + " because of too low profit").verbose().print();
-
-            if(Thread.interrupted()) break;
         }
 
         Platform.runLater(() ->

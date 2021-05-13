@@ -19,7 +19,7 @@ public class UpdateThread implements Runnable
     public void run()
     {
         Out.newBuilder("Updater thread started").verbose().SUCCESS().print();
-        while(!Thread.interrupted())
+        while(true)
         {
             updateFiles();
             sortFileAge();
