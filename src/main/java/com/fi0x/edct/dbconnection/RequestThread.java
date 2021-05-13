@@ -1,5 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.datastructures.STATION;
@@ -108,7 +109,7 @@ public class RequestThread implements Runnable
 
         try
         {
-            FileWriter writer = new FileWriter(MainWindow.commodityList.toString());
+            FileWriter writer = new FileWriter(Main.commodityList.toString());
 
             for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
             {

@@ -1,5 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
@@ -63,7 +64,7 @@ public class InaraCalls
         try
         {
             String folder = sell ? "CommoditySells" : "CommodityBuys";
-            File commodityFile = new File(MainWindow.localStorage.getPath() + File.separator + folder + File.separator + commodityRefID);
+            File commodityFile = new File(Main.localStorage.getPath() + File.separator + folder + File.separator + commodityRefID);
 
             if(commodityFile.exists())
             {

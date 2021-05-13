@@ -11,14 +11,14 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:11" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:13" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:13" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:win:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:win:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:12.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:11.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:11.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.13.1" level="project" />
     <orderEntry type="library" name="Maven: com.akathist.maven.plugins.launch4j:launch4j-maven-plugin:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: net.sf.launch4j:launch4j:core:3.14" level="project" />

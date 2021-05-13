@@ -1,7 +1,7 @@
 package com.fi0x.edct.dbconnection;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
-import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
@@ -52,9 +52,9 @@ public class UpdateThread implements Runnable
     {
         files = new ArrayList<>();
 
-        File folder = new File(MainWindow.localStorage + File.separator + "CommoditySells");
+        File folder = new File(Main.localStorage + File.separator + "CommoditySells");
         if(folder.exists()) files.addAll(Arrays.asList(Objects.requireNonNull(folder.listFiles())));
-        folder = new File(MainWindow.localStorage + File.separator + "CommodityBuys");
+        folder = new File(Main.localStorage + File.separator + "CommodityBuys");
         if(folder.exists()) files.addAll(Arrays.asList(Objects.requireNonNull(folder.listFiles())));
     }
 
@@ -80,7 +80,7 @@ public class UpdateThread implements Runnable
 
         try
         {
-            FileWriter writer = new FileWriter(MainWindow.commodityList.toString());
+            FileWriter writer = new FileWriter(Main.commodityList.toString());
 
             for(Map.Entry<String, Map.Entry<String, Integer>> entry : newCommodities.entrySet())
             {
