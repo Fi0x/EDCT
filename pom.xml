@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fi0x.edct</groupId>
     <artifactId>EliteDangerousCarrierTrader</artifactId>
-    <version>0.1-alpha</version>
+    <version>0.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -97,8 +97,9 @@
                         </goals>
                         <configuration>
                             <dontWrapJar>false</dontWrapJar>
-                            <headerType>console</headerType>
-                            <jar>target/EliteDangerousCarrierTrader-0.1-alpha-jar-with-dependencies.jar</jar>
+                            <headerType>gui</headerType>
+                            <stayAlive>true</stayAlive>
+                            <jar>target/EliteDangerousCarrierTrader-0.1-jar-with-dependencies.jar</jar>
                             <outfile>target/EDCT.exe</outfile>
                             <downloadUrl>https://jdk.java.net/java-se-ri/11</downloadUrl>
                             <classPath>
@@ -106,19 +107,18 @@
                             </classPath>
                             <jre>
                                 <bundledJre64Bit>true</bundledJre64Bit>
-                                <path>C:\\Program Files\\Java\\jdk-11.0.2</path>
-                                <bundledJreAsFallback>false</bundledJreAsFallback>
+                                <path>C:\\Program Files\\Java\\jdk-13.0.1</path>
+                                <bundledJreAsFallback>true</bundledJreAsFallback>
                                 <runtimeBits>64</runtimeBits>
                             </jre>
                             <versionInfo>
                                 <fileVersion>0.1.0.0</fileVersion>
-                                <txtFileVersion>0.1.0.0</txtFileVersion>
-                                <fileDescription>EDCT</fileDescription>
+                                <txtFileVersion>none</txtFileVersion>
+                                <fileDescription>Elite Dangerous Carrier Trader</fileDescription>
                                 <copyright>Copyright (c) 2021 Fi0x</copyright>
                                 <productVersion>0.1.0.0</productVersion>
                                 <txtProductVersion>0.1.0.0</txtProductVersion>
                                 <productName>EliteDangerousCarrierTrader</productName>
-                                <companyName>Fi0x</companyName>
                                 <internalName>EDCT</internalName>
                                 <originalFilename>EDCT.exe</originalFilename>
                             </versionInfo>
