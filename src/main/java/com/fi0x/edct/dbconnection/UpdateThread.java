@@ -26,7 +26,11 @@ public class UpdateThread implements Runnable
 
             if(files.size() > 0)
             {
-                while(System.currentTimeMillis() - files.get(0).lastModified() < 1000 * 60 * 60) wait(30000);
+                while(System.currentTimeMillis() - files.get(0).lastModified() < 1000 * 60 * 30)
+                {
+                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(System.currentTimeMillis() - files.get(0).lastModified()));
+                    wait((int) (Math.random() * 5000));
+                }
 
                 setCommodities(InaraCalls.getAllCommodities());
                 try
@@ -36,7 +40,8 @@ public class UpdateThread implements Runnable
                     files.remove(0);
                     if(files.size() > 0)
                     {
-                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(System.currentTimeMillis() - files.get(0).lastModified()));
+                        long age = System.currentTimeMillis() - files.get(0).lastModified();
+                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(age));
                     }
                     Out.newBuilder("Updated oldest file").verbose().print();
                 } catch(HttpRetryException ignored)
@@ -44,7 +49,7 @@ public class UpdateThread implements Runnable
                     Out.newBuilder("Could not update a commodity file").WARNING().debug().print();
                 }
             }
-            wait((int) (Math.random() * 20000 + 10000));
+            wait(500);
         }
     }
 

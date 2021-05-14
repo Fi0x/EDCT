@@ -14,28 +14,15 @@ public class Datastorage
     public Button btnStart;
     @FXML
     private Label lblDataAge;
-    @FXML
-    public Button btnUpdateLocalFiles;
 
     @FXML
     private void calculate()
     {
         btnStart.setVisible(false);
-        btnUpdateLocalFiles.setVisible(false);
         lblDataAge.setText("Loading data from storage");
 
-        Main.downloadThread = new Thread(new RequestThread(interactionController, 1, false));
+        Main.downloadThread = new Thread(new RequestThread(interactionController, false));
         Main.downloadThread.start();
-    }
-    @FXML
-    private void updateStorage()
-    {
-        btnStart.setVisible(false);
-        btnUpdateLocalFiles.setVisible(false);
-        lblDataAge.setText("Downloading data from INARA");
-
-        Thread threadReq = new Thread(new RequestThread(interactionController, 1, true));
-        threadReq.start();
     }
 
     public void setDataAge(long age)

@@ -6,12 +6,12 @@
 
 _Since inara does not provide any API endpoints for trade-data, EDCT gathers the required information directly from the HTML files that are provided to every website user. Therefor the trade information is always as accurate as the information on inara itself._
 
-## Features
-#### Implemented
-- UI
-- Search for the best commodity prices of all commodities
+To reduce traffic on [inara](https://inara.cz/galaxy-commodities/), the HTTP requests are delayed, which results in a few minutes waiting time at the first launch of the program.
+After the first launch, the program will provide results much faster, since downloaded trade data is stored locally.
 
-#### Upcoming
+## Features
+- GUI
+- Search for the best commodity prices of all commodities
 - Sorted result display
 - Display profit/t
 - Display total amount that could be traded

@@ -34,7 +34,7 @@ public class Interaction implements Initializable
         loadFilters();
         loadDatastorage();
 
-        Thread threadReq = new Thread(new RequestThread(this, 0, true));
+        Thread threadReq = new Thread(new RequestThread(this, false));
         threadReq.start();
     }
 

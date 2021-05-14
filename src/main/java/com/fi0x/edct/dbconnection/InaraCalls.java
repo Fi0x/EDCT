@@ -1,7 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.datastructures.ENDPOINTS;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;

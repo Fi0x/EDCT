@@ -1,7 +1,6 @@
 package com.fi0x.edct.dbconnection;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.datastructures.STATION;
 import com.fi0x.edct.util.Out;
@@ -18,45 +17,33 @@ public class RequestThread implements Runnable
 {
     private final Interaction INT_CONTROLLER;
 
-    private final int TYPE;
     private final boolean FORCE;
     private Map<String, Map.Entry<String, Integer>> commodities;
     public long oldestFileAge;
 
-    public RequestThread(Interaction intController, int type, boolean force)
+    public RequestThread(Interaction intController, boolean force)
     {
         INT_CONTROLLER = intController;
-        TYPE = type;
         FORCE = force;
     }
 
     @Override
     public void run()
     {
-        switch(TYPE)
+        int tries = 3;
+        while(tries > 0 && (commodities == null || commodities.size() == 0))
         {
-            case 0:
-                setCommodities(InaraCalls.getAllCommodities());
-                INT_CONTROLLER.storageController.btnStart.setVisible(true);
-                INT_CONTROLLER.storageController.btnUpdateLocalFiles.setVisible(true);
-                break;
-            case 1:
-                int tries = 3;
-                while(tries > 0 && (commodities == null || commodities.size() == 0))
-                {
-                    tries--;
-                    wait(1000);
-                    setCommodities(InaraCalls.getAllCommodities());
-                }
-                if(commodities == null)
-                {
-                    INT_CONTROLLER.storageController.btnStart.setVisible(true);
-                    break;
-                }
-
-                requestPrices();
-                break;
+            tries--;
+            wait(1000);
+            setCommodities(InaraCalls.getAllCommodities());
         }
+        if(commodities == null)
+        {
+            INT_CONTROLLER.storageController.btnStart.setVisible(true);
+            return;
+        }
+
+        requestPrices();
     }
 
     private void requestPrices()
@@ -70,32 +57,28 @@ public class RequestThread implements Runnable
         for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
         {
             i++;
-            if(entry.getValue().getValue() >= INT_CONTROLLER.filterController.getMinProfit())
+            try
             {
-                try
-                {
-                    ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), true, FORCE);
-                    if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
+                ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), true, FORCE);
+                if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
 
-                    tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), false, FORCE);
-                    if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue().getKey(), tmp);
-                } catch(HttpRetryException e)
+                tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), false, FORCE);
+                if(tmp != null) INT_CONTROLLER.buyPrices.put(entry.getValue().getKey(), tmp);
+            } catch(HttpRetryException e)
+            {
+                if(e.responseCode() == 429)
                 {
-                    if(e.responseCode() == 429)
-                    {
-                        Out.newBuilder("Received a 429 response code. Please wait a while.").always().WARNING().print();
-                        break;
-                    }
+                    Out.newBuilder("Received a 429 response code. Please wait a while.").always().WARNING().print();
+                    break;
                 }
-
-            } else Out.newBuilder("Skipped commodity " + i + " because of too low profit").verbose().print();
+            }
+            Out.newBuilder("Updated file " + i + "/" + commodities.size()).veryVerbose().SUCCESS().print();
         }
 
         Platform.runLater(() ->
         {
             INT_CONTROLLER.filterController.updateFilters();
             INT_CONTROLLER.storageController.btnStart.setVisible(true);
-            INT_CONTROLLER.storageController.btnUpdateLocalFiles.setVisible(true);
             INT_CONTROLLER.storageController.setDataAge(oldestFileAge);
         });
     }
