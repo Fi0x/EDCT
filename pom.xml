@@ -96,6 +96,7 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
+                            <icon>E:\\Users\\felpe\\Documents\\EDCT\\src\\main\\resources\\images\\icon.ico</icon>
                             <dontWrapJar>false</dontWrapJar>
                             <headerType>gui</headerType>
                             <stayAlive>true</stayAlive>

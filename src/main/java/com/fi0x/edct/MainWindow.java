@@ -7,6 +7,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -39,6 +40,7 @@ public class MainWindow extends Application
         loadResults(loader);
 
         primaryStage.setTitle("Elite: Dangerous Carrier Trader");
+        primaryStage.getIcons().add(new Image("images/icon.png"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setMinHeight(540);
         primaryStage.setMinWidth(960);
