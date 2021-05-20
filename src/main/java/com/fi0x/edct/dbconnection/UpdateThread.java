@@ -28,7 +28,7 @@ public class UpdateThread implements Runnable
             {
                 while(System.currentTimeMillis() - files.get(0).lastModified() < 1000 * 60 * 30)
                 {
-                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(System.currentTimeMillis() - files.get(0).lastModified()));
+                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(System.currentTimeMillis() - files.get(0).lastModified(), false));
                     wait((int) (Math.random() * 5000));
                 }
 
@@ -41,7 +41,7 @@ public class UpdateThread implements Runnable
                     if(files.size() > 0)
                     {
                         long age = System.currentTimeMillis() - files.get(0).lastModified();
-                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(age));
+                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(age, true));
                     }
                     Out.newBuilder("Updated oldest file").verbose().print();
                 } catch(HttpRetryException ignored)

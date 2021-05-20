@@ -7,6 +7,7 @@
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Datastorage">
     <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Get best trades" textAlignment="CENTER" visible="false"/>
     <Label fx:id="lblDataAge" text="Local data age: ---" />
+    <Label fx:id="lblUpdateStatus" text="Updating local files..." />
     <stylesheets>
         <URL value="@../css/datastorage.css"/>
     </stylesheets>

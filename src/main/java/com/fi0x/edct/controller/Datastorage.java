@@ -14,6 +14,8 @@ public class Datastorage
     public Button btnStart;
     @FXML
     private Label lblDataAge;
+    @FXML
+    private Label lblUpdateStatus;
 
     @FXML
     private void calculate()
@@ -33,6 +35,11 @@ public class Datastorage
         else if(age < (24 * 60 * 60 * 1000)) text += age/(60 * 60 * 1000) + "h";
         else text += age/(24 * 60 * 60 * 1000) + "d";
         lblDataAge.setText(text);
+    }
+    public void setDataAge(long age, boolean isUpdating)
+    {
+        lblUpdateStatus.setText(isUpdating ? "Updating local files..." : "Local files are updated");
+        setDataAge(age);
     }
 
     public void setInteractionController(Interaction controller)
