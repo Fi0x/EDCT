@@ -96,13 +96,13 @@
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <icon>E:\\Users\\felpe\\Documents\\EDCT\\src\\main\\resources\\images\\icon.ico</icon>
+                            <icon>src\\main\\resources\\images\\icon.ico</icon>
                             <dontWrapJar>false</dontWrapJar>
                             <headerType>gui</headerType>
                             <stayAlive>true</stayAlive>
                             <jar>target/EliteDangerousCarrierTrader-${project.version}-jar-with-dependencies.jar</jar>
                             <outfile>target/EDCT.exe</outfile>
-                            <downloadUrl>https://jdk.java.net/java-se-ri/11</downloadUrl>
+                            <downloadUrl>https://jdk.java.net/java-se-ri/13</downloadUrl>
                             <classPath>
                                 <mainClass>com.fi0x.edct.Main</mainClass>
                             </classPath>
