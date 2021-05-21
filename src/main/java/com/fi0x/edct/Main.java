@@ -1,6 +1,6 @@
 package com.fi0x.edct;
 
-import com.fi0x.edct.dbconnection.UpdateThread;
+import com.fi0x.edct.data.webconnection.UpdateThread;
 import com.fi0x.edct.util.Out;
 
 import java.io.File;

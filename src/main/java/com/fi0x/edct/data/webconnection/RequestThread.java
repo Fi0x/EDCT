@@ -1,4 +1,4 @@
-package com.fi0x.edct.dbconnection;
+package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Interaction;

@@ -1,7 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.dbconnection.RequestThread;
+import com.fi0x.edct.data.webconnection.RequestThread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

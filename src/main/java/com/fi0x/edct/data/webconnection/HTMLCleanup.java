@@ -1,4 +1,4 @@
-package com.fi0x.edct.dbconnection;
+package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.datastructures.PADSIZE;
 import com.fi0x.edct.datastructures.STATION;
