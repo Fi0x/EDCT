@@ -2,7 +2,7 @@ package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Interaction;
-import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 

@@ -1,6 +1,6 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.data.structures.STATION;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

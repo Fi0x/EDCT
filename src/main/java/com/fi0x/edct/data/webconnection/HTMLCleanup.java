@@ -1,8 +1,8 @@
 package com.fi0x.edct.data.webconnection;
 
-import com.fi0x.edct.datastructures.PADSIZE;
-import com.fi0x.edct.datastructures.STATION;
-import com.fi0x.edct.datastructures.STATIONTYPE;
+import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.util.Out;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

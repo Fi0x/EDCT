@@ -1,4 +1,4 @@
-package com.fi0x.edct.datastructures;
+package com.fi0x.edct.data.structures;
 
 import java.util.ArrayList;
 import java.util.Collections;

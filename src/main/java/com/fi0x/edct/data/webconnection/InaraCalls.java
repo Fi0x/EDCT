@@ -1,8 +1,9 @@
 package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.datastructures.ENDPOINTS;
-import com.fi0x.edct.datastructures.STATION;
+import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.structures.ENDPOINTS;
+import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Out;
 
 import java.io.File;
