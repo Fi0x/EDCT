@@ -1,7 +1,6 @@
 package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Out;
@@ -26,7 +25,7 @@ public class InaraCalls
         try
         {
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
-            commodities = HTMLCleanup.getCommodityIDs(html);
+            commodities = HTMLCleanup.getCommodityIDsOLD(html);
             Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS().print();
         } catch(Exception ignored)
         {

@@ -5,7 +5,8 @@ public enum SQLSTATEMENTS
     CreateCommodities(
             "CREATE TABLE IF NOT EXISTS commodities (" +
                     "commodity_name TEXT NOT NULL, " +
-                    "inara_id INT PRIMARY KEY)"),
+                    "inara_id INT PRIMARY KEY, " +
+                    "last_update_time INT NOT NULL)"),
     CreateStations(
             "CREATE TABLE IF NOT EXISTS stations (" +
                     "commodity_id INT NOT NULL, " +
@@ -13,7 +14,6 @@ public enum SQLSTATEMENTS
                     "star_system TEXT NOT NULL, " +
                     "is_seller INT NOT NULL, " +
                     "download_time INT NOT NULL, " +
-                    "inara_update_time INT NOT NULL, " +
                     "price INT NOT NULL, " +
                     "quantity INT NOT NULL, " +
                     "pad_size TEXT NOT NULL, " +

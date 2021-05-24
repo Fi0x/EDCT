@@ -46,12 +46,15 @@ public class DBHandler
     public void setCommodityData(String commodityName, int inaraID)
     {
         sendStatement("INSERT INTO commodities " +
-                "SELECT '" + commodityName + "', " + inaraID +
-                " WHERE NOT EXISTS (SELECT * FROM commodities " +
-                "WHERE inara_id = " + inaraID + " AND commodity_name = '" + commodityName + "')");
+                "SELECT '" + commodityName + "', " + inaraID + ", " + 0 + " " +
+                "WHERE NOT EXISTS (" +
+                "SELECT * " +
+                "FROM commodities " +
+                "WHERE inara_id = " + inaraID + " " +
+                "AND commodity_name = '" + commodityName + "')");
     }
 
-    public void setStationData(int inaraID, String stationName, boolean isSelling, long downloadTime, long inaraUpdateTime, int price, int quantity, PADSIZE pad, STATIONTYPE type, String system, int starDistance)
+    public void setStationData(int inaraID, String stationName, boolean isSelling, long downloadTime, int price, int quantity, PADSIZE pad, STATIONTYPE type, String system, int starDistance)
     {
         sendStatement("REPLACE INTO stations VALUES ("
                 + inaraID + ", '"
@@ -59,12 +62,19 @@ public class DBHandler
                 + system + ", "
                 + isSelling + ", "
                 + downloadTime + ", "
-                + inaraUpdateTime + ", "
                 + price + ", "
                 + quantity + ", "
                 + pad + ", "
                 + type + ", "
                 + starDistance + ")");
+    }
+
+    public void updateDownloadTime(String commodityName, int inaraID)
+    {
+        sendStatement("REPLACE INTO commodities VALUES ("
+                + commodityName + ", "
+                + inaraID + ", "
+                + System.currentTimeMillis() / 1000 + ")");
     }
 
     private void sendStatement(String command)
