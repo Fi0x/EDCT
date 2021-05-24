@@ -18,12 +18,12 @@ public class DBHandler
 
     private DBHandler()
     {
-        String url = "jdbc:sqlite:" + Main.localStorage.getPath() + File.separator + "Commodities.db";
+        String url = "jdbc:sqlite:" + Main.localStorage.getPath() + File.separator + "Trades.db";
 
         try
         {
             dbConnection = DriverManager.getConnection(url);
-            Out.newBuilder("Connection to local database established").verbose().print();
+            Out.newBuilder("Connection to local database established").verbose().SUCCESS().print();
 
         } catch(SQLException ignored)
         {
@@ -32,7 +32,10 @@ public class DBHandler
         }
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
+        Out.newBuilder("Created Commodity Table").veryVerbose().print();
+
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
+        Out.newBuilder("Created Station Table").veryVerbose().print();
     }
     public static DBHandler getInstance()
     {
@@ -42,15 +45,18 @@ public class DBHandler
 
     public void setCommodityData(String commodityName, int inaraID)
     {
-        sendStatement("IF NOT EXISTS (SELECT * FROM Commodities WHERE InaraID = " + inaraID + ") " +
-                "BEGIN INSERT INTO Commodities VALUES (" + commodityName + ", " + inaraID + ") END");
+        sendStatement("INSERT INTO commodities " +
+                "SELECT '" + commodityName + "', " + inaraID +
+                " WHERE NOT EXISTS (SELECT * FROM commodities " +
+                "WHERE inara_id = " + inaraID + " AND commodity_name = '" + commodityName + "')");
     }
 
     public void setStationData(int inaraID, String stationName, boolean isSelling, long downloadTime, long inaraUpdateTime, int price, int quantity, PADSIZE pad, STATIONTYPE type, String system, int starDistance)
     {
-        sendStatement("INSERT INTO Stations VALUES ("
-                + inaraID + ", "
-                + stationName + ", "
+        sendStatement("REPLACE INTO stations VALUES ("
+                + inaraID + ", '"
+                + stationName + "', "
+                + system + ", "
                 + isSelling + ", "
                 + downloadTime + ", "
                 + inaraUpdateTime + ", "
@@ -58,17 +64,7 @@ public class DBHandler
                 + quantity + ", "
                 + pad + ", "
                 + type + ", "
-                + system + ", "
-                + starDistance + ") " +
-                "ON DUPLICATE KEY UPDATE" +
-                " DownloadTime = " + downloadTime +
-                " InaraUpdateTime = " + inaraUpdateTime +
-                " Price = " + price +
-                " Quantity = " + quantity +
-                " PadSize = " + pad +
-                " StationType = " + type +
-                " System = " + system +
-                " StarDistance = " + starDistance);
+                + starDistance + ")");
     }
 
     private void sendStatement(String command)
@@ -77,6 +73,7 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             statement.executeUpdate(command);
+            Out.newBuilder("Executed statement").veryVerbose().print();
         } catch(SQLException e)
         {
             Out.newBuilder("Could not execute a statement for the DB").debug().WARNING().print();

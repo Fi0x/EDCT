@@ -3,24 +3,24 @@ package com.fi0x.edct.data.localstorage;
 public enum SQLSTATEMENTS
 {
     CreateCommodities(
-            "CREATE TABLE IF NOT EXISTS Commodities (" +
-                    "CommodityName TEXT NOT NULL, " +
-                    "InaraID INT PRIMARY KEY)"),
+            "CREATE TABLE IF NOT EXISTS commodities (" +
+                    "commodity_name TEXT NOT NULL, " +
+                    "inara_id INT PRIMARY KEY)"),
     CreateStations(
-            "CREATE TABLE IF NOT EXISTS Stations (" +
-                    "InaraID INT NOT NULL, " +
-                    "StationName TEXT NOT NULL, " +
-                    "IsSeller INT NOT NULL, " +
-                    "DownloadTime INT NOT NULL, " +
-                    "InaraUpdateTime INT NOT NULL, " +
-                    "Price INT NOT NULL, " +
-                    "Quantity INT NOT NULL, " +
-                    "PadSize TEXT NOT NULL, " +
-                    "StationType TEXT NOT NULL, " +
-                    "System TEXT NOT NULL, " +
-                    "StarDistance INT NOT NULL, " +
-                    "PRIMARY KEY (InaraID, StationName, IsSeller), " +
-                    "FOREIGN KEY (InaraID) REFERENCES Commodities (InaraID))");
+            "CREATE TABLE IF NOT EXISTS stations (" +
+                    "commodity_id INT NOT NULL, " +
+                    "station_name TEXT NOT NULL, " +
+                    "star_system TEXT NOT NULL, " +
+                    "is_seller INT NOT NULL, " +
+                    "download_time INT NOT NULL, " +
+                    "inara_update_time INT NOT NULL, " +
+                    "price INT NOT NULL, " +
+                    "quantity INT NOT NULL, " +
+                    "pad_size TEXT NOT NULL, " +
+                    "station_type TEXT NOT NULL, " +
+                    "star_distance INT NOT NULL, " +
+                    "PRIMARY KEY (commodity_id, station_name, star_system, is_seller), " +
+                    "FOREIGN KEY (commodity_id) REFERENCES commodities (inara_id))");
 
     private final String statement;
 
