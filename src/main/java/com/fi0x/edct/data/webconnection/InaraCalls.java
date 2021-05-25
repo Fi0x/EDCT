@@ -15,8 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+@Deprecated
 public class InaraCalls
 {
+    @Deprecated
     public static Map<String, Map.Entry<String, Integer>> getAllCommodities()
     {
         Map<String, String> parameters = new HashMap<>();
@@ -35,6 +37,7 @@ public class InaraCalls
         return commodities;
     }
 
+    @Deprecated
     public static ArrayList<STATION> getCommodityPrices(RequestThread caller, String commodityRefID, boolean sell, boolean forceHTTP) throws HttpRetryException
     {
         Map<String, String> parameters = new HashMap<>();

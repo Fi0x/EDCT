@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.HttpRetryException;
 import java.util.*;
 
+@Deprecated
 public class UpdateThread implements Runnable
 {
     ArrayList<File> files;

@@ -16,6 +16,7 @@ import java.util.Map;
 
 public class HTMLCleanup
 {
+    @Deprecated
     public static Map<String, Map.Entry<String, Integer>> getCommodityIDsOLD(String inputHTML)
     {
         Map<String, Map.Entry<String, Integer>> commodities = new HashMap<>();

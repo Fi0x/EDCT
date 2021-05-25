@@ -1,15 +1,13 @@
 package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Out;
 
+import javax.annotation.Nullable;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 public class DBHandler
 {
@@ -54,19 +52,19 @@ public class DBHandler
                 "AND commodity_name = '" + commodityName + "')");
     }
 
-    public void setStationData(int inaraID, String stationName, boolean isSelling, long downloadTime, int price, int quantity, PADSIZE pad, STATIONTYPE type, String system, int starDistance)
+    public void setStationData(STATION station, int inaraID, boolean isSelling, long downloadTime)
     {
         sendStatement("REPLACE INTO stations VALUES ("
                 + inaraID + ", '"
-                + stationName + "', "
-                + system + ", "
+                + station.NAME + "', "
+                + station.SYSTEM + ", "
                 + isSelling + ", "
                 + downloadTime + ", "
-                + price + ", "
-                + quantity + ", "
-                + pad + ", "
-                + type + ", "
-                + starDistance + ")");
+                + station.PRICE + ", "
+                + station.QUANTITY + ", "
+                + station.PAD + ", "
+                + station.TYPE + ", "
+                + station.STAR_DISTANCE + ")");
     }
 
     public void updateDownloadTime(String commodityName, int inaraID)
@@ -77,6 +75,44 @@ public class DBHandler
                 + System.currentTimeMillis() / 1000 + ")");
     }
 
+    public ArrayList<Integer> getMissingCommodityIDs()
+    {
+        ArrayList<Integer> ids = new ArrayList<>();
+
+        ResultSet results = getQueryResults("SELECT c.inara_id"
+                + "FROM commodities c "
+                + "LEFT JOIN stations s ON s.inara_id = c.inara_id"
+                + "WHERE s.inara_id IS NULL");//TODO: Check if this works
+        try
+        {
+            while(results.next())
+            {
+                ids.add(results.getInt("inara_id"));
+            }
+        } catch(Exception ignored)
+        {
+        }
+        return ids;
+    }
+
+    public String getCommodityNameByID(int commodityID)
+    {
+        ResultSet commodity = getQueryResults("SELECT commodity_name "
+                + "FROM commodities"
+                + "WHERE inara_id = '" + commodityID + "'");
+        try
+        {
+            if(commodity != null && commodity.next())
+            {
+                return commodity.getString("commodity_name");
+            }
+        } catch(SQLException ignored)
+        {
+            Out.newBuilder("Some error occured when requesting the name of commodity " + commodityID).debug().WARNING().print();
+        }
+        return "";
+    }
+
     private void sendStatement(String command)
     {
         try
@@ -84,10 +120,24 @@ public class DBHandler
             Statement statement = dbConnection.createStatement();
             statement.executeUpdate(command);
             Out.newBuilder("Executed statement").veryVerbose().print();
-        } catch(SQLException e)
+        } catch(SQLException ignored)
         {
             Out.newBuilder("Could not execute a statement for the DB").debug().WARNING().print();
-            e.printStackTrace();
         }
+    }
+    @Nullable
+    private ResultSet getQueryResults(String query)
+    {
+        try
+        {
+            Statement statement = dbConnection.createStatement();
+            ResultSet results = statement.executeQuery(query);
+            Out.newBuilder("Executed query").veryVerbose().print();
+            return results;
+        } catch(SQLException ignored)
+        {
+            Out.newBuilder("Could not execute a query for the DB").debug().WARNING().print();
+        }
+        return null;
     }
 }

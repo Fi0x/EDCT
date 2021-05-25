@@ -7,10 +7,6 @@
 <?import javafx.scene.control.Label?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
     <HBox>
-        <Label text="Min profit" alignment="CENTER_LEFT"/>
-        <TextField fx:id="txtProfit" text="5000" alignment="CENTER_RIGHT"/>
-    </HBox>
-    <HBox>
         <Label text="Min quantity" alignment="CENTER_LEFT"/>
         <TextField fx:id="txtQuantity" text="10000" alignment="CENTER_RIGHT"/>
     </HBox>

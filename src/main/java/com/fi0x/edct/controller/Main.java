@@ -21,12 +21,12 @@ public class Main
         interactionController = controller;
     }
 
-    public void updateFilters(int amount, int profit, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface)
+    public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface)
     {
         Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, interactionController.sellPrices);
         Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, interactionController.buyPrices);
 
-        resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices, profit));
+        resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
@@ -53,7 +53,7 @@ public class Main
         return filteredPrices;
     }
 
-    private static ArrayList<COMMODITY> getTrades(Map<String, ArrayList<STATION>> sellPrices, Map<String, ArrayList<STATION>> buyPrices, int minProfit)
+    private static ArrayList<COMMODITY> getTrades(Map<String, ArrayList<STATION>> sellPrices, Map<String, ArrayList<STATION>> buyPrices)
     {
         ArrayList<COMMODITY> trades = new ArrayList<>();
 
@@ -62,7 +62,7 @@ public class Main
             COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()));
             commodityTrade.sortPrices();
 
-            if(commodityTrade.profit >= minProfit) trades.add(commodityTrade);
+            trades.add(commodityTrade);
         }
 
         return sortTrades(trades);

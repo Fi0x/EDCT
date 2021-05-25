@@ -1,5 +1,6 @@
 package com.fi0x.edct;
 
+import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.data.webconnection.UpdateThread;
 import com.fi0x.edct.util.Out;
 
@@ -10,11 +11,17 @@ import java.util.Arrays;
 
 public class Main
 {
+    @Deprecated
     public static Thread updaterThread;
+    @Deprecated
     public static Thread downloadThread;
 
+    public static Thread updater;
+
     public static File localStorage;
+    @Deprecated
     public static File commodityList;
+    public static File errors;
 
     public static void main(String[] args)
     {
@@ -28,6 +35,7 @@ public class Main
         Out.newBuilder("Starting Program").verbose().print();
 
         updaterThread = new Thread(new UpdateThread());
+        updater = new Thread(new Updater());
 
         MainWindow.main(args);
     }
@@ -36,58 +44,52 @@ public class Main
     {
         if(updaterThread != null) updaterThread.stop();
         if(downloadThread != null) downloadThread.stop();
+
+        if(updater != null) updater.interrupt();
     }
 
     private static void setupLocalFiles()
     {
         Out.newBuilder("Setting up local storage").veryVerbose().print();
+
         localStorage = new File(System.getenv("APPDATA") + File.separator + "EDCT");
-
-        if(!localStorage.exists())
+        if(!createFileIfNotExists(localStorage, false))
         {
-            if(localStorage.mkdir()) Out.newBuilder("Created local storage directory").SUCCESS().verbose().print();
-            else
-            {
-                Out.newBuilder("Could not create local storage directory").origin("MainWindow").WARNING().debug().print();
-                return;
-            }
+            Out.newBuilder("Could not create local storage folder").always().ERROR().print();
+            System.exit(-1);
         }
 
+        @Deprecated
         File commodityFolder1 = new File(localStorage.getPath() + File.separator + "CommoditySells");
-        if(!commodityFolder1.exists())
-        {
-            if(commodityFolder1.mkdir()) Out.newBuilder("Created directory for commodity data").SUCCESS().verbose().print();
-            else
-            {
-                Out.newBuilder("Could not create directory for commodity data").origin("MainWindow").WARNING().debug().print();
-                return;
-            }
-        }
+        if(!createFileIfNotExists(commodityFolder1, false)) Out.newBuilder("Could not create sell-folder").always().ERROR().print();
+        @Deprecated
         File commodityFolder2 = new File(localStorage.getPath() + File.separator + "CommodityBuys");
-        if(!commodityFolder2.exists())
-        {
-            if(commodityFolder2.mkdir()) Out.newBuilder("Created directory for commodity data").SUCCESS().verbose().print();
-            else
-            {
-                Out.newBuilder("Could not create directory for commodity data").origin("MainWindow").WARNING().debug().print();
-                return;
-            }
-        }
+        if(!createFileIfNotExists(commodityFolder2, false)) Out.newBuilder("Could not create buy-folder").always().ERROR().print();
+
+        errors = new File(localStorage.getPath() + File.separator + "errors");
+        if(!createFileIfNotExists(errors, true)) Out.newBuilder("Could not create settings-file").debug().WARNING().print();
 
         commodityList = new File(localStorage.getPath() + File.separator + "CommodityList");
-        if(!commodityList.exists())
+        if(!createFileIfNotExists(commodityList, true)) Out.newBuilder("Could not create commodityList-file").debug().WARNING().print();
+    }
+
+    private static boolean createFileIfNotExists(File file, boolean isFile)
+    {
+        if(!file.exists())
         {
-            try
+            if(isFile)
             {
-                if(commodityList.createNewFile())
+                try
                 {
-                    Out.newBuilder("Created commodityList-file").SUCCESS().verbose().print();
-                    return;
+                    if(file.createNewFile()) return true;
+                } catch(IOException ignored)
+                {
                 }
-            } catch(IOException ignored)
-            {
             }
-            Out.newBuilder("Could not create commodityList-file").origin("MainWindow").WARNING().debug().print();
+            else return file.mkdir();
         }
+        else return true;
+
+        return false;
     }
 }

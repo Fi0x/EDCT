@@ -20,11 +20,14 @@ public class Datastorage
     @FXML
     private void calculate()
     {
+        //TODO: Get information from db
         btnStart.setVisible(false);
         lblDataAge.setText("Loading data from storage");
 
         Main.downloadThread = new Thread(new RequestThread(interactionController, false));
         Main.downloadThread.start();
+
+        Main.updater.start();
     }
 
     public void setDataAge(long age)
@@ -35,6 +38,7 @@ public class Datastorage
         else if(age < (24 * 60 * 60 * 1000)) text += age/(60 * 60 * 1000) + "h";
         else text += age/(24 * 60 * 60 * 1000) + "d";
         lblDataAge.setText(text);
+        //TODO: Make btnStart visible if there are new trades available
     }
     public void setDataAge(long age, boolean isUpdating)
     {
