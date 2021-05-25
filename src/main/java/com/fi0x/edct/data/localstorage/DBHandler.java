@@ -119,10 +119,10 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             statement.executeUpdate(command);
-            Out.newBuilder("Executed statement").veryVerbose().print();
+            Out.newBuilder("Executed statement\n\t" + command).veryVerbose().print();
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Could not execute a statement for the DB").debug().WARNING().print();
+            Out.newBuilder("Could not execute a statement for the DB\n\t" + command).debug().WARNING().print();
         }
     }
     @Nullable
@@ -132,11 +132,11 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             ResultSet results = statement.executeQuery(query);
-            Out.newBuilder("Executed query").veryVerbose().print();
+            Out.newBuilder("Executed query\n\t" + query).veryVerbose().print();
             return results;
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Could not execute a query for the DB").debug().WARNING().print();
+            Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING().print();
         }
         return null;
     }

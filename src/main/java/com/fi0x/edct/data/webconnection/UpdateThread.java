@@ -2,7 +2,6 @@ package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
-import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
@@ -91,8 +90,6 @@ public class UpdateThread implements Runnable
 
             for(Map.Entry<String, Map.Entry<String, Integer>> entry : newCommodities.entrySet())
             {
-                DBHandler.getInstance().setCommodityData(entry.getValue().getKey(), Integer.parseInt(entry.getKey()));
-
                 String commodityEntry = entry.getKey() + "___" + entry.getValue().getKey() + "___" + entry.getValue().getValue();
                 writer.write(commodityEntry + "\n");
             }
