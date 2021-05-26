@@ -108,9 +108,63 @@ public class DBHandler
             }
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Some error occured when requesting the name of commodity " + commodityID).debug().WARNING();
+            Out.newBuilder("Some error occurred when requesting the name of commodity " + commodityID).debug().WARNING();
         }
         return "";
+    }
+
+    public int getOldestCommodityID()
+    {
+        ResultSet commodity = getQueryResults("SELECT tbl.* " +
+                "FROM commodities tbl " +
+                "INNER JOIN (" +
+                "SELECT inara_id, MIN(last_update_time) min " +
+                "FROM commodities " +
+                "GROUP BY inara_id) tbl1 " +
+                "ON tbl1.inara_id = tbl.inara_id " +
+                "ORDER BY last_update_time");
+
+        int id = 0;
+
+        try
+        {
+            if(commodity != null && commodity.next())
+            {
+                id = commodity.getInt("inara_id");
+            }
+        } catch(SQLException ignored)
+        {
+            Out.newBuilder("Some error occurred when requesting the oldest commodity id").debug().WARNING();
+        }
+
+        return id;
+    }
+
+    public int getOldestUpdateAge()
+    {
+        ResultSet commodity = getQueryResults("SELECT tbl.* " +
+                "FROM commodities tbl " +
+                "INNER JOIN (" +
+                "SELECT inara_id, MIN(last_update_time) min " +
+                "FROM commodities " +
+                "GROUP BY inara_id) tbl1 " +
+                "ON tbl1.inara_id = tbl.inara_id " +
+                "ORDER BY last_update_time");
+
+        int time = 0;
+
+        try
+        {
+            if(commodity != null && commodity.next())
+            {
+                time = commodity.getInt("last_update_time");
+            }
+        } catch(SQLException ignored)
+        {
+            Out.newBuilder("Some error occurred when requesting the oldest commodity age").debug().WARNING();
+        }
+
+        return time;
     }
 
     private void sendStatement(String command)

@@ -28,6 +28,7 @@ public class Datastorage
         Main.downloadThread.start();
     }
 
+    //TODO: Use an event instead
     public void setDataAge(long age)
     {
         String text = "Local data age: ";

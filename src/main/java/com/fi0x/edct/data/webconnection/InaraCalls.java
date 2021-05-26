@@ -3,7 +3,6 @@ package com.fi0x.edct.data.webconnection;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Out;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,7 +29,6 @@ public class InaraCalls
             commodities = HTMLCleanup.getCommodityIDsOLD(html);
         } catch(Exception ignored)
         {
-            Out.newBuilder("Could not get commodity-list").always().ERROR();
         }
 
         return commodities;
@@ -90,7 +88,6 @@ public class InaraCalls
                     } catch(IOException ignored)
                     {
                     }
-                    Out.newBuilder("Could not create commodity-file " + commodityRefID).origin("InaraCalls").debug().WARNING();
                 } else writeCommodityDataToFile(commodityFile, stationList);
             } else stationList = readCommodityDataFromFile(commodityFile);
 
@@ -99,7 +96,6 @@ public class InaraCalls
             throw e;
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR();
         }
         return stationList;
     }
@@ -117,9 +113,8 @@ public class InaraCalls
             }
 
             writer.close();
-        } catch(IOException e)
+        } catch(IOException ignored)
         {
-            Out.newBuilder("Something went wrong when writing commodity data to local storage").origin("InaraCalls").debug().ERROR();
         }
     }
 
@@ -141,7 +136,6 @@ public class InaraCalls
             }
         } catch(FileNotFoundException ignored)
         {
-            Out.newBuilder("Could not load commodity data from local file").debug().ERROR();
         }
 
         return stations;

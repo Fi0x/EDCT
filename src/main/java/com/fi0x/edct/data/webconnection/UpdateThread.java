@@ -45,7 +45,6 @@ public class UpdateThread implements Runnable
                     }
                 } catch(HttpRetryException ignored)
                 {
-                    Out.newBuilder("Could not update a commodity file").debug().WARNING();
                 }
             }
             wait(500);
@@ -95,7 +94,6 @@ public class UpdateThread implements Runnable
             writer.close();
         } catch(IOException e)
         {
-            Out.newBuilder("Something went wrong when writing commodity data to local storage").debug().ERROR();
         }
     }
 

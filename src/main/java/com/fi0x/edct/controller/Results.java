@@ -21,6 +21,8 @@ public class Results implements Initializable
     private Station buyController;
     private Commodity commodityController;
 
+    //TODO: Completely re-make this class to use the db instead of single files
+    @Deprecated
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
     public int currentSellStation;

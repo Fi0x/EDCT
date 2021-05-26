@@ -63,22 +63,22 @@ public class Out
     public void WARNING()
     {
         color = YELLOW;
-        print("WARNING");
+        print("WRN");
     }
     public void ERROR()
     {
         color = RED;
-        print("ERROR");
+        print("ERR");
     }
     public void SUCCESS()
     {
         color = GREEN;
-        print("INFO");
+        print("INF");
     }
     public void INFO()
     {
         color = WHITE;
-        print("INFO");
+        print("INF");
     }
 
     private void print(String prefix)

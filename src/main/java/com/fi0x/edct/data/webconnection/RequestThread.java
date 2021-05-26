@@ -69,7 +69,6 @@ public class RequestThread implements Runnable
             {
                 if(e.responseCode() == 429)
                 {
-                    Out.newBuilder("Received a 429 response code. Please wait a while.").always().WARNING();
                     break;
                 }
             }
@@ -99,10 +98,8 @@ public class RequestThread implements Runnable
             }
 
             writer.close();
-            Out.newBuilder("Successfully wrote commodity-entries to file").verbose().SUCCESS();
         } catch(IOException e)
         {
-            Out.newBuilder("Something went wrong when writing commodity data to local storage").debug().ERROR();
         }
     }
 

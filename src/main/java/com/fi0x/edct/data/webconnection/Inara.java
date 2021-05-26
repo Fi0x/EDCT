@@ -20,7 +20,6 @@ public class Inara
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
             if(html == null) return false;
             commodities = HTMLCleanup.getCommodityIDs(html);
-            Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS();
         } catch(Exception ignored)
         {
             Out.newBuilder("Could not download commodity-list").always().WARNING();
@@ -34,7 +33,7 @@ public class Inara
         return true;
     }
 
-    public static boolean UpdateCommodityPrices(int commodityRefID)
+    public static boolean updateCommodityPrices(int commodityRefID)
     {
         Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "buymin");
         Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "sellmax");
@@ -58,9 +57,10 @@ public class Inara
             }
 
             DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);
-        } catch(Exception ignored)
+        } catch(Exception e)
         {
             Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR();
+            e.printStackTrace();
             return false;
         }
         return true;
