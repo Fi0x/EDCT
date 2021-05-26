@@ -28,7 +28,7 @@ public class RequestHandler
                 String errorTime = error.replace("429:", "");
                 if(System.currentTimeMillis() <= Long.parseLong(errorTime) + 1000 * 60 * 60)
                 {
-                    Out.newBuilder("There was a recent block from inara for this address (429)").always().WARNING().print();
+                    Out.newBuilder("There was a recent block from inara for this address (429)").always().WARNING();
                     return "";
                 }
             }
@@ -54,11 +54,11 @@ public class RequestHandler
             in.close();
         } else if(status == 429)
         {
-            Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR().print();
+            Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR();
             fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
             fileContent.add("429:" + System.currentTimeMillis());
             Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
-        } else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR().print();
+        } else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR();
 
         con.disconnect();
 

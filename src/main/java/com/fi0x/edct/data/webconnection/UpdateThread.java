@@ -19,7 +19,6 @@ public class UpdateThread implements Runnable
     @Override
     public void run()
     {
-        Out.newBuilder("Updater thread started").verbose().SUCCESS().print();
         while(true)
         {
             updateFiles();
@@ -44,10 +43,9 @@ public class UpdateThread implements Runnable
                         long age = System.currentTimeMillis() - files.get(0).lastModified();
                         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(age, true));
                     }
-                    Out.newBuilder("Updated oldest file").verbose().print();
                 } catch(HttpRetryException ignored)
                 {
-                    Out.newBuilder("Could not update a commodity file").WARNING().debug().print();
+                    Out.newBuilder("Could not update a commodity file").debug().WARNING();
                 }
             }
             wait(500);
@@ -95,10 +93,9 @@ public class UpdateThread implements Runnable
             }
 
             writer.close();
-            Out.newBuilder("Successfully wrote commodity-entries to file").verbose().SUCCESS().print();
         } catch(IOException e)
         {
-            Out.newBuilder("Something went wrong when writing commodity data to local storage").debug().ERROR().print();
+            Out.newBuilder("Something went wrong when writing commodity data to local storage").debug().ERROR();
         }
     }
 

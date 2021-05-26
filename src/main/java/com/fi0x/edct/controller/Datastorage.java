@@ -26,8 +26,6 @@ public class Datastorage
 
         Main.downloadThread = new Thread(new RequestThread(interactionController, false));
         Main.downloadThread.start();
-
-        Main.updater.start();
     }
 
     public void setDataAge(long age)

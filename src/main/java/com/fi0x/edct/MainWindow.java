@@ -32,7 +32,7 @@ public class MainWindow extends Application
             root = loader.load();
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load GUI. Shutting down").always().WARNING().print();
+            Out.newBuilder("Could not load GUI. Shutting down").always().WARNING();
             return;
         }
 
@@ -48,6 +48,8 @@ public class MainWindow extends Application
         primaryStage.show();
 
         Main.updaterThread.start();
+
+        Main.updater.start();
     }
     public static void main(String[] args)
     {
@@ -79,7 +81,7 @@ public class MainWindow extends Application
             interactionController.setMainController(parentLoader.getController());
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load interaction GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load interaction GUI elements").always().ERROR();
             return;
         }
 
@@ -98,7 +100,7 @@ public class MainWindow extends Application
             resultsController.updateResultController(parentLoader.getController());
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load result GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load result GUI elements").always().ERROR();
             return;
         }
 

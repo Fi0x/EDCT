@@ -32,7 +32,7 @@ public class Main
 
         setupLocalFiles();
 
-        Out.newBuilder("Starting Program").verbose().print();
+        Out.newBuilder("Starting Program").verbose().INFO();
 
         updaterThread = new Thread(new UpdateThread());
         updater = new Thread(new Updater());
@@ -50,27 +50,27 @@ public class Main
 
     private static void setupLocalFiles()
     {
-        Out.newBuilder("Setting up local storage").veryVerbose().print();
+        Out.newBuilder("Setting up local storage").veryVerbose().INFO();
 
         localStorage = new File(System.getenv("APPDATA") + File.separator + "EDCT");
         if(!createFileIfNotExists(localStorage, false))
         {
-            Out.newBuilder("Could not create local storage folder").always().ERROR().print();
+            Out.newBuilder("Could not create local storage folder").always().ERROR();
             System.exit(-1);
         }
 
         @Deprecated
         File commodityFolder1 = new File(localStorage.getPath() + File.separator + "CommoditySells");
-        if(!createFileIfNotExists(commodityFolder1, false)) Out.newBuilder("Could not create sell-folder").always().ERROR().print();
+        if(!createFileIfNotExists(commodityFolder1, false)) Out.newBuilder("Could not create sell-folder").always().ERROR();
         @Deprecated
         File commodityFolder2 = new File(localStorage.getPath() + File.separator + "CommodityBuys");
-        if(!createFileIfNotExists(commodityFolder2, false)) Out.newBuilder("Could not create buy-folder").always().ERROR().print();
+        if(!createFileIfNotExists(commodityFolder2, false)) Out.newBuilder("Could not create buy-folder").always().ERROR();
 
         errors = new File(localStorage.getPath() + File.separator + "errors");
-        if(!createFileIfNotExists(errors, true)) Out.newBuilder("Could not create settings-file").debug().WARNING().print();
+        if(!createFileIfNotExists(errors, true)) Out.newBuilder("Could not create settings-file").debug().WARNING();
 
         commodityList = new File(localStorage.getPath() + File.separator + "CommodityList");
-        if(!createFileIfNotExists(commodityList, true)) Out.newBuilder("Could not create commodityList-file").debug().WARNING().print();
+        if(!createFileIfNotExists(commodityList, true)) Out.newBuilder("Could not create commodityList-file").debug().WARNING();
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)

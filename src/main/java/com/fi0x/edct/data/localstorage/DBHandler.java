@@ -21,19 +21,19 @@ public class DBHandler
         try
         {
             dbConnection = DriverManager.getConnection(url);
-            Out.newBuilder("Connection to local database established").verbose().SUCCESS().print();
+            Out.newBuilder("Connection to local database established").verbose().SUCCESS();
 
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Something went wrong when creating the local database").always().ERROR().print();
+            Out.newBuilder("Something went wrong when creating the local database").always().ERROR();
             System.exit(-1);
         }
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
-        Out.newBuilder("Created Commodity Table").veryVerbose().print();
+        Out.newBuilder("Created Commodity Table").veryVerbose().INFO();
 
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
-        Out.newBuilder("Created Station Table").veryVerbose().print();
+        Out.newBuilder("Created Station Table").veryVerbose().INFO();
     }
     public static DBHandler getInstance()
     {
@@ -79,13 +79,13 @@ public class DBHandler
     {
         ArrayList<Integer> ids = new ArrayList<>();
 
-        ResultSet results = getQueryResults("SELECT c.inara_id"
+        ResultSet results = getQueryResults("SELECT c.inara_id "
                 + "FROM commodities c "
-                + "LEFT JOIN stations s ON s.inara_id = c.inara_id"
-                + "WHERE s.inara_id IS NULL");//TODO: Check if this works
+                + "LEFT JOIN stations s ON s.inara_id = c.inara_id "
+                + "WHERE s.inara_id IS NULL");//TODO: Fix this query
         try
         {
-            while(results.next())
+            while(results != null && results.next())
             {
                 ids.add(results.getInt("inara_id"));
             }
@@ -108,7 +108,7 @@ public class DBHandler
             }
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Some error occured when requesting the name of commodity " + commodityID).debug().WARNING().print();
+            Out.newBuilder("Some error occured when requesting the name of commodity " + commodityID).debug().WARNING();
         }
         return "";
     }
@@ -119,10 +119,10 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             statement.executeUpdate(command);
-            Out.newBuilder("Executed statement\n\t" + command).veryVerbose().print();
+            Out.newBuilder("Executed statement\n\t" + command).veryVerbose().INFO();
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Could not execute a statement for the DB\n\t" + command).debug().WARNING().print();
+            Out.newBuilder("Could not execute a statement for the DB\n\t" + command).debug().WARNING();
         }
     }
     @Nullable
@@ -132,11 +132,12 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             ResultSet results = statement.executeQuery(query);
-            Out.newBuilder("Executed query\n\t" + query).veryVerbose().print();
+            Out.newBuilder("Executed query\n\t" + query).veryVerbose().INFO();
             return results;
         } catch(SQLException ignored)
         {
-            Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING().print();
+            Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING();
+            ignored.printStackTrace();
         }
         return null;
     }

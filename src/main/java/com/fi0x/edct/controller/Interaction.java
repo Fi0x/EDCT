@@ -49,7 +49,7 @@ public class Interaction implements Initializable
             storageController.setInteractionController(this);
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR();
             return;
         }
 
@@ -66,7 +66,7 @@ public class Interaction implements Initializable
             filterController = loader.getController();
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR();
             return;
         }
 

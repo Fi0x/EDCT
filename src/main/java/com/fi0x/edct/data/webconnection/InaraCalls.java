@@ -28,10 +28,9 @@ public class InaraCalls
         {
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
             commodities = HTMLCleanup.getCommodityIDsOLD(html);
-            Out.newBuilder("Commodity list loaded from INARA").verbose().SUCCESS().print();
         } catch(Exception ignored)
         {
-            Out.newBuilder("Could not get commodity-list").always().ERROR().print();
+            Out.newBuilder("Could not get commodity-list").always().ERROR();
         }
 
         return commodities;
@@ -86,13 +85,12 @@ public class InaraCalls
                         if(commodityFile.createNewFile())
                         {
                             writeCommodityDataToFile(commodityFile, stationList);
-                            Out.newBuilder("Created commodity-file: " + commodityRefID).SUCCESS().verbose().print();
                             return stationList;
                         }
                     } catch(IOException ignored)
                     {
                     }
-                    Out.newBuilder("Could not create commodity-file " + commodityRefID).origin("InaraCalls").WARNING().debug().print();
+                    Out.newBuilder("Could not create commodity-file " + commodityRefID).origin("InaraCalls").debug().WARNING();
                 } else writeCommodityDataToFile(commodityFile, stationList);
             } else stationList = readCommodityDataFromFile(commodityFile);
 
@@ -101,7 +99,7 @@ public class InaraCalls
             throw e;
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR().print();
+            Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR();
         }
         return stationList;
     }
@@ -119,10 +117,9 @@ public class InaraCalls
             }
 
             writer.close();
-            Out.newBuilder("Successfully wrote commodity to file").veryVerbose().SUCCESS().print();
         } catch(IOException e)
         {
-            Out.newBuilder("Something went wrong when writing commodity data to local storage").origin("InaraCalls").debug().ERROR().print();
+            Out.newBuilder("Something went wrong when writing commodity data to local storage").origin("InaraCalls").debug().ERROR();
         }
     }
 
@@ -142,10 +139,9 @@ public class InaraCalls
                 STATION newStation = STATION.getStationFromParts(parts);
                 stations.add(newStation);
             }
-            Out.newBuilder("Commodity data loaded from local file").veryVerbose().SUCCESS().print();
         } catch(FileNotFoundException ignored)
         {
-            Out.newBuilder("Could not load commodity data from local file").debug().ERROR().print();
+            Out.newBuilder("Could not load commodity data from local file").debug().ERROR();
         }
 
         return stations;

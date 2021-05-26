@@ -56,7 +56,7 @@ public class Results implements Initializable
 
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load commodity GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load commodity GUI elements").always().ERROR();
             return;
         }
 
@@ -81,7 +81,7 @@ public class Results implements Initializable
             }
         } catch(IOException ignored)
         {
-            Out.newBuilder("Could not load station GUI elements").always().ERROR().print();
+            Out.newBuilder("Could not load station GUI elements").always().ERROR();
             return;
         }
 

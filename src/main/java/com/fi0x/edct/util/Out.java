@@ -60,23 +60,28 @@ public class Out
         return this;
     }
 
-    public Out WARNING()
+    public void WARNING()
     {
         color = YELLOW;
-        return this;
+        print();
     }
-    public Out ERROR()
+    public void ERROR()
     {
         color = RED;
-        return this;
+        print();
     }
-    public Out SUCCESS()
+    public void SUCCESS()
     {
         color = GREEN;
-        return this;
+        print();
+    }
+    public void INFO()
+    {
+        color = WHITE;
+        print();
     }
 
-    public void print()
+    private void print()
     {
         boolean allowed = always;
 

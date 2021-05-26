@@ -11,13 +11,13 @@ public class Updater implements Runnable
     @Override
     public void run()
     {
-        Out.newBuilder("Updater thread started").verbose().print();
+        Out.newBuilder("Updater thread started").verbose();
 
         while(!Inara.updateCommodityIDs())
         {
             if(sleepInterrupted(1000)) return;
         }
-        Out.newBuilder("Updated Commodity ID-list").veryVerbose().SUCCESS().print();
+        Out.newBuilder("Updated Commodity ID-list").veryVerbose().SUCCESS();
 
         ArrayList<Integer> missingIDs = DBHandler.getInstance().getMissingCommodityIDs();
 
