@@ -63,25 +63,25 @@ public class Out
     public void WARNING()
     {
         color = YELLOW;
-        print();
+        print("WARNING");
     }
     public void ERROR()
     {
         color = RED;
-        print();
+        print("ERROR");
     }
     public void SUCCESS()
     {
         color = GREEN;
-        print();
+        print("INFO");
     }
     public void INFO()
     {
         color = WHITE;
-        print();
+        print("INFO");
     }
 
-    private void print()
+    private void print(String prefix)
     {
         boolean allowed = always;
 
@@ -91,8 +91,9 @@ public class Out
 
         if(allowed)
         {
-            if(origin == null) System.out.println(color + text + RESET);
-            else System.out.println(origin + ":\t\t" + color + text + RESET);
+            prefix = "[" +prefix + "]: ";
+            if(origin == null) System.out.println(prefix + color + text + RESET);
+            else System.out.println(prefix + origin + ":\t\t" + color + text + RESET);
         }
     }
 }

@@ -44,33 +44,33 @@ public class DBHandler
     public void setCommodityData(String commodityName, int inaraID)
     {
         sendStatement("INSERT INTO commodities " +
-                "SELECT '" + commodityName + "', " + inaraID + ", " + 0 + " " +
+                "SELECT " + makeSQLValid(commodityName) + ", " + inaraID + ", " + 0 + " " +
                 "WHERE NOT EXISTS (" +
                 "SELECT * " +
                 "FROM commodities " +
                 "WHERE inara_id = " + inaraID + " " +
-                "AND commodity_name = '" + commodityName + "')");
+                "AND commodity_name = " + makeSQLValid(commodityName) + ")");
     }
 
     public void setStationData(STATION station, int inaraID, boolean isSelling, long downloadTime)
     {
         sendStatement("REPLACE INTO stations VALUES ("
-                + inaraID + ", '"
-                + station.NAME + "', "
-                + station.SYSTEM + ", "
+                + inaraID + ", "
+                + makeSQLValid(station.NAME) + ", "
+                + makeSQLValid(station.SYSTEM) + ", "
                 + isSelling + ", "
                 + downloadTime + ", "
                 + station.PRICE + ", "
                 + station.QUANTITY + ", "
-                + station.PAD + ", "
-                + station.TYPE + ", "
+                + makeSQLValid(station.PAD.toString()) + ", "
+                + makeSQLValid(station.TYPE.toString()) + ", "
                 + station.STAR_DISTANCE + ")");
     }
 
     public void updateDownloadTime(String commodityName, int inaraID)
     {
         sendStatement("REPLACE INTO commodities VALUES ("
-                + commodityName + ", "
+                + makeSQLValid(commodityName) + ", "
                 + inaraID + ", "
                 + System.currentTimeMillis() / 1000 + ")");
     }
@@ -81,8 +81,8 @@ public class DBHandler
 
         ResultSet results = getQueryResults("SELECT c.inara_id "
                 + "FROM commodities c "
-                + "LEFT JOIN stations s ON s.inara_id = c.inara_id "
-                + "WHERE s.inara_id IS NULL");//TODO: Fix this query
+                + "LEFT JOIN stations s ON s.commodity_id = c.inara_id "
+                + "WHERE s.commodity_id IS NULL");
         try
         {
             while(results != null && results.next())
@@ -98,8 +98,8 @@ public class DBHandler
     public String getCommodityNameByID(int commodityID)
     {
         ResultSet commodity = getQueryResults("SELECT commodity_name "
-                + "FROM commodities"
-                + "WHERE inara_id = '" + commodityID + "'");
+                + "FROM commodities "
+                + "WHERE inara_id = " + commodityID);
         try
         {
             if(commodity != null && commodity.next())
@@ -137,8 +137,11 @@ public class DBHandler
         } catch(SQLException ignored)
         {
             Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING();
-            ignored.printStackTrace();
         }
         return null;
+    }
+    private String makeSQLValid(String s)
+    {
+        return "'" + s.replace("'", "''") + "'";
     }
 }
