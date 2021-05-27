@@ -72,8 +72,7 @@ public class Main
             COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()));
             commodityTrade.sortPrices();
 
-            if(commodityTrade.profit > 0)
-                trades.add(commodityTrade);
+            if(commodityTrade.profit > 0) trades.add(commodityTrade);//TODO: Find out why many commodities have 0 buy / sell prices (min supply too low?)
         }
 
         return sortTrades(trades);

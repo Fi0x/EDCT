@@ -181,8 +181,6 @@ public class DBHandler
 
     public ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
     {
-        if(commodityID == 10268)
-            System.out.println("Found agro");
         ArrayList<STATION> stationList = new ArrayList<>();
 
         ResultSet stations = getQueryResults("SELECT * " +
