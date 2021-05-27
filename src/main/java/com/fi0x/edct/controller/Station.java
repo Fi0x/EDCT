@@ -29,6 +29,8 @@ public class Station
     @FXML
     private Label lblAmount;
     @FXML
+    private Label lblAge;
+    @FXML
     private Button btnPrevStation;
     @FXML
     private Button btnNextStation;
@@ -69,6 +71,7 @@ public class Station
         lblDistance.setText("Distance to star: " + station.STAR_DISTANCE + "Ls");
         lblPrice.setText("Price: " + station.PRICE + " credits");
         lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
+        lblAge.setText("Data age: " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
         btnNextStation.setDisable(!hasNext);

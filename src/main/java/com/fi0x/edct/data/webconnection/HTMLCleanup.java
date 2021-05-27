@@ -100,15 +100,36 @@ public class HTMLCleanup
             int price = 0;
             if(priceText.length() > 0) price = Integer.parseInt(priceText);
 
-            STATIONTYPE type = STATIONTYPE.ORBIT;
+            STATIONTYPE type;
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
             else if(entry.hasClass("filterable3")) type = STATIONTYPE.SURFACE;
+            else if(entry.hasClass("filterable4")) type = STATIONTYPE.ODYSSEY;
+            else type = STATIONTYPE.ORBIT;
 
             String starDistanceText = entry.getElementsByClass("minor alignright lineright").first().ownText().replace(",", "").replace(" Ls", "");
             int starDistance = 0;
             if(starDistanceText.length() > 0 && !starDistanceText.equals("---")) starDistance = Integer.parseInt(starDistanceText);
 
-            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance);
+            long inara_time = 0;
+            String[] dataAgeString = entry.getElementsByClass("minor alignright smaller").first().ownText().split(" ");
+            if(dataAgeString.length == 3)
+            {
+                inara_time = Long.parseLong(dataAgeString[0]);
+                switch(dataAgeString[1])
+                {
+                    case "days":
+                        inara_time *= 24;
+                    case "hours":
+                        inara_time *= 60;
+                    case "minutes":
+                        inara_time *= 60;
+                    default:
+                        inara_time *= 1000;
+                }
+                inara_time = System.currentTimeMillis() - inara_time;
+            }
+
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance, inara_time);
             stations.add(station);
         }
 

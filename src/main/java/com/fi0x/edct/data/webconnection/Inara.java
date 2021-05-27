@@ -49,11 +49,11 @@ public class Inara
 
             for(STATION seller : sellStations)
             {
-                DBHandler.getInstance().setStationData(seller, commodityRefID, true, System.currentTimeMillis() / 1000);
+                DBHandler.getInstance().setStationData(seller, commodityRefID, true);
             }
             for(STATION buyer : buyStations)
             {
-                DBHandler.getInstance().setStationData(buyer, commodityRefID, false, System.currentTimeMillis() / 1000);
+                DBHandler.getInstance().setStationData(buyer, commodityRefID, false);
             }
 
             DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);

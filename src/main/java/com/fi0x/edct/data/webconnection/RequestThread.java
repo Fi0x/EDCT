@@ -60,6 +60,7 @@ public class RequestThread implements Runnable
             i++;
             try
             {
+                //TODO: Get trades from db instead of files and add this stuff to another class / remake this one
                 ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), true, FORCE);
                 if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
 

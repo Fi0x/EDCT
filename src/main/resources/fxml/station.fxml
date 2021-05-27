@@ -13,6 +13,7 @@
     <Label fx:id="lblDistance" text="Distance to Star: ---" />
     <Label fx:id="lblPrice" text="Price: ---" />
     <Label fx:id="lblAmount" text="Supply: ---" />
+    <Label fx:id="lblAge" text="Data age: ---" />
     <HBox>
         <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" disable="true" />
         <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" disable="true" />

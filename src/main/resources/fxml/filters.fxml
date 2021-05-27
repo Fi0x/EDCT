@@ -10,10 +10,11 @@
         <Label text="Min quantity" alignment="CENTER_LEFT"/>
         <TextField fx:id="txtQuantity" text="10000" alignment="CENTER_RIGHT"/>
     </HBox>
-    <CheckBox id="carriers" fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
-    <CheckBox id="surface" fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
+    <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
+    <CheckBox fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
     <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>
     <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand"/>
+    <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations" />
     <stylesheets>
         <URL value="@../css/filters.css"/>
     </stylesheets>

@@ -52,14 +52,14 @@ public class DBHandler
                 "AND commodity_name = " + makeSQLValid(commodityName) + ")");
     }
 
-    public void setStationData(STATION station, int inaraID, boolean isSelling, long downloadTime)
+    public void setStationData(STATION station, int inaraID, boolean isSelling)
     {
         sendStatement("REPLACE INTO stations VALUES ("
                 + inaraID + ", "
                 + makeSQLValid(station.NAME) + ", "
                 + makeSQLValid(station.SYSTEM) + ", "
                 + isSelling + ", "
-                + downloadTime + ", "
+                + station.UPDATE_TIME + ", "
                 + station.PRICE + ", "
                 + station.QUANTITY + ", "
                 + makeSQLValid(station.PAD.toString()) + ", "

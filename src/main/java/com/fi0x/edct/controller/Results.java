@@ -21,8 +21,6 @@ public class Results implements Initializable
     private Station buyController;
     private Commodity commodityController;
 
-    //TODO: Completely re-make this class to use the db instead of single files
-    @Deprecated
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
     public int currentSellStation;
@@ -127,19 +125,10 @@ public class Results implements Initializable
     public void setTrades(ArrayList<COMMODITY> newTrades)
     {
         trades = newTrades;
-        if(currentCommodity < trades.size())
-        {
-            currentSellStation = Math.min(currentSellStation, trades.get(currentCommodity).SELL_PRICES.size() - 1);
-            currentBuyStation = Math.min(currentBuyStation, trades.get(currentCommodity).BUY_PRICES.size() - 1);
 
-            currentSellStation = Math.max(currentSellStation, 0);
-            currentBuyStation = Math.max(currentBuyStation, 0);
-        } else
-        {
-            currentCommodity = trades.size();
-            currentSellStation = 0;
-            currentBuyStation = 0;
-        }
+        currentCommodity = 0;
+        currentSellStation = 0;
+        currentBuyStation = 0;
     }
 
     public void displayResults()

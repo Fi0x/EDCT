@@ -108,7 +108,7 @@ public class InaraCalls
 
             for(STATION station : stations)
             {
-                String stationEntry = station.SYSTEM + "___" + station.NAME + "___" + station.PAD + "___" + station.QUANTITY + "___" + station.PRICE + "___" + station.TYPE + "___" + station.STAR_DISTANCE;
+                String stationEntry = station.SYSTEM + "___" + station.NAME + "___" + station.PAD + "___" + station.QUANTITY + "___" + station.PRICE + "___" + station.TYPE + "___" + station.STAR_DISTANCE + "___" + station.UPDATE_TIME;
                 writer.write(stationEntry + "\n");
             }
 

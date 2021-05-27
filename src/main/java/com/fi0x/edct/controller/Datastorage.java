@@ -37,7 +37,7 @@ public class Datastorage
         else if(age < (24 * 60 * 60 * 1000)) text += age/(60 * 60 * 1000) + "h";
         else text += age/(24 * 60 * 60 * 1000) + "d";
         lblDataAge.setText(text);
-        //TODO: Make btnStart visible if there are new trades available
+        //TODO: Make btnStart visible **if there are new trades** available
     }
     public void setDataAge(long age, boolean isUpdating)
     {

@@ -22,6 +22,8 @@ public class Filters implements Initializable
     private CheckBox cbLandingPad;
     @FXML
     private CheckBox cbDemand;
+    @FXML
+    private CheckBox cbOdyssey;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -37,12 +39,13 @@ public class Filters implements Initializable
         cbSurface.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
         cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
         cbDemand.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
+        cbOdyssey.selectedProperty().addListener((observable, oldValue, newValue) -> updateFilters());
     }
 
     public void updateFilters()
     {
         int amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
-        mainController.updateFilters(amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected());
+        mainController.updateFilters(amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected());
     }
 
     public void setMainController(Main controller)

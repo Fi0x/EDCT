@@ -21,17 +21,17 @@ public class Main
         interactionController = controller;
     }
 
-    public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface)
+    public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
     {
-        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, interactionController.sellPrices);
-        Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, interactionController.buyPrices);
+        Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
+        Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
 
-    private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, Map<String, ArrayList<STATION>> inputPrices)
+    private Map<String, ArrayList<STATION>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, Map<String, ArrayList<STATION>> inputPrices)
     {
         Map<String, ArrayList<STATION>> filteredPrices = new HashMap<>();
 
@@ -41,8 +41,18 @@ public class Main
             for(STATION station : commodity.getValue())
             {
                 boolean validStation = !noSmall || station.PAD == PADSIZE.L;
-                if(noCarrier && station.TYPE == STATIONTYPE.CARRIER) validStation = false;
-                if(noSurface && station.TYPE == STATIONTYPE.SURFACE) validStation = false;
+                switch(station.TYPE)
+                {
+                    case CARRIER:
+                        if(noCarrier) validStation = false;
+                        break;
+                    case SURFACE:
+                        if(noSurface) validStation = false;
+                        break;
+                    case ODYSSEY:
+                        if(noOdyssey) validStation = false;
+                        break;
+                }
                 if(amount > station.QUANTITY) validStation = false;
 
                 if(validStation) filteredStations.add(station);
