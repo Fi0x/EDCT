@@ -2,7 +2,6 @@ package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
-import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
 import java.io.File;
@@ -28,7 +27,7 @@ public class UpdateThread implements Runnable
             {
                 while(System.currentTimeMillis() - files.get(0).lastModified() < 1000 * 60 * 30)
                 {
-                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(System.currentTimeMillis() - files.get(0).lastModified(), false));
+                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAgeOld(System.currentTimeMillis() - files.get(0).lastModified(), false));
                     wait((int) (Math.random() * 5000));
                 }
 
@@ -41,7 +40,7 @@ public class UpdateThread implements Runnable
                     if(files.size() > 0)
                     {
                         long age = System.currentTimeMillis() - files.get(0).lastModified();
-                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAge(age, true));
+                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setDataAgeOld(age, true));
                     }
                 } catch(HttpRetryException ignored)
                 {

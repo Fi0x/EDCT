@@ -1,7 +1,9 @@
 package com.fi0x.edct.data;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.webconnection.Inara;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
@@ -21,7 +23,7 @@ public class Updater implements Runnable
         }
         Out.newBuilder("Updated Commodity ID-list").verbose().INFO();
 
-        ArrayList<Integer> missingIDs = DBHandler.getInstance().getMissingCommodityIDs();
+        ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
 
         for(int id : missingIDs)
         {
@@ -34,6 +36,9 @@ public class Updater implements Runnable
 
         Out.newBuilder("All missing ids downloaded").verbose().INFO();
 
+        Main.reloader = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
+        Main.reloader.start();
+
         while(!Thread.interrupted())
         {
             if(sleepInterrupted(5000)) return;
@@ -44,7 +49,7 @@ public class Updater implements Runnable
             Inara.updateCommodityPrices(oldestID);
             long age = System.currentTimeMillis() - DBHandler.getInstance().getOldestUpdateAge() * 1000L;
 
-            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setDataAge(age));
+            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setDataAge(age, true));
         }
     }
 

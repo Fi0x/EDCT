@@ -1,9 +1,12 @@
 package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.util.Out;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
@@ -75,14 +78,23 @@ public class DBHandler
                 + System.currentTimeMillis() / 1000 + ")");
     }
 
-    public ArrayList<Integer> getMissingCommodityIDs()
+    public ArrayList<Integer> getCommodityIDs(boolean onlyMissing)
     {
         ArrayList<Integer> ids = new ArrayList<>();
 
-        ResultSet results = getQueryResults("SELECT c.inara_id "
-                + "FROM commodities c "
-                + "LEFT JOIN stations s ON s.commodity_id = c.inara_id "
-                + "WHERE s.commodity_id IS NULL");
+        ResultSet results;
+        if(onlyMissing)
+        {
+            results = getQueryResults("SELECT c.inara_id "
+                    + "FROM commodities c "
+                    + "LEFT JOIN stations s ON s.commodity_id = c.inara_id "
+                    + "WHERE s.commodity_id IS NULL");
+        } else
+        {
+            results = getQueryResults("SELECT c.inara_id "
+                    + "FROM commodities c");
+        }
+
         try
         {
             while(results != null && results.next())
@@ -165,6 +177,38 @@ public class DBHandler
         }
 
         return time;
+    }
+
+    public ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
+    {
+        ArrayList<STATION> stationList = new ArrayList<>();
+
+        ResultSet stations = getQueryResults("SELECT * " +
+                "FROM stations " +
+                "WHERE commodity_id = " + commodityID + " " +
+                "AND is_seller = " + (isSelling ? 1 : 0));
+        if(stations == null) return stationList;
+
+        try
+        {
+            while(stations.next())
+            {
+                String system = stations.getString("star_system");
+                String name = stations.getString("station_name");
+                PADSIZE pad = PADSIZE.getFromString(stations.getString("pad_size"));
+                int quantity = stations.getInt("quantity");
+                int price = stations.getInt("price");
+                STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("station_type"));
+                int starDistance = stations.getInt("star_distance");
+                long updateTime = stations.getInt("inara_time") * 1000L;
+
+                stationList.add(new STATION(system, name, pad, quantity, price, type, starDistance, updateTime));
+            }
+        } catch(Exception ignored)
+        {
+        }
+
+        return stationList;
     }
 
     private void sendStatement(String command)

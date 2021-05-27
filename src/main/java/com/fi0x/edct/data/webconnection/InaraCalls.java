@@ -34,7 +34,6 @@ public class InaraCalls
         return commodities;
     }
 
-    @Deprecated
     public static ArrayList<STATION> getCommodityPrices(RequestThread caller, String commodityRefID, boolean sell, boolean forceHTTP) throws HttpRetryException
     {
         Map<String, String> parameters = new HashMap<>();
@@ -100,6 +99,7 @@ public class InaraCalls
         return stationList;
     }
 
+    @Deprecated
     private static void writeCommodityDataToFile(File file, ArrayList<STATION> stations)
     {
         try
@@ -118,6 +118,7 @@ public class InaraCalls
         }
     }
 
+    @Deprecated
     private static ArrayList<STATION> readCommodityDataFromFile(File file)
     {
         ArrayList<STATION> stations = new ArrayList<>();

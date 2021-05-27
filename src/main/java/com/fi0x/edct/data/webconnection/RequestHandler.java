@@ -29,6 +29,7 @@ public class RequestHandler
                 if(System.currentTimeMillis() <= Long.parseLong(errorTime) + 1000 * 60 * 60)
                 {
                     Out.newBuilder("There was a recent block from inara for this address (429)").always().WARNING();
+                    //TODO: Add a label in GUI to indicate this error
                     return "";
                 }
             }

@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.webconnection.RequestThread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -20,29 +21,32 @@ public class Datastorage
     @FXML
     private void calculate()
     {
-        //TODO: Get information from db
         btnStart.setVisible(false);
         lblDataAge.setText("Loading data from storage");
 
         Main.downloadThread = new Thread(new RequestThread(interactionController, false));
         Main.downloadThread.start();
+
+        Main.reloader = new Thread(new TradeReloader(interactionController));
+        Main.reloader.start();
     }
 
-    //TODO: Use an event instead
-    public void setDataAge(long age)
+    public void setDataAge(long age, boolean newTradesAvailable)
     {
         String text = "Local data age: ";
         if(age < (60 * 1000)) text += age/1000 + "s";
         else if(age < (60 * 60 * 1000)) text += age/(60 * 1000) + "min";
         else if(age < (24 * 60 * 60 * 1000)) text += age/(60 * 60 * 1000) + "h";
         else text += age/(24 * 60 * 60 * 1000) + "d";
+
         lblDataAge.setText(text);
-        //TODO: Make btnStart visible **if there are new trades** available
+        btnStart.setVisible(newTradesAvailable);
     }
-    public void setDataAge(long age, boolean isUpdating)
+    @Deprecated
+    public void setDataAgeOld(long age, boolean isUpdating)
     {
         lblUpdateStatus.setText(isUpdating ? "Updating local files..." : "Local files are updated");
-        setDataAge(age);
+        setDataAge(age, isUpdating);
     }
 
     public void setInteractionController(Interaction controller)

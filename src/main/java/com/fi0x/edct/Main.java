@@ -17,6 +17,7 @@ public class Main
     public static Thread downloadThread;
 
     public static Thread updater;
+    public static Thread reloader;
 
     public static File localStorage;
     @Deprecated
@@ -46,6 +47,7 @@ public class Main
         if(downloadThread != null) downloadThread.stop();
 
         if(updater != null) updater.interrupt();
+        if(reloader != null) reloader.interrupt();
     }
 
     private static void setupLocalFiles()

@@ -3,7 +3,6 @@ package com.fi0x.edct.data.webconnection;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
 
 import java.io.FileWriter;
@@ -18,6 +17,7 @@ public class RequestThread implements Runnable
 {
     private final Interaction INT_CONTROLLER;
 
+    @Deprecated
     private final boolean FORCE;
     private Map<String, Map.Entry<String, Integer>> commodities;
     public long oldestFileAge;
@@ -35,7 +35,7 @@ public class RequestThread implements Runnable
         while(tries > 0 && (commodities == null || commodities.size() == 0))
         {
             tries--;
-            wait(1000);
+            wait1();
             setCommodities(InaraCalls.getAllCommodities());
         }
         if(commodities == null)
@@ -45,6 +45,13 @@ public class RequestThread implements Runnable
         }
 
         requestPrices();
+
+        Platform.runLater(() ->
+        {
+            INT_CONTROLLER.filterController.updateFilters();
+            INT_CONTROLLER.storageController.btnStart.setVisible(true);
+            INT_CONTROLLER.storageController.setDataAge(oldestFileAge, true);
+        });
     }
 
     private void requestPrices()
@@ -54,13 +61,10 @@ public class RequestThread implements Runnable
 
         oldestFileAge = 0;
 
-        int i = 0;
         for(Map.Entry<String, Map.Entry<String, Integer>> entry : commodities.entrySet())
         {
-            i++;
             try
             {
-                //TODO: Get trades from db instead of files and add this stuff to another class / remake this one
                 ArrayList<STATION> tmp = InaraCalls.getCommodityPrices(this, entry.getKey(), true, FORCE);
                 if(tmp != null) INT_CONTROLLER.sellPrices.put(entry.getValue().getKey(), tmp);
 
@@ -74,15 +78,9 @@ public class RequestThread implements Runnable
                 }
             }
         }
-
-        Platform.runLater(() ->
-        {
-            INT_CONTROLLER.filterController.updateFilters();
-            INT_CONTROLLER.storageController.btnStart.setVisible(true);
-            INT_CONTROLLER.storageController.setDataAge(oldestFileAge);
-        });
     }
 
+    @Deprecated
     private void setCommodities(Map<String, Map.Entry<String, Integer>> newCommodities)
     {
         commodities = newCommodities;
@@ -99,16 +97,17 @@ public class RequestThread implements Runnable
             }
 
             writer.close();
-        } catch(IOException e)
+        } catch(IOException ignored)
         {
         }
     }
 
-    private void wait(int millis)
+    @Deprecated
+    private void wait1()
     {
         try
         {
-            Thread.sleep(millis);
+            Thread.sleep(1000);
         } catch(InterruptedException ignored)
         {
         }
