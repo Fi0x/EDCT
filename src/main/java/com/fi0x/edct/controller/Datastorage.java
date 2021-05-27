@@ -2,7 +2,6 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.localstorage.TradeReloader;
-import com.fi0x.edct.data.webconnection.RequestThread;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -24,9 +23,6 @@ public class Datastorage
         btnStart.setVisible(false);
         lblDataAge.setText("Loading data from storage");
 
-        Main.downloadThread = new Thread(new RequestThread(interactionController, false));
-        Main.downloadThread.start();
-
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();
     }
@@ -42,11 +38,10 @@ public class Datastorage
         lblDataAge.setText(text);
         btnStart.setVisible(newTradesAvailable);
     }
-    @Deprecated
-    public void setDataAgeOld(long age, boolean isUpdating)
+
+    public void setUpdateStatus(String status)
     {
-        lblUpdateStatus.setText(isUpdating ? "Updating local files..." : "Local files are updated");
-        setDataAge(age, isUpdating);
+        lblUpdateStatus.setText(status);
     }
 
     public void setInteractionController(Interaction controller)

@@ -1,9 +1,7 @@
 package com.fi0x.edct.data;
 
-import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
-import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.webconnection.Inara;
 import com.fi0x.edct.util.Out;
 import javafx.application.Platform;
@@ -25,8 +23,12 @@ public class Updater implements Runnable
 
         ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
 
+        int counter = 0;
         for(int id : missingIDs)
         {
+            counter++;
+            int finalCounter = counter;
+            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
             if(sleepInterrupted(500)) return;
             while(!Inara.updateCommodityPrices(id))
             {
@@ -35,13 +37,12 @@ public class Updater implements Runnable
         }
 
         Out.newBuilder("All missing ids downloaded").verbose().INFO();
-
-        Main.reloader = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
-        Main.reloader.start();
+        Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Updated"));
 
         while(!Thread.interrupted())
         {
             if(sleepInterrupted(5000)) return;
+            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -49,7 +50,11 @@ public class Updater implements Runnable
             Inara.updateCommodityPrices(oldestID);
             long age = System.currentTimeMillis() - DBHandler.getInstance().getOldestUpdateAge() * 1000L;
 
-            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setDataAge(age, true));
+            Platform.runLater(() ->
+            {
+                MainWindow.instance.interactionController.storageController.setDataAge(age, true);
+                MainWindow.instance.interactionController.storageController.setUpdateStatus("Updated");
+            });
         }
     }
 

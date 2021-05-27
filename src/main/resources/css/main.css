@@ -4,6 +4,7 @@
 }
 .label {
     -fx-text-fill: #eeeeee;
+    -fx-padding: 0 5 0 5;
 }
 .check-box {
     -fx-text-fill: #eeeeee;

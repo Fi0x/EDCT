@@ -1,7 +1,7 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.data.webconnection.RequestThread;
 import com.fi0x.edct.util.Out;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +33,7 @@ public class Interaction implements Initializable
         loadFilters();
         loadDatastorage();
 
-        Thread threadReq = new Thread(new RequestThread(this, false));
+        Thread threadReq = new Thread(new TradeReloader(this));
         threadReq.start();
     }
 

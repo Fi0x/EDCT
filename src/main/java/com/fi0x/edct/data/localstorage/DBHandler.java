@@ -181,12 +181,14 @@ public class DBHandler
 
     public ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
     {
+        if(commodityID == 10268)
+            System.out.println("Found agro");
         ArrayList<STATION> stationList = new ArrayList<>();
 
         ResultSet stations = getQueryResults("SELECT * " +
                 "FROM stations " +
                 "WHERE commodity_id = " + commodityID + " " +
-                "AND is_seller = " + (isSelling ? 1 : 0));
+                "AND is_seller = " + (isSelling ? 0 : 1));
         if(stations == null) return stationList;
 
         try
@@ -206,6 +208,7 @@ public class DBHandler
             }
         } catch(Exception ignored)
         {
+            Out.newBuilder("Something went wrong when receiving station results for a commodity").debug().WARNING();
         }
 
         return stationList;
@@ -229,9 +232,7 @@ public class DBHandler
         try
         {
             Statement statement = dbConnection.createStatement();
-            ResultSet results = statement.executeQuery(query);
-            Out.newBuilder("Executed query\n\t" + query).veryVerbose().INFO();
-            return results;
+            return statement.executeQuery(query);
         } catch(SQLException ignored)
         {
             Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING();

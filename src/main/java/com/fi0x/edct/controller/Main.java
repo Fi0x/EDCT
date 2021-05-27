@@ -72,7 +72,8 @@ public class Main
             COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()));
             commodityTrade.sortPrices();
 
-            trades.add(commodityTrade);
+            if(commodityTrade.profit > 0)
+                trades.add(commodityTrade);
         }
 
         return sortTrades(trades);

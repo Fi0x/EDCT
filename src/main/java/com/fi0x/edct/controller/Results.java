@@ -27,6 +27,8 @@ public class Results implements Initializable
     public int currentBuyStation;
 
     @FXML
+    private VBox vbResults;
+    @FXML
     private HBox hbStations;
     @FXML
     private AnchorPane apCommodity;
@@ -133,7 +135,11 @@ public class Results implements Initializable
 
     public void displayResults()
     {
-        if(trades == null || trades.size() == 0) return;
+        if(trades == null || trades.size() == 0)
+        {
+            vbResults.setVisible(false);
+            return;
+        }
 
         int profit = 0;
 
@@ -156,6 +162,8 @@ public class Results implements Initializable
         trades.get(currentCommodity).profit = profit;
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1);
+
+        vbResults.setVisible(true);
     }
 
     public COMMODITY getCurrentTrade()

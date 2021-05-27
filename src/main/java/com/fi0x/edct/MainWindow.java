@@ -47,8 +47,6 @@ public class MainWindow extends Application
         primaryStage.setResizable(false);
         primaryStage.show();
 
-        Main.updaterThread.start();
-
         Main.updater.start();
     }
     public static void main(String[] args)
