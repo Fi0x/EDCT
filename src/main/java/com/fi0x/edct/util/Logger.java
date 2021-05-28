@@ -1,8 +1,16 @@
 package com.fi0x.edct.util;
 
+import com.fi0x.edct.Main;
+
 import javax.annotation.Nullable;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class Logger
 {
@@ -11,7 +19,7 @@ public class Logger
     private static final String YELLOW = "\u001B[33m";
     private static final String RED = "\u001B[31m";
 
-    public static boolean debug;
+    public static boolean debug = false;
 
     public static void INFO(String text)
     {
@@ -47,6 +55,19 @@ public class Logger
             if(e != null) e.printStackTrace();
         }
 
-        //TODO: Write Log entry to .log-file
+        if(lvl != LOGLEVEL.INF)
+        {
+            try
+            {
+                List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
+
+                fileContent.add(time + prefix + text);
+                if(e != null) fileContent.add(Arrays.toString(e.getStackTrace()));
+
+                Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
+            } catch(IOException ignored)
+            {
+            }
+        }
     }
 }

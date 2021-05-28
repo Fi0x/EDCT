@@ -1,7 +1,7 @@
 package com.fi0x.edct;
 
 import com.fi0x.edct.data.Updater;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,13 +22,9 @@ public class Main
     public static void main(String[] args)
     {
         ArrayList<String> arguments = new ArrayList<>(Arrays.asList(args));
-        if(arguments.contains("-v")) Out.v = true;
-        if(arguments.contains("-vv")) Out.vv = true;
-        if(arguments.contains("-d")) Out.d = true;
+        if(arguments.contains("-d")) Logger.debug = true;
 
         setupLocalFiles();
-
-        Out.newBuilder("Starting Program").verbose().INFO();
 
         updater = new Thread(new Updater());
 
@@ -43,17 +39,14 @@ public class Main
 
     private static void setupLocalFiles()
     {
-        Out.newBuilder("Setting up local storage").veryVerbose().INFO();
-
         localStorage = new File(System.getenv("APPDATA") + File.separator + "EDCT");
         if(createFileIfNotExists(localStorage, false))
         {
-            Out.newBuilder("Could not create local storage folder").always().ERROR();
             System.exit(-1);
         }
 
-        errors = new File(localStorage.getPath() + File.separator + "errors");
-        if(createFileIfNotExists(errors, true)) Out.newBuilder("Could not create settings-file").debug().WARNING();
+        errors = new File(localStorage.getPath() + File.separator + "carrier_trader.log");
+        createFileIfNotExists(errors, true);
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)
