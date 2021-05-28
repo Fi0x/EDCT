@@ -1,6 +1,7 @@
 package com.fi0x.edct.util;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.MainWindow;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -23,7 +24,7 @@ public class Logger
 
     public static void INFO(String text)
     {
-        log(LOGLEVEL.INF, text, null);
+        log(0, LOGLEVEL.INF, text, null);
     }
     public static void WARNING(String text)
     {
@@ -31,27 +32,28 @@ public class Logger
     }
     public static void WARNING(String text, Exception e)
     {
-        log(LOGLEVEL.WRN, text, e);
+        log(0, LOGLEVEL.WRN, text, e);
     }
-    public static void ERROR(String text)
+    public static void ERROR(int code, String text)
     {
-        ERROR(text, null);
+        ERROR(code, text, null);
     }
-    public static void ERROR(String text, Exception e)
+    public static void ERROR(int code, String text, Exception e)
     {
-        log(LOGLEVEL.ERR, text, e);
+        log(code, LOGLEVEL.ERR, text, e);
     }
 
-    private static void log(LOGLEVEL lvl, String text, @Nullable Exception e)
+    private static void log(int code, LOGLEVEL lvl, String text, @Nullable Exception e)
     {
         String time = "[" + Date.from(Instant.now()) + "]";
+        String errorCode = code == 0 ? "[---]" : "[" + code + "]";
         String prefix = "[" + lvl + "]: ";
         if(debug || lvl == LOGLEVEL.INF)
         {
             String color = WHITE;
             if(lvl == LOGLEVEL.WRN) color = YELLOW;
             else if(lvl == LOGLEVEL.ERR) color = RED;
-            System.out.println(time + color + prefix + text + RESET);
+            System.out.println(time + color + prefix + errorCode + text + RESET);
             if(e != null) e.printStackTrace();
         }
 
@@ -61,13 +63,18 @@ public class Logger
             {
                 List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
 
-                fileContent.add(time + prefix + text);
+                fileContent.add(time + prefix + errorCode + text);
                 if(e != null) fileContent.add(Arrays.toString(e.getStackTrace()));
 
                 Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
             } catch(IOException ignored)
             {
             }
+        }
+
+        if(lvl == LOGLEVEL.ERR)
+        {
+            MainWindow.getInstance().infoController.setError(code);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.fi0x.edct;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.ProgramInfo;
 import com.fi0x.edct.controller.Results;
+import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 public class MainWindow extends Application
 {
-    public static MainWindow instance;
+    private static MainWindow instance;
 
     public ProgramInfo infoController;
     public Interaction interactionController;
@@ -32,9 +33,10 @@ public class MainWindow extends Application
         try
         {
             root = loader.load();
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load GUI. Shutting down").always().WARNING();
+            Logger.ERROR(999, "Could not load MainWindow controller");
+            System.exit(999);
             return;
         }
 
@@ -49,6 +51,8 @@ public class MainWindow extends Application
         primaryStage.setMinWidth(960);
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        Logger.INFO("GUI loaded");
 
         Main.updater.start();
     }
@@ -79,9 +83,9 @@ public class MainWindow extends Application
         {
             infoBox = loader.load();
             infoController = loader.getController();
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load info GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load ProgramInfo controller");
             return;
         }
 
@@ -101,9 +105,10 @@ public class MainWindow extends Application
             interactionBox = loader.load();
             interactionController = loader.getController();
             interactionController.setMainController(parentLoader.getController());
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load interaction GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Interaction controller");
+            System.exit(999);
             return;
         }
 
@@ -120,9 +125,10 @@ public class MainWindow extends Application
             interactionBox = loader.load();
             resultsController = loader.getController();
             resultsController.updateResultController(parentLoader.getController());
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load result GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Results controller");
+            System.exit(999);
             return;
         }
 

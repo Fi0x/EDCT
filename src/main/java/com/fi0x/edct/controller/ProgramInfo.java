@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.webconnection.GitHub;
+import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -23,25 +24,19 @@ public class ProgramInfo
     @FXML
     private void openErrorPage()
     {
-        //TODO: Open a GitHub wiki-page that explains the error code
+        openWebsite("https://github.com/Fi0x/EDCT/wiki/Errors#" + errorCode);
         lblError.setVisible(false);
     }
     @FXML
     private void updateVersion()
     {
-        Desktop desktop = Desktop.getDesktop();
-        try
-        {
-            desktop.browse(new URI(updateUrl));
-        } catch(IOException | URISyntaxException ignored)
-        {
-        }
+        openWebsite(updateUrl);
     }
 
     public void setError(int code)
     {
         errorCode = code;
-        lblError.setText("Error " + errorCode + " occured");
+        lblError.setText("Error " + errorCode + " occurred");
         lblError.setVisible(true);
     }
 
@@ -52,6 +47,18 @@ public class ProgramInfo
         {
             updateUrl = url;
             btnUpdate.setVisible(true);
+        }
+    }
+
+    private void openWebsite(String url)
+    {
+        Desktop desktop = Desktop.getDesktop();
+        try
+        {
+            desktop.browse(new URI(url));
+        } catch(IOException | URISyntaxException e)
+        {
+            Logger.WARNING("Could not open url in browser", e);
         }
     }
 }

@@ -28,7 +28,7 @@ public class Updater implements Runnable
         {
             counter++;
             int finalCounter = counter;
-            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
             if(sleepInterrupted(250)) return;
             while(!Inara.updateCommodityPrices(id))
             {
@@ -37,12 +37,12 @@ public class Updater implements Runnable
         }
 
         Out.newBuilder("All missing ids downloaded").verbose().INFO();
-        Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Updated"));
+        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
 
         while(!Thread.interrupted())
         {
             if(sleepInterrupted((long) (Math.random() * 4500) + 250)) return;
-            Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Updating..."));
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -52,8 +52,8 @@ public class Updater implements Runnable
 
             Platform.runLater(() ->
             {
-                MainWindow.instance.interactionController.storageController.setDataAge(age, true);
-                MainWindow.instance.interactionController.storageController.setUpdateStatus("Updated");
+                MainWindow.getInstance().interactionController.storageController.setDataAge(age, true);
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
             });
         }
     }

@@ -2,7 +2,7 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -56,9 +56,9 @@ public class Results implements Initializable
             commodityController = loader.getController();
             commodityController.setResultsController(this);
 
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load commodity GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Commodity controller");
             return;
         }
 
@@ -81,9 +81,9 @@ public class Results implements Initializable
                 sellController = loader.getController();
                 sellController.setResultsController(this, false);
             }
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load station GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Station controller");
             return;
         }
 

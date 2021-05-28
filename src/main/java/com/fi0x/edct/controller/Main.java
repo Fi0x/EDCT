@@ -3,7 +3,6 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATIONTYPE;
 
 import java.util.*;
 

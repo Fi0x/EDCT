@@ -2,7 +2,7 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -47,9 +47,9 @@ public class Interaction implements Initializable
             storageBox = loader.load();
             storageController = loader.getController();
             storageController.setInteractionController(this);
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Datastorage controller");
             return;
         }
 
@@ -64,9 +64,9 @@ public class Interaction implements Initializable
         {
             filterBox = loader.load();
             filterController = loader.getController();
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
-            Out.newBuilder("Could not load datastorage GUI elements").always().ERROR();
+            Logger.ERROR(999, "Could not load Filters controller");
             return;
         }
 
