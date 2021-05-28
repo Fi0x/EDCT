@@ -60,7 +60,6 @@ public class Inara
         } catch(Exception e)
         {
             Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR();
-            e.printStackTrace();
             return false;
         }
         return true;

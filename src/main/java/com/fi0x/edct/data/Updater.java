@@ -29,10 +29,10 @@ public class Updater implements Runnable
             counter++;
             int finalCounter = counter;
             Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
-            if(sleepInterrupted(500)) return;
+            if(sleepInterrupted(250)) return;
             while(!Inara.updateCommodityPrices(id))
             {
-                if(sleepInterrupted(1000)) return;
+                if(sleepInterrupted(500)) return;
             }
         }
 
@@ -41,7 +41,7 @@ public class Updater implements Runnable
 
         while(!Thread.interrupted())
         {
-            if(sleepInterrupted(5000)) return;
+            if(sleepInterrupted((long) (Math.random() * 4500) + 250)) return;
             Platform.runLater(() -> MainWindow.instance.interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
