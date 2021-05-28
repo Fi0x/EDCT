@@ -17,23 +17,37 @@ import java.util.Map;
 public class RequestHandler
 {
     @Nullable
-    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws IOException
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters)
+    {
+        try
+        {
+            return sendHTTPRequest(endpoint, requestType, parameters, false);
+        } catch(IOException ignored)
+        {
+            return null;
+        }
+    }
+    @Nullable
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException
     {
         List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
-        for(int i = fileContent.size() - 1; i >= 0; i--)
+        if(!ignore429)
         {
-            String error = fileContent.get(i);
-            if(error.startsWith("429"))
+            for(int i = fileContent.size() - 1; i >= 0; i--)
             {
-                String errorTime = error.replace("429:", "");
-                if(System.currentTimeMillis() <= Long.parseLong(errorTime) + 1000 * 60 * 60)
+                String error = fileContent.get(i);
+                if(error.startsWith("429"))
                 {
-                    Out.newBuilder("There was a recent block from inara for this address (429)").always().WARNING();
-                    //TODO: Add a label in GUI to indicate this error
-                    return "";
+                    String errorTime = error.replace("429:", "");
+                    if(System.currentTimeMillis() <= Long.parseLong(errorTime) + 1000 * 60 * 60)
+                    {
+                        Out.newBuilder("There was a recent block from inara for this address (429)").always().ERROR();
+                        return null;
+                    }
                 }
             }
         }
+
         endpoint += getParamsString(parameters);
         URL url = new URL(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -66,7 +80,7 @@ public class RequestHandler
         return content.toString();
     }
 
-    private static String getParamsString(Map<String, String> params) throws UnsupportedEncodingException
+    private static String getParamsString(Map<String, String> params)
     {
         StringBuilder result = new StringBuilder();
 

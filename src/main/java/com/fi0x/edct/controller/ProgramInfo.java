@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 public class ProgramInfo
 {
     private int errorCode = 0;
+    private String updateUrl = "https://github.com/Fi0x/EDCT/releases";
 
     @FXML
     private Label lblError;
@@ -31,7 +32,7 @@ public class ProgramInfo
         Desktop desktop = Desktop.getDesktop();
         try
         {
-            desktop.browse(new URI("https://github.com/Fi0x/EDCT/releases"));
+            desktop.browse(new URI(updateUrl));
         } catch(IOException | URISyntaxException ignored)
         {
         }
@@ -46,6 +47,11 @@ public class ProgramInfo
 
     public void checkForUpdates()
     {
-        if(GitHub.checkForVersionUpdates()) btnUpdate.setVisible(true);
+        String url = GitHub.checkForVersionUpdates();
+        if(url != null)
+        {
+            updateUrl = url;
+            btnUpdate.setVisible(true);
+        }
     }
 }

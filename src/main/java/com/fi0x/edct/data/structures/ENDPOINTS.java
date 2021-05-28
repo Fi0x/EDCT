@@ -2,6 +2,7 @@ package com.fi0x.edct.data.structures;
 
 public enum ENDPOINTS
 {
+    Releases("https://api.github.com/repos/Fi0x/EDCT/releases", "GET"),
     Commodities("https://inara.cz/galaxy-commodities/", "GET"),
     Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2");
 
