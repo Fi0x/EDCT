@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.ProgramInfo">
+    <Label fx:id="lblError" text="Error ? occured" visible="false" onMouseClicked="#openErrorPage" />
+    <Button fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion" />
+    <stylesheets>
+        <URL value="@../css/programinfo.css"/>
+    </stylesheets>
+</HBox>

@@ -1,6 +1,7 @@
 package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Interaction;
+import com.fi0x.edct.controller.ProgramInfo;
 import com.fi0x.edct.controller.Results;
 import com.fi0x.edct.util.Out;
 import javafx.application.Application;
@@ -18,6 +19,7 @@ public class MainWindow extends Application
 {
     public static MainWindow instance;
 
+    public ProgramInfo infoController;
     public Interaction interactionController;
     public Results resultsController;
 
@@ -36,6 +38,7 @@ public class MainWindow extends Application
             return;
         }
 
+        loadInfo(loader);
         loadInteraction(loader);
         loadResults(loader);
 
@@ -65,6 +68,27 @@ public class MainWindow extends Application
     {
         if(instance == null) instance = new MainWindow();
         return instance;
+    }
+
+    private void loadInfo(FXMLLoader parentLoader)
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/programinfo.fxml"));
+        HBox infoBox;
+
+        try
+        {
+            infoBox = loader.load();
+            infoController = loader.getController();
+        } catch(IOException ignored)
+        {
+            Out.newBuilder("Could not load info GUI elements").always().ERROR();
+            return;
+        }
+
+        VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
+        mainBox.getChildren().add(infoBox);
+
+        infoController.checkForUpdates();
     }
 
     private void loadInteraction(FXMLLoader parentLoader)

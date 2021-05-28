@@ -64,11 +64,14 @@ public class Out
     {
         color = YELLOW;
         print("WRN");
+        //TODO: Write warnings to .log file
     }
     public void ERROR()
     {
         color = RED;
         print("ERR");
+        //TODO: Write errors to .log file
+        //TODO: Display error in programinfo
     }
     public void SUCCESS()
     {
