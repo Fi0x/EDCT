@@ -4,7 +4,6 @@ import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.ProgramInfo;
 import com.fi0x.edct.controller.Results;
 import com.fi0x.edct.util.Logger;
-import com.fi0x.edct.util.Out;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

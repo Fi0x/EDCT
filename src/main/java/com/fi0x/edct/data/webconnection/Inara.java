@@ -3,7 +3,7 @@ package com.fi0x.edct.data.webconnection;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,9 +20,9 @@ public class Inara
             String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
             if(html == null) return false;
             commodities = HTMLCleanup.getCommodityIDs(html);
-        } catch(Exception ignored)
+        } catch(Exception e)
         {
-            Out.newBuilder("Could not download commodity-list").always().WARNING();
+            Logger.WARNING("Could not update commodity IDs", e);
             return false;
         }
 
@@ -59,7 +59,7 @@ public class Inara
             DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);
         } catch(Exception e)
         {
-            Out.newBuilder("Could not get commodity-prices for " + commodityRefID).always().ERROR();
+            Logger.WARNING("Could not get commodity prices for " + commodityRefID, e);
             return false;
         }
         return true;

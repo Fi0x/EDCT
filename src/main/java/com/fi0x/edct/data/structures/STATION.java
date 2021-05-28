@@ -23,19 +23,6 @@ public class STATION
         UPDATE_TIME = updateTime;
     }
 
-    public static STATION getStationFromParts(String[] parts)
-    {
-        return new STATION(
-                parts[0],
-                parts[1],
-                PADSIZE.getFromString(parts[2]),
-                Integer.parseInt(parts[3]),
-                Integer.parseInt(parts[4]),
-                STATIONTYPE.getFromString(parts[5]),
-                Integer.parseInt(parts[6]),
-                parts.length > 7 ? Long.parseLong(parts[7]) : 0);
-    }
-
     public String getUpdateAge()
     {
         long age = System.currentTimeMillis() - UPDATE_TIME;

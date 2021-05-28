@@ -1,6 +1,6 @@
 package com.fi0x.edct.data.webconnection;
 
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -27,9 +27,9 @@ public class JSONCleanup
                 Date publishedDate = Date.from(Instant.parse(published));
                 releaseDates.put(publishedDate, url);
             }
-        } catch(ParseException ignored)
+        } catch(ParseException e)
         {
-            Out.newBuilder("Something went wrong when parsing json").debug().WARNING();
+            Logger.WARNING("Could not convert release-json", e);
         }
 
         return releaseDates;

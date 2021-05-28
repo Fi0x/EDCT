@@ -2,7 +2,9 @@ package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
+import net.sf.launch4j.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,6 +21,7 @@ public class TradeReloader implements Runnable
     @Override
     public void run()
     {
+        Logger.INFO("Trade Reloader Thread started");
         updatePrices();
 
         long oldestFileAge = DBHandler.getInstance().getOldestUpdateAge();
@@ -27,6 +30,8 @@ public class TradeReloader implements Runnable
             INT_CONTROLLER.filterController.updateFilters();
             INT_CONTROLLER.storageController.setDataAge(oldestFileAge, false);
         });
+
+        Logger.INFO("Trade Reloader Thread finished");
     }
 
     private void updatePrices()

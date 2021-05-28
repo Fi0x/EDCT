@@ -1,7 +1,7 @@
 package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
 import java.io.*;
@@ -10,7 +10,9 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -22,8 +24,9 @@ public class RequestHandler
         try
         {
             return sendHTTPRequest(endpoint, requestType, parameters, false);
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
+            Logger.WARNING("Some error occurred when sending a HTTP request", e);
             return null;
         }
     }
@@ -36,12 +39,14 @@ public class RequestHandler
             for(int i = fileContent.size() - 1; i >= 0; i--)
             {
                 String error = fileContent.get(i);
-                if(error.startsWith("429"))
+                if(error.contains("[429]"))
                 {
-                    String errorTime = error.replace("429:", "");
-                    if(System.currentTimeMillis() <= Long.parseLong(errorTime) + 1000 * 60 * 60)
+                    String[] logEntry = error.split("]");
+                    String errorTimeString = logEntry[0].replace("[", "");
+                    Date errorDate = Date.from(Instant.parse(errorTimeString));
+                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
                     {
-                        Out.newBuilder("There was a recent block from inara for this address (429)").always().ERROR();
+                        Logger.WARNING("HTTP request could not be sent because of a 429 response");
                         return null;
                     }
                 }
@@ -67,13 +72,8 @@ public class RequestHandler
                 content.append(inputLine);
             }
             in.close();
-        } else if(status == 429)
-        {
-            Out.newBuilder("Received a 429 status code. Please wait a while until you try your next request").always().ERROR();
-            fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
-            fileContent.add("429:" + System.currentTimeMillis());
-            Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
-        } else Out.newBuilder("Response code of HTTP request was " + status).always().ERROR();
+        } else if(status == 429) Logger.ERROR(429, "Received a 429 status code from a website");
+        else Logger.WARNING("Received a bad HTTP response: " + status);
 
         con.disconnect();
 

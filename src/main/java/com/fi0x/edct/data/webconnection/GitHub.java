@@ -2,6 +2,7 @@ package com.fi0x.edct.data.webconnection;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.structures.ENDPOINTS;
+import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -29,8 +30,9 @@ public class GitHub
 
             if(newestVersion.after(Main.releaseDate))
                 return releases.get(newestVersion);
-        } catch(IOException ignored)
+        } catch(IOException e)
         {
+            Logger.WARNING("Could not find out if there is a newer version", e);
         }
         return null;
     }

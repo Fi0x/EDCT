@@ -3,46 +3,17 @@ package com.fi0x.edct.data.webconnection;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.util.Out;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class HTMLCleanup
 {
-    @Deprecated
-    public static Map<String, Map.Entry<String, Integer>> getCommodityIDsOLD(String inputHTML)
-    {
-        Map<String, Map.Entry<String, Integer>> commodities = new HashMap<>();
-        Document doc = Jsoup.parse(inputHTML);
-
-        Element body = doc.body();
-        Element table = body.getElementsByClass("tablesorter").first();
-        if(table == null) return commodities;
-        Elements entries = table.getElementsByTag("tbody").first().getElementsByTag("tr");
-        entries.remove(0);
-
-        for(Element entry : entries)
-        {
-            Element commodityInfo = entry.getElementsByClass("lineright paddingleft wrap").first();
-            if(commodityInfo == null) continue;
-            String commodityID = commodityInfo.getElementsByTag("a").first().attr("href").replace("commodity", "").replace("/", "");
-            String commodityName = commodityInfo.text();
-
-            int maxProfit = Integer.parseInt(entry.getElementsByTag("td").last().ownText().replace(",", ""));
-
-            commodities.put(commodityID, new AbstractMap.SimpleEntry<>(commodityName, maxProfit));
-        }
-
-        Out.newBuilder("Found " + commodities.size() + " commodities");
-        return commodities;
-    }
     public static Map<String, Integer> getCommodityIDs(String inputHTML)
     {
         Map<String, Integer> commodities = new HashMap<>();
@@ -66,7 +37,6 @@ public class HTMLCleanup
             commodities.put(commodityName, commodityID);
         }
 
-        Out.newBuilder("Found " + commodities.size() + " commodities");
         return commodities;
     }
 

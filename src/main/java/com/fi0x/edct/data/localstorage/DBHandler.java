@@ -4,9 +4,8 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
@@ -24,19 +23,18 @@ public class DBHandler
         try
         {
             dbConnection = DriverManager.getConnection(url);
-            Out.newBuilder("Connection to local database established").verbose().SUCCESS();
+            Logger.INFO("Connected to local DB");
 
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Something went wrong when creating the local database").always().ERROR();
+            Logger.ERROR(998, "Something went wrong when connecting to the local DB", e);
             System.exit(-1);
         }
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
-        Out.newBuilder("Created Commodity Table").veryVerbose().INFO();
-
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
-        Out.newBuilder("Created Station Table").veryVerbose().INFO();
+
+        Logger.INFO("Finished setup of local DB");
     }
     public static DBHandler getInstance()
     {
@@ -101,8 +99,9 @@ public class DBHandler
             {
                 ids.add(results.getInt("inara_id"));
             }
-        } catch(Exception ignored)
+        } catch(Exception e)
         {
+            Logger.WARNING("Could not get the INARA-ID of a commodity", e);
         }
         return ids;
     }
@@ -118,9 +117,9 @@ public class DBHandler
             {
                 return commodity.getString("commodity_name");
             }
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Some error occurred when requesting the name of commodity " + commodityID).debug().WARNING();
+            Logger.WARNING("Could not get the name of a commodity", e);
         }
         return "";
     }
@@ -144,9 +143,9 @@ public class DBHandler
             {
                 id = commodity.getInt("inara_id");
             }
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Some error occurred when requesting the oldest commodity id").debug().WARNING();
+            Logger.WARNING("Could not get the oldest commodity ID", e);
         }
 
         return id;
@@ -171,9 +170,9 @@ public class DBHandler
             {
                 time = commodity.getInt("last_update_time");
             }
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Some error occurred when requesting the oldest commodity age").debug().WARNING();
+            Logger.WARNING("Could not get the age of the oldest commodity", e);
         }
 
         return time;
@@ -204,9 +203,9 @@ public class DBHandler
 
                 stationList.add(new STATION(system, name, pad, quantity, price, type, starDistance, updateTime));
             }
-        } catch(Exception ignored)
+        } catch(Exception e)
         {
-            Out.newBuilder("Something went wrong when receiving station results for a commodity").debug().WARNING();
+            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
         }
 
         return stationList;
@@ -218,10 +217,9 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             statement.executeUpdate(command);
-            Out.newBuilder("Executed statement\n\t" + command).veryVerbose().INFO();
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Could not execute a statement for the DB\n\t" + command).debug().WARNING();
+            Logger.WARNING("Something went wrong when sending an SQL statement", e);
         }
     }
     @Nullable
@@ -231,9 +229,9 @@ public class DBHandler
         {
             Statement statement = dbConnection.createStatement();
             return statement.executeQuery(query);
-        } catch(SQLException ignored)
+        } catch(SQLException e)
         {
-            Out.newBuilder("Could not execute a query for the DB\n\t" + query).debug().WARNING();
+            Logger.WARNING("Something went wrong when sending a SQL query", e);
         }
         return null;
     }

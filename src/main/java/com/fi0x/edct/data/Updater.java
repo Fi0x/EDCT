@@ -3,7 +3,7 @@ package com.fi0x.edct.data;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.webconnection.Inara;
-import com.fi0x.edct.util.Out;
+import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -13,13 +13,11 @@ public class Updater implements Runnable
     @Override
     public void run()
     {
-        Out.newBuilder("Updater thread started").verbose().INFO();
-
+        Logger.INFO("Updater Thread started");
         while(!Inara.updateCommodityIDs())
         {
             if(sleepInterrupted(1000)) return;
         }
-        Out.newBuilder("Updated Commodity ID-list").verbose().INFO();
 
         ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
 
@@ -36,7 +34,7 @@ public class Updater implements Runnable
             }
         }
 
-        Out.newBuilder("All missing ids downloaded").verbose().INFO();
+        Logger.INFO("All Commodities loaded");
         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
 
         while(!Thread.interrupted())
@@ -56,6 +54,7 @@ public class Updater implements Runnable
                 MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
             });
         }
+        Logger.INFO("Updater Thread stopped");
     }
 
     private boolean sleepInterrupted(long delay)
