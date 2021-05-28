@@ -1,4 +1,6 @@
 package com.fi0x.edct.util;
+
+@Deprecated
 public class Out
 {
     private static final String RESET = "\u001B[0m";
@@ -94,7 +96,7 @@ public class Out
 
         if(allowed)
         {
-            prefix = "[" +prefix + "]: ";
+            prefix = "[" + prefix + "]: ";
             if(origin == null) System.out.println(prefix + color + text + RESET);
             else System.out.println(prefix + origin + ":\t\t" + color + text + RESET);
         }
