@@ -97,6 +97,9 @@ public class HTMLCleanup
                         inara_time *= 1000;
                 }
                 inara_time = System.currentTimeMillis() - inara_time;
+            } else if(dataAgeString.length == 1 && dataAgeString[0].equals("now"))
+            {
+                inara_time = System.currentTimeMillis();
             }
 
             STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance, inara_time);

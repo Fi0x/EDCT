@@ -60,7 +60,7 @@ public class DBHandler
                 + makeSQLValid(station.NAME) + ", "
                 + makeSQLValid(station.SYSTEM) + ", "
                 + isSelling + ", "
-                + station.UPDATE_TIME + ", "
+                + makeSQLValid(String.valueOf(station.UPDATE_TIME)) + ", "
                 + station.PRICE + ", "
                 + station.QUANTITY + ", "
                 + makeSQLValid(station.PAD.toString()) + ", "
@@ -199,7 +199,7 @@ public class DBHandler
                 int price = stations.getInt("price");
                 STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("station_type"));
                 int starDistance = stations.getInt("star_distance");
-                long updateTime = stations.getInt("inara_time") * 1000L;
+                long updateTime = Long.parseLong(stations.getString("inara_time"));
 
                 stationList.add(new STATION(system, name, pad, quantity, price, type, starDistance, updateTime));
             }

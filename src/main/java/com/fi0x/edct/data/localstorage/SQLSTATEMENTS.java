@@ -13,7 +13,7 @@ public enum SQLSTATEMENTS
                     "station_name TEXT NOT NULL, " +
                     "star_system TEXT NOT NULL, " +
                     "is_seller INT NOT NULL, " +
-                    "inara_time INT NOT NULL, " +
+                    "inara_time TEXT NOT NULL, " +
                     "price INT NOT NULL, " +
                     "quantity INT NOT NULL, " +
                     "pad_size TEXT NOT NULL, " +
