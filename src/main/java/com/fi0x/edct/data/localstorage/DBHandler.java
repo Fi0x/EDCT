@@ -28,7 +28,7 @@ public class DBHandler
         } catch(SQLException e)
         {
             Logger.ERROR(998, "Something went wrong when connecting to the local DB", e);
-            System.exit(-1);
+            System.exit(998);
         }
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());

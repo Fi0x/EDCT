@@ -58,8 +58,10 @@ public class Main
                 try
                 {
                     if(file.createNewFile()) return false;
-                } catch(IOException ignored)
+                } catch(IOException e)
                 {
+                    Logger.ERROR(997, "Could not create file: " + file, e);
+                    System.exit(997);
                 }
             }
             else return !file.mkdir();

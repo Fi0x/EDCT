@@ -67,8 +67,13 @@ public class Logger
                 if(e != null) fileContent.add(Arrays.toString(e.getStackTrace()));
 
                 Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
-            } catch(IOException ignored)
+            } catch(IOException ex)
             {
+                time = "[" + Date.from(Instant.now()) + "]";
+                prefix = "[ERR]";
+                errorCode = "[996]";
+                System.out.println(time + RED + prefix + errorCode + "Something went wrong when writing to the log-file" + RESET);
+                ex.printStackTrace();
             }
         }
 

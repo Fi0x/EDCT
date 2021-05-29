@@ -62,7 +62,7 @@ public class Updater implements Runnable
         try
         {
             Thread.sleep(delay);
-        } catch(InterruptedException e)
+        } catch(InterruptedException ignored)
         {
             return true;
         }
