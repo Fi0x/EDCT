@@ -17,6 +17,7 @@ public class Main
 
     public static File localStorage;
     public static File errors;
+    public static File settings;
     //TODO: Update version information
     public static final Date releaseDate = Date.from(Instant.parse("2021-05-29T08:56:30Z"));
     public static final String version = "1.0.0.0";
@@ -49,6 +50,9 @@ public class Main
 
         errors = new File(localStorage.getPath() + File.separator + "carrier_trader.log");
         createFileIfNotExists(errors, true);
+
+        settings = new File(localStorage.getPath() + File.separator + "settings.txt");
+        createFileIfNotExists(settings, true);
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)
