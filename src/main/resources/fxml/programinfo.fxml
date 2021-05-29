@@ -5,9 +5,21 @@
 
 <?import java.net.URL?>
 <HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.ProgramInfo">
-    <Label fx:id="lblError" text="Error ? occured" visible="false" onMouseClicked="#openErrorPage" />
-    <Label fx:id="lblVersion" text="" />
-    <Button fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion" />
+    <Label fx:id="lblError" text="Error ? occured" visible="false" onMouseClicked="#openErrorPage">
+        <tooltip>
+            <Tooltip text="Your program encountered this error, click on it to get more information online"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblVersion">
+        <tooltip>
+            <Tooltip text="This is the version you are using"/>
+        </tooltip>
+    </Label>
+    <Button fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion">
+        <tooltip>
+            <Tooltip text="A newer version is available, click here to open the download page"/>
+        </tooltip>
+    </Button>
     <stylesheets>
         <URL value="@../css/programinfo.css"/>
     </stylesheets>

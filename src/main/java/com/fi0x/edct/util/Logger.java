@@ -64,7 +64,7 @@ public class Logger
                 List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
 
                 fileContent.add(time + prefix + errorCode + text);
-                if(e != null) fileContent.add(Arrays.toString(e.getStackTrace()));
+                if(e != null) fileContent.add("\t" + Arrays.toString(e.getStackTrace()).replace(", ", "\n\t").replace("[", "").replace("]", ""));
 
                 Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
             } catch(IOException ex)

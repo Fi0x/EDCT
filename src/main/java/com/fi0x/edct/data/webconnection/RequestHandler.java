@@ -33,25 +33,7 @@ public class RequestHandler
     @Nullable
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException
     {
-        List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
-        if(!ignore429)
-        {
-            for(int i = fileContent.size() - 1; i >= 0; i--)
-            {
-                String error = fileContent.get(i);
-                if(error.contains("[429]"))
-                {
-                    String[] logEntry = error.split("]");
-                    String errorTimeString = logEntry[0].replace("[", "");
-                    Date errorDate = Date.from(Instant.parse(errorTimeString));
-                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
-                    {
-                        Logger.WARNING("HTTP request could not be sent because of a 429 response");
-                        return null;
-                    }
-                }
-            }
-        }
+        if(!canRequest(ignore429)) return null;
 
         endpoint += getParamsString(parameters);
         URL url = new URL(endpoint);
@@ -78,6 +60,33 @@ public class RequestHandler
         con.disconnect();
 
         return content.toString();
+    }
+
+    private static boolean canRequest(boolean ignore429) throws IOException
+    {
+        List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
+        if(!ignore429)
+        {
+            for(int i = fileContent.size() - 1; i >= 0; i--)
+            {
+                String error = fileContent.get(i);
+                if(error.contains("[429]"))
+                {
+                    String[] logEntry = error.split("]");
+                    String errorTimeString = logEntry[0].replace("[", "");
+                    Date errorDate = Date.from(Instant.parse(errorTimeString));
+                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
+                    {
+                        Logger.WARNING("HTTP request could not be sent because of a 429 response");
+                        return false;
+                    }
+                }
+            }
+        }
+
+        //TODO: Check for socketException
+
+        return true;
     }
 
     private static String getParamsString(Map<String, String> params)

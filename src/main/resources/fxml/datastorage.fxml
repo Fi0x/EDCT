@@ -5,9 +5,21 @@
 
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Datastorage">
-    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false"/>
-    <Label fx:id="lblDataAge" text="Local data age: ---" />
-    <Label fx:id="lblUpdateStatus" text="Initializing..." />
+    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false">
+        <tooltip>
+            <Tooltip text="Re-loads the results, not the local database"/>
+        </tooltip>
+    </Button>
+    <Label fx:id="lblDataAge" text="Local data age: ---">
+        <tooltip>
+            <Tooltip text="The age of the least recently updated database entry"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblUpdateStatus" text="Initializing...">
+        <tooltip>
+            <Tooltip text="This displays what happens in the background"/>
+        </tooltip>
+    </Label>
     <stylesheets>
         <URL value="@../css/datastorage.css"/>
     </stylesheets>

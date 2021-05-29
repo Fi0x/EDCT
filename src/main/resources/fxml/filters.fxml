@@ -5,16 +5,42 @@
 <?import javafx.scene.control.CheckBox?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.skin.ToolBarSkin.ToolBarOverflowMenu?>
 <VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Filters">
     <HBox>
-        <Label text="Min quantity" alignment="CENTER_LEFT"/>
+        <Label text="Min quantity">
+            <tooltip>
+                <Tooltip text="The lowest demand / supply a station should have for a commodity"/>
+            </tooltip>
+        </Label>
         <TextField fx:id="txtQuantity" text="10000" alignment="CENTER_RIGHT"/>
     </HBox>
-    <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers"/>
-    <CheckBox fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations"/>
-    <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads"/>
-    <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand"/>
-    <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations" />
+    <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers">
+        <tooltip>
+            <Tooltip text="If fleet carrier markets should be displayed as well"/>
+        </tooltip>
+    </CheckBox>
+    <CheckBox fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations">
+        <tooltip>
+            <Tooltip text="If markets from planetary bases should be displayed as well"/>
+        </tooltip>
+    </CheckBox>
+    <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads">
+        <tooltip>
+            <Tooltip text="If stations that have no large landing pads should be displayed"/>
+        </tooltip>
+    </CheckBox>
+    <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand">
+        <tooltip>
+            <Tooltip text="If a station with 0 demand should be displayed"/>
+        </tooltip>
+    </CheckBox>
+    <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations">
+        <tooltip>
+            <Tooltip text="If stations from odyssey-player-data should be displayed"/>
+        </tooltip>
+    </CheckBox>
     <stylesheets>
         <URL value="@../css/filters.css"/>
     </stylesheets>

@@ -6,17 +6,57 @@
 
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Station">
     <Label fx:id="lblAction" text="Buy at" />
-    <Label fx:id="lblSystem" text="System: ---" />
-    <Label fx:id="lblStationName" text="Station: ---" />
-    <Label fx:id="lblType" text="Type: ---" />
-    <Label fx:id="lblPad" text="Landing Pad: ---" />
-    <Label fx:id="lblDistance" text="Distance to Star: ---" />
-    <Label fx:id="lblPrice" text="Price: ---" />
-    <Label fx:id="lblAmount" text="Supply: ---" />
-    <Label fx:id="lblAge" text="Data age: ---" />
+    <Label fx:id="lblSystem" text="System: ---">
+        <tooltip>
+            <Tooltip text="The system this station is located in"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblStationName" text="Station: ---">
+        <tooltip>
+            <Tooltip text="The name of the station"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblType" text="Type: ---">
+        <tooltip>
+            <Tooltip text="Weather this station is a carrier, surface or normal station"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblPad" text="Landing Pad: ---">
+        <tooltip>
+            <Tooltip text="The size of the largest landing pad"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblDistance" text="Distance to Star: ---">
+        <tooltip>
+            <Tooltip text="The distance this station has to the main-star"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblPrice" text="Price: ---">
+        <tooltip>
+            <Tooltip text="The price at which you can buy / sell this commodity here"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblAmount" text="Supply: ---">
+        <tooltip>
+            <Tooltip text="The amount of the commodity this station buys / sells"/>
+        </tooltip>
+    </Label>
+    <Label fx:id="lblAge" text="Data age: ---">
+        <tooltip>
+            <Tooltip text="How long ago this data was updated on INARA"/>
+        </tooltip>
+    </Label>
     <HBox>
-        <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" disable="true" />
-        <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" disable="true" />
+        <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" disable="true">
+            <tooltip>
+                <Tooltip text="Select the previous station that sells this commodity"/>
+            </tooltip>
+        </Button>
+        <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" disable="true">
+            <tooltip>
+                <Tooltip text="Select the next station that sells this commodity"/>
+            </tooltip>
+        </Button>
     </HBox>
     <stylesheets>
         <URL value="@../css/station.css" />

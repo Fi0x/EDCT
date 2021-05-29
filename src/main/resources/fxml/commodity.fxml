@@ -8,7 +8,11 @@
     <Button fx:id="btnPrevComm" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" disable="true"/>
     <VBox alignment="CENTER">
         <Label fx:id="lblCommodity" text="---"/>
-        <Label fx:id="lblProfit" text="Profit: ---"/>
+        <Label fx:id="lblProfit" text="Profit: ---">
+            <tooltip>
+                <Tooltip text="The cr/t you can make with this trade"/>
+            </tooltip>
+        </Label>
     </VBox>
     <Button fx:id="btnNextComm" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" disable="true"/>
     <stylesheets>
