@@ -17,7 +17,9 @@ public class Main
 
     public static File localStorage;
     public static File errors;
-    public static final Date releaseDate = Date.from(Instant.parse("2021-05-15T08:56:30Z"));//TODO: Update releaseTime
+    //TODO: Update version information
+    public static final Date releaseDate = Date.from(Instant.parse("2021-05-29T08:56:30Z"));
+    public static final String version = "1.0.0.0";
 
     public static void main(String[] args)
     {

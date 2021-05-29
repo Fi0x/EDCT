@@ -1,8 +1,10 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.data.webconnection.GitHub;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -10,8 +12,10 @@ import java.awt.Desktop;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class ProgramInfo
+public class ProgramInfo implements Initializable
 {
     private int errorCode = 0;
     private String updateUrl = "https://github.com/Fi0x/EDCT/releases";
@@ -19,7 +23,15 @@ public class ProgramInfo
     @FXML
     private Label lblError;
     @FXML
+    private Label lblVersion;
+    @FXML
     private Button btnUpdate;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        lblVersion.setText("Version: " + Main.version);
+    }
 
     @FXML
     private void openErrorPage()

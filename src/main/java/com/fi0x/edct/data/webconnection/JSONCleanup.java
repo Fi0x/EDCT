@@ -22,7 +22,7 @@ public class JSONCleanup
             JSONArray jsonReleases = (JSONArray) new JSONParser().parse(jsonString);
             for(Object release : jsonReleases)
             {
-                String published = ((JSONObject) release).get("published_at").toString();
+                String published = ((JSONObject) release).get("created_at").toString();
                 String url = ((JSONObject) release).get("html_url").toString();
                 Date publishedDate = Date.from(Instant.parse(published));
                 releaseDates.put(publishedDate, url);
