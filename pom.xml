@@ -161,5 +161,10 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.34.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.zeromq</groupId>
+            <artifactId>jeromq</artifactId>
+            <version>0.5.2</version>
+        </dependency>
     </dependencies>
 </project>

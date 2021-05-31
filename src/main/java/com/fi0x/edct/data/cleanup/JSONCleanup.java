@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.util.Logger;
 import org.json.simple.JSONArray;

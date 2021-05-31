@@ -79,5 +79,7 @@
     <orderEntry type="library" name="Maven: org.sonatype.sisu:sisu-guice:noaop:2.1.7" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.xerial:sqlite-jdbc:3.34.0" level="project" />
+    <orderEntry type="library" name="Maven: org.zeromq:jeromq:0.5.2" level="project" />
+    <orderEntry type="library" name="Maven: eu.neilalexander:jnacl:1.0.0" level="project" />
   </component>
 </module>

@@ -1,7 +1,9 @@
 package com.fi0x.edct.data;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.webconnection.EDDN;
 import com.fi0x.edct.data.webconnection.Inara;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
@@ -48,6 +50,11 @@ public class Updater implements Runnable
 
         Logger.INFO("All Commodities loaded");
         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
+
+        if(Thread.interrupted()) return;
+
+        Main.eddn = new Thread(new EDDN());
+        Main.eddn.start();
 
         while(!Thread.interrupted())
         {
