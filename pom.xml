@@ -109,6 +109,7 @@
                             <jre>
                                 <bundledJre64Bit>true</bundledJre64Bit>
                                 <path>C:\\Program Files\\Java\\jdk-13.0.1</path>
+                                <bundledJre64Bit>true</bundledJre64Bit>
                                 <bundledJreAsFallback>true</bundledJreAsFallback>
                                 <runtimeBits>64</runtimeBits>
                             </jre>
