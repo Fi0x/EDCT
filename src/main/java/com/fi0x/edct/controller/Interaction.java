@@ -6,8 +6,9 @@ import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 import java.net.URL;
@@ -25,7 +26,7 @@ public class Interaction implements Initializable
     public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
 
     @FXML
-    private HBox hbInteraction;
+    private GridPane hbInteraction;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -40,7 +41,7 @@ public class Interaction implements Initializable
     private void loadDatastorage()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/datastorage.fxml"));
-        VBox storageBox;
+        Pane storageBox;
 
         try
         {
@@ -53,12 +54,12 @@ public class Interaction implements Initializable
             return;
         }
 
-        hbInteraction.getChildren().add(storageBox);
+        hbInteraction.add(storageBox, 3, 0);
     }
     private void loadFilters()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/filters.fxml"));
-        VBox filterBox;
+        Pane filterBox;
 
         try
         {
@@ -70,7 +71,7 @@ public class Interaction implements Initializable
             return;
         }
 
-        hbInteraction.getChildren().add(filterBox);
+        hbInteraction.add(filterBox, 1, 0);
     }
 
     public void setMainController(Main controller)

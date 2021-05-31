@@ -6,9 +6,7 @@ import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,9 +27,7 @@ public class Results implements Initializable
     @FXML
     private VBox vbResults;
     @FXML
-    private HBox hbStations;
-    @FXML
-    private AnchorPane apCommodity;
+    private GridPane hbStations;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -48,7 +44,7 @@ public class Results implements Initializable
     private void loadCommodity()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/commodity.fxml"));
-        HBox commodityBox;
+        Pane commodityBox;
 
         try
         {
@@ -62,12 +58,12 @@ public class Results implements Initializable
             return;
         }
 
-        apCommodity.getChildren().add(commodityBox);
+        vbResults.getChildren().add(1, commodityBox);
     }
     private void loadStation(boolean isBuying)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/station.fxml"));
-        VBox stationBox;
+        Pane stationBox;
 
         try
         {
@@ -87,7 +83,7 @@ public class Results implements Initializable
             return;
         }
 
-        hbStations.getChildren().add(stationBox);
+        hbStations.add(stationBox, isBuying ? 2 : 0, 0);
     }
 
     public void nextCommodity()

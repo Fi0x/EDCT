@@ -3,8 +3,14 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
-<HBox fx:id="hbInteraction" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Interaction" alignment="TOP_CENTER">
+<GridPane fx:id="hbInteraction" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Interaction" alignment="TOP_CENTER">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints/>
+        <ColumnConstraints hgrow="ALWAYS"/>
+        <ColumnConstraints/>
+    </columnConstraints>
     <stylesheets>
         <URL value="@../css/interaction.css"/>
     </stylesheets>
-</HBox>
+</GridPane>

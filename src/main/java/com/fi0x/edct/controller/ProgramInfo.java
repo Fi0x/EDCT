@@ -30,7 +30,7 @@ public class ProgramInfo implements Initializable
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
-        lblVersion.setText("Version: " + Main.version);
+        lblVersion.setText("Current version: " + Main.version);
     }
 
     @FXML

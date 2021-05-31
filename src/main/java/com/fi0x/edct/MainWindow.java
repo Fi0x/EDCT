@@ -9,8 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -46,8 +45,6 @@ public class MainWindow extends Application
         primaryStage.setTitle("Elite: Dangerous Carrier Trader");
         primaryStage.getIcons().add(new Image("images/icon.png"));
         primaryStage.setScene(new Scene(root));
-        primaryStage.setMinHeight(540);
-        primaryStage.setMinWidth(960);
         primaryStage.setResizable(false);
         primaryStage.show();
 
@@ -76,7 +73,7 @@ public class MainWindow extends Application
     private void loadInfo(FXMLLoader parentLoader)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/programinfo.fxml"));
-        HBox infoBox;
+        Pane infoBox;
 
         try
         {
@@ -88,7 +85,7 @@ public class MainWindow extends Application
             return;
         }
 
-        VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
+        Pane mainBox = (Pane) parentLoader.getNamespace().get("vbMain");
         mainBox.getChildren().add(infoBox);
 
         infoController.checkForUpdates();
@@ -97,7 +94,7 @@ public class MainWindow extends Application
     private void loadInteraction(FXMLLoader parentLoader)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/interaction.fxml"));
-        HBox interactionBox;
+        Pane interactionBox;
 
         try
         {
@@ -111,13 +108,13 @@ public class MainWindow extends Application
             return;
         }
 
-        VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
+        Pane mainBox = (Pane) parentLoader.getNamespace().get("vbMain");
         mainBox.getChildren().add(interactionBox);
     }
     private void loadResults(FXMLLoader parentLoader)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/results.fxml"));
-        VBox interactionBox;
+        Pane interactionBox;
 
         try
         {
@@ -131,7 +128,7 @@ public class MainWindow extends Application
             return;
         }
 
-        VBox mainBox = (VBox) parentLoader.getNamespace().get("vbMain");
+        Pane mainBox = (Pane) parentLoader.getNamespace().get("vbMain");
         mainBox.getChildren().add(interactionBox);
     }
 }

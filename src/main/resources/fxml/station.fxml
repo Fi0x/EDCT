@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Station">
-    <Label fx:id="lblAction" text="Buy at" />
+<VBox id="station" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Station" minWidth="350">
+    <Label id="topic" fx:id="lblAction" text="Buy at"/>
     <Label fx:id="lblSystem" text="System: ---">
         <tooltip>
             <Tooltip text="The system this station is located in"/>
@@ -46,18 +46,27 @@
             <Tooltip text="How long ago this data was updated on INARA"/>
         </tooltip>
     </Label>
-    <HBox>
-        <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" disable="true">
+    <GridPane>
+        <rowConstraints>
+            <RowConstraints minHeight="10"/>
+            <RowConstraints />
+        </rowConstraints>
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints/>
+        </columnConstraints>
+        <Button fx:id="btnPrevStation" mnemonicParsing="false" onAction="#previousStation" text="Previous Station" disable="true" GridPane.rowIndex="1" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="Select the previous station that sells this commodity"/>
             </tooltip>
         </Button>
-        <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" disable="true">
+        <Button fx:id="btnNextStation" mnemonicParsing="false" onAction="#nextStation" text="Next Station" disable="true" GridPane.rowIndex="1" GridPane.columnIndex="2">
             <tooltip>
                 <Tooltip text="Select the next station that sells this commodity"/>
             </tooltip>
         </Button>
-    </HBox>
+    </GridPane>
     <stylesheets>
         <URL value="@../css/station.css" />
     </stylesheets>

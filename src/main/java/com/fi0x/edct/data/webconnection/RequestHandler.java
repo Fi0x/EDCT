@@ -10,6 +10,8 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +21,7 @@ import java.util.Map;
 public class RequestHandler
 {
     @Nullable
-    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters)
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws InterruptedException
     {
         try
         {
@@ -31,7 +33,7 @@ public class RequestHandler
         }
     }
     @Nullable
-    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException, InterruptedException
     {
         if(!canRequest(ignore429)) return null;
 
@@ -43,7 +45,14 @@ public class RequestHandler
         con.setConnectTimeout(5000);
         con.setReadTimeout(5000);
 
-        int status = con.getResponseCode();
+        int status = 0;
+        try
+        {
+            status = con.getResponseCode();
+        } catch(IOException e)
+        {
+            Logger.ERROR(995, "Could not establish a connection to the server");
+        }
         StringBuilder content = new StringBuilder();
         if(status == 200)
         {
@@ -55,14 +64,14 @@ public class RequestHandler
             }
             in.close();
         } else if(status == 429) Logger.ERROR(429, "Received a 429 status code from a website");
-        else Logger.WARNING("Received a bad HTTP response: " + status);
+        else if(status != 0) Logger.WARNING("Received a bad HTTP response: " + status);
 
         con.disconnect();
 
         return content.toString();
     }
 
-    private static boolean canRequest(boolean ignore429) throws IOException
+    private static boolean canRequest(boolean ignore429) throws IOException, InterruptedException
     {
         List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
         if(!ignore429)
@@ -70,21 +79,37 @@ public class RequestHandler
             for(int i = fileContent.size() - 1; i >= 0; i--)
             {
                 String error = fileContent.get(i);
+                if(!error.contains("[ERR]")) continue;
+
                 if(error.contains("[429]"))
                 {
                     String[] logEntry = error.split("]");
                     String errorTimeString = logEntry[0].replace("[", "");
-                    Date errorDate = Date.from(Instant.parse(errorTimeString));
+
+                    Date errorDate = getDateFromString(errorTimeString);
+                    if(errorDate == null) return true;
+
                     if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
                     {
                         Logger.WARNING("HTTP request could not be sent because of a 429 response");
                         return false;
                     }
                 }
+                else if(error.contains("[995]"))
+                {
+                    String[] logEntry = error.split("]");
+                    String errorTimeString = logEntry[0].replace("[", "");
+
+                    Date errorDate = getDateFromString(errorTimeString);
+                    if(errorDate == null) return true;
+                    
+                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 10)
+                    {
+                        Thread.sleep(1000 * 10);
+                    }
+                }
             }
         }
-
-        //TODO: Check for socketException
 
         return true;
     }
@@ -103,5 +128,17 @@ public class RequestHandler
 
         String resultString = result.toString();
         return resultString.length() > 0 ? "?" + resultString.substring(0, resultString.length() - 1) : "";
+    }
+
+    private static Date getDateFromString(String input)
+    {
+        try
+        {
+            return new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy").parse(input);
+        } catch(ParseException e)
+        {
+            Logger.WARNING("Could not parse a date", e);
+            return null;
+        }
     }
 }

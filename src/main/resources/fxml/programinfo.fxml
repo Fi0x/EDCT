@@ -4,18 +4,23 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
-<HBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.ProgramInfo">
-    <Label fx:id="lblError" text="Error ? occured" visible="false" onMouseClicked="#openErrorPage">
+<GridPane id="menuBar" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.ProgramInfo">
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS" halignment="LEFT"/>
+        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER"/>
+        <ColumnConstraints hgrow="ALWAYS" halignment="RIGHT"/>
+    </columnConstraints>
+    <Label id="lblError" fx:id="lblError" text="Error --- occured" visible="false" onMouseClicked="#openErrorPage" GridPane.columnIndex="0">
         <tooltip>
             <Tooltip text="Your program encountered this error, click on it to get more information online"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblVersion">
+    <Label fx:id="lblVersion" GridPane.columnIndex="1">
         <tooltip>
             <Tooltip text="This is the version you are using"/>
         </tooltip>
     </Label>
-    <Button fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion">
+    <Button id="btnUpdate" fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion" GridPane.columnIndex="2">
         <tooltip>
             <Tooltip text="A newer version is available, click here to open the download page"/>
         </tooltip>
@@ -23,4 +28,4 @@
     <stylesheets>
         <URL value="@../css/programinfo.css"/>
     </stylesheets>
-</HBox>
+</GridPane>

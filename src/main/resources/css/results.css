@@ -1,0 +1,11 @@
+#results {
+    -fx-border-color: #000;
+    -fx-border-width: 4;
+}
+#stations {
+    -fx-padding: 10;
+    -fx-font-size: 18;
+}
+.button {
+    -fx-font-size: 16;
+}

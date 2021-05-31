@@ -1,0 +1,28 @@
+#menuBar {
+    -fx-background-color: #424242;
+    -fx-font-size: 14;
+}
+.label {
+    -fx-padding: 2 5 2 5;
+}
+.button {
+    -fx-padding: 2 5 2 5;
+}
+#lblError {
+    -fx-background-color: #ff6037;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+#lblError:hover {
+    -fx-background-color: #bd2600;
+    -fx-text-fill: #000000;
+    -fx-font-weight: bold;
+}
+#btnUpdate {
+    -fx-background-color: #87ff63;
+    -fx-text-fill: #021802;
+}
+#btnUpdate:hover {
+    -fx-background-color: #479c2d;
+    -fx-text-fill: #021802;
+}
