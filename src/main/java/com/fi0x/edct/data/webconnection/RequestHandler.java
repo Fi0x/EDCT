@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -134,10 +133,10 @@ public class RequestHandler
     {
         try
         {
-            return new SimpleDateFormat("E MMM dd HH:mm:ss Z yyyy").parse(input);
+            return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(input);
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not parse a date", e);
+            Logger.WARNING("Could not parse a date: " + input, e);
             return null;
         }
     }

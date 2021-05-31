@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,7 +48,7 @@ public class Logger
 
     private static void log(int code, LOGLEVEL lvl, String text, @Nullable Exception e)
     {
-        String time = "[" + Date.from(Instant.now()) + "]";
+        String time = getDateString();
         String errorCode = code == 0 ? "[---]" : "[" + code + "]";
         String prefix = "[" + lvl + "]: ";
         if(debug || lvl == LOGLEVEL.INF)
@@ -82,5 +84,13 @@ public class Logger
         {
             Platform.runLater(() -> MainWindow.getInstance().infoController.setError(code));
         }
+    }
+
+    private static String getDateString()
+    {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        return "[" + dtf.format(now) + "]";
     }
 }
