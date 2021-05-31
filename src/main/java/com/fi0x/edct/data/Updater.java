@@ -14,9 +14,15 @@ public class Updater implements Runnable
     public void run()
     {
         Logger.INFO("Updater Thread started");
-        while(!Inara.updateCommodityIDs())
+        try
         {
-            if(sleepInterrupted(1000)) return;
+            while(!Inara.updateCommodityIDs())
+            {
+                if(sleepInterrupted(1000)) return;
+            }
+        } catch(InterruptedException ignored)
+        {
+            return;
         }
 
         ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
@@ -28,9 +34,15 @@ public class Updater implements Runnable
             int finalCounter = counter;
             Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
             if(sleepInterrupted(250)) return;
-            while(!Inara.updateCommodityPrices(id))
+            try
             {
-                if(sleepInterrupted(500)) return;
+                while(!Inara.updateCommodityPrices(id))
+                {
+                    if(sleepInterrupted(500)) return;
+                }
+            } catch(InterruptedException ignored)
+            {
+                return;
             }
         }
 
@@ -45,7 +57,13 @@ public class Updater implements Runnable
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
 
-            Inara.updateCommodityPrices(oldestID);
+            try
+            {
+                Inara.updateCommodityPrices(oldestID);
+            } catch(InterruptedException ignored)
+            {
+                return;
+            }
             long age = System.currentTimeMillis() - DBHandler.getInstance().getOldestUpdateAge() * 1000L;
 
             Platform.runLater(() ->

@@ -18,7 +18,14 @@ public class GitHub
         Map<String, String> params = new HashMap<>();
         try
         {
-            String response = RequestHandler.sendHTTPRequest(ENDPOINTS.Releases.url, ENDPOINTS.Releases.type, params, true);
+            String response = null;
+            try
+            {
+                response = RequestHandler.sendHTTPRequest(ENDPOINTS.Releases.url, ENDPOINTS.Releases.type, params, true);
+            } catch(InterruptedException ignored)
+            {
+            }
+            if(response == null || response.equals("")) return null;
             Map<Date, String> releases = JSONCleanup.getReleases(response);
 
             Date newestVersion = Main.releaseDate;

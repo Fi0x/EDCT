@@ -19,7 +19,7 @@ public class Main
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final Date releaseDate = Date.from(Instant.parse("2021-05-29T08:56:30Z"));
+    public static final Date releaseDate = Date.from(Instant.parse("2021-05-31T08:56:30Z"));
     public static final String version = "1.0.0.0";
 
     public static void main(String[] args)

@@ -3,28 +3,19 @@ package com.fi0x.edct.data.webconnection;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.Logger;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Inara
 {
-    public static boolean updateCommodityIDs()
+    public static boolean updateCommodityIDs() throws InterruptedException
     {
         Map<String, String> parameters = new HashMap<>();
         Map<String, Integer> commodities;
-        try
-        {
-            String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
-            if(html == null) return false;
-            commodities = HTMLCleanup.getCommodityIDs(html);
-        } catch(Exception e)
-        {
-            Logger.WARNING("Could not update commodity IDs", e);
-            return false;
-        }
+        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
+        if(html == null) return false;
+        commodities = HTMLCleanup.getCommodityIDs(html);
 
         for(Map.Entry<String, Integer> entry : commodities.entrySet())
         {
@@ -33,35 +24,28 @@ public class Inara
         return true;
     }
 
-    public static boolean updateCommodityPrices(int commodityRefID)
+    public static boolean updateCommodityPrices(int commodityRefID) throws InterruptedException
     {
         Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "buymin");
         Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "sellmax");
 
-        try
-        {
-            String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
-            if(html == null) return false;
-            ArrayList<STATION> sellStations = HTMLCleanup.getCommodityPrices(html);
-            html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
-            if(html == null) return false;
-            ArrayList<STATION> buyStations = HTMLCleanup.getCommodityPrices(html);
+        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
+        if(html == null) return false;
+        ArrayList<STATION> sellStations = HTMLCleanup.getCommodityPrices(html);
+        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
+        if(html == null) return false;
+        ArrayList<STATION> buyStations = HTMLCleanup.getCommodityPrices(html);
 
-            for(STATION seller : sellStations)
-            {
-                DBHandler.getInstance().setStationData(seller, commodityRefID, true);
-            }
-            for(STATION buyer : buyStations)
-            {
-                DBHandler.getInstance().setStationData(buyer, commodityRefID, false);
-            }
-
-            DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);
-        } catch(Exception e)
+        for(STATION seller : sellStations)
         {
-            Logger.WARNING("Could not get commodity prices for " + commodityRefID, e);
-            return false;
+            DBHandler.getInstance().setStationData(seller, commodityRefID, true);
         }
+        for(STATION buyer : buyStations)
+        {
+            DBHandler.getInstance().setStationData(buyer, commodityRefID, false);
+        }
+
+        DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);
         return true;
     }
 

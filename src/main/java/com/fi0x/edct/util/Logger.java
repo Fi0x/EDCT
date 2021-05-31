@@ -2,6 +2,7 @@ package com.fi0x.edct.util;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
+import javafx.application.Platform;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -79,7 +80,7 @@ public class Logger
 
         if(lvl == LOGLEVEL.ERR)
         {
-            MainWindow.getInstance().infoController.setError(code);
+            Platform.runLater(() -> MainWindow.getInstance().infoController.setError(code));
         }
     }
 }

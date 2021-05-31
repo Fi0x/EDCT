@@ -29,7 +29,7 @@ public class JSONCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not convert release-json", e);
+            Logger.WARNING("Could not convert release-json: " + jsonString, e);
         }
 
         return releaseDates;
