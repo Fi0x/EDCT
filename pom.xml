@@ -5,7 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.fi0x.edct</groupId>
     <artifactId>EliteDangerousCarrierTrader</artifactId>
-    <version>1.0.0.0</version><!-- //TODO: update version -->
+    <!-- //TODO: update version -->
+    <version>1.0.0.1</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -90,27 +91,24 @@
                 <version>2.1.1</version>
                 <executions>
                     <execution>
-                        <id>l4j-gui</id>
+                        <id>l4j-clui</id>
                         <phase>package</phase>
                         <goals>
                             <goal>launch4j</goal>
                         </goals>
                         <configuration>
-                            <icon>src\\main\\resources\\images\\icon.ico</icon>
-                            <dontWrapJar>false</dontWrapJar>
                             <headerType>gui</headerType>
-                            <stayAlive>true</stayAlive>
-                            <jar>target/EliteDangerousCarrierTrader-${project.version}-jar-with-dependencies.jar</jar>
                             <outfile>target/EDCT.exe</outfile>
-                            <downloadUrl>https://jdk.java.net/java-se-ri/13</downloadUrl>
+                            <jar>target/EliteDangerousCarrierTrader-${project.version}-jar-with-dependencies.jar</jar>
+                            <downloadUrl>https://jdk.java.net/archive/</downloadUrl>
+                            <stayAlive>true</stayAlive>
+                            <icon>src\\main\\resources\\images\\icon.ico</icon>
                             <classPath>
                                 <mainClass>com.fi0x.edct.Main</mainClass>
                             </classPath>
                             <jre>
-                                <bundledJre64Bit>true</bundledJre64Bit>
-                                <path>C:\\Program Files\\Java\\jdk-13.0.1</path>
-                                <bundledJreAsFallback>true</bundledJreAsFallback>
-                                <runtimeBits>64</runtimeBits>
+<!--                                <path>jre</path>-->
+                                <minVersion>13.0.1</minVersion>
                             </jre>
                             <versionInfo>
                                 <fileVersion>${project.version}</fileVersion>
