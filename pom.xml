@@ -108,9 +108,6 @@
                             </classPath>
                             <jre>
                                 <path>jre</path>
-                                <bundledJre64Bit>true</bundledJre64Bit>
-                                <bundledJreAsFallback>true</bundledJreAsFallback>
-                                <minVersion>13.0.1</minVersion>
                             </jre>
                             <versionInfo>
                                 <fileVersion>${project.version}</fileVersion>
