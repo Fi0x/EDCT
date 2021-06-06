@@ -3,6 +3,7 @@ package com.fi0x.edct.data;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.webconnection.EDDN;
 import com.fi0x.edct.data.webconnection.Inara;
 import com.fi0x.edct.util.Logger;
@@ -27,29 +28,15 @@ public class Updater implements Runnable
             return;
         }
 
-        ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
-
-        int counter = 0;
-        for(int id : missingIDs)
-        {
-            counter++;
-            int finalCounter = counter;
-            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
-            if(sleepInterrupted(250)) return;
-            try
-            {
-                while(!Inara.updateCommodityPrices(id))
-                {
-                    if(sleepInterrupted(500)) return;
-                }
-            } catch(InterruptedException ignored)
-            {
-                return;
-            }
-        }
+        if(loadMissingIDs()) return;
 
         Logger.INFO("All Commodities loaded");
         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
+
+        DBHandler.getInstance().removeOldEntries();
+
+        Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
+        threadReq.start();
 
         if(Thread.interrupted()) return;
 
@@ -80,6 +67,31 @@ public class Updater implements Runnable
             });
         }
         Logger.INFO("Updater Thread stopped");
+    }
+
+    private boolean loadMissingIDs()
+    {
+        ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
+
+        int counter = 0;
+        for(int id : missingIDs)
+        {
+            counter++;
+            int finalCounter = counter;
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
+            if(sleepInterrupted(250)) return true;
+            try
+            {
+                while(!Inara.updateCommodityPrices(id))
+                {
+                    if(sleepInterrupted(500)) return true;
+                }
+            } catch(InterruptedException ignored)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean sleepInterrupted(long delay)

@@ -211,6 +211,13 @@ public class DBHandler
         return stationList;
     }
 
+    public void removeOldEntries()
+    {
+        long validTime = System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 4;
+        sendStatement("DELETE FROM stations " +
+                "WHERE inara_time > " + validTime);
+    }
+
     private void sendStatement(String command)
     {
         try
