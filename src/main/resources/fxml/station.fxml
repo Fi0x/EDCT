@@ -26,11 +26,6 @@
             <Tooltip text="The size of the largest landing pad"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblDistance" text="Distance to Star: ---">
-        <tooltip>
-            <Tooltip text="The distance this station has to the main-star"/>
-        </tooltip>
-    </Label>
     <Label fx:id="lblPrice" text="Price: ---">
         <tooltip>
             <Tooltip text="The price at which you can buy / sell this commodity here"/>

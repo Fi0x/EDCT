@@ -76,10 +76,6 @@ public class HTMLCleanup
             else if(entry.hasClass("filterable4")) type = STATIONTYPE.ODYSSEY;
             else type = STATIONTYPE.ORBIT;
 
-            String starDistanceText = entry.getElementsByClass("minor alignright lineright").first().ownText().replace(",", "").replace(" Ls", "");
-            int starDistance = 0;
-            if(starDistanceText.length() > 0 && !starDistanceText.equals("---")) starDistance = Integer.parseInt(starDistanceText);
-
             long inara_time = 0;
             String[] dataAgeString = entry.getElementsByClass("minor alignright smaller").first().ownText().split(" ");
             if(dataAgeString.length == 3)
@@ -102,7 +98,7 @@ public class HTMLCleanup
                 inara_time = System.currentTimeMillis();
             }
 
-            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance, inara_time);
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, inara_time);
             stations.add(station);
         }
 

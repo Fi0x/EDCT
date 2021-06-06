@@ -9,9 +9,8 @@ public class STATION
     public final int PRICE;
     public final long UPDATE_TIME;
     public final STATIONTYPE TYPE;
-    public final int STAR_DISTANCE;
 
-    public STATION(String systemName, String name, PADSIZE padsize, int quantity, int price, STATIONTYPE stationtype, int distanceToStar, long updateTime)
+    public STATION(String systemName, String name, PADSIZE padsize, int quantity, int price, STATIONTYPE stationtype, long updateTime)
     {
         SYSTEM = systemName;
         NAME = name;
@@ -19,7 +18,6 @@ public class STATION
         QUANTITY = quantity;
         PRICE = price;
         TYPE = stationtype;
-        STAR_DISTANCE = distanceToStar;
         UPDATE_TIME = updateTime;
     }
 

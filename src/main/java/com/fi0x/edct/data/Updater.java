@@ -28,12 +28,12 @@ public class Updater implements Runnable
             return;
         }
 
+        DBHandler.getInstance().removeOldEntries();
+
         if(loadMissingIDs()) return;
 
         Logger.INFO("All Commodities loaded");
         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
-
-        DBHandler.getInstance().removeOldEntries();
 
         Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
         threadReq.start();
