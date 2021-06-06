@@ -39,8 +39,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "target\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-; TODO: Make sure this exists before compiling
-Source: "target\jre"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+; TODO: Make sure this exists before compiling (requires a second jre folder inside with the bin, conf and lib folder)
+Source: "target\jre\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
