@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -76,10 +77,6 @@ public class HTMLCleanup
             else if(entry.hasClass("filterable4")) type = STATIONTYPE.ODYSSEY;
             else type = STATIONTYPE.ORBIT;
 
-            String starDistanceText = entry.getElementsByClass("minor alignright lineright").first().ownText().replace(",", "").replace(" Ls", "");
-            int starDistance = 0;
-            if(starDistanceText.length() > 0 && !starDistanceText.equals("---")) starDistance = Integer.parseInt(starDistanceText);
-
             long inara_time = 0;
             String[] dataAgeString = entry.getElementsByClass("minor alignright smaller").first().ownText().split(" ");
             if(dataAgeString.length == 3)
@@ -102,10 +99,93 @@ public class HTMLCleanup
                 inara_time = System.currentTimeMillis();
             }
 
-            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, starDistance, inara_time);
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, inara_time);
             stations.add(station);
         }
 
         return stations;
+    }
+
+    @Nullable
+    public static String getStationID(String inputHTML, String stationName, String systemName)
+    {
+        String stationID = null;
+
+        Element details = getStationDetails(inputHTML);
+        if(details == null) return null;
+
+        for(Element station : details.getElementsByTag("a"))
+        {
+            String stationEntry = station.toString();
+            if(stationEntry.contains(stationName) && stationEntry.contains(systemName))
+            {
+                stationID = station.attr("href").replace("station", "").replace("/", "");
+                break;
+            }
+        }
+        return stationID;
+    }
+
+    public static PADSIZE getStationPad(String inputHTML)
+    {
+        PADSIZE padsize = PADSIZE.M;
+
+        Element details = getStationDetails(inputHTML);
+        if(details == null) return padsize;
+
+        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        {
+            String pairText = pair.toString();
+            if(pairText.contains("Landing pad") && !pairText.contains("Large"))
+            {
+                padsize = PADSIZE.L;
+            }
+        }
+
+        return padsize;
+    }
+
+    public static STATIONTYPE getStationType(String inputHTML)
+    {
+        STATIONTYPE type = STATIONTYPE.ORBIT;
+
+        Element details = getStationDetails(inputHTML);
+        if(details == null) return type;
+
+        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        {
+            if(pair.toString().contains("Station type"))
+            {
+                String typeName = pair.getElementsByClass("itempairvalue").first().ownText();
+                if(typeName.contains("Odyssey")) type = STATIONTYPE.ODYSSEY;
+                else if(typeName.contains("Fleet carrier")) type = STATIONTYPE.CARRIER;
+                else if(typeName.contains("Surface")) type = STATIONTYPE.SURFACE;
+            }
+        }
+
+        return type;
+    }
+
+    @Nullable
+    private static Element getStationDetails(String inputHTML)
+    {
+        Document doc = Jsoup.parse(inputHTML);
+
+        Elements maincons = doc.getElementsByClass("maincon");
+        if(maincons.size() == 0) return null;
+
+        Elements containermains = maincons.first().getElementsByClass("containermain");
+        if(containermains.size() == 0) return null;
+
+        Elements maincontentcontainers = containermains.first().getElementsByClass("maincontentcontainer");
+        if(maincontentcontainers.size() == 0) return null;
+
+        Elements mainconten1s = maincontentcontainers.first().getElementsByClass("maincontent1");
+        if(mainconten1s.size() == 0) return null;
+
+        Elements mainblocks = mainconten1s.first().getElementsByClass("mainblock");
+        if(mainblocks.size() == 0) return null;
+
+        return mainblocks.get(1);
     }
 }

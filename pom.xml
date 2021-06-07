@@ -6,7 +6,7 @@
     <groupId>com.fi0x.edct</groupId>
     <artifactId>EliteDangerousCarrierTrader</artifactId>
     <!-- //TODO: update version -->
-    <version>1.0.0.1</version>
+    <version>1.0.1.0</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -158,6 +158,11 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.34.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.zeromq</groupId>
+            <artifactId>jeromq</artifactId>
+            <version>0.5.2</version>
         </dependency>
     </dependencies>
 </project>

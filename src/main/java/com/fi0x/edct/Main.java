@@ -14,13 +14,14 @@ public class Main
 {
     public static Thread updater;
     public static Thread reloader;
+    public static Thread eddn;
 
     public static File localStorage;
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final Date releaseDate = Date.from(Instant.parse("2021-06-02T08:56:30Z"));
-    public static final String version = "1.0.0.1";
+    public static final Date releaseDate = Date.from(Instant.parse("2021-06-08T08:56:30Z"));
+    public static final String version = "1.0.1.0";//All.GUI.Logic.Hotfix
 
     public static void main(String[] args)
     {
@@ -38,6 +39,7 @@ public class Main
     {
         if(updater != null) updater.interrupt();
         if(reloader != null) reloader.interrupt();
+        if(eddn != null) eddn.interrupt();
     }
 
     private static void setupLocalFiles()

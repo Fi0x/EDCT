@@ -1,5 +1,6 @@
 package com.fi0x.edct.data.webconnection;
 
+import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Inara
+public class InaraCommodity
 {
     public static boolean updateCommodityIDs() throws InterruptedException
     {

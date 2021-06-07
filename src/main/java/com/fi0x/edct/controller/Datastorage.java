@@ -16,6 +16,8 @@ public class Datastorage
     private Label lblDataAge;
     @FXML
     private Label lblUpdateStatus;
+    @FXML
+    private Label lblEDDNStatus;
 
     @FXML
     private void calculate()
@@ -29,6 +31,10 @@ public class Datastorage
 
     public void setDataAge(long age, boolean newTradesAvailable)
     {
+        btnStart.setVisible(newTradesAvailable);
+
+        if(age == -1) return;
+
         String text = "Local data age: ";
         if(age < (60 * 1000)) text += age/1000 + "s";
         else if(age < (60 * 60 * 1000)) text += age/(60 * 1000) + "min";
@@ -36,12 +42,15 @@ public class Datastorage
         else text += age/(24 * 60 * 60 * 1000) + "d";
 
         lblDataAge.setText(text);
-        btnStart.setVisible(newTradesAvailable);
     }
 
     public void setUpdateStatus(String status)
     {
         lblUpdateStatus.setText(status);
+    }
+    public void setEDDNStatus(String status)
+    {
+        lblEDDNStatus.setText(status);
     }
 
     public void setInteractionController(Interaction controller)

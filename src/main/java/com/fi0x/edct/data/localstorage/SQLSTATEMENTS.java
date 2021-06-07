@@ -18,7 +18,6 @@ public enum SQLSTATEMENTS
                     "quantity INT NOT NULL, " +
                     "pad_size TEXT NOT NULL, " +
                     "station_type TEXT NOT NULL, " +
-                    "star_distance INT NOT NULL, " +
                     "PRIMARY KEY (commodity_id, station_name, star_system, is_seller), " +
                     "FOREIGN KEY (commodity_id) REFERENCES commodities (inara_id))");
 

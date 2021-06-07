@@ -33,9 +33,6 @@ public class Interaction implements Initializable
     {
         loadFilters();
         loadDatastorage();
-
-        Thread threadReq = new Thread(new TradeReloader(this));
-        threadReq.start();
     }
 
     private void loadDatastorage()

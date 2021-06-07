@@ -4,7 +4,8 @@ public enum ENDPOINTS
 {
     Releases("https://api.github.com/repos/Fi0x/EDCT/releases", "GET"),
     Commodities("https://inara.cz/galaxy-commodities/", "GET"),
-    Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2");
+    Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2"),
+    StationSearch("https://inara.cz/station/", "GET", "search");
 
     public final String url;
     public final String type;
