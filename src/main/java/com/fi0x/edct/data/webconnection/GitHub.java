@@ -7,7 +7,7 @@ import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,21 +27,45 @@ public class GitHub
             {
             }
             if(response == null || response.equals("")) return null;
-            Map<Date, String> releases = JSONCleanup.getReleases(response);
+            Map<String, String> releases = JSONCleanup.getReleases(response);
 
-            Date newestVersion = Main.releaseDate;
-            for(Map.Entry<Date, String> version : releases.entrySet())
+            String newestVersion = Main.version;
+            for(Map.Entry<String, String> version : releases.entrySet())
             {
-                if(version.getKey().after(newestVersion))
-                    newestVersion = version.getKey();
+                if(isNewer(newestVersion, version.getKey())) newestVersion = version.getKey();
             }
 
-            if(newestVersion.after(Main.releaseDate))
-                return releases.get(newestVersion);
+            if(isNewer(Main.version, newestVersion)) return releases.get(newestVersion);
         } catch(IOException e)
         {
             Logger.WARNING("Could not find out if there is a newer version", e);
         }
         return null;
+    }
+
+    private static boolean isNewer(String currentVersion, String nextVersion)
+    {
+        ArrayList<Integer> currentParts = new ArrayList<>();
+        ArrayList<Integer> nextParts = new ArrayList<>();
+
+        for(String part : currentVersion.replace(".", "-").split("-"))
+        {
+            currentParts.add(Integer.parseInt(part));
+        }
+        for(String part : nextVersion.replace(".", "-").split("-"))
+        {
+            nextParts.add(Integer.parseInt(part));
+        }
+
+        if(currentParts.get(0) < nextParts.get(0)) return true;
+        else if(currentParts.get(0) > nextParts.get(0)) return false;
+
+        if(currentParts.get(1) < nextParts.get(1)) return true;
+        else if(currentParts.get(1) > nextParts.get(1)) return false;
+
+        if(currentParts.get(2) < nextParts.get(2)) return true;
+        else if(currentParts.get(2) > nextParts.get(2)) return false;
+
+        return currentParts.get(3) < nextParts.get(3);
     }
 }

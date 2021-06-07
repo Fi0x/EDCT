@@ -154,12 +154,12 @@ public class HTMLCleanup
 
         for(Element pair : details.getElementsByClass("itempaircontainer"))
         {
-            if(pair.toString().contains("Station type"))
+            if(pair.toString().toLowerCase().contains("station type"))
             {
                 String typeName = pair.getElementsByClass("itempairvalue").first().ownText();
-                if(typeName.contains("Odyssey")) type = STATIONTYPE.ODYSSEY;
-                else if(typeName.contains("Fleet carrier")) type = STATIONTYPE.CARRIER;
-                else if(typeName.contains("Surface")) type = STATIONTYPE.SURFACE;
+                if(typeName.toLowerCase().contains("odyssey")) type = STATIONTYPE.ODYSSEY;
+                else if(typeName.toLowerCase().contains("fleet carrier")) type = STATIONTYPE.CARRIER;
+                else if(typeName.toLowerCase().contains("surface")) type = STATIONTYPE.SURFACE;
             }
         }
 

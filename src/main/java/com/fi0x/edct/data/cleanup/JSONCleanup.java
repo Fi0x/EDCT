@@ -10,27 +10,24 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import javax.annotation.Nullable;
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 public class JSONCleanup
 {
-    public static Map<Date, String> getReleases(String jsonString)
+    public static Map<String, String> getReleases(String jsonString)
     {
-        Map<Date, String> releaseDates = new HashMap<>();
+        Map<String, String> releaseDates = new HashMap<>();
 
         try
         {
             JSONArray jsonReleases = (JSONArray) new JSONParser().parse(jsonString);
             for(Object release : jsonReleases)
             {
-                String published = ((JSONObject) release).get("created_at").toString();
+                String tag = ((JSONObject) release).get("tag_name").toString();
                 String url = ((JSONObject) release).get("html_url").toString();
-                Date publishedDate = Date.from(Instant.parse(published));
-                releaseDates.put(publishedDate, url);
+                releaseDates.put(tag, url);
             }
         } catch(ParseException e)
         {
