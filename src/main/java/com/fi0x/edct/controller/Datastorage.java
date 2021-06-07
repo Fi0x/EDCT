@@ -16,6 +16,8 @@ public class Datastorage
     private Label lblDataAge;
     @FXML
     private Label lblUpdateStatus;
+    @FXML
+    private Label lblEDDNStatus;
 
     @FXML
     private void calculate()
@@ -42,6 +44,10 @@ public class Datastorage
     public void setUpdateStatus(String status)
     {
         lblUpdateStatus.setText(status);
+    }
+    public void setEDDNStatus(String status)
+    {
+        lblEDDNStatus.setText(status);
     }
 
     public void setInteractionController(Interaction controller)

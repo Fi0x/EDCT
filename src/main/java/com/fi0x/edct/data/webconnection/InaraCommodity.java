@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Inara
+public class InaraCommodity
 {
     public static boolean updateCommodityIDs() throws InterruptedException
     {

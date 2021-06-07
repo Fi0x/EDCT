@@ -6,7 +6,7 @@ import java.util.Collections;
 public class COMMODITY
 {
     public final String NAME;
-    public int profit;
+    public long profit;
     public final ArrayList<STATION> SELL_PRICES;
     public final ArrayList<STATION> BUY_PRICES;
 
@@ -61,8 +61,8 @@ public class COMMODITY
             return;
         }
 
-        int buy = BUY_PRICES.get(0).PRICE;
-        int sell = SELL_PRICES.get(0).PRICE;
+        long buy = BUY_PRICES.get(0).PRICE;
+        long sell = SELL_PRICES.get(0).PRICE;
         profit = sell - buy;
     }
 }

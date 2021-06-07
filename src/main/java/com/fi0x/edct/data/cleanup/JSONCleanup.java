@@ -91,21 +91,21 @@ public class JSONCleanup
     @Nullable
     public static STATION getStationTrade(String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
     {
-        int quantity = 0;
-        int price = 0;
+        long quantity = 0;
+        long price = 0;
 
         try
         {
             JSONObject json = (JSONObject) new JSONParser().parse(jsonTrade);
             if(isSelling)
             {
-                quantity = (int) json.get("stock");
-                price = (int) json.get("buyPrice");
+                quantity = (long) json.get("stock");
+                price = (long) json.get("buyPrice");
             }
             else
             {
-                quantity = (int) json.get("demand");
-                price = (int) json.get("sellPrice");
+                quantity = (long) json.get("demand");
+                price = (long) json.get("sellPrice");
             }
         } catch(ParseException e)
         {

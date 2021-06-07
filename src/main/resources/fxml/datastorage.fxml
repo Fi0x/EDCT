@@ -8,6 +8,7 @@
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
+        <RowConstraints />
         <RowConstraints vgrow="ALWAYS"/>
         <RowConstraints />
     </rowConstraints>
@@ -21,7 +22,12 @@
             <Tooltip text="This displays what happens in the background"/>
         </tooltip>
     </Label>
-    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false" GridPane.rowIndex="3" GridPane.halignment="CENTER">
+    <Label fx:id="lblEDDNStatus" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+        <tooltip>
+            <Tooltip text="This is shown when the program received an update over the EDDN"/>
+        </tooltip>
+    </Label>
+    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">
         <tooltip>
             <Tooltip text="Re-loads the results, not the local database"/>
         </tooltip>

@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DBHandler
 {
@@ -121,6 +123,27 @@ public class DBHandler
             Logger.WARNING("Could not get the name of a commodity", e);
         }
         return "";
+    }
+
+    public Map<String, Integer> getCommodityNameIDPairs()
+    {
+        Map<String, Integer> pairs = new HashMap<>();
+
+        ResultSet results = getQueryResults("SELECT * " +
+                "FROM commodities");
+
+        try
+        {
+            while(results != null && results.next())
+            {
+                pairs.put(results.getString("commodity_name"), results.getInt("inara_id"));
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get a full list of all stored commodities");
+        }
+
+        return pairs;
     }
 
     public int getOldestCommodityID()

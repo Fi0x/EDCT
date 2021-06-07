@@ -1,16 +1,23 @@
 package com.fi0x.edct.data.webconnection;
 
+import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.util.Logger;
+import javafx.application.Platform;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -53,16 +60,43 @@ public class EDDN implements Runnable
 
                             if(outputString.contains(SCHEMA_KEY))
                             {
+                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus("Receiving Data"));
                                 String stationName = JSONCleanup.getStationName(outputString);
                                 String systemName = JSONCleanup.getSystemName(outputString);
-                                if(stationName == null || systemName == null) continue;
+                                if(stationName == null || systemName == null)
+                                {
+                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                    continue;
+                                }
 
-                                PADSIZE padsize = null; //TODO: Get landing pad size from inara
-                                STATIONTYPE stationtype = null; //TODO: Get station type from inara
+                                String html;
+                                try
+                                {
+                                    String stationID = InaraStation.getInaraStationID(stationName, systemName);
+                                    if(stationID == null)
+                                    {
+                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                        continue;
+                                    }
+
+                                    html = InaraStation.getStationHtml(stationID);
+                                    if(html == null)
+                                    {
+                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                        continue;
+                                    }
+                                } catch(InterruptedException ignored)
+                                {
+                                    return;
+                                }
+
+                                PADSIZE padsize = HTMLCleanup.getStationPad(html);
+                                STATIONTYPE stationtype = HTMLCleanup.getStationType(html);
 
                                 for(String trade : JSONCleanup.getTrades(outputString))
                                 {
-                                    int commodityID = -1; //TODO: Get commodity id from inara
+                                    int commodityID = getInaraIDForCommodity(trade);
+                                    if(commodityID == -1) continue;
 
                                     STATION station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, false);
@@ -70,6 +104,7 @@ public class EDDN implements Runnable
                                     station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, true);
                                 }
+                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
                             }
 
                         } catch(DataFormatException e)
@@ -80,5 +115,41 @@ public class EDDN implements Runnable
                 }
             }
         }
+    }
+
+    private int getInaraIDForCommodity(String commodityJSON)
+    {
+        String commodityName;
+        try
+        {
+            JSONObject json = (JSONObject) new JSONParser().parse(commodityJSON);
+            commodityName = (String) json.get("name");
+        } catch(ParseException e)
+        {
+            Logger.WARNING("Could not parse an EDDN json for a commodity");
+            return -1;
+        }
+
+        Map<String, Integer> pairs = DBHandler.getInstance().getCommodityNameIDPairs();
+        for(Map.Entry<String, Integer> pair : pairs.entrySet())
+        {
+            String dbName = pair.getKey()
+                    .replace("Low Temperature Diamonds", "lowtemperaturediamond")
+                    .replace("Micro-weave Cooling Hoses","coolinghoses")
+                    .replace("Hardware Diagnostic Sensor", "diagnosticsensor")
+                    .replace("Marine Equipment", "marinesupplies");
+
+            dbName = dbName
+                    .replace(" ", "")
+                    .replace("-", "");
+
+            if(!commodityName.equalsIgnoreCase(dbName))
+            {
+                return pair.getValue();
+            }
+        }
+
+        Logger.WARNING("Could not find commodity key that matches: " + commodityName);
+        return -1;
     }
 }

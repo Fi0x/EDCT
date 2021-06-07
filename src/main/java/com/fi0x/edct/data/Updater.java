@@ -5,7 +5,7 @@ import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.webconnection.EDDN;
-import com.fi0x.edct.data.webconnection.Inara;
+import com.fi0x.edct.data.webconnection.InaraCommodity;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 
@@ -19,7 +19,7 @@ public class Updater implements Runnable
         Logger.INFO("Updater Thread started");
         try
         {
-            while(!Inara.updateCommodityIDs())
+            while(!InaraCommodity.updateCommodityIDs())
             {
                 if(sleepInterrupted(1000)) return;
             }
@@ -45,7 +45,7 @@ public class Updater implements Runnable
 
         while(!Thread.interrupted())
         {
-            if(sleepInterrupted((long) (Math.random() * 4500) + 250)) return;
+            if(sleepInterrupted((long) (Math.random() * 5000) + 10000)) return;
             Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
@@ -53,7 +53,7 @@ public class Updater implements Runnable
 
             try
             {
-                Inara.updateCommodityPrices(oldestID);
+                InaraCommodity.updateCommodityPrices(oldestID);
             } catch(InterruptedException ignored)
             {
                 return;
@@ -82,7 +82,7 @@ public class Updater implements Runnable
             if(sleepInterrupted(250)) return true;
             try
             {
-                while(!Inara.updateCommodityPrices(id))
+                while(!InaraCommodity.updateCommodityPrices(id))
                 {
                     if(sleepInterrupted(500)) return true;
                 }
