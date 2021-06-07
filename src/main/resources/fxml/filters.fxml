@@ -35,7 +35,7 @@
     </CheckBox>
     <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations">
         <tooltip>
-            <Tooltip text="If stations from odyssey-player-data should be displayed" />
+            <Tooltip text="If stations from odyssey should be displayed" />
         </tooltip>
     </CheckBox>
     <stylesheets>

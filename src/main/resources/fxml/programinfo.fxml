@@ -12,12 +12,12 @@
     </columnConstraints>
     <Label id="lblError" fx:id="lblError" text="Error --- occured" visible="false" onMouseClicked="#openErrorPage" GridPane.columnIndex="0">
         <tooltip>
-            <Tooltip text="Your program encountered this error, click on it to get more information online"/>
+            <Tooltip text="Your program encountered this error, click here to get more information online"/>
         </tooltip>
     </Label>
     <Label fx:id="lblVersion" GridPane.columnIndex="1">
         <tooltip>
-            <Tooltip text="This is the version you are using"/>
+            <Tooltip text="This is the version you are using. Please refer to it when reporting a bug"/>
         </tooltip>
     </Label>
     <Button id="btnUpdate" fx:id="btnUpdate" text="Download new Version" visible="false" onMouseClicked="#updateVersion" GridPane.columnIndex="2">

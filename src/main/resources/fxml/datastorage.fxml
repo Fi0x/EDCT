@@ -29,7 +29,7 @@
     </Label>
     <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">
         <tooltip>
-            <Tooltip text="Re-loads the results, not the local database"/>
+            <Tooltip text="Re-loads the results. Can also be done by changing a filter setting"/>
         </tooltip>
     </Button>
     <stylesheets>

@@ -104,7 +104,11 @@ public class EDDN implements Runnable
                                     station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, true);
                                 }
-                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                Platform.runLater(() ->
+                                {
+                                    MainWindow.getInstance().interactionController.storageController.setDataAge(-1, true);
+                                    MainWindow.getInstance().interactionController.storageController.setEDDNStatus("");
+                                });
                             }
 
                         } catch(DataFormatException e)
