@@ -107,8 +107,8 @@
                                 <mainClass>com.fi0x.edct.Main</mainClass>
                             </classPath>
                             <jre>
-<!--                                <path>jre</path>-->
-                                <minVersion>13.0.1</minVersion>
+                                <path>jre</path>
+<!--                                <minVersion>13.0.1</minVersion>-->
                             </jre>
                             <versionInfo>
                                 <fileVersion>${project.version}</fileVersion>
@@ -118,7 +118,8 @@
                                 <productVersion>${project.version}</productVersion>
                                 <txtProductVersion>${project.version}</txtProductVersion>
                                 <productName>EliteDangerousCarrierTrader</productName>
-                                <companyName>Fi0x</companyName>
+                                <companyName>none</companyName>
+                                <trademarks>none</trademarks>
                                 <internalName>EDCT</internalName>
                                 <originalFilename>EDCT.exe</originalFilename>
                             </versionInfo>
