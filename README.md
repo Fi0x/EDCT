@@ -21,6 +21,8 @@ since downloaded trade data is stored in a local database.
 The program also uses the [EDDN](https://github.com/EDCD/EDDN)
 to keep the local database updated.
 
+### For more information about how this tool operates, visit the [wiki](https://github.com/Fi0x/EDCT/wiki)
+
 ## Features
 - GUI
 - Search for the best commodity prices of all commodities
