@@ -17,6 +17,7 @@ import java.io.IOException;
 public class MainWindow extends Application
 {
     private static MainWindow instance;
+    private Stage primeStage;
 
     public ProgramInfo infoController;
     public Interaction interactionController;
@@ -26,6 +27,7 @@ public class MainWindow extends Application
     public void start(Stage primaryStage)
     {
         instance = this;
+        primeStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root;
         try
@@ -42,11 +44,11 @@ public class MainWindow extends Application
         loadInteraction(loader);
         loadResults(loader);
 
-        primaryStage.setTitle("Elite: Dangerous Carrier Trader");
-        primaryStage.getIcons().add(new Image("images/icon.png"));
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setResizable(false);
-        primaryStage.show();
+        primeStage.setTitle("Elite: Dangerous Carrier Trader");
+        primeStage.getIcons().add(new Image("images/icon.png"));
+        primeStage.setScene(new Scene(root));
+        primeStage.setResizable(false);
+        primeStage.show();
 
         Logger.INFO("GUI loaded");
 
@@ -68,6 +70,16 @@ public class MainWindow extends Application
     {
         if(instance == null) instance = new MainWindow();
         return instance;
+    }
+
+    public void setUpdateStatus(String status, boolean displayAsTitle)
+    {
+        interactionController.storageController.setUpdateStatus(status);
+        if(displayAsTitle)
+        {
+            if(status == null) primeStage.setTitle("Elite: Dangerous Carrier Trader");
+            else primeStage.setTitle("Elite: Dangerous Carrier Trader - " + status);
+        }
     }
 
     private void loadInfo(FXMLLoader parentLoader)

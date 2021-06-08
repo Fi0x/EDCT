@@ -56,7 +56,7 @@ public class Logger
             String color = WHITE;
             if(lvl == LOGLEVEL.WRN) color = YELLOW;
             else if(lvl == LOGLEVEL.ERR) color = RED;
-            System.out.println(time + color + prefix + errorCode + text + RESET);
+            System.out.println(color + time + prefix + errorCode + text + RESET);
             if(e != null) e.printStackTrace();
         }
 

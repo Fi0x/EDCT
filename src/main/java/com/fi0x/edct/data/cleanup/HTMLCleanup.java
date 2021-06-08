@@ -3,6 +3,7 @@ package com.fi0x.edct.data.cleanup;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.util.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,6 +12,7 @@ import org.jsoup.select.Elements;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class HTMLCleanup
@@ -126,40 +128,46 @@ public class HTMLCleanup
         return stationID;
     }
 
+    @Nullable
     public static PADSIZE getStationPad(String inputHTML)
     {
-        PADSIZE padsize = PADSIZE.M;
+        PADSIZE padsize = PADSIZE.S;
 
         Element details = getStationDetails(inputHTML);
-        if(details == null) return padsize;
+        if(details == null) return null;
 
         for(Element pair : details.getElementsByClass("itempaircontainer"))
         {
-            String pairText = pair.toString();
-            if(pairText.contains("Landing pad") && !pairText.contains("Large"))
+            String pairText = pair.toString().toLowerCase();
+            if(pairText.contains("landing pad"))
             {
-                padsize = PADSIZE.L;
+                if(pairText.contains("none")) return null;
+                else if(pairText.contains("large")) padsize = PADSIZE.L;
+                else if(pairText.contains("medium")) padsize = PADSIZE.M;
+                break;
             }
         }
 
         return padsize;
     }
 
+    @Nullable
     public static STATIONTYPE getStationType(String inputHTML)
     {
-        STATIONTYPE type = STATIONTYPE.ORBIT;
+        STATIONTYPE type = null;
 
         Element details = getStationDetails(inputHTML);
-        if(details == null) return type;
+        if(details == null) return null;
 
         for(Element pair : details.getElementsByClass("itempaircontainer"))
         {
             if(pair.toString().toLowerCase().contains("station type"))
             {
-                String typeName = pair.getElementsByClass("itempairvalue").first().ownText();
-                if(typeName.toLowerCase().contains("odyssey")) type = STATIONTYPE.ODYSSEY;
-                else if(typeName.toLowerCase().contains("fleet carrier")) type = STATIONTYPE.CARRIER;
-                else if(typeName.toLowerCase().contains("surface")) type = STATIONTYPE.SURFACE;
+                String typeName = pair.getElementsByClass("itempairvalue").first().ownText().toLowerCase();
+                if(typeName.contains("odyssey")) type = STATIONTYPE.ODYSSEY;
+                else if(typeName.contains("fleet") || typeName.contains("carrier")) type = STATIONTYPE.CARRIER;
+                else if(typeName.contains("surface")) type = STATIONTYPE.SURFACE;
+                else if(typeName.contains("starport") || typeName.contains("outpost")) type = STATIONTYPE.ORBIT;
             }
         }
 
@@ -186,6 +194,13 @@ public class HTMLCleanup
         Elements mainblocks = mainconten1s.first().getElementsByClass("mainblock");
         if(mainblocks.size() == 0) return null;
 
-        return mainblocks.get(1);
+        for(Element block : mainblocks)
+        {
+            String blockText = block.toString().toLowerCase();
+            if(blockText.contains("class=\"mainblock\"") && (blockText.contains("landing pad") || blockText.contains("station type") || blockText.contains("href=\"/station/")))
+            return block;
+
+        }
+        return null;
     }
 }

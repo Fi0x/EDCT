@@ -33,7 +33,11 @@ public class Updater implements Runnable
         if(loadMissingIDs()) return;
 
         Logger.INFO("All Commodities loaded");
-        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated"));
+        Platform.runLater(() ->
+        {
+            MainWindow.getInstance().setUpdateStatus(null, true);
+            MainWindow.getInstance().setUpdateStatus("Updated", false);
+        });
 
         Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
         threadReq.start();
@@ -46,7 +50,7 @@ public class Updater implements Runnable
         while(!Thread.interrupted())
         {
             if(sleepInterrupted((long) (Math.random() * 5000) + 10000)) return;
-            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
+            Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus("Updating...", false));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -63,7 +67,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().interactionController.storageController.setDataAge(age, true);
-                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
+                MainWindow.getInstance().setUpdateStatus("Updated", false);
             });
         }
         Logger.INFO("Updater Thread stopped");
@@ -78,7 +82,7 @@ public class Updater implements Runnable
         {
             counter++;
             int finalCounter = counter;
-            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size() + " ..."));
+            Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), true));
             if(sleepInterrupted(250)) return true;
             try
             {

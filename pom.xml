@@ -6,7 +6,7 @@
     <groupId>com.fi0x.edct</groupId>
     <artifactId>EliteDangerousCarrierTrader</artifactId>
     <!-- //TODO: update version -->
-    <version>1.0.1.1</version>
+    <version>1.0.1.2</version>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -118,6 +118,7 @@
                                 <productVersion>${project.version}</productVersion>
                                 <txtProductVersion>${project.version}</txtProductVersion>
                                 <productName>EliteDangerousCarrierTrader</productName>
+                                <companyName>Fi0x</companyName>
                                 <internalName>EDCT</internalName>
                                 <originalFilename>EDCT.exe</originalFilename>
                             </versionInfo>

@@ -92,6 +92,12 @@ public class EDDN implements Runnable
 
                                 PADSIZE padsize = HTMLCleanup.getStationPad(html);
                                 STATIONTYPE stationtype = HTMLCleanup.getStationType(html);
+                                if(stationtype == null || padsize == null)
+                                {
+                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                    Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " - html: " + html);
+                                    continue;
+                                }
 
                                 for(String trade : JSONCleanup.getTrades(outputString))
                                 {
