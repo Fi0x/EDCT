@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.util.Logger;
@@ -6,6 +6,7 @@ import com.fi0x.edct.util.Logger;
 import javax.annotation.Nullable;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,7 @@ public class RequestHandler
         if(!canRequest(ignore429)) return null;
 
         endpoint += getParamsString(parameters);
-        URL url = new URL(endpoint);
+        URL url = cleanUpUrl(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(requestType);
 
@@ -93,15 +94,14 @@ public class RequestHandler
                         Logger.WARNING("HTTP request could not be sent because of a 429 response");
                         return false;
                     }
-                }
-                else if(error.contains("[995]"))
+                } else if(error.contains("[995]"))
                 {
                     String[] logEntry = error.split("]");
                     String errorTimeString = logEntry[0].replace("[", "");
 
                     Date errorDate = getDateFromString(errorTimeString);
                     if(errorDate == null) return true;
-                    
+
                     if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 10)
                     {
                         Thread.sleep(1000 * 10);
@@ -139,5 +139,16 @@ public class RequestHandler
             Logger.WARNING("Could not parse a date: " + input, e);
             return null;
         }
+    }
+
+    private static URL cleanUpUrl(String endpoint) throws MalformedURLException
+    {
+        URL url = new URL(endpoint
+                .replace(" ", "%20")
+                .replace("'", "%27")
+                .replace("`", "%60")
+        );
+
+        return url;
     }
 }

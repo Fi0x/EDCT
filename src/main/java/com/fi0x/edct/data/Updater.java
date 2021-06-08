@@ -4,8 +4,7 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.localstorage.TradeReloader;
-import com.fi0x.edct.data.webconnection.EDDN;
-import com.fi0x.edct.data.webconnection.InaraCommodity;
+import com.fi0x.edct.data.websites.InaraCommodity;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 

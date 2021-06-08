@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data;
 
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
@@ -7,6 +7,7 @@ import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.websites.InaraStation;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 import org.json.simple.JSONObject;
@@ -15,7 +16,6 @@ import org.json.simple.parser.ParseException;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.zip.DataFormatException;

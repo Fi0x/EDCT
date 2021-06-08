@@ -19,7 +19,13 @@ public enum SQLSTATEMENTS
                     "pad_size TEXT NOT NULL, " +
                     "station_type TEXT NOT NULL, " +
                     "PRIMARY KEY (commodity_id, station_name, star_system, is_seller), " +
-                    "FOREIGN KEY (commodity_id) REFERENCES commodities (inara_id))");
+                    "FOREIGN KEY (commodity_id) REFERENCES commodities (inara_id))"),
+    CreateDistances(
+            "CREATE TABLE IF NOT EXISTS distances (" +
+                    "star1 TEXT NOT NULL, " +
+                    "star2 TEXT NOT NULL, " +
+                    "distance INT NOT NULL, " +
+                    "PRIMARY KEY (star1, star2))");
 
     private final String statement;
 

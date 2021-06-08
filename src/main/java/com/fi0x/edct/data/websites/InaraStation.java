@@ -1,5 +1,6 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data.websites;
 
+import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 
@@ -34,16 +35,9 @@ public class InaraStation
 
         if(parameter.length > 0 && parameter[0].equals("search"))
         {
-            parameters.put(parameter[0], getRefinedStationName(stationName));
+            parameters.put(parameter[0], stationName);
         }
 
         return parameters;
-    }
-
-    private static String getRefinedStationName(String stationName)
-    {
-        return stationName.replace(" ", "+")
-                .replace("'", "%27")
-                .replace("`", "%60");
     }
 }

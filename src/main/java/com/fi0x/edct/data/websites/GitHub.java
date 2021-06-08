@@ -1,6 +1,7 @@
-package com.fi0x.edct.data.webconnection;
+package com.fi0x.edct.data.websites;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.util.Logger;

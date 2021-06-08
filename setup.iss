@@ -3,7 +3,7 @@
 
 ; TODO: Update Version info
 #define MyAppName "Elite Dangerous Carrier Trader"
-#define MyAppVersion "1.0.1.2"
+#define MyAppVersion "1.0.2.2"
 #define MyAppPublisher "Fi0x"
 #define MyAppURL "https://github.com/Fi0x/EDCT"
 #define MyAppExeName "EDCT.exe"

@@ -35,6 +35,7 @@ public class DBHandler
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
+        sendStatement(SQLSTATEMENTS.CreateDistances.getStatement());
 
         Logger.INFO("Finished setup of local DB");
     }
@@ -67,6 +68,14 @@ public class DBHandler
                 + station.QUANTITY + ", "
                 + makeSQLValid(station.PAD.toString()) + ", "
                 + makeSQLValid(station.TYPE.toString()) + ")");
+    }
+
+    public void setSystemDistance(String system1, String system2, double distance)
+    {
+        sendStatement("REPLACE INTO distances VALUES ("
+                + makeSQLValid(system1) + ", "
+                + makeSQLValid(system2) + ", "
+                + distance + ")");
     }
 
     public void updateDownloadTime(String commodityName, int inaraID)
@@ -230,6 +239,27 @@ public class DBHandler
         }
 
         return stationList;
+    }
+
+    public double getSystemDistance(String system1, String system2)
+    {
+        ResultSet results = getQueryResults("SELECT distance " +
+                "FROM distances " +
+                "WHERE (star1 = '" + system1 + "' AND star2 = '" + system2 + "') " +
+                "OR (star1 = '" + system2 + "' AND star2 = '" + system1 + "')");
+
+        try
+        {
+            if(results != null && results.next())
+            {
+                return results.getInt("distance");
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get the distance between two systems", e);
+        }
+
+        return 0;
     }
 
     public void removeOldEntries()

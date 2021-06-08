@@ -18,6 +18,14 @@
     -fx-text-fill: #000000;
     -fx-font-weight: bold;
 }
+#btnBugReport {
+    -fx-background-color: #ff6037;
+    -fx-text-fill: #000000;
+}
+#btnBugReport:hover {
+    -fx-background-color: #bd2600;
+    -fx-text-fill: #000000;
+}
 #btnUpdate {
     -fx-background-color: #87ff63;
     -fx-text-fill: #021802;

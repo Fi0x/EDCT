@@ -2,6 +2,7 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.websites.Hozbase;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -138,10 +139,12 @@ public class Results implements Initializable
         }
 
         int profit = 0;
+        STATION sellStation = null;
+        STATION buyStation = null;
 
         if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
         {
-            STATION sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+            sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
             sellController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
 
             profit -= sellStation.PRICE;
@@ -149,15 +152,23 @@ public class Results implements Initializable
 
         if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
         {
-            STATION buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+            buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
             buyController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
 
             if(profit < 0) profit += buyStation.PRICE;
         }
 
         trades.get(currentCommodity).profit = profit;
+        double distance = 0;
+        try
+        {
+            if(sellStation == null || buyStation == null) distance = 0;
+            else distance = Hozbase.getStarDistance(sellStation.SYSTEM, buyStation.SYSTEM);
+        } catch(InterruptedException ignored)
+        {
+        }
 
-        commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1);
+        commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
 
         vbResults.setVisible(true);
     }

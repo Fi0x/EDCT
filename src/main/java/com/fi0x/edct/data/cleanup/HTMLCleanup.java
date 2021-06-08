@@ -3,7 +3,6 @@ package com.fi0x.edct.data.cleanup;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.util.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +11,6 @@ import org.jsoup.select.Elements;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class HTMLCleanup
@@ -108,6 +106,46 @@ public class HTMLCleanup
         return stations;
     }
 
+    public static double getSystemDistance(String inputHTML)
+    {
+        Document doc = Jsoup.parse(inputHTML);
+
+        Elements bodies = doc.getElementsByClass("body-outer");
+        if(bodies.size() == 0) return 0;
+
+        Elements containers = bodies.first().getElementsByClass("container body-content");
+        if(containers.size() == 0) return 0;
+
+        Elements panels = containers.first().getElementsByClass("panel panel-primary panel-success");
+        if(panels.size() == 0) return 0;
+
+        Elements tables = panels.first().getElementsByClass("table-responsive");
+        if(tables.size() == 0) return 0;
+
+        Elements innerTables = tables.first().getElementsByClass("table table-condensed table-striped table-bordered");
+        if(innerTables.size() == 0) return 0;
+
+        Elements rows = innerTables.first().getElementsByTag("tr");
+        if(rows.size() == 0) return 0;
+
+        for(Element row : rows)
+        {
+            if(!row.toString().contains("td")) continue;
+
+            Elements rowEntries = row.getElementsByTag("td");
+            for(Element entry : rowEntries)
+            {
+                if(entry.ownText().contains("-")) continue;
+                if(entry.ownText().length() == 0) continue;
+                if(entry.toString().contains("<td>")) continue;
+
+                return Double.parseDouble(entry.ownText());
+            }
+        }
+
+        return 0;
+    }
+
     @Nullable
     public static String getStationID(String inputHTML, String stationName, String systemName)
     {
@@ -198,7 +236,7 @@ public class HTMLCleanup
         {
             String blockText = block.toString().toLowerCase();
             if(blockText.contains("class=\"mainblock\"") && (blockText.contains("landing pad") || blockText.contains("station type") || blockText.contains("href=\"/station/")))
-            return block;
+                return block;
 
         }
         return null;

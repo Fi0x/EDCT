@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.util.NumberConverter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -66,8 +67,8 @@ public class Station
         lblStationName.setText("Station: " + station.NAME);
         lblType.setText("Type: " + station.TYPE);
         lblPad.setText("Pad: " + station.PAD);
-        lblPrice.setText("Price: " + station.PRICE + " credits");
-        lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + station.QUANTITY + " tons");
+        lblPrice.setText("Price: " + NumberConverter.convertToString(station.PRICE, " ") + " credits");
+        lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + NumberConverter.convertToString(station.QUANTITY, " ") + " tons");
         lblAge.setText("Data age: " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);

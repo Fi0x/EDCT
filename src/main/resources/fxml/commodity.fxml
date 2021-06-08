@@ -18,6 +18,7 @@
                 <Tooltip text="The cr/t you can make with this trade"/>
             </tooltip>
         </Label>
+        <Label id="distance" fx:id="lblDistance" text="Distance: ---"/>
     </VBox>
     <Button fx:id="btnNextComm" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" disable="true" GridPane.columnIndex="2"/>
     <stylesheets>

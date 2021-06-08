@@ -1,7 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.data.webconnection.GitHub;
+import com.fi0x.edct.data.websites.GitHub;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +25,8 @@ public class ProgramInfo implements Initializable
     @FXML
     private Label lblVersion;
     @FXML
+    private Button btnBugReport;
+    @FXML
     private Button btnUpdate;
 
     @Override
@@ -38,6 +40,11 @@ public class ProgramInfo implements Initializable
     {
         openWebsite("https://github.com/Fi0x/EDCT/wiki/Errors#" + errorCode);
         lblError.setVisible(false);
+    }
+    @FXML
+    private void reportBug()
+    {
+        openWebsite("https://github.com/Fi0x/EDCT/issues");
     }
     @FXML
     private void updateVersion()
@@ -59,6 +66,7 @@ public class ProgramInfo implements Initializable
         {
             updateUrl = url;
             btnUpdate.setVisible(true);
+            btnBugReport.setVisible(false);
         }
     }
 
