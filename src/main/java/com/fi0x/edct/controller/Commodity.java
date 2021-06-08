@@ -1,6 +1,5 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.util.NumberConverter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,11 +34,15 @@ public class Commodity
 
     public void updateDisplay(boolean hasPrev, boolean hasNext, double distance)
     {
-        lblCommodity.setText(resultsController.getCurrentTrade().NAME);
-        String profit = NumberConverter.convertToString(resultsController.getCurrentTrade().profit, " ");
-        lblProfit.setText(profit + " credits");
         DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(1);
+
+        lblCommodity.setText(resultsController.getCurrentTrade().NAME);
+        String profit = df.format(resultsController.getCurrentTrade().profit);
+        lblProfit.setText(profit + " credits");
+
         df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(1);
         lblDistance.setText("Distance: " + (distance == 0 ? "Unknown" : df.format(distance) + "Ly"));
 
         btnPrevComm.setDisable(!hasPrev);
