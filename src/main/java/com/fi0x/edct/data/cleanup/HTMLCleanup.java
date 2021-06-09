@@ -205,7 +205,7 @@ public class HTMLCleanup
                 if(typeName.contains("odyssey")) type = STATIONTYPE.ODYSSEY;
                 else if(typeName.contains("fleet") || typeName.contains("carrier")) type = STATIONTYPE.CARRIER;
                 else if(typeName.contains("surface")) type = STATIONTYPE.SURFACE;
-                else if(typeName.contains("starport") || typeName.contains("outpost")) type = STATIONTYPE.ORBIT;
+                else if(typeName.contains("starport") || typeName.contains("outpost") || typeName.contains("asteroid") || typeName.contains("megaship")) type = STATIONTYPE.ORBIT;
             }
         }
 
