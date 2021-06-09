@@ -34,8 +34,8 @@ public class Updater implements Runnable
         Logger.INFO("All Commodities loaded");
         Platform.runLater(() ->
         {
-            MainWindow.getInstance().setUpdateStatus(null, true);
-            MainWindow.getInstance().setUpdateStatus("Updated", false);
+            MainWindow.getInstance().setUpdateStatus(-1);
+            MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
         });
 
         Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
@@ -49,7 +49,7 @@ public class Updater implements Runnable
         while(!Thread.interrupted())
         {
             if(sleepInterrupted((long) (Math.random() * 5000) + 10000)) return;
-            Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus("Updating...", false));
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -66,7 +66,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().interactionController.storageController.setDataAge(age, true);
-                MainWindow.getInstance().setUpdateStatus("Updated", false);
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
             });
         }
         Logger.INFO("Updater Thread stopped");
@@ -81,7 +81,11 @@ public class Updater implements Runnable
         {
             counter++;
             int finalCounter = counter;
-            Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), true));
+            Platform.runLater(() ->
+            {
+                MainWindow.getInstance().setUpdateStatus((float)finalCounter / (float)missingIDs.size());
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size());
+            });
             if(sleepInterrupted(250)) return true;
             try
             {

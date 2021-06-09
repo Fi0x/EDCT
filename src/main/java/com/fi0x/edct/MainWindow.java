@@ -4,6 +4,8 @@ import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.ProgramInfo;
 import com.fi0x.edct.controller.Results;
 import com.fi0x.edct.util.Logger;
+import com.nativejavafx.taskbar.TaskbarProgressbar;
+import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,7 +19,7 @@ import java.io.IOException;
 public class MainWindow extends Application
 {
     private static MainWindow instance;
-    private Stage primeStage;
+    private TaskbarProgressbar progressbar;
 
     public ProgramInfo infoController;
     public Interaction interactionController;
@@ -27,7 +29,8 @@ public class MainWindow extends Application
     public void start(Stage primaryStage)
     {
         instance = this;
-        primeStage = primaryStage;
+        progressbar = TaskbarProgressbarFactory.getTaskbarProgressbar(primaryStage);
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root;
         try
@@ -44,11 +47,11 @@ public class MainWindow extends Application
         loadInteraction(loader);
         loadResults(loader);
 
-        primeStage.setTitle("Elite: Dangerous Carrier Trader");
-        primeStage.getIcons().add(new Image("images/icon.png"));
-        primeStage.setScene(new Scene(root));
-        primeStage.setResizable(false);
-        primeStage.show();
+        primaryStage.setTitle("Elite: Dangerous Carrier Trader");
+        primaryStage.getIcons().add(new Image("images/icon.png"));
+        primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
+        primaryStage.show();
 
         Logger.INFO("GUI loaded");
 
@@ -72,14 +75,10 @@ public class MainWindow extends Application
         return instance;
     }
 
-    public void setUpdateStatus(String status, boolean displayAsTitle)
+    public void setUpdateStatus(double status)
     {
-        interactionController.storageController.setUpdateStatus(status);
-        if(displayAsTitle)
-        {
-            if(status == null) primeStage.setTitle("Elite: Dangerous Carrier Trader");
-            else primeStage.setTitle("Elite: Dangerous Carrier Trader - " + status);
-        }
+        if(status < 0) progressbar.setProgressType(TaskbarProgressbar.Type.NO_PROGRESS);
+        else progressbar.showCustomProgress(status, TaskbarProgressbar.Type.NORMAL);
     }
 
     private void loadInfo(FXMLLoader parentLoader)
