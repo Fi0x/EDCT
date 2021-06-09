@@ -169,7 +169,7 @@ public class HTMLCleanup
     @Nullable
     public static PADSIZE getStationPad(String inputHTML)
     {
-        PADSIZE padsize = PADSIZE.S;
+        PADSIZE padsize = PADSIZE.NONE;
 
         Element details = getStationDetails(inputHTML);
         if(details == null) return null;
@@ -179,9 +179,9 @@ public class HTMLCleanup
             String pairText = pair.toString().toLowerCase();
             if(pairText.contains("landing pad"))
             {
-                if(pairText.contains("none")) return null;
-                else if(pairText.contains("large")) padsize = PADSIZE.L;
+                if(pairText.contains("large")) padsize = PADSIZE.L;
                 else if(pairText.contains("medium")) padsize = PADSIZE.M;
+                else if(pairText.contains("small")) padsize = PADSIZE.S;
                 break;
             }
         }
@@ -192,7 +192,7 @@ public class HTMLCleanup
     @Nullable
     public static STATIONTYPE getStationType(String inputHTML)
     {
-        STATIONTYPE type = null;
+        STATIONTYPE type = STATIONTYPE.UNKNOWN;
 
         Element details = getStationDetails(inputHTML);
         if(details == null) return null;
@@ -205,7 +205,10 @@ public class HTMLCleanup
                 if(typeName.contains("odyssey")) type = STATIONTYPE.ODYSSEY;
                 else if(typeName.contains("fleet") || typeName.contains("carrier")) type = STATIONTYPE.CARRIER;
                 else if(typeName.contains("surface")) type = STATIONTYPE.SURFACE;
-                else if(typeName.contains("starport") || typeName.contains("outpost") || typeName.contains("asteroid") || typeName.contains("megaship")) type = STATIONTYPE.ORBIT;
+                else if(typeName.contains("starport") ||
+                        typeName.contains("outpost") ||
+                        typeName.contains("asteroid") ||
+                        typeName.contains("megaship")) type = STATIONTYPE.ORBIT;
             }
         }
 

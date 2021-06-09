@@ -54,6 +54,14 @@ public class NameMap
         COMMODITY_NAMES.put("Narcotics", "basicnarcotics");
         COMMODITY_NAMES.put("Microbial Furnaces", "heliostaticfurnaces");
         COMMODITY_NAMES.put("Void Opal", "opal");
+        COMMODITY_NAMES.put("Trinkets of Hidden Fortune", "trinketsoffortune");
+        COMMODITY_NAMES.put("Ancient Artefact", "usscargoancientartefact");
+        COMMODITY_NAMES.put("Experimental Chemicals", "usscargoexperimentalchemicals");
+        COMMODITY_NAMES.put("Military Plans", "usscargomilitaryplans");
+        COMMODITY_NAMES.put("Rebel Transmissions", "usscargorebeltransmissions");
+        COMMODITY_NAMES.put("Technical Blueprints", "usscargotechnicalblueprints");
+        COMMODITY_NAMES.put("Prototype Tech", "usscargoprototypetech");
+        COMMODITY_NAMES.put("Political Prisoners", "politicalprisoner");
 
         RARE_NAMES.add("aerialedenapple");
         RARE_NAMES.add("alacarakmoskinart");

@@ -5,12 +5,15 @@ public enum STATIONTYPE
     ORBIT,
     CARRIER,
     SURFACE,
-    ODYSSEY;
+    ODYSSEY,
+    UNKNOWN;
 
     public static STATIONTYPE getFromString(String name)
     {
         switch(name)
         {
+            case "ORBIT":
+                return ORBIT;
             case "CARRIER":
                 return CARRIER;
             case "SURFACE":
@@ -18,7 +21,7 @@ public enum STATIONTYPE
             case "ODYSSEY":
                 return ODYSSEY;
             default:
-                return ORBIT;
+                return UNKNOWN;
         }
     }
 }

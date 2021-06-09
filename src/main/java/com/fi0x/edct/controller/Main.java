@@ -1,10 +1,13 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.COMMODITY;
-import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main
 {
@@ -40,7 +43,7 @@ public class Main
             ArrayList<STATION> filteredStations = new ArrayList<>();
             for(STATION station : commodity.getValue())
             {
-                boolean validStation = !noSmall || station.PAD == PADSIZE.L;
+                boolean validStation = (!noSmall && station.PAD != PADSIZE.NONE) || station.PAD == PADSIZE.L;
                 switch(station.TYPE)
                 {
                     case CARRIER:
@@ -51,6 +54,9 @@ public class Main
                         break;
                     case ODYSSEY:
                         if(noOdyssey) validStation = false;
+                        break;
+                    case UNKNOWN:
+                        validStation = false;
                         break;
                 }
                 if(amount > station.QUANTITY) validStation = false;
