@@ -262,6 +262,11 @@ public class DBHandler
         return 0;
     }
 
+    public void removeStationEntry(String commodityName, String stationName, String systemName, boolean isSeller)
+    {
+        //TODO: Remove entry from stations
+    }
+
     public void removeOldEntries()
     {
         long validTime = System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 4;

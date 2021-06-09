@@ -1,5 +1,8 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -60,6 +63,14 @@ public class Station
         if(!isBuying) resultsController.currentBuyStation = stationID;
         else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
+    }
+    @FXML
+    private void removeStation()
+    {
+        //TODO: Remove station from db
+        //TODO: Remove station from current trades
+        //TODO: Check if new current trade is displayable
+        //TODO: update displayed results
     }
 
     public void setStation(STATION station, boolean hasPrev, boolean hasNext)
