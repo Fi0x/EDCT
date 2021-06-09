@@ -1,7 +1,6 @@
 package com.fi0x.edct.data;
 
 import com.fi0x.edct.MainWindow;
-import com.fi0x.edct.controller.Station;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.localstorage.DBHandler;
@@ -18,7 +17,6 @@ import org.json.simple.parser.ParseException;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
-import javax.naming.Name;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.zip.DataFormatException;
@@ -107,18 +105,8 @@ public class EDDN implements Runnable
                                 for(String trade : JSONCleanup.getTrades(outputString))
                                 {
                                     int commodityID = getInaraIDForCommodity(trade);
-                                    if(commodityID < 0)
-                                    {
-                                        if(commodityID == -2)
-                                        {
-                                            System.out.println("\t" + systemName + ", " + stationName);
-                                            STATION s = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
-                                            if(s != null) System.out.println("\t" + s.QUANTITY + "t, " + s.PRICE);
-                                            s = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
-                                            if(s != null) System.out.println("\t" + s.QUANTITY + "t, " + s.PRICE);
-                                        }
-                                        continue;
-                                    }
+                                    if(commodityID == -1) continue;
+
 
                                     STATION station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, false);
@@ -164,15 +152,10 @@ public class EDDN implements Runnable
                     .replace("-", "")
                     .toLowerCase();
 
-            if(commodityName.equals(dbName))
-            {
-                return pair.getValue();
-            }
+            if(commodityName.equals(dbName)) return pair.getValue();
         }
 
-        if(NameMap.isRare(commodityName) || NameMap.isIgnored(commodityName)) return -1;
-
-        Logger.WARNING("Could not find commodity key that matches: " + commodityName);
-        return -2;
+        if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName)) Logger.WARNING("Could not find commodity key that matches: " + commodityName);
+        return -1;
     }
 }

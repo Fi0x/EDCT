@@ -190,6 +190,8 @@ public class NameMap
         RARE_NAMES.add("wolf1301fesh");
         RARE_NAMES.add("terramaterbloodbores");
         RARE_NAMES.add("borasetanipathogenetics");
+        RARE_NAMES.add("aganipperush");
+        RARE_NAMES.add("hip118311swarm");
 
         IGNORED.add("thargoidtissuesampletype1");
         IGNORED.add("thargoidtissuesampletype2");
@@ -201,6 +203,11 @@ public class NameMap
         IGNORED.add("s6_tissuesample_cells");
         IGNORED.add("s6_tissuesample_coenosarc");
         IGNORED.add("s_tissuesample_cells");
+        RARE_NAMES.add("transgeniconionhead");
+        RARE_NAMES.add("p_particulatesample");
+        RARE_NAMES.add("animaleffigies");
+        RARE_NAMES.add("alieneggs");
+        RARE_NAMES.add("advert1");
     }
 
     public static String convertDBToEDDN(String localName)

@@ -7,7 +7,9 @@ import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -176,5 +178,23 @@ public class Results implements Initializable
     public COMMODITY getCurrentTrade()
     {
         return trades.get(currentCommodity);
+    }
+    public void removeCurrentTrade()
+    {
+        trades.remove(currentCommodity);
+        if(currentCommodity >= trades.size()) currentCommodity--;
+    }
+    public STATION getCurrentSellStation()
+    {
+        return trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+    }
+    public STATION getCurrentBuyStation()
+    {
+        return trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+    }
+    public void removeStationFromCurrentTrade(STATION station)
+    {
+        getCurrentTrade().SELL_PRICES.remove(station);
+        getCurrentTrade().BUY_PRICES.remove(station);
     }
 }

@@ -1,8 +1,6 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
-import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -67,10 +65,22 @@ public class Station
     @FXML
     private void removeStation()
     {
-        //TODO: Remove station from db
-        //TODO: Remove station from current trades
-        //TODO: Check if new current trade is displayable
-        //TODO: update displayed results
+        STATION s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        int commodityID = DBHandler.getInstance().getCommodityIDByName(resultsController.getCurrentTrade().NAME);
+        DBHandler.getInstance().removeStationEntry(commodityID, s.NAME, s.SYSTEM, isBuying);
+
+        resultsController.removeStationFromCurrentTrade(s);
+
+        if(!isBuying && stationID >= resultsController.getCurrentTrade().BUY_PRICES.size()) stationID = resultsController.getCurrentTrade().BUY_PRICES.size() - 1;
+        else if(isBuying && stationID >= resultsController.getCurrentTrade().SELL_PRICES.size()) stationID = resultsController.getCurrentTrade().SELL_PRICES.size() - 1;
+
+        if(!isBuying) resultsController.currentBuyStation = stationID;
+        else resultsController.currentSellStation = stationID;
+        resultsController.displayResults();
+
+        if(resultsController.getCurrentTrade().BUY_PRICES.size() == 0 || resultsController.getCurrentTrade().SELL_PRICES.size() == 0) resultsController.removeCurrentTrade();
+
+        resultsController.displayResults();
     }
 
     public void setStation(STATION station, boolean hasPrev, boolean hasNext)

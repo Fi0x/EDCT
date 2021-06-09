@@ -134,6 +134,24 @@ public class DBHandler
         return "";
     }
 
+    public int getCommodityIDByName(String name)
+    {
+        ResultSet commodity = getQueryResults("SELECT inara_id "
+                + "FROM commodities "
+                + "WHERE commodity_name = " + makeSQLValid(name));
+        try
+        {
+            if(commodity != null && commodity.next())
+            {
+                return commodity.getInt("inara_id");
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get the id of a commodity", e);
+        }
+        return -1;
+    }
+
     public Map<String, Integer> getCommodityNameIDPairs()
     {
         Map<String, Integer> pairs = new HashMap<>();
@@ -262,9 +280,13 @@ public class DBHandler
         return 0;
     }
 
-    public void removeStationEntry(String commodityName, String stationName, String systemName, boolean isSeller)
+    public void removeStationEntry(int commodityID, String stationName, String systemName, boolean isSeller)
     {
-        //TODO: Remove entry from stations
+        sendStatement("DELETE FROM stations " +
+                "WHERE commodity_id = " + commodityID + " " +
+                "AND station_name = " + makeSQLValid(stationName) + " " +
+                "AND star_system = " + makeSQLValid(systemName) + " " +
+                "AND is_seller = " + (isSeller ? 0 : 1));
     }
 
     public void removeOldEntries()
