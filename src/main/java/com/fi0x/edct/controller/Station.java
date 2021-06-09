@@ -1,10 +1,11 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.util.NumberConverter;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+
+import java.text.DecimalFormat;
 
 public class Station
 {
@@ -63,12 +64,15 @@ public class Station
 
     public void setStation(STATION station, boolean hasPrev, boolean hasNext)
     {
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(1);
+
         lblSystem.setText("System: " + station.SYSTEM);
         lblStationName.setText("Station: " + station.NAME);
         lblType.setText("Type: " + station.TYPE);
         lblPad.setText("Pad: " + station.PAD);
-        lblPrice.setText("Price: " + NumberConverter.convertToString(station.PRICE, " ") + " credits");
-        lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + NumberConverter.convertToString(station.QUANTITY, " ") + " tons");
+        lblPrice.setText("Price: " + df.format(station.PRICE) + " credits");
+        lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + df.format(station.QUANTITY) + " tons");
         lblAge.setText("Data age: " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
