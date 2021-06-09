@@ -111,7 +111,7 @@ public class EDDN implements Runnable
                                     STATION station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, false);
 
-                                    station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
+                                    station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
                                     if(station != null) DBHandler.getInstance().setStationData(station, commodityID, true);
                                 }
                                 Platform.runLater(() ->
@@ -137,7 +137,7 @@ public class EDDN implements Runnable
         try
         {
             JSONObject json = (JSONObject) new JSONParser().parse(commodityJSON);
-            commodityName = (String) json.get("name");
+            commodityName = ((String) json.get("name")).toLowerCase();
         } catch(ParseException e)
         {
             Logger.WARNING("Could not parse an EDDN json for a commodity");
