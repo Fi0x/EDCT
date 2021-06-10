@@ -51,6 +51,15 @@ public class Commodity
         btnNextComm.setDisable(!hasNext);
     }
 
+    public void setDistance(double distance)
+    {
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+        df.setMinimumFractionDigits(1);
+
+        lblDistance.setText("Distance: " + df.format(distance) + "Ly");
+    }
+
     public void setResultsController(Results controller)
     {
         resultsController = controller;

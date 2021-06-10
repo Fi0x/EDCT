@@ -1,16 +1,38 @@
 package com.fi0x.edct.data.websites;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
+import javafx.application.Platform;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Hozbase
+public class Hozbase implements Runnable
 {
-    public static double getStarDistance(String system1, String system2) throws InterruptedException
+    private final String startSystem;
+    private final String endSystem;
+
+    public Hozbase(String system1, String system2)
+    {
+        startSystem = system1;
+        endSystem = system2;
+    }
+    @Override
+    public void run()
+    {
+        try
+        {
+            double distance = getStarDistance(startSystem, endSystem);
+            Platform.runLater(() -> MainWindow.getInstance().resultsController.updateDistance(startSystem, endSystem, distance));
+        } catch(InterruptedException ignored)
+        {
+        }
+    }
+
+    private static double getStarDistance(String system1, String system2) throws InterruptedException
     {
         double distance = DBHandler.getInstance().getSystemDistance(system1, system2);
         if(distance != 0) return distance;

@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.websites.Hozbase;
@@ -162,17 +163,24 @@ public class Results implements Initializable
 
         trades.get(currentCommodity).profit = profit;
         double distance = 0;
-        try
+        if(sellStation != null && buyStation != null)
         {
-            if(sellStation == null || buyStation == null) distance = 0;
-            else distance = Hozbase.getStarDistance(sellStation.SYSTEM, buyStation.SYSTEM);
-        } catch(InterruptedException ignored)
-        {
+            distance = DBHandler.getInstance().getSystemDistance(sellStation.SYSTEM, buyStation.SYSTEM);
+            if(distance == 0) new Thread(new Hozbase(sellStation.SYSTEM, buyStation.SYSTEM)).start();
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
 
         vbResults.setVisible(true);
+    }
+
+    public void updateDistance(String system1, String system2, double distance)
+    {
+        if(distance == 0) return;
+        if(!trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation).SYSTEM.equals(system1)) return;
+        if(!trades.get(currentCommodity).SELL_PRICES.get(currentSellStation).SYSTEM.equals(system2)) return;
+
+        commodityController.setDistance(distance);
     }
 
     public COMMODITY getCurrentTrade()
