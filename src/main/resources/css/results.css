@@ -1,6 +1,10 @@
 #results {
     -fx-border-color: #000;
     -fx-border-width: 4;
+    -fx-alignment: CENTER;
+}
+#spacer {
+    -fx-min-height: 10;
 }
 #stations {
     -fx-padding: 10;

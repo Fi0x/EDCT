@@ -2,8 +2,8 @@
 
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<VBox id="results" fx:id="vbResults" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Results" alignment="CENTER" visible="false">
-    <GridPane minHeight="10"/>
+<VBox id="results" fx:id="vbResults" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Results" visible="false">
+    <GridPane id="spacer"/>
     <GridPane id="stations" fx:id="hbStations" hgap="10"/>
     <stylesheets>
         <URL value="@../css/results.css"/>

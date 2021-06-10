@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 
 <?import java.net.URL?>
-<GridPane id="datastorage" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Datastorage" minWidth="220">
+<GridPane id="datastorage" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Datastorage">
     <rowConstraints>
         <RowConstraints />
         <RowConstraints />
@@ -27,7 +27,7 @@
             <Tooltip text="This is shown when the program received an update over the EDDN"/>
         </tooltip>
     </Label>
-    <Button id="start" fx:id="btnStart" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#calculate" text="Reload Trades" textAlignment="CENTER" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">
+    <Button id="start" fx:id="btnStart" onMouseClicked="#calculate" text="Reload Trades" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">
         <tooltip>
             <Tooltip text="Re-loads the results. Can also be done by changing a filter setting"/>
         </tooltip>

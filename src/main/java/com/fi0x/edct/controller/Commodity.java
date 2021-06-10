@@ -3,6 +3,7 @@ package com.fi0x.edct.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.text.DecimalFormat;
 
@@ -40,6 +41,7 @@ public class Commodity
         lblCommodity.setText(resultsController.getCurrentTrade().NAME);
         String profit = df.format(resultsController.getCurrentTrade().profit);
         lblProfit.setText(profit + " credits");
+        setProfitColor(resultsController.getCurrentTrade().profit);
 
         df.setMaximumFractionDigits(2);
         df.setMinimumFractionDigits(1);
@@ -52,5 +54,20 @@ public class Commodity
     public void setResultsController(Results controller)
     {
         resultsController = controller;
+    }
+
+    private void setProfitColor(long profit)
+    {
+        Color color = new Color(238d/255d, 238d/255d, 238d/255d, 1);
+
+        if(profit < 10000)
+        {
+            color = new Color(238d/255d, 50d/255d, 50d/255d, 1);
+        } else if(profit > 30000)
+        {
+            color = new Color(50d/255d, 238d/255d, 50d/255d, 1);
+        }
+
+        lblProfit.setTextFill(color);
     }
 }

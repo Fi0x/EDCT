@@ -1,6 +1,12 @@
 #datastorage {
     -fx-padding: 10;
+    -fx-min-width: 220;
 }
 .label {
     -fx-padding: 0 5 0 0;
+}
+.button {
+    -fx-text-alignment: CENTER;
+    -fx-content-display: CENTER;
+    -fx-alignment: CENTER;
 }

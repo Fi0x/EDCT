@@ -11,14 +11,18 @@
         <ColumnConstraints hgrow="ALWAYS" halignment="CENTER"/>
     </columnConstraints>
     <Button fx:id="btnPrevComm" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" disable="true" GridPane.columnIndex="0"/>
-    <VBox id="commodityInfo" alignment="CENTER" minWidth="350" GridPane.columnIndex="1">
+    <VBox id="commodityInfo" GridPane.columnIndex="1">
         <Label id="commodityName" fx:id="lblCommodity" text="---"/>
         <Label id="profit" fx:id="lblProfit" text="Profit: ---">
             <tooltip>
                 <Tooltip text="The cr/t you can make with this trade"/>
             </tooltip>
         </Label>
-        <Label id="distance" fx:id="lblDistance" text="Distance: ---"/>
+        <Label id="distance" fx:id="lblDistance" text="Distance: ---">
+            <tooltip>
+                <Tooltip text="The distance between the systems the current stations are in"/>
+            </tooltip>
+        </Label>
     </VBox>
     <Button fx:id="btnNextComm" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" disable="true" GridPane.columnIndex="2"/>
     <stylesheets>

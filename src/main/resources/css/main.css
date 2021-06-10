@@ -31,4 +31,5 @@
     -fx-padding: 0 5 0 5;
     -fx-show-delay: 10ms;
     -fx-show-duration: 10s;
+    -fx-font-weight: normal;
 }
