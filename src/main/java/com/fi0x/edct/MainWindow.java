@@ -4,8 +4,7 @@ import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.controller.ProgramInfo;
 import com.fi0x.edct.controller.Results;
 import com.fi0x.edct.util.Logger;
-import com.nativejavafx.taskbar.TaskbarProgressbar;
-import com.nativejavafx.taskbar.TaskbarProgressbarFactory;
+import com.fi0x.edct.util.ProgressBar;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,7 +18,7 @@ import java.io.IOException;
 public class MainWindow extends Application
 {
     private static MainWindow instance;
-    private TaskbarProgressbar progressbar;
+    private ProgressBar progressbar;
 
     public ProgramInfo infoController;
     public Interaction interactionController;
@@ -29,7 +28,7 @@ public class MainWindow extends Application
     public void start(Stage primaryStage)
     {
         instance = this;
-        progressbar = TaskbarProgressbarFactory.getTaskbarProgressbar(primaryStage);
+        progressbar = new ProgressBar();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root;
@@ -52,6 +51,8 @@ public class MainWindow extends Application
         primaryStage.setScene(new Scene(root));
         primaryStage.setResizable(false);
         primaryStage.show();
+
+        progressbar.setStage(primaryStage);
 
         Logger.INFO("GUI loaded");
 
@@ -77,8 +78,8 @@ public class MainWindow extends Application
 
     public void setUpdateStatus(double status)
     {
-        if(status < 0) progressbar.setProgressType(TaskbarProgressbar.Type.NO_PROGRESS);
-        else progressbar.showCustomProgress(status, TaskbarProgressbar.Type.NORMAL);
+        if(status < 0) progressbar.setProgressType(ProgressBar.Type.NO_PROGRESS);
+        else progressbar.showCustomProgress(status, ProgressBar.Type.NORMAL);
     }
 
     private void loadInfo(FXMLLoader parentLoader)
