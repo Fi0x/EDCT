@@ -4,7 +4,9 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -51,7 +53,7 @@ public class RequestHandler
             status = con.getResponseCode();
         } catch(IOException e)
         {
-            Logger.ERROR(995, "Could not establish a connection to the server");
+            Logger.WARNING(995, "Could not establish a connection to the server");
         }
         StringBuilder content = new StringBuilder();
         if(status == 200)
@@ -79,7 +81,7 @@ public class RequestHandler
             for(int i = fileContent.size() - 1; i >= 0; i--)
             {
                 String error = fileContent.get(i);
-                if(!error.contains("[ERR]")) continue;
+                if(!error.contains("[ERR]") && !error.contains("[WRN]")) continue;
 
                 if(error.contains("[429]"))
                 {

@@ -31,15 +31,23 @@ public class Logger
     }
     public static void WARNING(String text)
     {
-        WARNING(text, null);
+        log(0, LOGLEVEL.WRN, text, null);
     }
     public static void WARNING(String text, Exception e)
     {
         log(0, LOGLEVEL.WRN, text, e);
     }
+    public static void WARNING(int code, String text)
+    {
+        log(code, LOGLEVEL.WRN, text, null);
+    }
+    public static void WARNING(int code, String text, Exception e)
+    {
+        log(code, LOGLEVEL.WRN, text, e);
+    }
     public static void ERROR(int code, String text)
     {
-        ERROR(code, text, null);
+        log(code, LOGLEVEL.ERR, text, null);
     }
     public static void ERROR(int code, String text, Exception e)
     {
@@ -50,13 +58,13 @@ public class Logger
     {
         String time = getDateString();
         String errorCode = code == 0 ? "[---]" : "[" + code + "]";
-        String prefix = "[" + lvl + "]: ";
+        String prefix = "[" + lvl + "]";
         if(debug || lvl == LOGLEVEL.INF)
         {
             String color = WHITE;
             if(lvl == LOGLEVEL.WRN) color = YELLOW;
             else if(lvl == LOGLEVEL.ERR) color = RED;
-            System.out.println(color + time + prefix + errorCode + text + RESET);
+            System.out.println(color + time + " " + prefix + " " + errorCode + " " + text + RESET);
             if(e != null) e.printStackTrace();
         }
 
