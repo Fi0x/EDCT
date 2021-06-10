@@ -34,3 +34,8 @@
     -fx-background-color: #479c2d;
     -fx-text-fill: #021802;
 }
+#btnSettings {
+    -fx-background-color: transparent;
+    -fx-max-width: 15;
+    -fx-background-radius: 0;
+}

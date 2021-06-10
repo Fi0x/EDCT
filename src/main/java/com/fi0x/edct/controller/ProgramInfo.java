@@ -7,8 +7,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,11 +30,23 @@ public class ProgramInfo implements Initializable
     private Button btnBugReport;
     @FXML
     private Button btnUpdate;
+    @FXML
+    private Button btnSettings;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         lblVersion.setText("Current version: " + Main.version);
+
+        Image img = new Image(getClass().getResourceAsStream("/images/settings.png"), 20, 20, false, false);
+        btnSettings.setGraphic(new ImageView(img));
+
+        btnSettings.hoverProperty().addListener((observable, oldValue, newValue) ->
+        {
+            Image imgDark = new Image(getClass().getResourceAsStream("/images/settings_dark.png"), 20, 20, false, false);
+            if(btnSettings.isHover()) btnSettings.setGraphic(new ImageView(imgDark));
+            else btnSettings.setGraphic(new ImageView(img));
+        });
     }
 
     @FXML
@@ -50,6 +64,11 @@ public class ProgramInfo implements Initializable
     private void updateVersion()
     {
         openWebsite(updateUrl);
+    }
+    @FXML
+    private void openSettings()
+    {
+        //TODO: open new settings page
     }
 
     public void setError(int code)
