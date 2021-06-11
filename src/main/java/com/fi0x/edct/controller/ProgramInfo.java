@@ -4,17 +4,22 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.data.websites.GitHub;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProgramInfo implements Initializable
@@ -38,12 +43,12 @@ public class ProgramInfo implements Initializable
     {
         lblVersion.setText("Current version: " + Main.version);
 
-        Image img = new Image(getClass().getResourceAsStream("/images/settings.png"), 20, 20, false, false);
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/settings.png")), 20, 20, false, false);
         btnSettings.setGraphic(new ImageView(img));
 
         btnSettings.hoverProperty().addListener((observable, oldValue, newValue) ->
         {
-            Image imgDark = new Image(getClass().getResourceAsStream("/images/settings_dark.png"), 20, 20, false, false);
+            Image imgDark = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/settings_dark.png")), 20, 20, false, false);
             if(btnSettings.isHover()) btnSettings.setGraphic(new ImageView(imgDark));
             else btnSettings.setGraphic(new ImageView(img));
         });
@@ -68,7 +73,27 @@ public class ProgramInfo implements Initializable
     @FXML
     private void openSettings()
     {
-        //TODO: open new settings page
+        FXMLLoader settingsLoader = new FXMLLoader();
+        settingsLoader.setLocation(getClass().getResource("/fxml/settings.fxml"));
+
+        Stage stage = new Stage();
+        Scene scene;
+
+        try
+        {
+            scene = new Scene(settingsLoader.load(), 600, 400);
+        } catch(IOException e)
+        {
+            Logger.WARNING(999, "Could not load settings");
+            return;
+        }
+
+        stage.setTitle("EDCT - Settings");
+        stage.setScene(scene);
+        stage.setResizable(false);
+
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
     }
 
     public void setError(int code)
