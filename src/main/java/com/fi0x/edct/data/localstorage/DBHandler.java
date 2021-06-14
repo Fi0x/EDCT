@@ -297,6 +297,11 @@ public class DBHandler
                 "WHERE inara_time < " + validTime);
     }
 
+    public void removeTradeData()
+    {
+        sendStatement("DELETE FROM stations");
+    }
+
     private void sendStatement(String command)
     {
         try

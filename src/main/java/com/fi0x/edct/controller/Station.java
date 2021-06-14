@@ -22,15 +22,15 @@ public class Station
     @FXML
     private Label lblStationName;
     @FXML
-    private Label lblType;
+    public Label lblType;
     @FXML
-    private Label lblPad;
+    public Label lblPad;
     @FXML
     private Label lblPrice;
     @FXML
     private Label lblAmount;
     @FXML
-    private Label lblAge;
+    public Label lblAge;
     @FXML
     private Button btnPrevStation;
     @FXML

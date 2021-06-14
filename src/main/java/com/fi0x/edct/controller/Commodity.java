@@ -20,7 +20,7 @@ public class Commodity
     @FXML
     private Label lblProfit;
     @FXML
-    private Label lblDistance;
+    public Label lblDistance;
 
     @FXML
     private void nextCommodity()

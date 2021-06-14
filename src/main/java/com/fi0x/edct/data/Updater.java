@@ -104,6 +104,7 @@ public class Updater implements Runnable
 
     private boolean sleepInterrupted(long delay)
     {
+        if(delay <= 0) return false;
         try
         {
             Thread.sleep(delay);

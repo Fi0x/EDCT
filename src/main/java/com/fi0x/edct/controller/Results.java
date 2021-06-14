@@ -174,6 +174,19 @@ public class Results implements Initializable
         vbResults.setVisible(true);
     }
 
+    public void updateDetails(boolean detailed)
+    {
+        commodityController.lblDistance.setVisible(detailed);
+
+        buyController.lblPad.setVisible(detailed);
+        buyController.lblType.setVisible(detailed);
+        buyController.lblAge.setVisible(detailed);
+
+        sellController.lblPad.setVisible(detailed);
+        sellController.lblType.setVisible(detailed);
+        sellController.lblAge.setVisible(detailed);
+    }
+
     public void updateDistance(String system1, String system2, double distance)
     {
         if(distance == 0) return;

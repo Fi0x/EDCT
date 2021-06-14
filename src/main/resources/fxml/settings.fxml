@@ -49,7 +49,7 @@
                 <Tooltip text="Minimum: 5 seconds"/>
             </tooltip>
         </TextField>
-        <ChoiceBox value="seconds">
+        <ChoiceBox fx:id="cbInaraDelay" value="seconds">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="seconds"/>
@@ -66,7 +66,7 @@
             <ColumnConstraints hgrow="ALWAYS"/>
             <ColumnConstraints/>
         </columnConstraints>
-        <Button onAction="#changeDetailMode" text="Detailed trades" GridPane.columnIndex="0">
+        <Button fx:id="btnDetails" onAction="#changeDetailMode" text="Detailed trades" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="Change the amount of details that get displayed"/>
             </tooltip>
