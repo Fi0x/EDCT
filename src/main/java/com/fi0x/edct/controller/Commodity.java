@@ -69,10 +69,10 @@ public class Commodity
     {
         Color color = new Color(238d/255d, 238d/255d, 238d/255d, 1);
 
-        if(profit < 10000)
+        if(profit < Settings.lowProfitBorder)
         {
             color = new Color(238d/255d, 50d/255d, 50d/255d, 1);
-        } else if(profit > 30000)
+        } else if(profit > Settings.highProfitBorder)
         {
             color = new Color(50d/255d, 238d/255d, 50d/255d, 1);
         }

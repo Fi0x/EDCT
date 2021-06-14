@@ -2,6 +2,7 @@ package com.fi0x.edct.data;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.localstorage.TradeReloader;
 import com.fi0x.edct.data.websites.InaraCommodity;
@@ -48,7 +49,7 @@ public class Updater implements Runnable
 
         while(!Thread.interrupted())
         {
-            if(sleepInterrupted((long) (Math.random() * 5000) + 10000)) return;
+            if(sleepInterrupted((long) (Math.random() * 5000) + Settings.inaraDelay - 5000)) return;
             Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();

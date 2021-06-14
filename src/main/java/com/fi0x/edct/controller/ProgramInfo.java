@@ -81,7 +81,7 @@ public class ProgramInfo implements Initializable
 
         try
         {
-            scene = new Scene(settingsLoader.load(), 600, 400);
+            scene = new Scene(settingsLoader.load());
         } catch(IOException e)
         {
             Logger.WARNING(999, "Could not load settings");

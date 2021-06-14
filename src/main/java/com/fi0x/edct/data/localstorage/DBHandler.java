@@ -1,6 +1,7 @@
 package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
@@ -291,7 +292,7 @@ public class DBHandler
 
     public void removeOldEntries()
     {
-        long validTime = System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 4;
+        long validTime = System.currentTimeMillis() - Settings.maxDataAge;
         sendStatement("DELETE FROM stations " +
                 "WHERE inara_time < " + validTime);
     }

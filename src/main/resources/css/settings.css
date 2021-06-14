@@ -1,0 +1,5 @@
+.root {
+    -fx-font-size: 16;
+    -fx-background-color: #565656;
+    -fx-focus-color: transparent;
+}
