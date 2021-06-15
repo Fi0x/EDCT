@@ -22,14 +22,20 @@
         </Label>
         <TextField fx:id="txtHighProfit"/>
     </HBox>
-    <HBox id="hbox">
-        <Label id="description" text="Max Data-Age">
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints />
+        </columnConstraints>
+        <Label id="description" text="Max Data-Age" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="Any information in the database that is older gets deleted"/>
             </tooltip>
         </Label>
-        <TextField fx:id="txtMaxAge"/>
-        <ChoiceBox fx:id="cbDataAge" value="days">
+        <TextField fx:id="txtMaxAge" GridPane.columnIndex="1"/>
+        <ChoiceBox id="selector" fx:id="cbDataAge" value="days" GridPane.columnIndex="3">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="hours"/>
@@ -37,19 +43,25 @@
                 </FXCollections>
             </items>
         </ChoiceBox>
-    </HBox>
-    <HBox id="hbox">
-        <Label id="description" text="Inara-Update Delay">
+    </GridPane>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints />
+            <ColumnConstraints />
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints />
+        </columnConstraints>
+        <Label id="description" text="Inara-Update Delay" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="The delay between requests to the INARA website"/>
             </tooltip>
         </Label>
-        <TextField fx:id="txtInaraDelay" text="15">
+        <TextField fx:id="txtInaraDelay" text="15" GridPane.columnIndex="1">
             <tooltip>
                 <Tooltip text="Minimum: 5 seconds"/>
             </tooltip>
         </TextField>
-        <ChoiceBox fx:id="cbInaraDelay" value="seconds">
+        <ChoiceBox id="selector" fx:id="cbInaraDelay" value="seconds" GridPane.columnIndex="3">
             <items>
                 <FXCollections fx:factory="observableArrayList">
                     <String fx:value="seconds"/>
@@ -57,7 +69,7 @@
                 </FXCollections>
             </items>
         </ChoiceBox>
-    </HBox>
+    </GridPane>
     <GridPane id="gridButtons">
         <columnConstraints>
             <ColumnConstraints/>
