@@ -5,6 +5,7 @@ import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.util.Logger;
+import com.fi0x.edct.util.SettingsHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -23,8 +24,8 @@ public class Settings implements Initializable
 {
     public static int lowProfitBorder = 10000;
     public static int highProfitBorder = 30000;
-    public static int maxDataAge = 1000 * 60 * 60 * 24 * 4;//TODO: Verify that time always gets converted correctly
-    public static int inaraDelay = 15000;//TODO: Verify that time always gets converted correctly
+    public static int maxDataAge = 1000 * 60 * 60 * 24 * 4;
+    public static int inaraDelay = 15000;
     public static boolean detailedResults = true;
 
     @FXML
@@ -69,15 +70,6 @@ public class Settings implements Initializable
             else if(!newValue.matches("\\d*")) txtMaxAge.setText(newValue.replaceAll("[^\\d]", ""));
             else updateAgeSettings();
         });
-        if(maxDataAge >= 1000 * 60 * 60 * 24)
-        {
-            txtMaxAge.setText(String.valueOf(maxDataAge / (1000 * 60 * 60 * 24)));
-            cbDataAge.setValue("days");
-        } else
-        {
-            txtMaxAge.setText(String.valueOf(maxDataAge / (1000 * 60 * 60)));
-            cbDataAge.setValue("hours");
-        }
 
         txtInaraDelay.textProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -85,15 +77,11 @@ public class Settings implements Initializable
             else if(!newValue.matches("\\d*")) txtInaraDelay.setText(newValue.replaceAll("[^\\d]", ""));
             else updateAgeSettings();
         });
-        if(inaraDelay >= 1000 * 60)
-        {
-            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000 * 60)));
-            cbInaraDelay.setValue("minutes");
-        } else
-        {
-            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
-            cbInaraDelay.setValue("seconds");
-        }
+
+        setCorrectAgeFields();
+
+        if(detailedResults) btnDetails.setText("Simple Results");
+        else btnDetails.setText("Detailed Results");
     }
 
     @FXML
@@ -102,6 +90,8 @@ public class Settings implements Initializable
         detailedResults = !detailedResults;
         if(detailedResults) btnDetails.setText("Simple Results");
         else btnDetails.setText("Detailed Results");
+
+        SettingsHandler.storeValue("detailedResults", detailedResults);
 
         MainWindow.getInstance().resultsController.updateDetails(detailedResults);
     }
@@ -128,57 +118,29 @@ public class Settings implements Initializable
 
     private void loadSettings()
     {
-        try
-        {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(com.fi0x.edct.Main.settings.toPath(), StandardCharsets.UTF_8));
-            for(String line : fileContent)
-            {
-                String[] setting = line.split("=");
-                if(setting.length < 2) continue;
-
-                switch(setting[0])
-                {
-                    case "lowProfit":
-                        txtLowProfit.setText(setting[1]);
-                        break;
-                    case "highProfit":
-                        txtHighProfit.setText(setting[1]);
-                        break;
-                    case "dataAge":
-                        txtMaxAge.setText(setting[1]);
-                        break;
-                    case "inaraDelay":
-                        txtInaraDelay.setText(setting[1]);
-                        break;
-                }
-            }
-        } catch(IOException e)
-        {
-            Logger.WARNING("Could not read settings from local file", e);
-        }
+        lowProfitBorder = SettingsHandler.loadInt("lowProfit", 10000);
+        highProfitBorder = SettingsHandler.loadInt("highProfit", 30000);
+        maxDataAge = SettingsHandler.loadInt("dataAge", 1000 * 60 * 60 * 24 * 4);
+        inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
+        detailedResults = SettingsHandler.loadBoolean("detailedResults", true);
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
         inaraDelay = Math.max(inaraDelay, 15000);
+
+        txtLowProfit.setText(String.valueOf(lowProfitBorder));
+        txtHighProfit.setText(String.valueOf(highProfitBorder));
+
+        setCorrectAgeFields();
     }
     private void updateProfitBorder()
     {
         if(txtLowProfit.getText().length() > 0) lowProfitBorder = Integer.parseInt(txtLowProfit.getText());
         if(txtHighProfit.getText().length() > 0) highProfitBorder = Integer.parseInt(txtHighProfit.getText());
 
-        try
-        {
-            List<String> fileContent = new ArrayList<>();
-
-            fileContent.add("lowProfit=" + lowProfitBorder);
-            fileContent.add("highProfit=" + highProfitBorder);
-
-            Files.write(com.fi0x.edct.Main.settings.toPath(), fileContent, StandardCharsets.UTF_8);
-        } catch(IOException e)
-        {
-            Logger.WARNING("Could not write profit settings to local file", e);
-        }
+        SettingsHandler.storeValue("lowProfit", lowProfitBorder);
+        SettingsHandler.storeValue("highProfit", highProfitBorder);
     }
     private void updateAgeSettings()
     {
@@ -193,17 +155,29 @@ public class Settings implements Initializable
             if(cbInaraDelay.getValue().equals("minutes")) inaraDelay *= 60;
         }
 
-        try
+        SettingsHandler.storeValue("dataAge", maxDataAge);
+        SettingsHandler.storeValue("inaraDelay", inaraDelay);
+    }
+    private void setCorrectAgeFields()
+    {
+        if(maxDataAge >= 1000 * 60 * 60 * 24)
         {
-            List<String> fileContent = new ArrayList<>();
-
-            fileContent.add("dataAge=" + maxDataAge);
-            fileContent.add("inaraDelay=" + inaraDelay);
-
-            Files.write(com.fi0x.edct.Main.settings.toPath(), fileContent, StandardCharsets.UTF_8);
-        } catch(IOException e)
+            txtMaxAge.setText(String.valueOf(maxDataAge / (1000 * 60 * 60 * 24)));
+            cbDataAge.setValue("days");
+        } else
         {
-            Logger.WARNING("Could not write age settings to local file", e);
+            txtMaxAge.setText(String.valueOf(maxDataAge / (1000 * 60 * 60)));
+            cbDataAge.setValue("hours");
+        }
+
+        if(inaraDelay >= 1000 * 60)
+        {
+            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000 * 60)));
+            cbInaraDelay.setValue("minutes");
+        } else
+        {
+            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
+            cbInaraDelay.setValue("seconds");
         }
     }
 }

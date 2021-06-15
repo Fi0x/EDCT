@@ -66,7 +66,7 @@
             <ColumnConstraints hgrow="ALWAYS"/>
             <ColumnConstraints/>
         </columnConstraints>
-        <Button fx:id="btnDetails" onAction="#changeDetailMode" text="Detailed trades" GridPane.columnIndex="0">
+        <Button fx:id="btnDetails" onAction="#changeDetailMode" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="Change the amount of details that get displayed"/>
             </tooltip>
