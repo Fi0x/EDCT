@@ -70,6 +70,7 @@ public class Settings implements Initializable
             else if(!newValue.matches("\\d*")) txtMaxAge.setText(newValue.replaceAll("[^\\d]", ""));
             else updateAgeSettings();
         });
+        cbDataAge.valueProperty().addListener((observable, oldValue, newValue) -> updateAgeSettings());
 
         txtInaraDelay.textProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -77,6 +78,7 @@ public class Settings implements Initializable
             else if(!newValue.matches("\\d*")) txtInaraDelay.setText(newValue.replaceAll("[^\\d]", ""));
             else updateAgeSettings();
         });
+        cbInaraDelay.valueProperty().addListener((observable, oldValue, newValue) -> updateAgeSettings());
 
         setCorrectAgeFields();
 

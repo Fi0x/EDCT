@@ -18,7 +18,7 @@ public class Main
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final String version = "1.1.3.3";//All.GUI.Logic.Hotfix
+    public static final String version = "1.1.3.4";//All.GUI.Logic.Hotfix
 
     public static void main(String[] args)
     {
