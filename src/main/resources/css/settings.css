@@ -3,3 +3,53 @@
     -fx-background-color: #565656;
     -fx-focus-color: transparent;
 }
+.button {
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #1c1c1c;
+    -fx-font-weight: bold;
+    -fx-padding: 0 5 0 5;
+}
+.button:hover {
+    -fx-background-color: #1c1c1c;
+    -fx-text-fill: #eeeeee;
+    -fx-font-weight: bold;
+}
+.text-field {
+    -fx-padding: 0 5 0 5;
+    -fx-focus-traversable: false;
+}
+.tooltip {
+    -fx-background-color: #aeaeae;
+    -fx-text-fill: #3e3e3e;
+    -fx-padding: 0 5 0 5;
+    -fx-show-delay: 10ms;
+    -fx-show-duration: 10s;
+    -fx-font-weight: normal;
+}
+.text-field {
+    -fx-max-width: 100;
+}
+#hbox {
+    -fx-alignment: CENTER-LEFT;
+    -fx-padding: 5;
+}
+#description {
+    -fx-text-fill: #eeeeee;
+    -fx-padding: 0 5 0 5;
+    -fx-min-width: 180;
+}
+#gridButtons {
+    -fx-hgap: 10;
+    -fx-padding: 5;
+}
+#btnDetails {
+    -fx-min-width: 150;
+}
+#btnDanger {
+    -fx-background-color: #b71616;
+    -fx-text-fill: #333333;
+}
+#btnDanger:hover {
+    -fx-background-color: #600d0d;
+    -fx-text-fill: #cfcccc;
+}

@@ -33,3 +33,6 @@
     -fx-show-duration: 10s;
     -fx-font-weight: normal;
 }
+.text-field {
+    -fx-max-width: 100;
+}

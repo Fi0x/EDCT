@@ -6,24 +6,24 @@
 <?import java.lang.String?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Settings">
-    <HBox>
-        <Label text="Low Profit Border">
+    <HBox id="hbox">
+        <Label id="description" text="Low Profit Border">
             <tooltip>
                 <Tooltip text="The profit at which the text starts to be red"/>
             </tooltip>
         </Label>
         <TextField fx:id="txtLowProfit"/>
     </HBox>
-    <HBox>
-        <Label text="High Profit Border">
+    <HBox id="hbox">
+        <Label id="description" text="High Profit Border">
             <tooltip>
                 <Tooltip text="The profit at which the text starts to be green"/>
             </tooltip>
         </Label>
         <TextField fx:id="txtHighProfit"/>
     </HBox>
-    <HBox>
-        <Label text="Max Data-Age">
+    <HBox id="hbox">
+        <Label id="description" text="Max Data-Age">
             <tooltip>
                 <Tooltip text="Any information in the database that is older gets deleted"/>
             </tooltip>
@@ -38,10 +38,10 @@
             </items>
         </ChoiceBox>
     </HBox>
-    <HBox>
-        <Label text="Inara-Update Delay">
+    <HBox id="hbox">
+        <Label id="description" text="Inara-Update Delay">
             <tooltip>
-                <Tooltip text="The average delay between requests to the INARA website"/>
+                <Tooltip text="The delay between requests to the INARA website"/>
             </tooltip>
         </Label>
         <TextField fx:id="txtInaraDelay" text="15">
@@ -58,7 +58,7 @@
             </items>
         </ChoiceBox>
     </HBox>
-    <GridPane>
+    <GridPane id="gridButtons">
         <columnConstraints>
             <ColumnConstraints/>
             <ColumnConstraints hgrow="ALWAYS"/>
@@ -66,17 +66,17 @@
             <ColumnConstraints hgrow="ALWAYS"/>
             <ColumnConstraints/>
         </columnConstraints>
-        <Button fx:id="btnDetails" onAction="#changeDetailMode" GridPane.columnIndex="0">
+        <Button id="btnDetails" fx:id="btnDetails" onAction="#changeDetailMode" GridPane.columnIndex="0">
             <tooltip>
                 <Tooltip text="Change the amount of details that get displayed"/>
             </tooltip>
         </Button>
-        <Button text="Clear logs" onAction="#clearLogs" GridPane.columnIndex="2">
+        <Button id="btnDanger" text="Clear logs" onAction="#clearLogs" GridPane.columnIndex="2">
             <tooltip>
                 <Tooltip text="Removes all log entries"/>
             </tooltip>
         </Button>
-        <Button text="Clear database" onAction="#clearDB" GridPane.columnIndex="4">
+        <Button id="btnDanger" text="Clear database" onAction="#clearDB" GridPane.columnIndex="4">
             <tooltip>
                 <Tooltip text="Removes all entries from the local database"/>
             </tooltip>

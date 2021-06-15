@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
 <VBox id="filters" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Filters">
     <HBox id="quantity">
         <Label text="Min quantity">
@@ -11,7 +11,7 @@
                 <Tooltip text="The lowest demand / supply a station should have for a commodity" />
             </tooltip>
         </Label>
-        <TextField fx:id="txtQuantity" alignment="CENTER_RIGHT" maxWidth="100" text="10000" />
+        <TextField fx:id="txtQuantity" alignment="CENTER_RIGHT" text="10000" />
     </HBox>
     <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers">
         <tooltip>
