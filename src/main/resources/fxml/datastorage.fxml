@@ -18,7 +18,7 @@
     </Label>
     <Label fx:id="lblUpdateStatus" text="Initializing..." GridPane.rowIndex="1" GridPane.halignment="CENTER">
         <tooltip>
-            <Tooltip text="This displays what happens in the background"/>
+            <Tooltip fx:id="ttBackgroundStatus" text="This displays what happens in the background"/>
         </tooltip>
     </Label>
     <Label fx:id="lblEDDNStatus" GridPane.rowIndex="2" GridPane.halignment="CENTER">

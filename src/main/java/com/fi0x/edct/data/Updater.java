@@ -2,6 +2,7 @@ package com.fi0x.edct.data;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.controller.Datastorage;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.localstorage.TradeReloader;
@@ -36,7 +37,7 @@ public class Updater implements Runnable
         Platform.runLater(() ->
         {
             MainWindow.getInstance().setUpdateStatus(-1);
-            MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
+            MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
         });
 
         Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
@@ -50,7 +51,7 @@ public class Updater implements Runnable
         while(!Thread.interrupted())
         {
             if(sleepInterrupted((long) (Math.random() * 5000) + Settings.inaraDelay - 5000)) return;
-            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating..."));
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating...", Datastorage.BACKGROUND_STATUS.INITIALIZED));
 
             int oldestID = DBHandler.getInstance().getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -67,7 +68,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().interactionController.storageController.setDataAge(age, true);
-                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated");
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
             });
         }
         Logger.INFO("Updater Thread stopped");
@@ -85,7 +86,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().setUpdateStatus((float)finalCounter / (float)missingIDs.size());
-                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size());
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), Datastorage.BACKGROUND_STATUS.INITIALIZING);
             });
             if(sleepInterrupted(250)) return true;
             try

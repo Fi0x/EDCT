@@ -5,6 +5,7 @@ import com.fi0x.edct.data.localstorage.TradeReloader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 
 public class Datastorage
 {
@@ -18,6 +19,8 @@ public class Datastorage
     private Label lblUpdateStatus;
     @FXML
     private Label lblEDDNStatus;
+    @FXML
+    private Tooltip ttBackgroundStatus;
 
     @FXML
     private void calculate()
@@ -44,9 +47,18 @@ public class Datastorage
         lblDataAge.setText(text);
     }
 
-    public void setUpdateStatus(String status)
+    public void setUpdateStatus(String status, BACKGROUND_STATUS phase)
     {
         lblUpdateStatus.setText(status);
+        switch(phase)
+        {
+            case INITIALIZING:
+                ttBackgroundStatus.setText("How many commodities are updated / need updates");
+                break;
+            case INITIALIZED:
+                ttBackgroundStatus.setText("This indicates if the tool requests updates from INARA or is up-to-date");
+                break;
+        }
     }
     public void setEDDNStatus(String status)
     {
@@ -56,5 +68,11 @@ public class Datastorage
     public void setInteractionController(Interaction controller)
     {
         interactionController = controller;
+    }
+
+    public enum BACKGROUND_STATUS
+    {
+        INITIALIZING,
+        INITIALIZED
     }
 }
