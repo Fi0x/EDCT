@@ -1,5 +1,6 @@
 package com.fi0x.edct;
 
+import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.util.Logger;
 
@@ -26,6 +27,7 @@ public class Main
         if(arguments.contains("-d")) Logger.debug = true;
 
         setupLocalFiles();
+        Settings.loadSettings();
 
         updater = new Thread(new Updater());
 

@@ -1,10 +1,10 @@
 package com.fi0x.edct.data.localstorage;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
-import net.sf.launch4j.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,9 +28,10 @@ public class TradeReloader implements Runnable
         Platform.runLater(() ->
         {
             INT_CONTROLLER.filterController.updateFilters();
-            INT_CONTROLLER.storageController.setDataAge(oldestFileAge, false);
+            INT_CONTROLLER.storageController.setDataAge(oldestFileAge);
         });
 
+        MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
         Logger.INFO("Trade Reloader Thread finished");
     }
 

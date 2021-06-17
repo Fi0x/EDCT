@@ -47,6 +47,9 @@ public class Settings implements Initializable
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         loadSettings();
+        txtLowProfit.setText(String.valueOf(lowProfitBorder));
+        txtHighProfit.setText(String.valueOf(highProfitBorder));
+        setCorrectAgeFields();
 
         txtLowProfit.textProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -118,7 +121,7 @@ public class Settings implements Initializable
         Main.updater.start();
     }
 
-    private void loadSettings()
+    public static void loadSettings()
     {
         lowProfitBorder = SettingsHandler.loadInt("lowProfit", 10000);
         highProfitBorder = SettingsHandler.loadInt("highProfit", 30000);
@@ -130,11 +133,6 @@ public class Settings implements Initializable
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
         inaraDelay = Math.max(inaraDelay, 15000);
-
-        txtLowProfit.setText(String.valueOf(lowProfitBorder));
-        txtHighProfit.setText(String.valueOf(highProfitBorder));
-
-        setCorrectAgeFields();
     }
     private void updateProfitBorder()
     {

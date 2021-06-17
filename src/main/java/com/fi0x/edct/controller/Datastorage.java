@@ -32,10 +32,8 @@ public class Datastorage
         Main.reloader.start();
     }
 
-    public void setDataAge(long age, boolean newTradesAvailable)
+    public void setDataAge(long age)
     {
-        btnStart.setVisible(newTradesAvailable);
-
         if(age == -1) return;
 
         String text = "Local data age: ";

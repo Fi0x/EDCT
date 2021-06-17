@@ -25,7 +25,6 @@ public class Main
 
     public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
     {
-        interactionController.storageController.btnStart.setVisible(false);
         Map<String, ArrayList<STATION>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
         Map<String, ArrayList<STATION>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
 

@@ -67,7 +67,7 @@ public class Updater implements Runnable
 
             Platform.runLater(() ->
             {
-                MainWindow.getInstance().interactionController.storageController.setDataAge(age, true);
+                MainWindow.getInstance().interactionController.storageController.setDataAge(age);
                 MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
             });
         }

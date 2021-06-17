@@ -116,7 +116,7 @@ public class EDDN implements Runnable
                                 }
                                 Platform.runLater(() ->
                                 {
-                                    MainWindow.getInstance().interactionController.storageController.setDataAge(-1, true);
+                                    MainWindow.getInstance().interactionController.storageController.setDataAge(-1);
                                     MainWindow.getInstance().interactionController.storageController.setEDDNStatus("");
                                 });
                             }
