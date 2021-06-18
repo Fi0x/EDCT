@@ -3,6 +3,7 @@ package com.fi0x.edct;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.util.Logger;
+import com.fi0x.edct.util.SettingsHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class Main
         if(arguments.contains("-d")) Logger.debug = true;
 
         setupLocalFiles();
+        SettingsHandler.verifyIntegrity();
         Settings.loadSettings();
 
         updater = new Thread(new Updater());

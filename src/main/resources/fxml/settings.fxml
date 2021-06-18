@@ -80,7 +80,7 @@
         </columnConstraints>
         <Button id="btnDetails" fx:id="btnDetails" onAction="#changeDetailMode" GridPane.columnIndex="0">
             <tooltip>
-                <Tooltip text="Change the amount of details that get displayed"/>
+                <Tooltip text="Change the amount of details that gets displayed"/>
             </tooltip>
         </Button>
         <Button id="btnDanger" text="Clear logs" onAction="#clearLogs" GridPane.columnIndex="2">

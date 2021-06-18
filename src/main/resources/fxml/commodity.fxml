@@ -2,15 +2,14 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <?import java.net.URL?>
-<GridPane id="commodity" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Commodity">
+<GridPane id="commodity" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Commodity">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER"/>
-        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER"/>
-        <ColumnConstraints hgrow="ALWAYS" halignment="CENTER"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
     </columnConstraints>
-    <Button fx:id="btnPrevComm" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" disable="true" GridPane.columnIndex="0"/>
+    <Button fx:id="btnPrevComm" disable="true" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" GridPane.columnIndex="0" maxHeight="1.7976931348623157E308"/>
     <VBox id="commodityInfo" GridPane.columnIndex="1">
         <Label id="commodityName" fx:id="lblCommodity" text="---"/>
         <Label id="profit" fx:id="lblProfit" text="Profit: ---">
@@ -24,8 +23,11 @@
             </tooltip>
         </Label>
     </VBox>
-    <Button fx:id="btnNextComm" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" disable="true" GridPane.columnIndex="2"/>
+    <Button fx:id="btnNextComm" disable="true" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" GridPane.columnIndex="2" maxHeight="1.7976931348623157E308"/>
     <stylesheets>
         <URL value="@../css/commodity.css"/>
     </stylesheets>
+    <rowConstraints>
+        <RowConstraints/>
+    </rowConstraints>
 </GridPane>

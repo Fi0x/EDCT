@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.websites.GitHub;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
@@ -94,6 +95,8 @@ public class ProgramInfo implements Initializable
 
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
+
+        DBHandler.getInstance().removeOldEntries();
     }
 
     public void setError(int code)

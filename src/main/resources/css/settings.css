@@ -43,7 +43,7 @@
     -fx-padding: 5;
 }
 #btnDetails {
-    -fx-min-width: 150;
+    -fx-min-width: 160;
 }
 #btnDanger {
     -fx-background-color: #600d0d;

@@ -88,13 +88,13 @@ public class Station
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
-        lblSystem.setText("System: " + station.SYSTEM);
-        lblStationName.setText("Station: " + station.NAME);
-        lblType.setText("Type: " + station.TYPE);
-        lblPad.setText("Pad: " + station.PAD);
-        lblPrice.setText("Price: " + df.format(station.PRICE) + " credits");
-        lblAmount.setText((isBuying ? "Demand: " : "Supply: ") + df.format(station.QUANTITY) + " tons");
-        lblAge.setText("Data age: " + station.getUpdateAge());
+        lblSystem.setText("System:\t " + station.SYSTEM);
+        lblStationName.setText("Station:\t " + station.NAME);
+        lblType.setText("Type:\t " + station.TYPE);
+        lblPad.setText("Pad:\t\t " + station.PAD);
+        lblPrice.setText("Price:\t " + df.format(station.PRICE) + " credits");
+        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format(station.QUANTITY) + " tons");
+        lblAge.setText("Data age:\t " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
         btnNextStation.setDisable(!hasNext);

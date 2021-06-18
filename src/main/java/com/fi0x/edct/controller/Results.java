@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION;
@@ -43,6 +44,8 @@ public class Results implements Initializable
         loadCommodity();
         loadStation(false);
         loadStation(true);
+
+        updateDetails(Settings.detailedResults);
     }
 
     private void loadCommodity()
@@ -174,17 +177,33 @@ public class Results implements Initializable
         vbResults.setVisible(true);
     }
 
-    public void updateDetails(boolean detailed)
+    public void updateDetails(Settings.Details detailed)
     {
-        commodityController.lblDistance.setVisible(detailed);
+        boolean advanced = detailed.equals(Settings.Details.Advanced);
+        boolean normal = detailed.equals(Settings.Details.Normal) || advanced;
 
-        buyController.lblPad.setVisible(detailed);
-        buyController.lblType.setVisible(detailed);
-        buyController.lblAge.setVisible(detailed);
+        commodityController.lblDistance.setVisible(normal);
+        commodityController.lblDistance.setManaged(normal);
 
-        sellController.lblPad.setVisible(detailed);
-        sellController.lblType.setVisible(detailed);
-        sellController.lblAge.setVisible(detailed);
+        buyController.lblPad.setVisible(normal);
+        buyController.lblPad.setManaged(normal);
+
+        buyController.lblType.setVisible(normal);
+        buyController.lblType.setManaged(normal);
+
+        buyController.lblAge.setVisible(normal);
+        buyController.lblAge.setManaged(normal);
+
+        sellController.lblPad.setVisible(normal);
+        sellController.lblPad.setManaged(normal);
+
+        sellController.lblType.setVisible(normal);
+        sellController.lblType.setManaged(normal);
+
+        sellController.lblAge.setVisible(normal);
+        sellController.lblAge.setManaged(normal);
+
+        MainWindow.getInstance().primaryStage.sizeToScene();
     }
 
     public void updateDistance(String system1, String system2, double distance)

@@ -26,7 +26,7 @@ public class Settings implements Initializable
     public static int highProfitBorder = 30000;
     public static int maxDataAge = 1000 * 60 * 60 * 24 * 4;
     public static int inaraDelay = 15000;
-    public static boolean detailedResults = true;
+    public static Details detailedResults = Details.Normal;
 
     @FXML
     private TextField txtLowProfit;
@@ -55,7 +55,11 @@ public class Settings implements Initializable
         {
             if(newValue.length() > 9) txtLowProfit.setText(oldValue);
             else if(!newValue.matches("\\d*")) txtLowProfit.setText(newValue.replaceAll("[^\\d]", ""));
-            else updateProfitBorder();
+            else
+            {
+                updateProfitBorder();
+                MainWindow.getInstance().resultsController.displayResults();
+            }
         });
         txtLowProfit.setText(String.valueOf(lowProfitBorder));
 
@@ -63,7 +67,11 @@ public class Settings implements Initializable
         {
             if(newValue.length() > 9) txtHighProfit.setText(oldValue);
             else if(!newValue.matches("\\d*")) txtHighProfit.setText(newValue.replaceAll("[^\\d]", ""));
-            else updateProfitBorder();
+            else
+            {
+                updateProfitBorder();
+                MainWindow.getInstance().resultsController.displayResults();
+            }
         });
         txtHighProfit.setText(String.valueOf(highProfitBorder));
 
@@ -85,16 +93,14 @@ public class Settings implements Initializable
 
         setCorrectAgeFields();
 
-        if(detailedResults) btnDetails.setText("Simple Results");
-        else btnDetails.setText("Detailed Results");
+        btnDetails.setText(detailedResults.name() + " Results");
     }
 
     @FXML
     private void changeDetailMode()
     {
-        detailedResults = !detailedResults;
-        if(detailedResults) btnDetails.setText("Simple Results");
-        else btnDetails.setText("Detailed Results");
+        detailedResults = Details.values()[(detailedResults.ordinal() + 1 ) % Details.values().length];
+        btnDetails.setText(detailedResults.name() + " Results");
 
         SettingsHandler.storeValue("detailedResults", detailedResults);
 
@@ -127,7 +133,7 @@ public class Settings implements Initializable
         highProfitBorder = SettingsHandler.loadInt("highProfit", 30000);
         maxDataAge = SettingsHandler.loadInt("dataAge", 1000 * 60 * 60 * 24 * 4);
         inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
-        detailedResults = SettingsHandler.loadBoolean("detailedResults", true);
+        detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Normal);
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
@@ -179,5 +185,12 @@ public class Settings implements Initializable
             txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
             cbInaraDelay.setValue("seconds");
         }
+    }
+
+    public enum Details
+    {
+        Simple,
+        Normal,
+        Advanced
     }
 }

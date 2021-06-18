@@ -19,16 +19,18 @@ public class MainWindow extends Application
 {
     private static MainWindow instance;
     private ProgressBar progressbar;
+    public Stage primaryStage;
 
     public ProgramInfo infoController;
     public Interaction interactionController;
     public Results resultsController;
 
     @Override
-    public void start(Stage primaryStage)
+    public void start(Stage stage)
     {
         instance = this;
         progressbar = new ProgressBar();
+        primaryStage = stage;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/main.fxml"));
         Parent root;
