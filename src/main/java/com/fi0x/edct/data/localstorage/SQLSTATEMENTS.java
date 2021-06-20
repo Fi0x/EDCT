@@ -25,7 +25,11 @@ public enum SQLSTATEMENTS
                     "star1 TEXT NOT NULL, " +
                     "star2 TEXT NOT NULL, " +
                     "distance INT NOT NULL, " +
-                    "PRIMARY KEY (star1, star2))");
+                    "PRIMARY KEY (star1, star2))"),
+    UpdateCommodities(
+            "ALTER TABLE commodities " +
+                    "ADD average_price INT DEFAULT 0"
+    );
 
     private final String statement;
 

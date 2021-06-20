@@ -6,6 +6,7 @@ import com.fi0x.edct.controller.Datastorage;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.localstorage.TradeReloader;
+import com.fi0x.edct.data.websites.EDDB;
 import com.fi0x.edct.data.websites.InaraCommodity;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
@@ -28,6 +29,20 @@ public class Updater implements Runnable
         {
             return;
         }
+
+        try
+        {
+            while(!EDDB.updateGalacticAverages())
+            {
+                if(sleepInterrupted(1000)) return;
+            }
+        }
+        catch(InterruptedException ignored)
+        {
+            return;
+        }
+
+        Logger.INFO("Updated Commodity Average Prices");
 
         DBHandler.getInstance().removeOldEntries();
 

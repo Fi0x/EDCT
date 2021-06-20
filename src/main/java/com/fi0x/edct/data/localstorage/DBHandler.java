@@ -38,6 +38,8 @@ public class DBHandler
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
         sendStatement(SQLSTATEMENTS.CreateDistances.getStatement());
 
+        sendStatement(SQLSTATEMENTS.UpdateCommodities.getStatement());
+
         Logger.INFO("Finished setup of local DB");
     }
     public static DBHandler getInstance()
@@ -48,13 +50,20 @@ public class DBHandler
 
     public void setCommodityData(String commodityName, int inaraID)
     {
-        sendStatement("INSERT INTO commodities " +
-                "SELECT " + makeSQLValid(commodityName) + ", " + inaraID + ", " + 0 + " " +
-                "WHERE NOT EXISTS (" +
-                "SELECT * " +
-                "FROM commodities " +
-                "WHERE inara_id = " + inaraID + " " +
-                "AND commodity_name = " + makeSQLValid(commodityName) + ")");
+        sendStatement("REPLACE INTO commodities " +
+                "(inara_id, commodity_name, last_update_time) " +
+                "VALUES (" +
+                inaraID + ", " +
+                makeSQLValid(commodityName) + ", " +
+                0 + ")");
+        //TODO: Don't reset the update time and average price, use a default or existing value instead
+    }
+
+    public void setGalacticAverage(String commodityName, int galacticAverage)
+    {
+        sendStatement("UPDATE commodities " +
+                "SET average_price = " + galacticAverage + " " +
+                "WHERE commodity_name = " + makeSQLValid(commodityName));
     }
 
     public void setStationData(STATION station, int inaraID, boolean isSelling)
@@ -81,7 +90,9 @@ public class DBHandler
 
     public void updateDownloadTime(String commodityName, int inaraID)
     {
-        sendStatement("REPLACE INTO commodities VALUES ("
+        sendStatement("REPLACE INTO commodities " +
+                "(commodity_name, inara_id, last_update_time) " +
+                "VALUES ("
                 + makeSQLValid(commodityName) + ", "
                 + inaraID + ", "
                 + System.currentTimeMillis() / 1000 + ")");

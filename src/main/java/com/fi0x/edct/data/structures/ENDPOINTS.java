@@ -4,6 +4,7 @@ public enum ENDPOINTS
 {
     Releases("https://api.github.com/repos/Fi0x/EDCT/releases", "GET"),
     Commodities("https://inara.cz/galaxy-commodities/", "GET"),
+    EDDNPrices("https://eddb.io/commodity", "GET"),
     Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2"),
     StationSearch("https://inara.cz/station/", "GET", "search"),
     SystemDistance("http://elitedangerous.hozbase.co.uk/calc/distances", "GET", "systems");
