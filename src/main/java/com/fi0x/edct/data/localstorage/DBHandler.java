@@ -50,13 +50,13 @@ public class DBHandler
 
     public void setCommodityData(String commodityName, int inaraID)
     {
-        sendStatement("REPLACE INTO commodities " +
-                "(inara_id, commodity_name, last_update_time) " +
-                "VALUES (" +
-                inaraID + ", " +
-                makeSQLValid(commodityName) + ", " +
-                0 + ")");
-        //TODO: Don't reset the update time and average price, use a default or existing value instead
+        sendStatement("INSERT INTO commodities " +
+                "SELECT " + makeSQLValid(commodityName) + ", " + inaraID + ", " + 0 + ", " + 0 + " " +
+                "WHERE NOT EXISTS (" +
+                "SELECT * " +
+                "FROM commodities " +
+                "WHERE inara_id = " + inaraID + " " +
+                "AND commodity_name = " + makeSQLValid(commodityName) + ")");
     }
 
     public void setGalacticAverage(String commodityName, int galacticAverage)
@@ -88,14 +88,11 @@ public class DBHandler
                 + distance + ")");
     }
 
-    public void updateDownloadTime(String commodityName, int inaraID)
+    public void updateDownloadTime(int inaraID)
     {
-        sendStatement("REPLACE INTO commodities " +
-                "(commodity_name, inara_id, last_update_time) " +
-                "VALUES ("
-                + makeSQLValid(commodityName) + ", "
-                + inaraID + ", "
-                + System.currentTimeMillis() / 1000 + ")");
+        sendStatement("UPDATE commodities " +
+                "SET last_update_time = " + System.currentTimeMillis() / 1000 + " " +
+                "WHERE inara_id = " + inaraID);
     }
 
     public ArrayList<Integer> getCommodityIDs(boolean onlyMissing)

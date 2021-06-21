@@ -47,7 +47,7 @@ public class InaraCommodity
             DBHandler.getInstance().setStationData(buyer, commodityRefID, false);
         }
 
-        DBHandler.getInstance().updateDownloadTime(DBHandler.getInstance().getCommodityNameByID(commodityRefID), commodityRefID);
+        DBHandler.getInstance().updateDownloadTime(commodityRefID);
         return true;
     }
 
