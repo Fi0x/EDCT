@@ -23,6 +23,7 @@ public class Results implements Initializable
     private Station sellController;
     private Station buyController;
     private Commodity commodityController;
+    private Details detailsController;
 
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
@@ -44,6 +45,7 @@ public class Results implements Initializable
         loadCommodity();
         loadStation(false);
         loadStation(true);
+        loadDetails();
 
         updateDetails(Settings.detailedResults);
     }
@@ -91,6 +93,25 @@ public class Results implements Initializable
         }
 
         hbStations.add(stationBox, isBuying ? 2 : 0, 0);
+    }
+
+    private void loadDetails()
+    {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/details.fxml"));
+        Pane detailsBox;
+
+        try
+        {
+            detailsBox = loader.load();
+            detailsController = loader.getController();
+
+        } catch(IOException e)
+        {
+            Logger.ERROR(999, "Could not load Details controller");
+            return;
+        }
+
+        vbResults.getChildren().add(3, detailsBox);
     }
 
     public void nextCommodity()
@@ -173,6 +194,7 @@ public class Results implements Initializable
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
+        detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
 
         vbResults.setVisible(true);
     }

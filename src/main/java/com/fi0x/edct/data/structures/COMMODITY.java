@@ -6,13 +6,15 @@ import java.util.Collections;
 public class COMMODITY
 {
     public final String NAME;
+    public final long GALACTIC_AVERAGE;
     public long profit;
     public final ArrayList<STATION> SELL_PRICES;
     public final ArrayList<STATION> BUY_PRICES;
 
-    public COMMODITY(String name, ArrayList<STATION> sellPrices, ArrayList<STATION> buyPrices)
+    public COMMODITY(String name, ArrayList<STATION> sellPrices, ArrayList<STATION> buyPrices, long galacticAverage)
     {
         NAME = name;
+        GALACTIC_AVERAGE = galacticAverage;
         profit = 0;
         SELL_PRICES = sellPrices;
         BUY_PRICES = buyPrices;

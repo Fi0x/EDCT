@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATION;
@@ -74,7 +75,8 @@ public class Main
 
         for(Map.Entry<String, ArrayList<STATION>> commodity : sellPrices.entrySet())
         {
-            COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()));
+            long galAvg = DBHandler.getInstance().getCommodityAverage(commodity.getKey());
+            COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()), galAvg);
             commodityTrade.sortPrices();
 
             if(commodityTrade.profit > 0) trades.add(commodityTrade);

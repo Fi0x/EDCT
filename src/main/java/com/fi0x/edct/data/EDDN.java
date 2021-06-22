@@ -63,12 +63,12 @@ public class EDDN implements Runnable
 
                             if(outputString.contains(SCHEMA_KEY))
                             {
-                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus("Receiving Data"));
+                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(true));
                                 String stationName = JSONCleanup.getStationName(outputString);
                                 String systemName = JSONCleanup.getSystemName(outputString);
                                 if(stationName == null || systemName == null)
                                 {
-                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                                     continue;
                                 }
 
@@ -78,14 +78,14 @@ public class EDDN implements Runnable
                                     String stationID = InaraStation.getInaraStationID(stationName, systemName);
                                     if(stationID == null)
                                     {
-                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                                         continue;
                                     }
 
                                     html = InaraStation.getStationHtml(stationID);
                                     if(html == null)
                                     {
-                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                                         continue;
                                     }
                                 } catch(InterruptedException ignored)
@@ -97,7 +97,7 @@ public class EDDN implements Runnable
                                 STATIONTYPE stationtype = HTMLCleanup.getStationType(html);
                                 if(stationtype == null || padsize == null)
                                 {
-                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(""));
+                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                                     Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " - html: " + html);
                                     continue;
                                 }
@@ -117,7 +117,7 @@ public class EDDN implements Runnable
                                 Platform.runLater(() ->
                                 {
                                     MainWindow.getInstance().interactionController.storageController.setDataAge(-1);
-                                    MainWindow.getInstance().interactionController.storageController.setEDDNStatus("");
+                                    MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false);
                                 });
                             }
 

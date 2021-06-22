@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import java.net.URL?>
+<GridPane id="details" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Details">
+    <columnConstraints>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+    </columnConstraints>
+    <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN"/>
+<!--    TODO: fill details-->
+    <stylesheets>
+        <URL value="@../css/details.css" />
+    </stylesheets>
+</GridPane>

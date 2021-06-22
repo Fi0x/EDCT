@@ -58,9 +58,9 @@ public class Datastorage
                 break;
         }
     }
-    public void setEDDNStatus(String status)
+    public void setEDDNStatus(boolean updating)
     {
-        lblEDDNStatus.setText(status);
+        lblEDDNStatus.setText(updating ? "Storing EDDN information..." : "EDDN information stored");
     }
 
     public void setInteractionController(Interaction controller)

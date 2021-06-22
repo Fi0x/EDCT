@@ -11,7 +11,7 @@
         <RowConstraints vgrow="ALWAYS"/>
         <RowConstraints />
     </rowConstraints>
-    <Label id="lblDataAge" fx:id="lblDataAge" text="Local data age: ---" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+    <Label fx:id="lblDataAge" text="Local data age: ---" GridPane.rowIndex="0" GridPane.halignment="CENTER">
         <tooltip>
             <Tooltip text="The age of the least recently updated database entry"/>
         </tooltip>
@@ -21,9 +21,9 @@
             <Tooltip fx:id="ttBackgroundStatus" text="This displays what happens in the background"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblEDDNStatus" GridPane.rowIndex="2" GridPane.halignment="CENTER">
+    <Label id="lblEDDNStatus" fx:id="lblEDDNStatus" text="EDDN information stored" GridPane.rowIndex="2" GridPane.halignment="CENTER">
         <tooltip>
-            <Tooltip text="This is shown when the program received an update over the EDDN"/>
+            <Tooltip text="This indicates weather or not an EDDN message gets processed right now"/>
         </tooltip>
     </Label>
     <Button id="start" fx:id="btnStart" onMouseClicked="#calculate" text="Reload Trades" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">

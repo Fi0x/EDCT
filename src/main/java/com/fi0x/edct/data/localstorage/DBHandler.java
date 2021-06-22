@@ -182,6 +182,26 @@ public class DBHandler
         return pairs;
     }
 
+    public long getCommodityAverage(String commodityName)
+    {
+        ResultSet results = getQueryResults("SELECT average_price " +
+                "FROM commodities " +
+                "WHERE commodity_name = " + makeSQLValid(commodityName));
+
+        try
+        {
+            if(results != null && results.next())
+            {
+                return results.getInt("average_price");
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get the average price for " + commodityName);
+        }
+
+        return 0;
+    }
+
     public int getOldestCommodityID()
     {
         ResultSet commodity = getQueryResults("SELECT tbl.* " +

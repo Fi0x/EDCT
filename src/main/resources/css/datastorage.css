@@ -1,8 +1,8 @@
 #datastorage {
     -fx-padding: 10;
 }
-#lblDataAge {
-    -fx-min-width: 200;
+#lblEDDNStatus {
+    -fx-min-width: 210;
 }
 .label {
     -fx-padding: 0 5 0 0;
