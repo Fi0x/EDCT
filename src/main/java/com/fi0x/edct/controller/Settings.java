@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,11 +23,15 @@ import java.util.ResourceBundle;
 
 public class Settings implements Initializable
 {
+    public ProgramInfo infoController;
+
     public static int lowProfitBorder = 10000;
     public static int highProfitBorder = 30000;
     public static int maxDataAge = 1000 * 60 * 60 * 24 * 4;
     public static int inaraDelay = 15000;
     public static Details detailedResults = Details.Normal;
+    public static int shipCargoSpace = 790;
+    public static long minCarrierTonProfit = 2000000;
 
     @FXML
     private TextField txtLowProfit;
@@ -42,6 +47,12 @@ public class Settings implements Initializable
     private ChoiceBox<String> cbInaraDelay;
     @FXML
     private Button btnDetails;
+    @FXML
+    private VBox vbSecretSettings;
+    @FXML
+    private TextField txtShipCargoSpace;
+    @FXML
+    private TextField txtCarrierProfit;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -49,7 +60,7 @@ public class Settings implements Initializable
         loadSettings();
         txtLowProfit.setText(String.valueOf(lowProfitBorder));
         txtHighProfit.setText(String.valueOf(highProfitBorder));
-        setCorrectAgeFields();
+        updateSecretVisibility(detailedResults == Details.Advanced);
 
         txtLowProfit.textProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -93,6 +104,30 @@ public class Settings implements Initializable
 
         setCorrectAgeFields();
 
+        txtShipCargoSpace.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 9) txtShipCargoSpace.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtShipCargoSpace.setText(newValue.replaceAll("[^\\d]", ""));
+            else
+            {
+                updateSecretSettings();
+                MainWindow.getInstance().resultsController.displayResults();
+            }
+        });
+        txtShipCargoSpace.setText(String.valueOf(shipCargoSpace));
+
+        txtCarrierProfit.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 9) txtCarrierProfit.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtCarrierProfit.setText(newValue.replaceAll("[^\\d]", ""));
+            else
+            {
+                updateSecretSettings();
+                MainWindow.getInstance().resultsController.displayResults();
+            }
+        });
+        txtCarrierProfit.setText(String.valueOf(minCarrierTonProfit));
+
         btnDetails.setText(detailedResults.name() + " Results");
     }
 
@@ -101,6 +136,8 @@ public class Settings implements Initializable
     {
         detailedResults = Details.values()[(detailedResults.ordinal() + 1 ) % Details.values().length];
         btnDetails.setText(detailedResults.name() + " Results");
+        updateSecretVisibility(detailedResults == Details.Advanced);
+        infoController.settingsStage.sizeToScene();
 
         SettingsHandler.storeValue("detailedResults", detailedResults);
 
@@ -134,12 +171,17 @@ public class Settings implements Initializable
         maxDataAge = SettingsHandler.loadInt("dataAge", 1000 * 60 * 60 * 24 * 4);
         inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
         detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Normal);
+        shipCargoSpace = SettingsHandler.loadInt("shipCargoSpace", 790);
+        minCarrierTonProfit = SettingsHandler.loadInt("carrierTonProfit", 5000000);
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
         inaraDelay = Math.max(inaraDelay, 15000);
+        if(shipCargoSpace < 0) shipCargoSpace = 0;
+        if(minCarrierTonProfit < 0) minCarrierTonProfit = 0;
     }
+
     private void updateProfitBorder()
     {
         if(txtLowProfit.getText().length() > 0) lowProfitBorder = Integer.parseInt(txtLowProfit.getText());
@@ -185,6 +227,19 @@ public class Settings implements Initializable
             txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
             cbInaraDelay.setValue("seconds");
         }
+    }
+    private void updateSecretSettings()
+    {
+        if(txtShipCargoSpace.getText().length() > 0) shipCargoSpace = Integer.parseInt(txtShipCargoSpace.getText());
+        if(txtCarrierProfit.getText().length() > 0) minCarrierTonProfit = Integer.parseInt(txtCarrierProfit.getText());
+
+        SettingsHandler.storeValue("carrierTonProfit", minCarrierTonProfit);
+        SettingsHandler.storeValue("shipCargoSpace", shipCargoSpace);
+    }
+    private void updateSecretVisibility(boolean visible)
+    {
+        vbSecretSettings.setVisible(visible);
+        vbSecretSettings.setManaged(visible);
     }
 
     public enum Details

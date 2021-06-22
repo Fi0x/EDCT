@@ -94,6 +94,24 @@
             </tooltip>
         </Button>
     </GridPane>
+    <VBox fx:id="vbSecretSettings">
+        <HBox id="hbox">
+            <Label id="description" text="Ship cargo space">
+                <tooltip>
+                    <Tooltip text="The amount of cargo your ship can hold (For profit calculations)"/>
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtShipCargoSpace"/>
+        </HBox>
+        <HBox id="hbox">
+            <Label id="description" text="Carrier profit/t">
+                <tooltip>
+                    <Tooltip text="The minimum profit/ton your carrier should make with this trade"/>
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtCarrierProfit"/>
+        </HBox>
+    </VBox>
     <stylesheets>
         <URL value="@../css/settings.css"/>
     </stylesheets>

@@ -30,6 +30,8 @@ public class Results implements Initializable
     public int currentSellStation;
     public int currentBuyStation;
 
+    private Pane detailsBox;
+
     @FXML
     private VBox vbResults;
     @FXML
@@ -98,7 +100,6 @@ public class Results implements Initializable
     private void loadDetails()
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/details.fxml"));
-        Pane detailsBox;
 
         try
         {
@@ -224,6 +225,9 @@ public class Results implements Initializable
 
         sellController.lblAge.setVisible(normal);
         sellController.lblAge.setManaged(normal);
+
+        detailsBox.setVisible(advanced);
+        detailsBox.setManaged(advanced);
 
         MainWindow.getInstance().primaryStage.sizeToScene();
     }

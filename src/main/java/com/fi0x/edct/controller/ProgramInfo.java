@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 
 public class ProgramInfo implements Initializable
 {
+    public Stage settingsStage;
+
     private int errorCode = 0;
     private String updateUrl = "https://github.com/Fi0x/EDCT/releases";
 
@@ -77,24 +79,26 @@ public class ProgramInfo implements Initializable
         FXMLLoader settingsLoader = new FXMLLoader();
         settingsLoader.setLocation(getClass().getResource("/fxml/settings.fxml"));
 
-        Stage stage = new Stage();
+        settingsStage = new Stage();
         Scene scene;
 
         try
         {
             scene = new Scene(settingsLoader.load());
+            ((Settings) settingsLoader.getController()).infoController = this;
         } catch(IOException e)
         {
             Logger.WARNING(999, "Could not load settings");
             return;
         }
 
-        stage.setTitle("EDCT - Settings");
-        stage.setScene(scene);
-        stage.setResizable(false);
+        settingsStage.setTitle("EDCT - Settings");
+        settingsStage.setScene(scene);
+        settingsStage.setResizable(false);
 
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+        settingsStage.initModality(Modality.APPLICATION_MODAL);
+        settingsStage.sizeToScene();
+        settingsStage.showAndWait();
 
         DBHandler.getInstance().removeOldEntries();
     }
