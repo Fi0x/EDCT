@@ -40,7 +40,7 @@ public class Commodity
 
         lblCommodity.setText(resultsController.getCurrentTrade().NAME);
         String profit = df.format(resultsController.getCurrentTrade().profit);
-        lblProfit.setText(profit + " credits");
+        lblProfit.setText("Profit: " + profit + " credits/t");
         setProfitColor(resultsController.getCurrentTrade().profit);
 
         df.setMaximumFractionDigits(2);

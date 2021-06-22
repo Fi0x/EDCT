@@ -15,6 +15,6 @@ public class Details
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
-        lblGalAverage.setText("Galactic Average: " + (average > 0 ? df.format(average) + " credits" : "UNKNOWN"));
+        lblGalAverage.setText("Galactic Average: " + (average > 0 ? df.format(average) + " credits/t" : "UNKNOWN"));
     }
 }

@@ -94,7 +94,7 @@
             </tooltip>
         </Button>
     </GridPane>
-    <VBox fx:id="vbSecretSettings">
+    <VBox id="vbSecretSettings" fx:id="vbSecretSettings">
         <HBox id="hbox">
             <Label id="description" text="Ship cargo space">
                 <tooltip>

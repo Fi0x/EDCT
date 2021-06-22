@@ -56,3 +56,6 @@
 #selector {
     -fx-min-width: 110;
 }
+#vbSecretSettings {
+    -fx-background-color: #4e4e4e;
+}
