@@ -1,25 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import java.net.URL?>
 <GridPane id="details" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Details">
     <columnConstraints>
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
+        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
+        <RowConstraints/>
+        <RowConstraints/>
     </rowConstraints>
-    <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN" GridPane.columnSpan="2"/>
-    <VBox id="vbLoading" GridPane.columnIndex="0" GridPane.rowIndex="1">
-<!--        TODO: fill details-->
+    <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN" GridPane.columnSpan="3"/>
+    <VBox id="vbLoading" GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="Infinity">
+        <Label id="topic" text="Loading"/>
+        <Label fx:id="lblLoadProfitTon" text="Profit/t: ---">
+            <tooltip>
+                <Tooltip text="The profit a trader can make when selling 1 ton to your carrier"/>
+            </tooltip>
+        </Label>
+        <Label fx:id="lblLoadProfitTotal" text="Total profit: ---">
+            <tooltip>
+                <Tooltip text="The profit a trader can make with a fully loaded ship"/>
+            </tooltip>
+        </Label>
     </VBox>
-    <VBox id="vbUnloading" GridPane.columnIndex="1" GridPane.rowIndex="1">
-<!--        TODO: fill details-->
+    <VBox id="vbCarrierStats" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity">
+        <Label id="topic" text="Carrier"/>
+        <GridPane>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints/>
+                <RowConstraints/>
+            </rowConstraints>
+            <Label fx:id="lblCarrierBuy" text="Buy Price: ---" GridPane.rowSpan="2" GridPane.columnIndex="0">
+                <tooltip>
+                    <Tooltip text="The price you need to set on your carrier to buy the commodity"/>
+                </tooltip>
+            </Label>
+            <Label id="topic" fx:id="lblCarrierProfitTon" text="Profit/t: ---" GridPane.rowIndex="0" GridPane.columnIndex="1">
+                <tooltip>
+                    <Tooltip text="How much profit your carrier makes with 1 ton"/>
+                </tooltip>
+            </Label>
+            <Label id="topic" fx:id="lblCarrierProfitTotal" text="Total profit: ---" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                <tooltip>
+                    <Tooltip text="How much profit your carrier makes with a full cargo hold"/>
+                </tooltip>
+            </Label>
+            <Label fx:id="lblCarrierSell" text="Sell Price: ---" GridPane.rowSpan="2" GridPane.columnIndex="2">
+                <tooltip>
+                    <Tooltip text="The price you need to set on your carrier to sell the commodity"/>
+                </tooltip>
+            </Label>
+        </GridPane>
+    </VBox>
+    <VBox id="vbUnloading" GridPane.columnIndex="2" GridPane.rowIndex="1" maxWidth="Infinity">
+        <Label id="topic" text="Unloading"/>
+        <Label fx:id="lblUnloadProfitTon" text="Profit/t: ---">
+            <tooltip>
+                <Tooltip text="The profit a trader can make when buying 1 ton from your carrier"/>
+            </tooltip>
+        </Label>
+        <Label fx:id="lblUnloadProfitTotal" text="Total profit: ---">
+            <tooltip>
+                <Tooltip text="The profit a trader can make with a fully loaded ship"/>
+            </tooltip>
+        </Label>
     </VBox>
     <stylesheets>
-        <URL value="@../css/details.css" />
+        <URL value="@../css/details.css"/>
     </stylesheets>
 </GridPane>

@@ -196,6 +196,7 @@ public class Results implements Initializable
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
         detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
+        detailsController.setCarrierStats();
 
         vbResults.setVisible(true);
     }

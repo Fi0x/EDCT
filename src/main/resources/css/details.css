@@ -2,3 +2,15 @@
     -fx-background-color: #3e3e3e;
     -fx-padding: 10;
 }
+#topic {
+    -fx-font-weight: bold;
+}
+#vbLoading {
+    -fx-alignment: TOP_LEFT;
+}
+#vbCarrierStats {
+    -fx-alignment: TOP_CENTER;
+}
+#vbUnloading {
+    -fx-alignment: TOP_RIGHT;
+}

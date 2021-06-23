@@ -104,12 +104,20 @@
             <TextField fx:id="txtShipCargoSpace"/>
         </HBox>
         <HBox id="hbox">
-            <Label id="description" text="Carrier profit/t">
+            <Label id="description" text="Loading profit/t">
                 <tooltip>
-                    <Tooltip text="The minimum profit/ton your carrier should make with this trade"/>
+                    <Tooltip text="How much profit/t a trader should make when loading your carrier"/>
                 </tooltip>
             </Label>
-            <TextField fx:id="txtCarrierProfit"/>
+            <TextField fx:id="txtLoadingTonProfit"/>
+        </HBox>
+        <HBox id="hbox">
+            <Label id="description" text="Unloading profit/t">
+                <tooltip>
+                    <Tooltip text="How much profit/t a trader should make when unloading your carrier"/>
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtUnloadingTonProfit"/>
         </HBox>
     </VBox>
     <stylesheets>

@@ -9,7 +9,7 @@
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
         <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
     </columnConstraints>
-    <Button fx:id="btnPrevComm" disable="true" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" GridPane.columnIndex="0" maxHeight="1.7976931348623157E308"/>
+    <Button fx:id="btnPrevComm" disable="true" mnemonicParsing="false" onAction="#previousCommodity" text="Previous Commodity" GridPane.columnIndex="0" maxHeight="Infinity"/>
     <VBox id="commodityInfo" GridPane.columnIndex="1">
         <Label id="commodityName" fx:id="lblCommodity" text="---"/>
         <Label id="profit" fx:id="lblProfit" text="Profit: ---">
@@ -23,7 +23,7 @@
             </tooltip>
         </Label>
     </VBox>
-    <Button fx:id="btnNextComm" disable="true" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" GridPane.columnIndex="2" maxHeight="1.7976931348623157E308"/>
+    <Button fx:id="btnNextComm" disable="true" mnemonicParsing="false" onAction="#nextCommodity" text="Next Commodity" GridPane.columnIndex="2" maxHeight="Infinity"/>
     <stylesheets>
         <URL value="@../css/commodity.css"/>
     </stylesheets>

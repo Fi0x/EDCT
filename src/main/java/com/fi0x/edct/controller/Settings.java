@@ -31,7 +31,8 @@ public class Settings implements Initializable
     public static int inaraDelay = 15000;
     public static Details detailedResults = Details.Normal;
     public static int shipCargoSpace = 790;
-    public static long minCarrierTonProfit = 2000000;
+    public static int loadingTonProfit = 10000;
+    public static int unloadingTonProfit = 10000;
 
     @FXML
     private TextField txtLowProfit;
@@ -52,7 +53,9 @@ public class Settings implements Initializable
     @FXML
     private TextField txtShipCargoSpace;
     @FXML
-    private TextField txtCarrierProfit;
+    private TextField txtLoadingTonProfit;
+    @FXML
+    private TextField txtUnloadingTonProfit;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -116,17 +119,29 @@ public class Settings implements Initializable
         });
         txtShipCargoSpace.setText(String.valueOf(shipCargoSpace));
 
-        txtCarrierProfit.textProperty().addListener((observable, oldValue, newValue) ->
+        txtLoadingTonProfit.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if(newValue.length() > 9) txtCarrierProfit.setText(oldValue);
-            else if(!newValue.matches("\\d*")) txtCarrierProfit.setText(newValue.replaceAll("[^\\d]", ""));
+            if(newValue.length() > 9) txtLoadingTonProfit.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtLoadingTonProfit.setText(newValue.replaceAll("[^\\d]", ""));
             else
             {
                 updateSecretSettings();
                 MainWindow.getInstance().resultsController.displayResults();
             }
         });
-        txtCarrierProfit.setText(String.valueOf(minCarrierTonProfit));
+        txtLoadingTonProfit.setText(String.valueOf(loadingTonProfit));
+
+        txtUnloadingTonProfit.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 9) txtUnloadingTonProfit.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtUnloadingTonProfit.setText(newValue.replaceAll("[^\\d]", ""));
+            else
+            {
+                updateSecretSettings();
+                MainWindow.getInstance().resultsController.displayResults();
+            }
+        });
+        txtUnloadingTonProfit.setText(String.valueOf(unloadingTonProfit));
 
         btnDetails.setText(detailedResults.name() + " Results");
     }
@@ -172,14 +187,14 @@ public class Settings implements Initializable
         inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
         detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Normal);
         shipCargoSpace = SettingsHandler.loadInt("shipCargoSpace", 790);
-        minCarrierTonProfit = SettingsHandler.loadInt("carrierTonProfit", 5000000);
+        loadingTonProfit = SettingsHandler.loadInt("loadingProfit", 10000);
+        unloadingTonProfit = SettingsHandler.loadInt("unloadingProfit", 10000);
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
         inaraDelay = Math.max(inaraDelay, 15000);
         if(shipCargoSpace < 0) shipCargoSpace = 0;
-        if(minCarrierTonProfit < 0) minCarrierTonProfit = 0;
     }
 
     private void updateProfitBorder()
@@ -231,10 +246,12 @@ public class Settings implements Initializable
     private void updateSecretSettings()
     {
         if(txtShipCargoSpace.getText().length() > 0) shipCargoSpace = Integer.parseInt(txtShipCargoSpace.getText());
-        if(txtCarrierProfit.getText().length() > 0) minCarrierTonProfit = Integer.parseInt(txtCarrierProfit.getText());
+        if(txtLoadingTonProfit.getText().length() > 0) loadingTonProfit = Integer.parseInt(txtLoadingTonProfit.getText());
+        if(txtUnloadingTonProfit.getText().length() > 0) unloadingTonProfit = Integer.parseInt(txtUnloadingTonProfit.getText());
 
-        SettingsHandler.storeValue("carrierTonProfit", minCarrierTonProfit);
         SettingsHandler.storeValue("shipCargoSpace", shipCargoSpace);
+        SettingsHandler.storeValue("loadingProfit", loadingTonProfit);
+        SettingsHandler.storeValue("unloadingProfit", unloadingTonProfit);
     }
     private void updateSecretVisibility(boolean visible)
     {
