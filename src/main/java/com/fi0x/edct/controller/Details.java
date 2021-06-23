@@ -34,20 +34,21 @@ public class Details
         lblGalAverage.setText("Galactic Average: " + (average > 0 ? df.format(average) + " credits/t" : "UNKNOWN"));
     }
 
-    public void setCarrierStats()
+    public void setCarrierStats(long profitTon, long profitTotal, long buyPrice, long sellPrice, long loadProfit, long unloadProfit)
     {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
-        //TODO: Set correct buy order price
-        //TODO: Set correct sell order price
-        //TODO: Set correct profit/t and total profit
+        lblCarrierBuy.setText(df.format(buyPrice) + " credits");
+        lblCarrierSell.setText(df.format(sellPrice) + " credits");
+        lblCarrierProfitTon.setText(df.format(profitTon) + " credits/t");
+        lblCarrierProfitTotal.setText(df.format(profitTotal / 1000000) + "mil credits");
 
-        //TODO: Update trader profit related to carrier prices
-        lblUnloadProfitTon.setText(df.format(Settings.unloadingTonProfit) + " credits/t");
-        lblUnloadProfitTotal.setText(df.format((long) Settings.unloadingTonProfit * Settings.shipCargoSpace / 1000) + "k credits");
+        lblLoadProfitTon.setText(df.format(loadProfit) + " credits/t");
+        lblLoadProfitTotal.setText(df.format( loadProfit * Settings.shipCargoSpace / 1000) + "k credits");
+        lblUnloadProfitTon.setText(df.format(unloadProfit) + " credits/t");
+        lblUnloadProfitTotal.setText(df.format(unloadProfit * Settings.shipCargoSpace / 1000) + "k credits");
 
-        lblLoadProfitTon.setText(df.format(Settings.loadingTonProfit) + " credits/t");
-        lblLoadProfitTotal.setText(df.format((long) Settings.loadingTonProfit * Settings.shipCargoSpace / 1000) + "k credits");
+        //TODO: Change colors to red/green for profits
     }
 }

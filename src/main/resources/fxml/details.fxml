@@ -14,7 +14,7 @@
         <RowConstraints/>
     </rowConstraints>
     <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN" GridPane.columnSpan="3"/>
-    <VBox id="vbLoading" GridPane.columnIndex="0" GridPane.rowIndex="1" maxWidth="Infinity">
+    <VBox id="vbLoading" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <Label id="topic" text="Loading"/>
         <Label fx:id="lblLoadProfitTon" text="Profit/t: ---">
             <tooltip>
@@ -27,19 +27,20 @@
             </tooltip>
         </Label>
     </VBox>
-    <VBox id="vbCarrierStats" GridPane.columnIndex="1" GridPane.rowIndex="1" maxWidth="Infinity">
+    <VBox id="vbCarrierStats" GridPane.columnIndex="1" GridPane.rowIndex="1">
         <Label id="topic" text="Carrier"/>
         <GridPane>
             <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS"/>
                 <ColumnConstraints hgrow="ALWAYS"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
-                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints halignment="CENTER"  hgrow="ALWAYS"/>
             </columnConstraints>
             <rowConstraints>
                 <RowConstraints/>
                 <RowConstraints/>
             </rowConstraints>
-            <Label fx:id="lblCarrierBuy" text="Buy Price: ---" GridPane.rowSpan="2" GridPane.columnIndex="0">
+            <Label text="Buy Price" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+            <Label fx:id="lblCarrierBuy" text="UNKNOWN" GridPane.rowIndex="1" GridPane.columnIndex="0">
                 <tooltip>
                     <Tooltip text="The price you need to set on your carrier to buy the commodity"/>
                 </tooltip>
@@ -54,14 +55,15 @@
                     <Tooltip text="How much profit your carrier makes with a full cargo hold"/>
                 </tooltip>
             </Label>
-            <Label fx:id="lblCarrierSell" text="Sell Price: ---" GridPane.rowSpan="2" GridPane.columnIndex="2">
+            <Label text="Sell Price" GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+            <Label fx:id="lblCarrierSell" text="Sell Price: ---" GridPane.rowIndex="1" GridPane.columnIndex="2">
                 <tooltip>
                     <Tooltip text="The price you need to set on your carrier to sell the commodity"/>
                 </tooltip>
             </Label>
         </GridPane>
     </VBox>
-    <VBox id="vbUnloading" GridPane.columnIndex="2" GridPane.rowIndex="1" maxWidth="Infinity">
+    <VBox id="vbUnloading" GridPane.columnIndex="2" GridPane.rowIndex="1">
         <Label id="topic" text="Unloading"/>
         <Label fx:id="lblUnloadProfitTon" text="Profit/t: ---">
             <tooltip>

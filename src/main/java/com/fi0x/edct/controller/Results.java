@@ -195,8 +195,8 @@ public class Results implements Initializable
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
-        detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
-        detailsController.setCarrierStats();
+
+        setHiddenDetails();
 
         vbResults.setVisible(true);
     }
@@ -263,5 +263,26 @@ public class Results implements Initializable
     {
         getCurrentTrade().SELL_PRICES.remove(station);
         getCurrentTrade().BUY_PRICES.remove(station);
+    }
+
+    private void setHiddenDetails()
+    {
+        detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
+
+        long buyPrice = getCurrentTrade().BUY_PRICES.get(currentBuyStation).PRICE + Settings.loadingTonProfit;
+        buyPrice = Math.max(buyPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
+        buyPrice = Math.min(buyPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
+
+        long sellPrice = getCurrentTrade().SELL_PRICES.get(currentSellStation).PRICE - Settings.unloadingTonProfit;
+        sellPrice = Math.max(sellPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
+        sellPrice = Math.min(sellPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
+
+        long carrierProfitTon = sellPrice - buyPrice;
+        long carrierProfitTotal = carrierProfitTon * Integer.parseInt(MainWindow.getInstance().interactionController.filterController.txtQuantity.getText());
+
+        long loadProfit = buyPrice - getCurrentTrade().BUY_PRICES.get(currentBuyStation).PRICE;
+        long unloadProfit = getCurrentTrade().SELL_PRICES.get(currentSellStation).PRICE - sellPrice;
+
+        detailsController.setCarrierStats(carrierProfitTon, carrierProfitTotal, buyPrice, sellPrice, loadProfit, unloadProfit);
     }
 }

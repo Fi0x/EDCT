@@ -1,5 +1,5 @@
 #details {
-    -fx-background-color: #3e3e3e;
+    -fx-background-color: #545454;
     -fx-padding: 10;
 }
 #topic {
@@ -7,10 +7,15 @@
 }
 #vbLoading {
     -fx-alignment: TOP_LEFT;
+    -fx-min-width: 200;
+    -fx-max-width: 200;
 }
 #vbCarrierStats {
     -fx-alignment: TOP_CENTER;
+    -fx-max-width: Infinity;
 }
 #vbUnloading {
     -fx-alignment: TOP_RIGHT;
+    -fx-min-width: 200;
+    -fx-max-width: 200;
 }

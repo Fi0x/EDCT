@@ -1,7 +1,7 @@
 #station {
     -fx-background-color: #3e3e3e;
     -fx-padding: 10;
-    -fx-min-width: 350;
+    -fx-min-width: 380;
 }
 #topic {
     -fx-font-weight: bold;

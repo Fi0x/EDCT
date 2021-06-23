@@ -1,18 +1,12 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class Filters implements Initializable
@@ -20,7 +14,7 @@ public class Filters implements Initializable
     private Main mainController;
 
     @FXML
-    private TextField txtQuantity;
+    public TextField txtQuantity;
     @FXML
     private CheckBox cbCarrier;
     @FXML
