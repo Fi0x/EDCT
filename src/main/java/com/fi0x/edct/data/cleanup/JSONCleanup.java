@@ -25,6 +25,9 @@ public class JSONCleanup
             JSONArray jsonReleases = (JSONArray) new JSONParser().parse(jsonString);
             for(Object release : jsonReleases)
             {
+                if((boolean) ((JSONObject) release).get("prerelease")) continue;
+                if((boolean) ((JSONObject) release).get("draft")) continue;
+
                 String tag = ((JSONObject) release).get("tag_name").toString();
                 String url = ((JSONObject) release).get("html_url").toString();
                 releaseDates.put(tag, url);
