@@ -2,6 +2,7 @@ package com.fi0x.edct.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
 
 import java.text.DecimalFormat;
 
@@ -49,6 +50,12 @@ public class Details
         lblUnloadProfitTon.setText(df.format(unloadProfit) + " credits/t");
         lblUnloadProfitTotal.setText(df.format(unloadProfit * Settings.shipCargoSpace / 1000) + "k credits");
 
-        //TODO: Change colors to red/green for profits
+        Color color;
+
+        if(profitTon <= 0) color = new Color(238d/255d, 50d/255d, 50d/255d, 1);
+        else color = new Color(50d/255d, 238d/255d, 50d/255d, 1);
+
+        lblCarrierProfitTon.setTextFill(color);
+        lblCarrierProfitTotal.setTextFill(color);
     }
 }

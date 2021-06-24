@@ -1,5 +1,5 @@
 #details {
-    -fx-background-color: #545454;
+    -fx-background-color: #3e3e3e;
     -fx-padding: 10;
 }
 #topic {
@@ -18,4 +18,8 @@
     -fx-alignment: TOP_RIGHT;
     -fx-min-width: 200;
     -fx-max-width: 200;
+}
+#carrierSetting {
+    -fx-background-color: #555555;
+    -fx-alignment: CENTER;
 }
