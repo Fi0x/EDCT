@@ -34,7 +34,7 @@ public class Hozbase implements Runnable
 
     private static double getStarDistance(String system1, String system2) throws InterruptedException
     {
-        double distance = DBHandler.getInstance().getSystemDistance(system1, system2);
+        double distance = DBHandler.getSystemDistance(system1, system2);
         if(distance != 0) return distance;
 
         Map<String, String> parameters = getRefinedParameters(ENDPOINTS.SystemDistance.parameter, system1, system2);
@@ -43,7 +43,7 @@ public class Hozbase implements Runnable
         if(html == null) return 0;
         distance = HTMLCleanup.getSystemDistance(html);
 
-        DBHandler.getInstance().setSystemDistance(system1, system2, distance);
+        DBHandler.setSystemDistance(system1, system2, distance);
         return distance;
     }
 

@@ -8,7 +8,6 @@ import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
-import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ public class DBHandler
 
     private DBHandler()
     {
-        String url = "jdbc:sqlite:" + Main.localStorage.getPath() + File.separator + "Trades.db";
+        String url = "jdbc:sqlite:" + Main.getDBURL();
 
         try
         {
@@ -42,13 +41,16 @@ public class DBHandler
 
         Logger.INFO("Finished setup of local DB");
     }
-    public static DBHandler getInstance()
+    private static DBHandler getInstance()
     {
-        if(instance == null) instance = new DBHandler();
+        if(instance == null) instance = new DBHandler()
+        {
+
+        };
         return instance;
     }
 
-    public void setCommodityData(String commodityName, int inaraID)
+    public static void setCommodityData(String commodityName, int inaraID)
     {
         sendStatement("INSERT INTO commodities " +
                 "SELECT " + makeSQLValid(commodityName) + ", " + inaraID + ", " + 0 + ", " + 0 + " " +
@@ -59,14 +61,14 @@ public class DBHandler
                 "AND commodity_name = " + makeSQLValid(commodityName) + ")");
     }
 
-    public void setGalacticAverage(String commodityName, int galacticAverage)
+    public static void setGalacticAverage(String commodityName, int galacticAverage)
     {
         sendStatement("UPDATE commodities " +
                 "SET average_price = " + galacticAverage + " " +
                 "WHERE commodity_name = " + makeSQLValid(commodityName));
     }
 
-    public void setStationData(STATION station, int inaraID, boolean isSelling)
+    public static void setStationData(STATION station, int inaraID, boolean isSelling)
     {
         sendStatement("REPLACE INTO stations VALUES ("
                 + inaraID + ", "
@@ -80,7 +82,7 @@ public class DBHandler
                 + makeSQLValid(station.TYPE.toString()) + ")");
     }
 
-    public void setSystemDistance(String system1, String system2, double distance)
+    public static void setSystemDistance(String system1, String system2, double distance)
     {
         sendStatement("REPLACE INTO distances VALUES ("
                 + makeSQLValid(system1) + ", "
@@ -88,14 +90,14 @@ public class DBHandler
                 + distance + ")");
     }
 
-    public void updateDownloadTime(int inaraID)
+    public static void updateDownloadTime(int inaraID)
     {
         sendStatement("UPDATE commodities " +
                 "SET last_update_time = " + System.currentTimeMillis() / 1000 + " " +
                 "WHERE inara_id = " + inaraID);
     }
 
-    public ArrayList<Integer> getCommodityIDs(boolean onlyMissing)
+    public static ArrayList<Integer> getCommodityIDs(boolean onlyMissing)
     {
         ArrayList<Integer> ids = new ArrayList<>();
 
@@ -125,7 +127,7 @@ public class DBHandler
         return ids;
     }
 
-    public String getCommodityNameByID(int commodityID)
+    public static String getCommodityNameByID(int commodityID)
     {
         ResultSet commodity = getQueryResults("SELECT commodity_name "
                 + "FROM commodities "
@@ -143,7 +145,7 @@ public class DBHandler
         return "";
     }
 
-    public int getCommodityIDByName(String name)
+    public static int getCommodityIDByName(String name)
     {
         ResultSet commodity = getQueryResults("SELECT inara_id "
                 + "FROM commodities "
@@ -161,7 +163,7 @@ public class DBHandler
         return -1;
     }
 
-    public Map<String, Integer> getCommodityNameIDPairs()
+    public static Map<String, Integer> getCommodityNameIDPairs()
     {
         Map<String, Integer> pairs = new HashMap<>();
 
@@ -182,7 +184,7 @@ public class DBHandler
         return pairs;
     }
 
-    public long getCommodityAverage(String commodityName)
+    public static long getCommodityAverage(String commodityName)
     {
         ResultSet results = getQueryResults("SELECT average_price " +
                 "FROM commodities " +
@@ -202,7 +204,7 @@ public class DBHandler
         return 0;
     }
 
-    public int getOldestCommodityID()
+    public static int getOldestCommodityID()
     {
         ResultSet commodity = getQueryResults("SELECT tbl.* " +
                 "FROM commodities tbl " +
@@ -229,7 +231,7 @@ public class DBHandler
         return id;
     }
 
-    public int getOldestUpdateAge()
+    public static int getOldestUpdateAge()
     {
         ResultSet commodity = getQueryResults("SELECT tbl.* " +
                 "FROM commodities tbl " +
@@ -256,7 +258,7 @@ public class DBHandler
         return time;
     }
 
-    public ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
+    public static ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
     {
         ArrayList<STATION> stationList = new ArrayList<>();
 
@@ -288,7 +290,7 @@ public class DBHandler
         return stationList;
     }
 
-    public double getSystemDistance(String system1, String system2)
+    public static double getSystemDistance(String system1, String system2)
     {
         ResultSet results = getQueryResults("SELECT distance " +
                 "FROM distances " +
@@ -309,7 +311,7 @@ public class DBHandler
         return 0;
     }
 
-    public void removeStationEntry(int commodityID, String stationName, String systemName, boolean isSeller)
+    public static void removeStationEntry(int commodityID, String stationName, String systemName, boolean isSeller)
     {
         sendStatement("DELETE FROM stations " +
                 "WHERE commodity_id = " + commodityID + " " +
@@ -318,23 +320,23 @@ public class DBHandler
                 "AND is_seller = " + (isSeller ? 0 : 1));
     }
 
-    public void removeOldEntries()
+    public static void removeOldEntries()
     {
         long validTime = System.currentTimeMillis() - Settings.maxDataAge;
         sendStatement("DELETE FROM stations " +
                 "WHERE inara_time < " + validTime);
     }
 
-    public void removeTradeData()
+    public static void removeTradeData()
     {
         sendStatement("DELETE FROM stations");
     }
 
-    private void sendStatement(String command)
+    private static void sendStatement(String command)
     {
         try
         {
-            Statement statement = dbConnection.createStatement();
+            Statement statement = getInstance().dbConnection.createStatement();
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
@@ -342,11 +344,11 @@ public class DBHandler
         }
     }
     @Nullable
-    private ResultSet getQueryResults(String query)
+    private static ResultSet getQueryResults(String query)
     {
         try
         {
-            Statement statement = dbConnection.createStatement();
+            Statement statement = getInstance().dbConnection.createStatement();
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
@@ -354,7 +356,7 @@ public class DBHandler
         }
         return null;
     }
-    private String makeSQLValid(String s)
+    private static String makeSQLValid(String s)
     {
         return "'" + s.replace("'", "''") + "'";
     }

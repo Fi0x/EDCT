@@ -43,6 +43,11 @@ public class Main
         if(eddn != null) eddn.interrupt();
     }
 
+    public static String getDBURL()
+    {
+        return localStorage.getPath() + File.separator + "Trades" + version.replace(".", "-") + ".db";
+    }
+
     private static void setupLocalFiles()
     {
         localStorage = new File(System.getenv("APPDATA") + File.separator + "EDCT");

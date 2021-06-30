@@ -109,10 +109,10 @@ public class EDDN implements Runnable
 
 
                                     STATION station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
-                                    if(station != null) DBHandler.getInstance().setStationData(station, commodityID, false);
+                                    if(station != null) DBHandler.setStationData(station, commodityID, false);
 
                                     station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
-                                    if(station != null) DBHandler.getInstance().setStationData(station, commodityID, true);
+                                    if(station != null) DBHandler.setStationData(station, commodityID, true);
                                 }
                                 Platform.runLater(() ->
                                 {
@@ -144,7 +144,7 @@ public class EDDN implements Runnable
             return -1;
         }
 
-        Map<String, Integer> pairs = DBHandler.getInstance().getCommodityNameIDPairs();
+        Map<String, Integer> pairs = DBHandler.getCommodityNameIDPairs();
         for(Map.Entry<String, Integer> pair : pairs.entrySet())
         {
             String dbName = NameMap.convertDBToEDDN(pair.getKey())

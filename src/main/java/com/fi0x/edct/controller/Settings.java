@@ -29,7 +29,7 @@ public class Settings implements Initializable
     public static int highProfitBorder = 30000;
     public static int maxDataAge = 1000 * 60 * 60 * 24 * 4;
     public static int inaraDelay = 15000;
-    public static Details detailedResults = Details.Normal;
+    public static Details detailedResults = Details.Advanced;
     public static int shipCargoSpace = 790;
     public static int loadingTonProfit = 10000;
     public static int unloadingTonProfit = 10000;
@@ -173,7 +173,7 @@ public class Settings implements Initializable
     @FXML
     private void clearDB()
     {
-        DBHandler.getInstance().removeTradeData();
+        DBHandler.removeTradeData();
         if(Main.updater != null) Main.updater.interrupt();
         Main.updater = new Thread(new Updater());
         Main.updater.start();
@@ -185,7 +185,7 @@ public class Settings implements Initializable
         highProfitBorder = SettingsHandler.loadInt("highProfit", 30000);
         maxDataAge = SettingsHandler.loadInt("dataAge", 1000 * 60 * 60 * 24 * 4);
         inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
-        detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Normal);
+        detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Advanced);
         shipCargoSpace = SettingsHandler.loadInt("shipCargoSpace", 790);
         loadingTonProfit = SettingsHandler.loadInt("loadingProfit", 10000);
         unloadingTonProfit = SettingsHandler.loadInt("unloadingProfit", 10000);

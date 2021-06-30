@@ -13,7 +13,11 @@
         <RowConstraints/>
         <RowConstraints/>
     </rowConstraints>
-    <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN" GridPane.columnSpan="3"/>
+    <Label fx:id="lblGalAverage" text="Galactic Average: UNKNOWN" GridPane.columnSpan="3">
+        <tooltip>
+            <Tooltip text="You can only sell or buy goods for 5-1000% of the galactic average"/>
+        </tooltip>
+    </Label>
     <VBox id="vbLoading" GridPane.columnIndex="0" GridPane.rowIndex="1">
         <Label id="topic" text="Loading"/>
         <Label fx:id="lblLoadProfitTon" text="Profit/t: ---">

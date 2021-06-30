@@ -24,7 +24,7 @@ public class TradeReloader implements Runnable
         Logger.INFO("Trade Reloader Thread started");
         updatePrices();
 
-        long oldestFileAge = DBHandler.getInstance().getOldestUpdateAge();
+        long oldestFileAge = DBHandler.getOldestUpdateAge();
         Platform.runLater(() ->
         {
             INT_CONTROLLER.filterController.updateFilters();
@@ -40,14 +40,14 @@ public class TradeReloader implements Runnable
         INT_CONTROLLER.sellPrices = new HashMap<>();
         INT_CONTROLLER.buyPrices = new HashMap<>();
 
-        for(int id : DBHandler.getInstance().getCommodityIDs(false))
+        for(int id : DBHandler.getCommodityIDs(false))
         {
-            String commodityName = DBHandler.getInstance().getCommodityNameByID(id);
+            String commodityName = DBHandler.getCommodityNameByID(id);
 
-            ArrayList<STATION> tmp = DBHandler.getInstance().getCommodityInformation(id, true);
+            ArrayList<STATION> tmp = DBHandler.getCommodityInformation(id, true);
             INT_CONTROLLER.sellPrices.put(commodityName, tmp);
 
-            tmp = DBHandler.getInstance().getCommodityInformation(id, false);
+            tmp = DBHandler.getCommodityInformation(id, false);
             INT_CONTROLLER.buyPrices.put(commodityName, tmp);
         }
     }
