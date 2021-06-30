@@ -3,7 +3,7 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
-import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.data.websites.Hozbase;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
@@ -167,8 +167,8 @@ public class Results implements Initializable
         }
 
         int profit = 0;
-        STATION sellStation = null;
-        STATION buyStation = null;
+        STATION_OLD sellStation = null;
+        STATION_OLD buyStation = null;
 
         if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
         {
@@ -251,15 +251,15 @@ public class Results implements Initializable
         trades.remove(currentCommodity);
         if(currentCommodity >= trades.size()) currentCommodity--;
     }
-    public STATION getCurrentSellStation()
+    public STATION_OLD getCurrentSellStation()
     {
         return trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
     }
-    public STATION getCurrentBuyStation()
+    public STATION_OLD getCurrentBuyStation()
     {
         return trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
     }
-    public void removeStationFromCurrentTrade(STATION station)
+    public void removeStationFromCurrentTrade(STATION_OLD station)
     {
         getCurrentTrade().SELL_PRICES.remove(station);
         getCurrentTrade().BUY_PRICES.remove(station);

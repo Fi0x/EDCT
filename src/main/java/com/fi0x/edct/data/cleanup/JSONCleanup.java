@@ -1,8 +1,8 @@
 package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.util.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -89,7 +89,7 @@ public class JSONCleanup
         return trades;
     }
     @Nullable
-    public static STATION getStationTrade(String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
+    public static STATION_OLD getStationTrade(String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
     {
         long quantity = 0;
         long price = 0;
@@ -113,6 +113,6 @@ public class JSONCleanup
         }
 
         if(price == 0) return null;
-        return new STATION(system, station, pad, quantity, price, type, System.currentTimeMillis());
+        return new STATION_OLD(system, station, pad, quantity, price, type, System.currentTimeMillis());
     }
 }

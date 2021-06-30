@@ -3,7 +3,7 @@ package com.fi0x.edct.data.localstorage;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 
@@ -45,7 +45,7 @@ public class TradeReloader implements Runnable
         {
             String commodityName = DBHandler.getCommodityNameByID(id);
 
-            ArrayList<STATION> tmp = DBHandler.getCommodityInformation(id, true);
+            ArrayList<STATION_OLD> tmp = DBHandler.getCommodityInformation(id, true);
             INT_CONTROLLER.sellPrices.put(commodityName, tmp);
 
             tmp = DBHandler.getCommodityInformation(id, false);

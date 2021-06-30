@@ -3,8 +3,9 @@ package com.fi0x.edct.data.localstorage.db;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
@@ -55,24 +56,45 @@ public class DBHandler
 
     public static void setCommodityData(String commodityName, int inaraID)
     {
-        sendStatement("INSERT INTO commodities " +
-                "SELECT " + makeSQLValid(commodityName) + ", " + inaraID + ", " + 0 + ", " + 0 + " " +
+        sendStatement("INSERT INTO Commodities " +
+                "SELECT " + inaraID + ", " + makeSQLValid(commodityName) + ", " + 0 + ", " + 0 + " " +
                 "WHERE NOT EXISTS (" +
                 "SELECT * " +
-                "FROM commodities " +
-                "WHERE inara_id = " + inaraID + " " +
-                "AND commodity_name = " + makeSQLValid(commodityName) + ")");
+                "FROM Commodities " +
+                "WHERE InaraID = " + inaraID + " " +
+                "AND CommodityName = " + makeSQLValid(commodityName) + ")");
     }
 
     public static void setGalacticAverage(String commodityName, int galacticAverage)
     {
-        sendStatement("UPDATE commodities " +
-                "SET average_price = " + galacticAverage + " " +
-                "WHERE commodity_name = " + makeSQLValid(commodityName));
+        sendStatement("UPDATE Commodities " +
+                "SET GalacticAverage = " + galacticAverage + " " +
+                "WHERE CommodityName = " + makeSQLValid(commodityName));
     }
 
-    public static void setStationData(STATION station, int inaraID, boolean isSelling)
+    public static void setTradeData(TRADE trade)
     {
+        sendStatement("REPLACE INTO Stations VALUES (" +
+                makeSQLValid(trade.STATION.NAME) + ", " +
+                makeSQLValid(trade.STATION.SYSTEM) + ", " +
+                makeSQLValid(trade.STATION.PAD.toString()) + ", " +
+                makeSQLValid(trade.STATION.TYPE.toString()) + ")");
+
+        //TODO: Check if trades get updated correctly or created
+        sendStatement("REPLACE INTO Trades VALUES (" +
+                makeSQLValid(trade.STATION.NAME) + ", " +
+                makeSQLValid(trade.STATION.SYSTEM) + ", " +
+                trade.INARA_ID + ", " +
+                makeSQLValid(String.valueOf(trade.AGE)) + ", " +
+                trade.SUPPLY + ", " +
+                trade.DEMAND + ", " +
+                trade.BUY_PRICE + ", " +
+                trade.SELL_PRICE + ")");
+    }
+    @Deprecated
+    public static void setStationData(STATION_OLD station, int inaraID, boolean isSelling)
+    {
+        //TODO: Use setTradeData() instead
         sendStatement("REPLACE INTO stations VALUES ("
                 + inaraID + ", "
                 + makeSQLValid(station.NAME) + ", "
@@ -87,7 +109,7 @@ public class DBHandler
 
     public static void setSystemDistance(String system1, String system2, double distance)
     {
-        sendStatement("REPLACE INTO distances VALUES ("
+        sendStatement("REPLACE INTO Distances VALUES ("
                 + makeSQLValid(system1) + ", "
                 + makeSQLValid(system2) + ", "
                 + distance + ")");
@@ -95,9 +117,9 @@ public class DBHandler
 
     public static void updateDownloadTime(int inaraID)
     {
-        sendStatement("UPDATE commodities " +
-                "SET last_update_time = " + System.currentTimeMillis() / 1000 + " " +
-                "WHERE inara_id = " + inaraID);
+        sendStatement("UPDATE Commodities " +
+                "SET LastUpdated = " + System.currentTimeMillis() / 1000 + " " +
+                "WHERE InaraID = " + inaraID);
     }
 
     public static ArrayList<Integer> getCommodityIDs(boolean onlyMissing)
@@ -107,21 +129,21 @@ public class DBHandler
         ResultSet results;
         if(onlyMissing)
         {
-            results = getQueryResults("SELECT c.inara_id "
-                    + "FROM commodities c "
-                    + "LEFT JOIN stations s ON s.commodity_id = c.inara_id "
-                    + "WHERE s.commodity_id IS NULL");
+            results = getQueryResults("SELECT c.InaraID "
+                    + "FROM Commodities c "
+                    + "LEFT JOIN Trades t ON t.InaraID = c.InaraID "
+                    + "WHERE t.InaraID IS NULL");
         } else
         {
-            results = getQueryResults("SELECT c.inara_id "
-                    + "FROM commodities c");
+            results = getQueryResults("SELECT InaraID "
+                    + "FROM Commodities");
         }
 
         try
         {
             while(results != null && results.next())
             {
-                ids.add(results.getInt("inara_id"));
+                ids.add(results.getInt("InaraID"));
             }
         } catch(Exception e)
         {
@@ -132,14 +154,14 @@ public class DBHandler
 
     public static String getCommodityNameByID(int commodityID)
     {
-        ResultSet commodity = getQueryResults("SELECT commodity_name "
-                + "FROM commodities "
-                + "WHERE inara_id = " + commodityID);
+        ResultSet commodity = getQueryResults("SELECT CommodityName "
+                + "FROM Commodities "
+                + "WHERE InaraID = " + commodityID);
         try
         {
             if(commodity != null && commodity.next())
             {
-                return commodity.getString("commodity_name");
+                return commodity.getString("CommodityName");
             }
         } catch(SQLException e)
         {
@@ -150,14 +172,14 @@ public class DBHandler
 
     public static int getCommodityIDByName(String name)
     {
-        ResultSet commodity = getQueryResults("SELECT inara_id "
-                + "FROM commodities "
-                + "WHERE commodity_name = " + makeSQLValid(name));
+        ResultSet commodity = getQueryResults("SELECT InaraID "
+                + "FROM Commodities "
+                + "WHERE CommodityName = " + makeSQLValid(name));
         try
         {
             if(commodity != null && commodity.next())
             {
-                return commodity.getInt("inara_id");
+                return commodity.getInt("InaraID");
             }
         } catch(SQLException e)
         {
@@ -171,13 +193,13 @@ public class DBHandler
         Map<String, Integer> pairs = new HashMap<>();
 
         ResultSet results = getQueryResults("SELECT * " +
-                "FROM commodities");
+                "FROM Commodities");
 
         try
         {
             while(results != null && results.next())
             {
-                pairs.put(results.getString("commodity_name"), results.getInt("inara_id"));
+                pairs.put(results.getString("CommodityName"), results.getInt("InaraID"));
             }
         } catch(SQLException e)
         {
@@ -189,15 +211,15 @@ public class DBHandler
 
     public static long getCommodityAverage(String commodityName)
     {
-        ResultSet results = getQueryResults("SELECT average_price " +
-                "FROM commodities " +
-                "WHERE commodity_name = " + makeSQLValid(commodityName));
+        ResultSet results = getQueryResults("SELECT GalacticAverage " +
+                "FROM Commodities " +
+                "WHERE CommodityName = " + makeSQLValid(commodityName));
 
         try
         {
             if(results != null && results.next())
             {
-                return results.getInt("average_price");
+                return results.getInt("GalacticAverage");
             }
         } catch(SQLException e)
         {
@@ -209,6 +231,7 @@ public class DBHandler
 
     public static int getOldestCommodityID()
     {
+        //TODO: Update to use new db-structure
         ResultSet commodity = getQueryResults("SELECT tbl.* " +
                 "FROM commodities tbl " +
                 "INNER JOIN (" +
@@ -236,6 +259,7 @@ public class DBHandler
 
     public static int getOldestUpdateAge()
     {
+        //TODO: Update to use new db-structure
         ResultSet commodity = getQueryResults("SELECT tbl.* " +
                 "FROM commodities tbl " +
                 "INNER JOIN (" +
@@ -261,9 +285,10 @@ public class DBHandler
         return time;
     }
 
-    public static ArrayList<STATION> getCommodityInformation(int commodityID, boolean isSelling)
+    public static ArrayList<STATION_OLD> getCommodityInformation(int commodityID, boolean isSelling)
     {
-        ArrayList<STATION> stationList = new ArrayList<>();
+        //TODO: Update to use new db-structure
+        ArrayList<STATION_OLD> stationList = new ArrayList<>();
 
         ResultSet stations = getQueryResults("SELECT * " +
                 "FROM stations " +
@@ -283,7 +308,7 @@ public class DBHandler
                 STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("station_type"));
                 long updateTime = Long.parseLong(stations.getString("inara_time"));
 
-                stationList.add(new STATION(system, name, pad, quantity, price, type, updateTime));
+                stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
             }
         } catch(Exception e)
         {
@@ -295,16 +320,16 @@ public class DBHandler
 
     public static double getSystemDistance(String system1, String system2)
     {
-        ResultSet results = getQueryResults("SELECT distance " +
-                "FROM distances " +
-                "WHERE (star1 = '" + system1 + "' AND star2 = '" + system2 + "') " +
-                "OR (star1 = '" + system2 + "' AND star2 = '" + system1 + "')");
+        ResultSet results = getQueryResults("SELECT Distance " +
+                "FROM Distances " +
+                "WHERE (System1 = '" + system1 + "' AND System2 = '" + system2 + "') " +
+                "OR (System1 = '" + system2 + "' AND System2 = '" + system1 + "')");
 
         try
         {
             if(results != null && results.next())
             {
-                return results.getInt("distance");
+                return results.getInt("Distance");
             }
         } catch(SQLException e)
         {
@@ -316,23 +341,24 @@ public class DBHandler
 
     public static void removeStationEntry(int commodityID, String stationName, String systemName, boolean isSeller)
     {
-        sendStatement("DELETE FROM stations " +
-                "WHERE commodity_id = " + commodityID + " " +
-                "AND station_name = " + makeSQLValid(stationName) + " " +
-                "AND star_system = " + makeSQLValid(systemName) + " " +
-                "AND is_seller = " + (isSeller ? 0 : 1));
+        //TODO: Check if buyer / seller is not swapped
+        sendStatement("DELETE FROM Trades " +
+                "WHERE InaraID = " + commodityID + " " +
+                "AND StationName = " + makeSQLValid(stationName) + " " +
+                "AND SystemName = " + makeSQLValid(systemName) + " " +
+                "AND " + (isSeller ? "Supply" : "Demand") + " > 0");
     }
 
     public static void removeOldEntries()
     {
         long validTime = System.currentTimeMillis() - Settings.maxDataAge;
-        sendStatement("DELETE FROM stations " +
-                "WHERE inara_time < " + validTime);
+        sendStatement("DELETE FROM Trades " +
+                "WHERE Age < " + validTime);
     }
 
     public static void removeTradeData()
     {
-        sendStatement("DELETE FROM stations");
+        sendStatement("DELETE FROM Trades");
     }
 
     private static void sendStatement(String command)

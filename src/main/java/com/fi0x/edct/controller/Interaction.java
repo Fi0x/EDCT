@@ -1,13 +1,11 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.data.localstorage.TradeReloader;
-import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 import java.io.IOException;
@@ -22,8 +20,8 @@ public class Interaction implements Initializable
     public Datastorage storageController;
     public Filters filterController;
 
-    public Map<String, ArrayList<STATION>> sellPrices = new HashMap<>();
-    public Map<String, ArrayList<STATION>> buyPrices = new HashMap<>();
+    public Map<String, ArrayList<STATION_OLD>> sellPrices = new HashMap<>();
+    public Map<String, ArrayList<STATION_OLD>> buyPrices = new HashMap<>();
 
     @FXML
     private GridPane hbInteraction;

@@ -1,8 +1,8 @@
 package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -76,9 +76,9 @@ public class HTMLCleanup
         return nameAverageMap;
     }
 
-    public static ArrayList<STATION> getCommodityPrices(String inputHTML)
+    public static ArrayList<STATION_OLD> getCommodityPrices(String inputHTML)
     {
-        ArrayList<STATION> stations = new ArrayList<>();
+        ArrayList<STATION_OLD> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
 
         Element table = doc.getElementsByClass("tablesorterintab").first();
@@ -134,7 +134,7 @@ public class HTMLCleanup
                 inara_time = System.currentTimeMillis();
             }
 
-            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, inara_time);
+            STATION_OLD station = new STATION_OLD(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, inara_time);
             stations.add(station);
         }
 

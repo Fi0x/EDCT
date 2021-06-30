@@ -5,6 +5,8 @@ import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,18 +36,22 @@ public class InaraCommodity
 
         String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
-        ArrayList<STATION> sellStations = HTMLCleanup.getCommodityPrices(html);
+        ArrayList<STATION_OLD> sellStations = HTMLCleanup.getCommodityPrices(html);
         html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
-        ArrayList<STATION> buyStations = HTMLCleanup.getCommodityPrices(html);
+        ArrayList<STATION_OLD> buyStations = HTMLCleanup.getCommodityPrices(html);
 
-        for(STATION seller : sellStations)
+        for(STATION_OLD seller : sellStations)
         {
-            DBHandler.setStationData(seller, commodityRefID, true);
+            STATION s = new STATION(seller.SYSTEM, seller.NAME, seller.PAD, seller.TYPE);
+            TRADE t = new TRADE(s, commodityRefID, seller.UPDATE_TIME, seller.QUANTITY, 0, 0, seller.PRICE);
+            DBHandler.setTradeData(t);
         }
-        for(STATION buyer : buyStations)
+        for(STATION_OLD buyer : buyStations)
         {
-            DBHandler.setStationData(buyer, commodityRefID, false);
+            STATION s = new STATION(buyer.SYSTEM, buyer.NAME, buyer.PAD, buyer.TYPE);
+            TRADE t = new TRADE(s, commodityRefID, buyer.UPDATE_TIME, 0, buyer.QUANTITY, buyer.PRICE, 0);
+            DBHandler.setTradeData(t);
         }
 
         DBHandler.updateDownloadTime(commodityRefID);

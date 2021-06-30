@@ -1,7 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,7 +65,7 @@ public class Station
     @FXML
     private void removeStation()
     {
-        STATION s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        STATION_OLD s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);
         DBHandler.removeStationEntry(commodityID, s.NAME, s.SYSTEM, isBuying);
 
@@ -83,7 +83,7 @@ public class Station
         resultsController.displayResults();
     }
 
-    public void setStation(STATION station, boolean hasPrev, boolean hasNext)
+    public void setStation(STATION_OLD station, boolean hasPrev, boolean hasNext)
     {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);

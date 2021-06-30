@@ -6,8 +6,8 @@ import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.localstorage.NameMap;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.data.websites.InaraStation;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
@@ -108,7 +108,7 @@ public class EDDN implements Runnable
                                     if(commodityID == -1) continue;
 
 
-                                    STATION station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
+                                    STATION_OLD station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
                                     if(station != null) DBHandler.setStationData(station, commodityID, false);
 
                                     station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
