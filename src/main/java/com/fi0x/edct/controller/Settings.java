@@ -3,7 +3,7 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.Updater;
-import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
 import javafx.fxml.FXML;

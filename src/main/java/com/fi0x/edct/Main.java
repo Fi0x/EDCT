@@ -16,7 +16,7 @@ public class Main
     public static Thread reloader;
     public static Thread eddn;
 
-    public static File localStorage;
+    private static File localStorage;
     public static File errors;
     public static File settings;
     //TODO: Update version information

@@ -1,6 +1,6 @@
 package com.fi0x.edct.controller;
 
-import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.STATION;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

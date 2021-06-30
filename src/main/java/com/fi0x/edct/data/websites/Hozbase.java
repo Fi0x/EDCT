@@ -3,7 +3,7 @@ package com.fi0x.edct.data.websites;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
-import com.fi0x.edct.data.localstorage.DBHandler;
+import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import javafx.application.Platform;
 

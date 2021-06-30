@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.localstorage;
+package com.fi0x.edct.data.localstorage.db;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Settings;
@@ -44,12 +44,11 @@ public class DBHandler
     }
     private static void initialize()
     {
-
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
-        sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
+        sendStatement(SQLSTATEMENTS.CreateSystems.getStatement());
         sendStatement(SQLSTATEMENTS.CreateDistances.getStatement());
-
-        sendStatement(SQLSTATEMENTS.UpdateCommodities.getStatement());
+        sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
+        sendStatement(SQLSTATEMENTS.CreateTrades.getStatement());
 
         Logger.INFO("Finished setup of local DB");
     }

@@ -2,6 +2,7 @@ package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
+import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
