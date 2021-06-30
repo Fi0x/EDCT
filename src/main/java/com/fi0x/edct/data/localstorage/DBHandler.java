@@ -32,6 +32,18 @@ public class DBHandler
             Logger.ERROR(998, "Something went wrong when connecting to the local DB", e);
             System.exit(998);
         }
+    }
+    private static DBHandler getInstance()
+    {
+        if(instance == null)
+        {
+            instance = new DBHandler();
+            initialize();
+        }
+        return instance;
+    }
+    private static void initialize()
+    {
 
         sendStatement(SQLSTATEMENTS.CreateCommodities.getStatement());
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
@@ -40,14 +52,6 @@ public class DBHandler
         sendStatement(SQLSTATEMENTS.UpdateCommodities.getStatement());
 
         Logger.INFO("Finished setup of local DB");
-    }
-    private static DBHandler getInstance()
-    {
-        if(instance == null) instance = new DBHandler()
-        {
-
-        };
-        return instance;
     }
 
     public static void setCommodityData(String commodityName, int inaraID)

@@ -100,7 +100,7 @@ public class ProgramInfo implements Initializable
         settingsStage.sizeToScene();
         settingsStage.showAndWait();
 
-        DBHandler.getInstance().removeOldEntries();
+        DBHandler.removeOldEntries();
     }
 
     public void setError(int code)

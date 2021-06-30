@@ -75,7 +75,7 @@ public class Main
 
         for(Map.Entry<String, ArrayList<STATION>> commodity : sellPrices.entrySet())
         {
-            long galAvg = DBHandler.getInstance().getCommodityAverage(commodity.getKey());
+            long galAvg = DBHandler.getCommodityAverage(commodity.getKey());
             COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()), galAvg);
             commodityTrade.sortPrices();
 

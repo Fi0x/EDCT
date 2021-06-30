@@ -5,6 +5,7 @@ import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.DBHandler;
 import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class InaraCommodity
 
         for(Map.Entry<String, Integer> entry : commodities.entrySet())
         {
-            DBHandler.getInstance().setCommodityData(entry.getKey(), entry.getValue());
+            DBHandler.setCommodityData(entry.getKey(), entry.getValue());
         }
         return true;
     }
@@ -40,14 +41,14 @@ public class InaraCommodity
 
         for(STATION seller : sellStations)
         {
-            DBHandler.getInstance().setStationData(seller, commodityRefID, true);
+            DBHandler.setStationData(seller, commodityRefID, true);
         }
         for(STATION buyer : buyStations)
         {
-            DBHandler.getInstance().setStationData(buyer, commodityRefID, false);
+            DBHandler.setStationData(buyer, commodityRefID, false);
         }
 
-        DBHandler.getInstance().updateDownloadTime(commodityRefID);
+        DBHandler.updateDownloadTime(commodityRefID);
         return true;
     }
 

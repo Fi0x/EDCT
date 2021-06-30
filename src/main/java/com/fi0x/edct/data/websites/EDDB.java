@@ -21,7 +21,7 @@ public class EDDB
 
         for(Map.Entry<String, Integer> entry : averages.entrySet())
         {
-            DBHandler.getInstance().setGalacticAverage(entry.getKey(), entry.getValue());
+            DBHandler.setGalacticAverage(entry.getKey(), entry.getValue());
         }
         return true;
     }

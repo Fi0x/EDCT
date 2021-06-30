@@ -44,7 +44,7 @@ public class Updater implements Runnable
 
         Logger.INFO("Updated Commodity Average Prices");
 
-        DBHandler.getInstance().removeOldEntries();
+        DBHandler.removeOldEntries();
 
         if(loadMissingIDs()) return;
 
@@ -68,7 +68,7 @@ public class Updater implements Runnable
             if(sleepInterrupted((long) (Math.random() * 5000) + Settings.inaraDelay - 5000)) return;
             Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating...", Datastorage.BACKGROUND_STATUS.INITIALIZED));
 
-            int oldestID = DBHandler.getInstance().getOldestCommodityID();
+            int oldestID = DBHandler.getOldestCommodityID();
             if(oldestID == 0) continue;
 
             try
@@ -78,7 +78,7 @@ public class Updater implements Runnable
             {
                 return;
             }
-            long age = System.currentTimeMillis() - DBHandler.getInstance().getOldestUpdateAge() * 1000L;
+            long age = System.currentTimeMillis() - DBHandler.getOldestUpdateAge() * 1000L;
 
             Platform.runLater(() ->
             {
@@ -91,7 +91,7 @@ public class Updater implements Runnable
 
     private boolean loadMissingIDs()
     {
-        ArrayList<Integer> missingIDs = DBHandler.getInstance().getCommodityIDs(true);
+        ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true);
 
         int counter = 0;
         for(int id : missingIDs)

@@ -190,7 +190,7 @@ public class Results implements Initializable
         double distance = 0;
         if(sellStation != null && buyStation != null)
         {
-            distance = DBHandler.getInstance().getSystemDistance(sellStation.SYSTEM, buyStation.SYSTEM);
+            distance = DBHandler.getSystemDistance(sellStation.SYSTEM, buyStation.SYSTEM);
             if(distance == 0) new Thread(new Hozbase(sellStation.SYSTEM, buyStation.SYSTEM)).start();
         }
 
