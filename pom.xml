@@ -171,5 +171,10 @@
             <artifactId>bridj</artifactId>
             <version>0.7.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.mixpanel</groupId>
+            <artifactId>mixpanel-java</artifactId>
+            <version>1.4.4</version>
+        </dependency>
     </dependencies>
 </project>
