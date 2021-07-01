@@ -2,6 +2,8 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
 
@@ -15,23 +17,30 @@ public class Main
     public static Thread updater;
     public static Thread reloader;
     public static Thread eddn;
+    private static Thread mixpanel;
 
     private static File localStorage;
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final String version = "1.2.4.4";//All.GUI.Logic.Hotfix
+    public static final String version = "1.2.5.4";//All.GUI.Logic.Hotfix
 
     public static void main(String[] args)
     {
         ArrayList<String> arguments = new ArrayList<>(Arrays.asList(args));
-        if(arguments.contains("-d")) Logger.debug = true;
+        Logger.setDebugMode(arguments.contains("-d"));
+        MixpanelHandler.setDebugMode(arguments.contains("-d"));
 
         setupLocalFiles();
         SettingsHandler.verifyIntegrity();
         Settings.loadSettings();
 
+        MixpanelHandler.addMessage(EVENT.INITIALIZATION, null);
+        MixpanelHandler.sendMessages();
+
         updater = new Thread(new Updater());
+        mixpanel = new Thread(new MixpanelHandler());
+        mixpanel.start();
 
         MainWindow.main(args);
     }
@@ -41,6 +50,10 @@ public class Main
         if(updater != null) updater.interrupt();
         if(reloader != null) reloader.interrupt();
         if(eddn != null) eddn.interrupt();
+        if(mixpanel != null) mixpanel.interrupt();
+
+        MixpanelHandler.addMessage(EVENT.SHUTDOWN, null);
+        MixpanelHandler.sendMessages();
     }
 
     public static String getDBURL()
@@ -77,10 +90,8 @@ public class Main
                     Logger.ERROR(997, "Could not create file: " + file, e);
                     System.exit(997);
                 }
-            }
-            else return !file.mkdir();
-        }
-        else return false;
+            } else return !file.mkdir();
+        } else return false;
 
         return true;
     }

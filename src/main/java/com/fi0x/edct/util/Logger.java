@@ -2,6 +2,8 @@ package com.fi0x.edct.util;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import javafx.application.Platform;
 
 import javax.annotation.Nullable;
@@ -11,10 +13,7 @@ import java.nio.file.Files;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class Logger
 {
@@ -23,7 +22,7 @@ public class Logger
     private static final String YELLOW = "\u001B[33m";
     private static final String RED = "\u001B[31m";
 
-    public static boolean debug = false;
+    private static boolean debug = false;
 
     public static void INFO(String text)
     {
@@ -75,7 +74,9 @@ public class Logger
                 List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
 
                 fileContent.add(time + prefix + errorCode + text);
-                if(e != null) fileContent.add("\t" + Arrays.toString(e.getStackTrace()).replace(", ", "\n\t").replace("[", "").replace("]", ""));
+                if(e != null) fileContent.add("\t" + Arrays.toString(e.getStackTrace())
+                        .replace(", ", "\n\t")
+                        .replace("[", "").replace("]", ""));
 
                 Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
             } catch(IOException ex)
@@ -86,12 +87,19 @@ public class Logger
                 System.out.println(time + RED + prefix + errorCode + "Something went wrong when writing to the log-file" + RESET);
                 ex.printStackTrace();
             }
-        }
 
-        if(lvl == LOGLEVEL.ERR)
-        {
-            Platform.runLater(() -> MainWindow.getInstance().infoController.setError(code));
+            if(lvl == LOGLEVEL.ERR)
+            {
+                MixpanelHandler.addMessage(EVENT.ERROR, getMixpanelProps(errorCode, text, e));
+                Platform.runLater(() -> MainWindow.getInstance().infoController.setError(code));
+            } else MixpanelHandler.addMessage(EVENT.WARNING, getMixpanelProps(errorCode, text, e));
         }
+    }
+
+    public static void setDebugMode(boolean isDebug)
+    {
+        debug = isDebug;
+        Logger.INFO("DEBUG-MODE: " + isDebug);
     }
 
     private static String getDateString()
@@ -100,5 +108,15 @@ public class Logger
         LocalDateTime now = LocalDateTime.now();
 
         return "[" + dtf.format(now) + "]";
+    }
+    private static Map<String, String> getMixpanelProps(String errorCode, String message, @Nullable Exception exception)
+    {
+        Map<String, String> props = new HashMap<>();
+
+        props.put("code", errorCode);
+        props.put("message", message);
+        if(exception != null) props.put("exception", exception.toString());
+
+        return props;
     }
 }

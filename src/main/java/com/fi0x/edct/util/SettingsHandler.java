@@ -144,6 +144,29 @@ public class SettingsHandler
 
         return defaultValue;
     }
+    public static String loadString(String key, String defaultValue)
+    {
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(com.fi0x.edct.Main.settings.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                String[] setting = line.split("=");
+                if(setting.length < 2) continue;
+
+                if(setting[0].equals(key)) return setting[1];
+            }
+        } catch(IOException e)
+        {
+            Logger.WARNING("Could not read a boolean from the settings file", e);
+        }
+
+        verifyIntegrity();
+        storeValue(key, defaultValue);
+
+        return defaultValue;
+    }
     public static Settings.Details loadDetails(String key, Settings.Details defaultValue)
     {
         try

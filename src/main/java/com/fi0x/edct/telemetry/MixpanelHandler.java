@@ -1,22 +1,47 @@
 package com.fi0x.edct.telemetry;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.util.Logger;
+import com.fi0x.edct.util.SettingsHandler;
 import com.mixpanel.mixpanelapi.ClientDelivery;
 import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
-public class MixpanelHandler
+public class MixpanelHandler implements Runnable
 {
     private static final String PROJECT_TOKEN = "cbdd63a3871a9f08b430df46217cf420";
+    private static boolean debug = false;
+    private static String userID;
+
     private static MessageBuilder builder;
     private static ClientDelivery delivery;
 
-    public static boolean sendMessages()
+    @Override
+    public void run()
+    {
+        while(!Thread.interrupted())
+        {
+            if(delivery != null) sendMessages();
+
+            try
+            {
+                Thread.sleep(10000);
+            } catch(InterruptedException e)
+            {
+                break;
+            }
+        }
+    }
+
+    public static void sendMessages()
     {
         try
         {
@@ -24,31 +49,42 @@ public class MixpanelHandler
         } catch(IOException e)
         {
             Logger.WARNING("Could not send messages to mixpanel", e);
-            return false;
+            return;
         }
 
+        Logger.INFO("Mixpanel delivery successfully sent");
         delivery = null;
-        return true;
     }
 
-    public static boolean addMessage(String userID, String eventName, Map<String, String> properties)
+    public static void addMessage(EVENT event, @Nullable Map<String, String> properties)
     {
+        if(properties == null) properties = new HashMap<>();
+        addDefaultProperties(properties);
+
         JSONObject props = new JSONObject();
         for(Map.Entry<String, String> property : properties.entrySet())
         {
             try
             {
                 props.put(property.getKey(), property.getValue());
-            } catch(JSONException e)
+            } catch(JSONException ignored)
             {
-                Logger.WARNING("Could not add a mixpanel message to the delivery queue", e);
-                return false;
             }
         }
 
-        addMessageToDelivery(getBuilder().event(userID, eventName, props));
+        addMessageToDelivery(getBuilder().event(getUserID(), String.valueOf(event), props));
         Logger.INFO("Added message for mixpanel to delivery queue");
-        return true;
+    }
+
+    public static void setDebugMode(boolean isDebug)
+    {
+        debug = isDebug;
+    }
+
+    private static void addDefaultProperties(Map<String, String> props)
+    {
+        props.put("version", Main.version);
+        props.put("debug", String.valueOf(debug));
     }
 
     private static MessageBuilder getBuilder()
@@ -60,5 +96,28 @@ public class MixpanelHandler
     {
         if(delivery == null) delivery = new ClientDelivery();
         delivery.addMessage(message);
+    }
+    private static String getUserID()
+    {
+        if(userID == null)
+        {
+            userID = SettingsHandler.loadString("userID", "");
+
+            if(userID.length() < 50)
+            {
+                String randomString = new Random().ints(48, 123)
+                        .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                        .limit(50)
+                        .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                        .toString();
+
+                userID = randomString;
+                SettingsHandler.storeValue("userID", randomString);
+            }
+
+            Logger.INFO("UserID: " + userID);
+        }
+
+        return userID;
     }
 }

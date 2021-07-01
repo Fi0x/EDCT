@@ -80,7 +80,7 @@ public class DBHandler
                 makeSQLValid(trade.STATION.PAD.toString()) + ", " +
                 makeSQLValid(trade.STATION.TYPE.toString()) + ")");
 
-        //TODO: Check if trades get updated correctly or created
+        //TODO: Ignore 0 values, only write positive numbers for prices and quantity
         sendStatement("REPLACE INTO Trades VALUES (" +
                 makeSQLValid(trade.STATION.NAME) + ", " +
                 makeSQLValid(trade.STATION.SYSTEM) + ", " +
