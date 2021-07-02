@@ -7,6 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SettingsHandler
 {
@@ -192,5 +193,16 @@ public class SettingsHandler
         storeValue(key, defaultValue);
 
         return defaultValue;
+    }
+
+    public static void addSettingsToMap(Map<String, String> props)
+    {
+        //TODO: Get all settings and add them
+        props.put("filterQuantity", txtQuantity.getText());
+        props.put("filterCarrier", String.valueOf(cbCarrier.isSelected()));
+        props.put("filterSurface", String.valueOf(cbSurface.isSelected()));
+        props.put("filterLandingPad", String.valueOf(cbLandingPad.isSelected()));
+        props.put("filterDemand", String.valueOf(cbDemand.isSelected()));
+        props.put("filterOdyssey", String.valueOf(cbOdyssey.isSelected()));
     }
 }

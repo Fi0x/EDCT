@@ -92,7 +92,7 @@ public class ProgramInfo implements Initializable
             return;
         }
 
-        settingsStage.setTitle("EDCT - Settings");
+        settingsStage.setTitle("EDCT - Settings by Fi0x");
         settingsStage.setScene(scene);
         settingsStage.setResizable(false);
 

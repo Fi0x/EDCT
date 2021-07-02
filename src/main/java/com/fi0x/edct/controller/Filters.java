@@ -7,6 +7,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Filters implements Initializable
@@ -78,6 +79,16 @@ public class Filters implements Initializable
     public void setMainController(Main controller)
     {
         mainController = controller;
+    }
+
+    public void addFiltersToMap(Map<String, String> props)
+    {
+        props.put("filterQuantity", txtQuantity.getText());
+        props.put("filterCarrier", String.valueOf(cbCarrier.isSelected()));
+        props.put("filterSurface", String.valueOf(cbSurface.isSelected()));
+        props.put("filterLandingPad", String.valueOf(cbLandingPad.isSelected()));
+        props.put("filterDemand", String.valueOf(cbDemand.isSelected()));
+        props.put("filterOdyssey", String.valueOf(cbOdyssey.isSelected()));
     }
 
     private void loadFilters()

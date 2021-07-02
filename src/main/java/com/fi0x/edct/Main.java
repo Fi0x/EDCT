@@ -35,7 +35,7 @@ public class Main
         SettingsHandler.verifyIntegrity();
         Settings.loadSettings();
 
-        MixpanelHandler.addMessage(EVENT.INITIALIZATION, null);
+        MixpanelHandler.addMessage(EVENT.INITIALIZATION, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
 
         updater = new Thread(new Updater());
@@ -52,7 +52,7 @@ public class Main
         if(eddn != null) eddn.interrupt();
         if(mixpanel != null) mixpanel.interrupt();
 
-        MixpanelHandler.addMessage(EVENT.SHUTDOWN, null);
+        MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
     }
 
