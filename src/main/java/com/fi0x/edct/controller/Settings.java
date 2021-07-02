@@ -4,6 +4,8 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
 import javafx.fxml.FXML;
@@ -161,6 +163,7 @@ public class Settings implements Initializable
     @FXML
     private void clearLogs()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-logs"));
         try
         {
             List<String> fileContent = new ArrayList<>();
@@ -173,6 +176,7 @@ public class Settings implements Initializable
     @FXML
     private void clearDB()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-DB"));
         DBHandler.removeTradeData();
         if(Main.updater != null) Main.updater.interrupt();
         Main.updater = new Thread(new Updater());

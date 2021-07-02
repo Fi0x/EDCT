@@ -3,6 +3,8 @@ package com.fi0x.edct.controller;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.websites.GitHub;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -60,22 +62,27 @@ public class ProgramInfo implements Initializable
     @FXML
     private void openErrorPage()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("error-label"));
         openWebsite("https://github.com/Fi0x/EDCT/wiki/Errors#" + errorCode);
         lblError.setVisible(false);
     }
     @FXML
     private void reportBug()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("bug-report"));
         openWebsite("https://github.com/Fi0x/EDCT/issues");
     }
     @FXML
     private void updateVersion()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("download-new-version"));
         openWebsite(updateUrl);
     }
     @FXML
     private void openSettings()
     {
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("open-settings"));
+
         FXMLLoader settingsLoader = new FXMLLoader();
         settingsLoader.setLocation(getClass().getResource("/fxml/settings.fxml"));
 
@@ -99,6 +106,8 @@ public class ProgramInfo implements Initializable
         settingsStage.initModality(Modality.APPLICATION_MODAL);
         settingsStage.sizeToScene();
         settingsStage.showAndWait();
+
+        MixpanelHandler.addMessage(EVENT.SETTINGS_CLOSED, MixpanelHandler.getProgramState());
 
         DBHandler.removeOldEntries();
     }

@@ -1,7 +1,6 @@
 package com.fi0x.edct.telemetry;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
@@ -78,13 +77,21 @@ public class MixpanelHandler implements Runnable
         Logger.INFO("Added message for mixpanel to delivery queue");
     }
 
-    //TODO: Use this on settings/filter-change events
     public static Map<String, String> getProgramState()
     {
         Map<String, String> props = new HashMap<>();
 
-        MainWindow.getInstance().interactionController.filterController.addFiltersToMap(props);
+        SettingsHandler.addFiltersToMap(props);
         SettingsHandler.addSettingsToMap(props);
+
+        return props;
+    }
+
+    public static Map<String, String> getButtonProperty(String buttonName)
+    {
+        Map<String, String> props = new HashMap<>();
+
+        props.put("buttonName", buttonName);
 
         return props;
     }

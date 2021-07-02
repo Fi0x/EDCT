@@ -2,6 +2,8 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.localstorage.TradeReloader;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,6 +29,8 @@ public class Datastorage
     {
         btnStart.setVisible(false);
         lblDataAge.setText("Loading data from storage");
+
+        MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("trade-reloader"));
 
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();

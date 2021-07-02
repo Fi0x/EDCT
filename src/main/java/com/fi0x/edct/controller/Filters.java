@@ -1,5 +1,7 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.SettingsHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -7,7 +9,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Filters implements Initializable
@@ -40,6 +41,7 @@ public class Filters implements Initializable
             {
                 updateFilters();
                 SettingsHandler.storeValue("quantity", txtQuantity.getText());
+                MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
             }
 
         });
@@ -47,26 +49,31 @@ public class Filters implements Initializable
         {
             updateFilters();
             SettingsHandler.storeValue("carrier", cbCarrier.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbSurface.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             updateFilters();
             SettingsHandler.storeValue("surface", cbSurface.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             updateFilters();
             SettingsHandler.storeValue("pad", cbLandingPad.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbDemand.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             updateFilters();
             SettingsHandler.storeValue("demand", cbDemand.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbOdyssey.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             updateFilters();
             SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
     }
 
@@ -79,16 +86,6 @@ public class Filters implements Initializable
     public void setMainController(Main controller)
     {
         mainController = controller;
-    }
-
-    public void addFiltersToMap(Map<String, String> props)
-    {
-        props.put("filterQuantity", txtQuantity.getText());
-        props.put("filterCarrier", String.valueOf(cbCarrier.isSelected()));
-        props.put("filterSurface", String.valueOf(cbSurface.isSelected()));
-        props.put("filterLandingPad", String.valueOf(cbLandingPad.isSelected()));
-        props.put("filterDemand", String.valueOf(cbDemand.isSelected()));
-        props.put("filterOdyssey", String.valueOf(cbOdyssey.isSelected()));
     }
 
     private void loadFilters()

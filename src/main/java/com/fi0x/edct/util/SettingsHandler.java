@@ -197,12 +197,65 @@ public class SettingsHandler
 
     public static void addSettingsToMap(Map<String, String> props)
     {
-        //TODO: Get all settings and add them
-        props.put("filterQuantity", txtQuantity.getText());
-        props.put("filterCarrier", String.valueOf(cbCarrier.isSelected()));
-        props.put("filterSurface", String.valueOf(cbSurface.isSelected()));
-        props.put("filterLandingPad", String.valueOf(cbLandingPad.isSelected()));
-        props.put("filterDemand", String.valueOf(cbDemand.isSelected()));
-        props.put("filterOdyssey", String.valueOf(cbOdyssey.isSelected()));
+        verifyIntegrity();
+
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(com.fi0x.edct.Main.settings.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                String[] setting = line.split("=");
+                if(setting.length < 2) continue;
+
+                switch(setting[0])
+                {
+                    case "lowProfit":
+                    case "highProfit":
+                    case "dataAge":
+                    case "inaraDelay":
+                    case "detailedResults":
+                    case "shipCargoSpace":
+                    case "loadingProfit":
+                    case "unloadingProfit":
+                        props.put(setting[0], setting[1]);
+                        break;
+                }
+            }
+        } catch(IOException e)
+        {
+            Logger.WARNING("Could not read the content of the settings file", e);
+        }
+    }
+
+    public static void addFiltersToMap(Map<String, String> props)
+    {
+        verifyIntegrity();
+
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(com.fi0x.edct.Main.settings.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                String[] setting = line.split("=");
+                if(setting.length < 2) continue;
+
+                switch(setting[0])
+                {
+                    case "filterQuantity":
+                    case "filterCarrier":
+                    case "filterSurface":
+                    case "filterLandingPad":
+                    case "filterDemand":
+                    case "filterOdyssey":
+                        props.put(setting[0], setting[1]);
+                        break;
+                }
+            }
+        } catch(IOException e)
+        {
+            Logger.WARNING("Could not read the content of the settings file", e);
+        }
     }
 }
