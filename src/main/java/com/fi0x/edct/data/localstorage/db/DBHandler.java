@@ -81,6 +81,7 @@ public class DBHandler
                 makeSQLValid(trade.STATION.TYPE.toString()) + ")");
 
         //TODO: Ignore 0 values, only write positive numbers for prices and quantity
+        //TODO: Only UPDATE entries that already exist and create new ones if the station doesn't exist
         sendStatement("REPLACE INTO Trades VALUES (" +
                 makeSQLValid(trade.STATION.NAME) + ", " +
                 makeSQLValid(trade.STATION.SYSTEM) + ", " +
@@ -334,12 +335,11 @@ public class DBHandler
 
     public static void removeStationEntry(int commodityID, String stationName, String systemName, boolean isSeller)
     {
-        //TODO: Check if buyer / seller is not swapped
         sendStatement("DELETE FROM Trades " +
                 "WHERE InaraID = " + commodityID + " " +
                 "AND StationName = " + makeSQLValid(stationName) + " " +
                 "AND SystemName = " + makeSQLValid(systemName) + " " +
-                "AND " + (isSeller ? "Supply" : "Demand") + " > 0");
+                "AND " + (isSeller ? "SellPrice" : "BuyPrice") + " > 0");
     }
 
     public static void removeOldEntries()

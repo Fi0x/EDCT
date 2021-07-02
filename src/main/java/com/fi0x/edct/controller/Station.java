@@ -67,7 +67,7 @@ public class Station
     {
         STATION_OLD s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);
-        DBHandler.removeStationEntry(commodityID, s.NAME, s.SYSTEM, isBuying);
+        DBHandler.removeStationEntry(commodityID, s.NAME, s.SYSTEM, !isBuying);
 
         resultsController.removeStationFromCurrentTrade(s);
 
