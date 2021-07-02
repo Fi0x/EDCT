@@ -91,21 +91,6 @@ public class DBHandler
                 trade.BUY_PRICE + ", " +
                 trade.SELL_PRICE + ")");
     }
-    @Deprecated
-    public static void setStationData(STATION_OLD station, int inaraID, boolean isSelling)
-    {
-        //TODO: Use setTradeData() instead
-        sendStatement("REPLACE INTO stations VALUES ("
-                + inaraID + ", "
-                + makeSQLValid(station.NAME) + ", "
-                + makeSQLValid(station.SYSTEM) + ", "
-                + isSelling + ", "
-                + makeSQLValid(String.valueOf(station.UPDATE_TIME)) + ", "
-                + station.PRICE + ", "
-                + station.QUANTITY + ", "
-                + makeSQLValid(station.PAD.toString()) + ", "
-                + makeSQLValid(station.TYPE.toString()) + ")");
-    }
 
     public static void setSystemDistance(String system1, String system2, double distance)
     {
@@ -132,7 +117,8 @@ public class DBHandler
             results = getQueryResults("SELECT c.InaraID "
                     + "FROM Commodities c "
                     + "LEFT JOIN Trades t ON t.InaraID = c.InaraID "
-                    + "WHERE t.InaraID IS NULL");
+                    + "WHERE t.InaraID IS NULL "
+                    + "AND GalacticAverage > 0");
         } else
         {
             results = getQueryResults("SELECT InaraID "
@@ -231,15 +217,14 @@ public class DBHandler
 
     public static int getOldestCommodityID()
     {
-        //TODO: Update to use new db-structure
-        ResultSet commodity = getQueryResults("SELECT tbl.* " +
-                "FROM commodities tbl " +
+        ResultSet commodity = getQueryResults("SELECT c.* " +
+                "FROM Commodities c " +
                 "INNER JOIN (" +
-                "SELECT inara_id, MIN(last_update_time) min " +
-                "FROM commodities " +
-                "GROUP BY inara_id) tbl1 " +
-                "ON tbl1.inara_id = tbl.inara_id " +
-                "ORDER BY last_update_time");
+                "SELECT InaraID, MIN(LastUpdated) min " +
+                "FROM Commodities " +
+                "GROUP BY InaraID) c2 " +
+                "ON c2.InaraID = c.InaraID " +
+                "ORDER BY LastUpdated, GalacticAverage DESC");
 
         int id = 0;
 
@@ -247,7 +232,7 @@ public class DBHandler
         {
             if(commodity != null && commodity.next())
             {
-                id = commodity.getInt("inara_id");
+                id = commodity.getInt("InaraID");
             }
         } catch(SQLException e)
         {
@@ -259,15 +244,14 @@ public class DBHandler
 
     public static int getOldestUpdateAge()
     {
-        //TODO: Update to use new db-structure
-        ResultSet commodity = getQueryResults("SELECT tbl.* " +
-                "FROM commodities tbl " +
+        ResultSet commodity = getQueryResults("SELECT c.* " +
+                "FROM Commodities c " +
                 "INNER JOIN (" +
-                "SELECT inara_id, MIN(last_update_time) min " +
-                "FROM commodities " +
-                "GROUP BY inara_id) tbl1 " +
-                "ON tbl1.inara_id = tbl.inara_id " +
-                "ORDER BY last_update_time");
+                "SELECT InaraID, MIN(LastUpdated) min " +
+                "FROM Commodities " +
+                "GROUP BY InaraID) c1 " +
+                "ON c1.InaraID = c.InaraID " +
+                "ORDER BY LastUpdated");
 
         int time = 0;
 
@@ -275,7 +259,7 @@ public class DBHandler
         {
             if(commodity != null && commodity.next())
             {
-                time = commodity.getInt("last_update_time");
+                time = commodity.getInt("LastUpdated");
             }
         } catch(SQLException e)
         {
@@ -285,7 +269,7 @@ public class DBHandler
         return time;
     }
 
-    public static ArrayList<STATION_OLD> getCommodityInformation(int commodityID, boolean isSelling)
+    public static ArrayList<STATION_OLD> newAlternative(int commodityID, boolean isSelling)
     {
         //TODO: Update to use new db-structure
         ArrayList<STATION_OLD> stationList = new ArrayList<>();
@@ -307,6 +291,40 @@ public class DBHandler
                 int price = stations.getInt("price");
                 STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("station_type"));
                 long updateTime = Long.parseLong(stations.getString("inara_time"));
+
+                stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
+            }
+        } catch(Exception e)
+        {
+            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
+        }
+
+        return stationList;
+    }
+
+    @Deprecated
+    public static ArrayList<STATION_OLD> getCommodityInformation(int commodityID, boolean isSelling)
+    {
+        //TODO: Use method above instead
+        ArrayList<STATION_OLD> stationList = new ArrayList<>();
+
+        ResultSet stations = getQueryResults("SELECT * " +
+                "FROM Trades " +
+                "WHERE InaraID = " + commodityID + " " +
+                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0");
+        if(stations == null) return stationList;
+
+        try
+        {
+            while(stations.next())
+            {
+                String system = stations.getString("SystemName");
+                String name = stations.getString("StationName");
+                PADSIZE pad = PADSIZE.getFromString("L");//TODO: Get correct landing pad
+                int quantity = Math.max(stations.getInt("Supply"), stations.getInt("Demand"));
+                int price = Math.max(stations.getInt("BuyPrice"), stations.getInt("SellPrice"));
+                STATIONTYPE type = STATIONTYPE.getFromString("ORBIT");//TODO: Get correct type
+                long updateTime = Long.parseLong(stations.getString("Age"));
 
                 stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
             }

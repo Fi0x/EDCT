@@ -5,9 +5,7 @@ import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.localstorage.NameMap;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.*;
 import com.fi0x.edct.data.websites.InaraStation;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
@@ -109,10 +107,20 @@ public class EDDN implements Runnable
 
 
                                     STATION_OLD station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
-                                    if(station != null) DBHandler.setStationData(station, commodityID, false);
+                                    if(station != null)
+                                    {
+                                        STATION s = new STATION(station.SYSTEM, station.NAME, station.PAD, station.TYPE);
+                                        TRADE t = new TRADE(s, commodityID, station.UPDATE_TIME, 0, station.QUANTITY, station.PRICE, 0);
+                                        DBHandler.setTradeData(t);
+                                    }
 
                                     station = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
-                                    if(station != null) DBHandler.setStationData(station, commodityID, true);
+                                    if(station != null)
+                                    {
+                                        STATION s = new STATION(station.SYSTEM, station.NAME, station.PAD, station.TYPE);
+                                        TRADE t = new TRADE(s, commodityID, station.UPDATE_TIME, station.QUANTITY, 0, 0, station.PRICE);
+                                        DBHandler.setTradeData(t);
+                                    }
                                 }
                                 Platform.runLater(() ->
                                 {

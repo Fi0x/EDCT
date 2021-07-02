@@ -45,10 +45,10 @@ public class TradeReloader implements Runnable
         {
             String commodityName = DBHandler.getCommodityNameByID(id);
 
-            ArrayList<STATION_OLD> tmp = DBHandler.getCommodityInformation(id, true);
+            ArrayList<STATION_OLD> tmp = DBHandler.getCommodityInformation(id, false);
             INT_CONTROLLER.sellPrices.put(commodityName, tmp);
 
-            tmp = DBHandler.getCommodityInformation(id, false);
+            tmp = DBHandler.getCommodityInformation(id, true);
             INT_CONTROLLER.buyPrices.put(commodityName, tmp);
         }
     }

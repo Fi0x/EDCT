@@ -1,5 +1,6 @@
 package com.fi0x.edct.data.structures;
 
+@Deprecated
 public class STATION_OLD
 {
     public final String SYSTEM;
