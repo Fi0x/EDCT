@@ -271,35 +271,9 @@ public class DBHandler
 
     public static ArrayList<STATION_OLD> newAlternative(int commodityID, boolean isSelling)
     {
-        //TODO: Update to use new db-structure
-        ArrayList<STATION_OLD> stationList = new ArrayList<>();
+        //TODO: Find out what is required and make correct db-requests
 
-        ResultSet stations = getQueryResults("SELECT * " +
-                "FROM stations " +
-                "WHERE commodity_id = " + commodityID + " " +
-                "AND is_seller = " + (isSelling ? 0 : 1));
-        if(stations == null) return stationList;
-
-        try
-        {
-            while(stations.next())
-            {
-                String system = stations.getString("star_system");
-                String name = stations.getString("station_name");
-                PADSIZE pad = PADSIZE.getFromString(stations.getString("pad_size"));
-                int quantity = stations.getInt("quantity");
-                int price = stations.getInt("price");
-                STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("station_type"));
-                long updateTime = Long.parseLong(stations.getString("inara_time"));
-
-                stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
-            }
-        } catch(Exception e)
-        {
-            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
-        }
-
-        return stationList;
+        return new ArrayList<>();
     }
 
     @Deprecated
@@ -308,23 +282,24 @@ public class DBHandler
         //TODO: Use method above instead
         ArrayList<STATION_OLD> stationList = new ArrayList<>();
 
-        ResultSet stations = getQueryResults("SELECT * " +
-                "FROM Trades " +
+        ResultSet trades = getQueryResults("SELECT t.*, s.* " +
+                "FROM Trades t " +
+                "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
                 "WHERE InaraID = " + commodityID + " " +
-                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0");
-        if(stations == null) return stationList;
+                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 ");
+        if(trades == null) return stationList;
 
         try
         {
-            while(stations.next())
+            while(trades.next())
             {
-                String system = stations.getString("SystemName");
-                String name = stations.getString("StationName");
-                PADSIZE pad = PADSIZE.getFromString("L");//TODO: Get correct landing pad
-                int quantity = Math.max(stations.getInt("Supply"), stations.getInt("Demand"));
-                int price = Math.max(stations.getInt("BuyPrice"), stations.getInt("SellPrice"));
-                STATIONTYPE type = STATIONTYPE.getFromString("ORBIT");//TODO: Get correct type
-                long updateTime = Long.parseLong(stations.getString("Age"));
+                String system = trades.getString("SystemName");
+                String name = trades.getString("StationName");
+                PADSIZE pad = PADSIZE.getFromString(trades.getString("PadSize"));
+                int quantity = Math.max(trades.getInt("Supply"), trades.getInt("Demand"));
+                int price = Math.max(trades.getInt("BuyPrice"), trades.getInt("SellPrice"));
+                STATIONTYPE type = STATIONTYPE.getFromString(trades.getString("StationType"));
+                long updateTime = Long.parseLong(trades.getString("Age"));
 
                 stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
             }
