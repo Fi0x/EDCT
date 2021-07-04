@@ -80,9 +80,7 @@ public class DBHandler
                 makeSQLValid(trade.STATION.PAD.toString()) + ", " +
                 makeSQLValid(trade.STATION.TYPE.toString()) + ")");
 
-        //TODO: Ignore 0 values, only write positive numbers for prices and quantity
-        //TODO: Only UPDATE entries that already exist and create new ones if the station doesn't exist
-        sendStatement("REPLACE INTO Trades VALUES (" +
+        sendStatement("INSERT INTO Trades VALUES (" +
                 makeSQLValid(trade.STATION.NAME) + ", " +
                 makeSQLValid(trade.STATION.SYSTEM) + ", " +
                 trade.INARA_ID + ", " +
@@ -90,7 +88,11 @@ public class DBHandler
                 trade.SUPPLY + ", " +
                 trade.DEMAND + ", " +
                 trade.BUY_PRICE + ", " +
-                trade.SELL_PRICE + ")");
+                trade.SELL_PRICE + ") " +
+                "ON CONFLICT (StationName, SystemName, InaraID) " +
+                "DO UPDATE SET " +
+                "Age = " + makeSQLValid(String.valueOf(trade.AGE)) + ", " +
+                (trade.SELL_PRICE > 0 ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
     }
 
     public static void setSystemDistance(String system1, String system2, double distance)

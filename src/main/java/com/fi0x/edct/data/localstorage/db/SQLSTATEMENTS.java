@@ -40,7 +40,8 @@ public enum SQLSTATEMENTS
                     "BuyPrice INT DEFAULT 0, " +
                     "SellPrice INT DEFAULT 0, " +
                     "FOREIGN KEY (StationName, SystemName) REFERENCES Stations (StationName, SystemName), " +
-                    "FOREIGN KEY (InaraID) REFERENCES Commodities (InaraID))"
+                    "FOREIGN KEY (InaraID) REFERENCES Commodities (InaraID), " +
+                    "UNIQUE(StationName, SystemName, InaraID))"
     );
 
     private final String statement;
