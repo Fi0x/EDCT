@@ -1,4 +1,4 @@
-package com.fi0x.edct.data.structures;
+package com.fi0x.edct.data.websites;
 
 public enum ENDPOINTS
 {
@@ -7,6 +7,8 @@ public enum ENDPOINTS
     EDDNPrices("https://eddb.io/commodity", "GET"),
     Prices("https://inara.cz/ajaxaction.php", "GET", "act", "refname", "refid", "refid2"),
     StationSearch("https://inara.cz/station/", "GET", "search"),
+    EDSMCoordinates("https://www.edsm.net/api-v1/system", "GET", "systemName", "showCoordinates"),
+    @Deprecated
     SystemDistance("http://elitedangerous.hozbase.co.uk/calc/distances", "GET", "systems");
 
     public final String url;

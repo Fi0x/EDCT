@@ -3,7 +3,6 @@ package com.fi0x.edct.data.websites;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.ENDPOINTS;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.data.structures.TRADE;
@@ -45,12 +44,14 @@ public class InaraCommodity
         {
             STATION s = new STATION(seller.SYSTEM, seller.NAME, seller.PAD, seller.TYPE);
             TRADE t = new TRADE(s, commodityRefID, seller.UPDATE_TIME, seller.QUANTITY, 0, 0, seller.PRICE);
+            DBHandler.setStationData(s); //TODO: Only set station data if station is new
             DBHandler.setTradeData(t);
         }
         for(STATION_OLD buyer : buyStations)
         {
             STATION s = new STATION(buyer.SYSTEM, buyer.NAME, buyer.PAD, buyer.TYPE);
             TRADE t = new TRADE(s, commodityRefID, buyer.UPDATE_TIME, 0, buyer.QUANTITY, buyer.PRICE, 0);
+            DBHandler.setStationData(s); //TODO: Only set station data if station is new
             DBHandler.setTradeData(t);
         }
 

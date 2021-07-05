@@ -218,7 +218,7 @@ public class SettingsHandler
                     case "shipCargoSpace":
                     case "loadingProfit":
                     case "unloadingProfit":
-                        props.put(setting[0], setting[1]);
+                        props.put("setting" + setting[0], setting[1]);
                         break;
                 }
             }
@@ -243,13 +243,13 @@ public class SettingsHandler
 
                 switch(setting[0])
                 {
-                    case "filterQuantity":
-                    case "filterCarrier":
-                    case "filterSurface":
-                    case "filterLandingPad":
-                    case "filterDemand":
-                    case "filterOdyssey":
-                        props.put(setting[0], setting[1]);
+                    case "quantity":
+                    case "carrier":
+                    case "surface":
+                    case "pad":
+                    case "demand":
+                    case "odyssey":
+                        props.put("filter" + setting[0], setting[1]);
                         break;
                 }
             }

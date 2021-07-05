@@ -4,12 +4,12 @@ import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.ENDPOINTS;
 import javafx.application.Platform;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@Deprecated
 public class Hozbase implements Runnable
 {
     private final String startSystem;

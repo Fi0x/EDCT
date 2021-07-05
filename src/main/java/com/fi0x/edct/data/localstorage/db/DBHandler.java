@@ -2,10 +2,7 @@ package com.fi0x.edct.data.localstorage.db;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Settings;
-import com.fi0x.edct.data.structures.PADSIZE;
-import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.data.structures.STATION_OLD;
-import com.fi0x.edct.data.structures.TRADE;
+import com.fi0x.edct.data.structures.*;
 import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
@@ -51,6 +48,8 @@ public class DBHandler
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
         sendStatement(SQLSTATEMENTS.CreateTrades.getStatement());
 
+        sendStatement(SQLSTATEMENTS.UpdateSystems.getStatement());
+
         Logger.INFO("Finished setup of local DB");
     }
 
@@ -72,14 +71,17 @@ public class DBHandler
                 "WHERE CommodityName = " + makeSQLValid(commodityName));
     }
 
-    public static void setTradeData(TRADE trade)
+    public static void setStationData(STATION station)
     {
         sendStatement("REPLACE INTO Stations VALUES (" +
-                makeSQLValid(trade.STATION.NAME) + ", " +
-                makeSQLValid(trade.STATION.SYSTEM) + ", " +
-                makeSQLValid(trade.STATION.PAD.toString()) + ", " +
-                makeSQLValid(trade.STATION.TYPE.toString()) + ")");
+                makeSQLValid(station.NAME) + ", " +
+                makeSQLValid(station.SYSTEM) + ", " +
+                makeSQLValid(station.PAD.toString()) + ", " +
+                makeSQLValid(station.TYPE.toString()) + ")");
+    }
 
+    public static void setTradeData(TRADE trade)
+    {
         sendStatement("INSERT INTO Trades VALUES (" +
                 makeSQLValid(trade.STATION.NAME) + ", " +
                 makeSQLValid(trade.STATION.SYSTEM) + ", " +

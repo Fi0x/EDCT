@@ -42,6 +42,14 @@ public enum SQLSTATEMENTS
                     "FOREIGN KEY (StationName, SystemName) REFERENCES Stations (StationName, SystemName), " +
                     "FOREIGN KEY (InaraID) REFERENCES Commodities (InaraID), " +
                     "UNIQUE(StationName, SystemName, InaraID))"
+    ),
+    UpdateSystems(
+            "ALTER TABLE Systems " +
+                    "ADD COLUMN CoordsX TEXT; " +
+                    "ALTER TABLE Systems " +
+                    "ADD COLUMN CoordsY TEXT; " +
+                    "ALTER TABLE Systems " +
+                    "ADD COLUMN CoordsZ TEXT; "
     );
 
     private final String statement;

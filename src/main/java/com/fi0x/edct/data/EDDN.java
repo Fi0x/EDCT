@@ -73,6 +73,7 @@ public class EDDN implements Runnable
                                 String html;
                                 try
                                 {
+                                    //TODO: Only get station from inara if local db has no entry
                                     String stationID = InaraStation.getInaraStationID(stationName, systemName);
                                     if(stationID == null)
                                     {
@@ -91,6 +92,7 @@ public class EDDN implements Runnable
                                     return;
                                 }
 
+                                //TODO: Get padsize and stationtype from db if possible
                                 PADSIZE padsize = HTMLCleanup.getStationPad(html);
                                 STATIONTYPE stationtype = HTMLCleanup.getStationType(html);
                                 if(stationtype == null || padsize == null)
@@ -111,6 +113,7 @@ public class EDDN implements Runnable
                                     {
                                         STATION s = new STATION(station.SYSTEM, station.NAME, station.PAD, station.TYPE);
                                         TRADE t = new TRADE(s, commodityID, station.UPDATE_TIME, 0, station.QUANTITY, station.PRICE, 0);
+                                        DBHandler.setStationData(s); //TODO: Only set station data if station is new
                                         DBHandler.setTradeData(t);
                                     }
 
@@ -119,6 +122,7 @@ public class EDDN implements Runnable
                                     {
                                         STATION s = new STATION(station.SYSTEM, station.NAME, station.PAD, station.TYPE);
                                         TRADE t = new TRADE(s, commodityID, station.UPDATE_TIME, station.QUANTITY, 0, 0, station.PRICE);
+                                        DBHandler.setStationData(s); //TODO: Only set station data if station is new
                                         DBHandler.setTradeData(t);
                                     }
                                 }

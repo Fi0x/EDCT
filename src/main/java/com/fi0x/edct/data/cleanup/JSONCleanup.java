@@ -4,6 +4,7 @@ import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.util.Logger;
+import com.sun.javafx.geom.Vec3d;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -114,5 +115,26 @@ public class JSONCleanup
 
         if(price == 0) return null;
         return new STATION_OLD(system, station, pad, quantity, price, type, System.currentTimeMillis());
+    }
+
+    @Nullable
+    public static Vec3d getSystemCoordinates(String jsonString)
+    {
+        Vec3d vector = null;
+        try
+        {
+            JSONObject json = (JSONObject) new JSONParser().parse(jsonString);
+            JSONObject coordinates = (JSONObject) json.get("coords");
+
+            double x = (double) coordinates.get("x");
+            double y = (double) coordinates.get("y");
+            double z = (double) coordinates.get("z");
+            vector = new Vec3d(x, y, z);
+        } catch(ParseException e)
+        {
+            Logger.WARNING("Could not parse the coordinates for a station", e);
+        }
+
+        return vector;
     }
 }
