@@ -11,7 +11,7 @@ import java.util.Map;
 public class EDSM
 {
     @Nullable
-    public static Vec3d getInaraStationID(String systemName, Vec3d coordinates) throws InterruptedException
+    public static Vec3d getSystemCoordinates(String systemName) throws InterruptedException
     {
         Map<String, String> parameters = new HashMap<>();
         parameters.put(ENDPOINTS.EDSMCoordinates.parameter[0], systemName);

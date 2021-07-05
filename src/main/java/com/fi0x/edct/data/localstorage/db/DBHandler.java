@@ -4,6 +4,7 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.structures.*;
 import com.fi0x.edct.util.Logger;
+import com.sun.javafx.geom.Vec3d;
 
 import javax.annotation.Nullable;
 import java.sql.*;
@@ -95,6 +96,19 @@ public class DBHandler
                 "DO UPDATE SET " +
                 "Age = " + makeSQLValid(String.valueOf(trade.AGE)) + ", " +
                 (trade.SELL_PRICE > 0 ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
+    }
+
+    //TODO: Use this method whenever a station gets added in a new system
+    public static void setSystemCoordinates(String systemName, Vec3d coords)
+    {
+        sendStatement("INSERT INTO Systems VALUES (" +
+                makeSQLValid(systemName) + ", " +
+                coords.x + ", " +
+                coords.y + ", " +
+                coords.z + ") " +
+                "ON CONFLICT (SystemName) " +
+                "DO UPDATE SET " +
+                "CoordsX = " + coords.x + ", CoordsY = " + coords.y + "CoordsZ = " + coords.z);
     }
 
     public static void setSystemDistance(String system1, String system2, double distance)
@@ -314,6 +328,14 @@ public class DBHandler
         }
 
         return stationList;
+    }
+
+    @Nullable
+    public static Vec3d getSystemCoords(String systemName)
+    {
+        //TODO: Return system coordinates or null if no entry exists
+
+        return null;
     }
 
     public static double getSystemDistance(String system1, String system2)

@@ -1,10 +1,10 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.data.localstorage.DistanceHandler;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.STATION_OLD;
-import com.fi0x.edct.data.websites.Hozbase;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -191,7 +191,7 @@ public class Results implements Initializable
         if(sellStation != null && buyStation != null)
         {
             distance = DBHandler.getSystemDistance(sellStation.SYSTEM, buyStation.SYSTEM);
-            if(distance == 0) new Thread(new Hozbase(sellStation.SYSTEM, buyStation.SYSTEM)).start();
+            if(distance == 0) new Thread(new DistanceHandler(sellStation.SYSTEM, buyStation.SYSTEM)).start();
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
