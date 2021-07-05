@@ -26,8 +26,8 @@ public class Main
 
     public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
     {
-        Map<String, ArrayList<STATION_OLD>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
-        Map<String, ArrayList<STATION_OLD>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
+        Map<String, ArrayList<STATION_OLD>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices_OLD);
+        Map<String, ArrayList<STATION_OLD>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices_OLD);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 

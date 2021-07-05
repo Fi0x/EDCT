@@ -1,6 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,8 +21,12 @@ public class Interaction implements Initializable
     public Datastorage storageController;
     public Filters filterController;
 
-    public Map<String, ArrayList<STATION_OLD>> sellPrices = new HashMap<>();
-    public Map<String, ArrayList<STATION_OLD>> buyPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> sellPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> buyPrices = new HashMap<>();
+    @Deprecated
+    public Map<String, ArrayList<STATION_OLD>> sellPrices_OLD = new HashMap<>();
+    @Deprecated
+    public Map<String, ArrayList<STATION_OLD>> buyPrices_OLD = new HashMap<>();
 
     @FXML
     private GridPane hbInteraction;

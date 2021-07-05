@@ -98,7 +98,6 @@ public class DBHandler
                 (trade.SELL_PRICE > 0 ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
     }
 
-    //TODO: Use this method whenever a station gets added in a new system
     public static void setSystemCoordinates(String systemName, Vec3d coords)
     {
         sendStatement("INSERT INTO Systems VALUES (" +
@@ -288,17 +287,46 @@ public class DBHandler
         return time;
     }
 
-    public static ArrayList<STATION_OLD> newAlternative(int commodityID, boolean isSelling)
+    public static ArrayList<TRADE> getTradeInformation(int commodityID, boolean isSelling)
     {
-        //TODO: Find out what is required and make correct db-requests
+        ArrayList<TRADE> stationList = new ArrayList<>();
 
-        return new ArrayList<>();
+        ResultSet trades = getQueryResults("SELECT t.*, s.* " +
+                "FROM Trades t " +
+                "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
+                "WHERE InaraID = " + commodityID + " " +
+                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 ");
+        if(trades == null) return stationList;
+
+        try
+        {
+            while(trades.next())
+            {
+                String systemName = trades.getString("SystemName");
+                String stationName = trades.getString("StationName");
+                PADSIZE pad = PADSIZE.getFromString(trades.getString("PadSize"));
+                STATIONTYPE type = STATIONTYPE.getFromString(trades.getString("StationType"));
+                STATION station = new STATION(systemName, stationName, pad, type);
+
+                int supply = trades.getInt("Supply");
+                int demand = trades.getInt("Demand");
+                int buyPrice = trades.getInt("BuyPrice");
+                int sellPrice = trades.getInt("SellPrice");
+                long updateTime = Long.parseLong(trades.getString("Age"));
+
+                stationList.add(new TRADE(station, commodityID, updateTime, supply, demand, buyPrice, sellPrice));
+            }
+        } catch(Exception e)
+        {
+            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
+        }
+
+        return stationList;
     }
 
     @Deprecated
     public static ArrayList<STATION_OLD> getCommodityInformation(int commodityID, boolean isSelling)
     {
-        //TODO: Use method above instead
         ArrayList<STATION_OLD> stationList = new ArrayList<>();
 
         ResultSet trades = getQueryResults("SELECT t.*, s.* " +
@@ -331,11 +359,56 @@ public class DBHandler
     }
 
     @Nullable
+    public static STATION getStation(String systemName, String stationName)
+    {
+        ResultSet stations = getQueryResults("SELECT * " +
+                "FROM Stations " +
+                "WHERE SystemName = " + makeSQLValid(systemName) + " " +
+                "AND StationName = " + makeSQLValid(stationName));
+
+        STATION station = null;
+        try
+        {
+            if(stations != null && stations.next())
+            {
+                PADSIZE pad = PADSIZE.getFromString(stations.getString("PadSize"));
+                STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("StationType"));
+
+                station = new STATION(systemName, stationName, pad, type);
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get some station information", e);
+        }
+
+        return station;
+    }
+
+    @Nullable
     public static Vec3d getSystemCoords(String systemName)
     {
-        //TODO: Return system coordinates or null if no entry exists
+        ResultSet system = getQueryResults("SELECT * " +
+                "FROM Systems " +
+                "WHERE SystemName = " + makeSQLValid(systemName));
 
-        return null;
+        Vec3d coordinates = null;
+
+        try
+        {
+            if(system != null && system.next())
+            {
+                double x = Double.parseDouble(system.getString("CoordsX"));
+                double y = Double.parseDouble(system.getString("CoordsY"));
+                double z = Double.parseDouble(system.getString("CoordsZ"));
+
+                coordinates = new Vec3d(x, y, z);
+            }
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not get the age of the oldest commodity", e);
+        }
+
+        return coordinates;
     }
 
     public static double getSystemDistance(String system1, String system2)
