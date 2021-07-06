@@ -269,19 +269,19 @@ public class Results implements Initializable
     {
         detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
 
-        long buyPrice = getCurrentTrade().BUY_PRICES.get(currentBuyStation).BUY_PRICE + Settings.loadingTonProfit; //TODO: Check if it is sell or buy price
+        long buyPrice = getCurrentTrade().BUY_PRICES.get(currentBuyStation).SELL_PRICE + Settings.loadingTonProfit;
         buyPrice = Math.max(buyPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
         buyPrice = Math.min(buyPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
 
-        long sellPrice = getCurrentTrade().SELL_PRICES.get(currentSellStation).SELL_PRICE - Settings.unloadingTonProfit; //TODO: Check if it is sell or buy price
+        long sellPrice = getCurrentTrade().SELL_PRICES.get(currentSellStation).BUY_PRICE - Settings.unloadingTonProfit;
         sellPrice = Math.max(sellPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
         sellPrice = Math.min(sellPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
 
         long carrierProfitTon = sellPrice - buyPrice;
         long carrierProfitTotal = carrierProfitTon * Integer.parseInt(MainWindow.getInstance().interactionController.filterController.txtQuantity.getText());
 
-        long loadProfit = buyPrice - getCurrentTrade().BUY_PRICES.get(currentBuyStation).BUY_PRICE; //TODO: Check if it is sell or buy price
-        long unloadProfit = getCurrentTrade().SELL_PRICES.get(currentSellStation).SELL_PRICE - sellPrice; //TODO: Check if it is sell or buy price
+        long loadProfit = buyPrice - getCurrentTrade().BUY_PRICES.get(currentBuyStation).SELL_PRICE;
+        long unloadProfit = getCurrentTrade().SELL_PRICES.get(currentSellStation).BUY_PRICE - sellPrice;
 
         detailsController.setCarrierStats(carrierProfitTon, carrierProfitTotal, buyPrice, sellPrice, loadProfit, unloadProfit);
     }

@@ -384,8 +384,8 @@ public class DBHandler
     {
         ResultSet results = getQueryResults("SELECT Distance " +
                 "FROM Distances " +
-                "WHERE (System1 = '" + system1 + "' AND System2 = '" + system2 + "') " +
-                "OR (System1 = '" + system2 + "' AND System2 = '" + system1 + "')");
+                "WHERE (System1 = " + makeSQLValid(system1) + " AND System2 = " + makeSQLValid(system2) + ") " +
+                "OR (System1 = " + makeSQLValid(system2) + " AND System2 = " + makeSQLValid(system1) + ")");
 
         try
         {

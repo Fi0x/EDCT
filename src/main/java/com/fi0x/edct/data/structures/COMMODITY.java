@@ -27,7 +27,7 @@ public class COMMODITY
             for(int i = 1; i < SELL_PRICES.size(); i++)
             {
                 int j = i - 1;
-                while(SELL_PRICES.get(j + 1).SELL_PRICE > SELL_PRICES.get(j).SELL_PRICE) //TODO: Check if prices are not swapped
+                while(SELL_PRICES.get(j + 1).BUY_PRICE > SELL_PRICES.get(j).BUY_PRICE)
                 {
                     Collections.swap(SELL_PRICES, j + 1, j);
 
@@ -42,7 +42,7 @@ public class COMMODITY
             for(int i = 1; i < BUY_PRICES.size(); i++)
             {
                 int j = i - 1;
-                while(BUY_PRICES.get(j + 1).BUY_PRICE < BUY_PRICES.get(j).BUY_PRICE) //TODO: Check if prices are not swapped
+                while(BUY_PRICES.get(j + 1).SELL_PRICE < BUY_PRICES.get(j).SELL_PRICE)
                 {
                     Collections.swap(BUY_PRICES, j + 1, j);
 
@@ -63,9 +63,8 @@ public class COMMODITY
             return;
         }
 
-        //TODO: Check if prices are not swapped
-        long buy = BUY_PRICES.get(0).BUY_PRICE;
-        long sell = SELL_PRICES.get(0).SELL_PRICE;
+        long buy = BUY_PRICES.get(0).SELL_PRICE;
+        long sell = SELL_PRICES.get(0).BUY_PRICE;
         profit = sell - buy;
     }
 }
