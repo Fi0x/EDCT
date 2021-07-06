@@ -430,7 +430,7 @@ public class DBHandler
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending an SQL statement", e);
+            Logger.WARNING("Something went wrong when sending an SQL statement. Statement: " + command, e);
         }
     }
     @Nullable
@@ -442,7 +442,7 @@ public class DBHandler
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending a SQL query", e);
+            Logger.WARNING("Something went wrong when sending a SQL query. Query: " + query, e);
         }
         return null;
     }

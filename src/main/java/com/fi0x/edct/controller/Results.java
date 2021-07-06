@@ -175,7 +175,7 @@ public class Results implements Initializable
             sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
             sellController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
 
-            profit -= sellStation.BUY_PRICE; //TODO: Check if it is sell or buy price
+            profit -= sellStation.SELL_PRICE;
         }
 
         if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
@@ -183,7 +183,7 @@ public class Results implements Initializable
             buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
             buyController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
 
-            if(profit < 0) profit += buyStation.SELL_PRICE; //TODO: Check if it is sell or buy price
+            if(profit < 0) profit += buyStation.BUY_PRICE;
         }
 
         trades.get(currentCommodity).profit = profit;
