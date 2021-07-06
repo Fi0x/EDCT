@@ -1,8 +1,9 @@
 package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
 import com.sun.javafx.geom.Vec3d;
 import org.json.simple.JSONArray;
@@ -90,49 +91,80 @@ public class JSONCleanup
         return trades;
     }
     @Nullable
-    public static STATION_OLD getStationTrade(String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
+    public static TRADE getStationTrade(int commodityID, String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
     {
-        long quantity = 0;
-        long price = 0;
+        long supply = 0;
+        long demand = 0;
+        long buyPrice = 0;
+        long sellPrice = 0;
 
         try
         {
             JSONObject json = (JSONObject) new JSONParser().parse(jsonTrade);
             if(isSelling)
             {
-                quantity = (long) json.get("stock");
-                price = (long) json.get("buyPrice");
+                supply = (long) json.get("stock");
+                sellPrice = (long) json.get("buyPrice");
             }
             else
             {
-                quantity = (long) json.get("demand");
-                price = (long) json.get("sellPrice");
+                demand = (long) json.get("demand");
+                buyPrice = (long) json.get("sellPrice");
             }
         } catch(ParseException e)
         {
             Logger.WARNING("Could not get trade data from an EDDN json");
         }
 
-        if(price == 0) return null;
-        return new STATION_OLD(system, station, pad, quantity, price, type, System.currentTimeMillis());
+        if(sellPrice == 0 && buyPrice == 0) return null;
+
+        STATION s = new STATION(system, station, pad, type);
+        return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, buyPrice, sellPrice);
     }
 
     @Nullable
     public static Vec3d getSystemCoordinates(String jsonString)
     {
         Vec3d vector = null;
-        try
-        {
-            JSONObject json = (JSONObject) new JSONParser().parse(jsonString);
-            JSONObject coordinates = (JSONObject) json.get("coords");
 
-            double x = (double) coordinates.get("x");
-            double y = (double) coordinates.get("y");
-            double z = (double) coordinates.get("z");
-            vector = new Vec3d(x, y, z);
-        } catch(ParseException e)
+        if(jsonString.contains("coords"))
         {
-            Logger.WARNING("Could not parse the coordinates for a station", e);
+            try
+            {
+                JSONObject json = (JSONObject) new JSONParser().parse(jsonString);
+                JSONObject coordinates = (JSONObject) json.get("coords");
+
+                double x;
+                double y;
+                double z;
+
+                try
+                {
+                    x = (double) coordinates.get("x");
+                } catch(ClassCastException ignored)
+                {
+                    x = (long) coordinates.get("x");
+                }
+                try
+                {
+                    y = (double) coordinates.get("y");
+                } catch(ClassCastException ignored)
+                {
+                    y = (long) coordinates.get("y");
+                }
+                try
+                {
+                    z = (double) coordinates.get("z");
+                } catch(ClassCastException ignored)
+                {
+                    z = (long) coordinates.get("z");
+                }
+
+                vector = new Vec3d(x, y, z);
+            } catch(ParseException | ClassCastException e)
+            {
+                Logger.WARNING("Could not parse the coordinates for a system. JSON: " + jsonString, e);
+            }
         }
 
         return vector;

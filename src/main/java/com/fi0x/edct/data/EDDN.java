@@ -5,7 +5,10 @@ import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.cleanup.JSONCleanup;
 import com.fi0x.edct.data.localstorage.NameMap;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.*;
+import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.data.websites.EDSM;
 import com.fi0x.edct.data.websites.InaraStation;
 import com.fi0x.edct.util.Logger;
@@ -63,95 +66,17 @@ public class EDDN implements Runnable
 
                             if(outputString.contains(SCHEMA_KEY))
                             {
-                                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(true));
-                                String stationName = JSONCleanup.getStationName(outputString);
-                                String systemName = JSONCleanup.getSystemName(outputString);
-                                if(stationName == null || systemName == null)
+                                Thread t = new Thread()
                                 {
-                                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                                    continue;
-                                }
-
-                                PADSIZE padsize;
-                                STATIONTYPE stationtype;
-
-                                STATION station = DBHandler.getStation(systemName, stationName);
-
-                                if(station == null)
-                                {
-                                    String html;
-                                    try
+                                    @Override
+                                    public void run()
                                     {
-                                        if(DBHandler.getSystemCoords(systemName) == null)
-                                        {
-                                            Vec3d coordinates = EDSM.getSystemCoordinates(systemName);
-                                            if(coordinates != null) DBHandler.setSystemCoordinates(systemName, coordinates);
-                                        }
-
-                                        String stationID = InaraStation.getInaraStationID(stationName, systemName);
-                                        if(stationID == null)
-                                        {
-                                            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                                            continue;
-                                        }
-
-                                        html = InaraStation.getStationHtml(stationID);
-                                        if(html == null)
-                                        {
-                                            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                                            continue;
-                                        }
-                                    } catch(InterruptedException ignored)
-                                    {
-                                        return;
+                                        super.run();
+                                        retrieveStationInterrupted(outputString);
                                     }
-
-                                    padsize = HTMLCleanup.getStationPad(html);
-                                    stationtype = HTMLCleanup.getStationType(html);
-
-                                    if(stationtype == null || padsize == null)
-                                    {
-                                        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                                        Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " - html: " + html);
-                                        continue;
-                                    }
-                                } else
-                                {
-                                    padsize = station.PAD;
-                                    stationtype = station.TYPE;
-                                }
-
-                                for(String trade : JSONCleanup.getTrades(outputString))
-                                {
-                                    int commodityID = getInaraIDForCommodity(trade);
-                                    if(commodityID == -1) continue;
-
-
-                                    STATION_OLD station_old = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, false);
-                                    if(station_old != null)
-                                    {
-                                        STATION s = new STATION(station_old.SYSTEM, station_old.NAME, station_old.PAD, station_old.TYPE);
-                                        TRADE t = new TRADE(s, commodityID, station_old.UPDATE_TIME, 0, station_old.QUANTITY, station_old.PRICE, 0);
-                                        DBHandler.setStationData(s); //TODO: Only set station data if station is new
-                                        DBHandler.setTradeData(t);
-                                    }
-
-                                    station_old = JSONCleanup.getStationTrade(systemName, stationName, padsize, stationtype, trade, true);
-                                    if(station_old != null)
-                                    {
-                                        STATION s = new STATION(station_old.SYSTEM, station_old.NAME, station_old.PAD, station_old.TYPE);
-                                        TRADE t = new TRADE(s, commodityID, station_old.UPDATE_TIME, station_old.QUANTITY, 0, 0, station_old.PRICE);
-                                        DBHandler.setStationData(s); //TODO: Only set station data if station is new
-                                        DBHandler.setTradeData(t);
-                                    }
-                                }
-                                Platform.runLater(() ->
-                                {
-                                    MainWindow.getInstance().interactionController.storageController.setDataAge(-1);
-                                    MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false);
-                                });
+                                };
+                                t.start();
                             }
-
                         } catch(DataFormatException e)
                         {
                             Logger.WARNING("Something went wrong when retrieving an EDDN message", e);
@@ -160,6 +85,106 @@ public class EDDN implements Runnable
                 }
             }
         }
+    }
+
+    private void retrieveStationInterrupted(String outputString)
+    {
+        Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(true));
+        String stationName = JSONCleanup.getStationName(outputString);
+        String systemName = JSONCleanup.getSystemName(outputString);
+        if(stationName == null || systemName == null)
+        {
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
+            return;
+        }
+
+        PADSIZE padsize;
+        STATIONTYPE stationtype;
+
+        STATION station = DBHandler.getStation(systemName, stationName);
+
+        if(station == null)
+        {
+            String html;
+            try
+            {
+                if(DBHandler.getSystemCoords(systemName) == null)
+                {
+                    Vec3d coordinates = EDSM.getSystemCoordinates(systemName);
+                    if(coordinates != null) DBHandler.setSystemCoordinates(systemName, coordinates);
+                }
+
+                String stationID = InaraStation.getInaraStationID(stationName, systemName);
+                if(stationID == null)
+                {
+                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
+                    return;
+                }
+
+                html = InaraStation.getStationHtml(stationID);
+                if(html == null)
+                {
+                    Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
+                    return;
+                }
+            } catch(InterruptedException ignored)
+            {
+                return;
+            }
+
+            padsize = HTMLCleanup.getStationPad(html);
+            stationtype = HTMLCleanup.getStationType(html);
+
+            if(stationtype == null || padsize == null)
+            {
+                Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
+                Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " - html: " + html);
+                return;
+            }
+        } else
+        {
+            padsize = station.PAD;
+            stationtype = station.TYPE;
+        }
+
+        for(String trade : JSONCleanup.getTrades(outputString))
+        {
+            int commodityID = getInaraIDForCommodity(trade);
+            if(commodityID == -1) continue;
+
+
+            TRADE station_old = JSONCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, false);
+            if(station_old != null)
+            {
+                STATION s = DBHandler.getStation(systemName, stationName);
+                if(s == null)
+                {
+                    s = new STATION(systemName, stationName, padsize, stationtype);
+                    DBHandler.setStationData(s);
+                }
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.BUY_PRICE, 0);
+                DBHandler.setTradeData(t);
+            }
+
+            station_old = JSONCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, true);
+            if(station_old != null)
+            {
+                STATION s = DBHandler.getStation(systemName, stationName);
+                if(s == null)
+                {
+                    s = new STATION(systemName, stationName, padsize, stationtype);
+                    DBHandler.setStationData(s);
+                }
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.SELL_PRICE);
+                DBHandler.setTradeData(t);
+            }
+        }
+        Platform.runLater(() ->
+        {
+            MainWindow.getInstance().interactionController.storageController.setDataAge(-1);
+            MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false);
+        });
+
     }
 
     private int getInaraIDForCommodity(String commodityJSON)

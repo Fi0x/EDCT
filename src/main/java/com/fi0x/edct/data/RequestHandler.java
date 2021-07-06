@@ -149,12 +149,11 @@ public class RequestHandler
 
     private static URL cleanUpUrl(String endpoint) throws MalformedURLException
     {
-        URL url = new URL(endpoint
+
+        return new URL(endpoint
                 .replace(" ", "%20")
                 .replace("'", "%27")
                 .replace("`", "%60")
         );
-
-        return url;
     }
 }

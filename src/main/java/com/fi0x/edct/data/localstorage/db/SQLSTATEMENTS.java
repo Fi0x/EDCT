@@ -11,7 +11,10 @@ public enum SQLSTATEMENTS
     ),
     CreateSystems(
             "CREATE TABLE IF NOT EXISTS Systems (" +
-                    "SystemName TEXT PRIMARY KEY)"
+                    "SystemName TEXT PRIMARY KEY, " +
+                    "CoordsX TEXT, " +
+                    "CoordsY TEXT, " +
+                    "CoordsZ TEXT)"
     ),
     CreateDistances(
             "CREATE TABLE IF NOT EXISTS Distances (" +
@@ -42,14 +45,6 @@ public enum SQLSTATEMENTS
                     "FOREIGN KEY (StationName, SystemName) REFERENCES Stations (StationName, SystemName), " +
                     "FOREIGN KEY (InaraID) REFERENCES Commodities (InaraID), " +
                     "UNIQUE(StationName, SystemName, InaraID))"
-    ),
-    UpdateSystems(
-            "ALTER TABLE Systems " +
-                    "ADD COLUMN CoordsX TEXT; " +
-                    "ALTER TABLE Systems " +
-                    "ADD COLUMN CoordsY TEXT; " +
-                    "ALTER TABLE Systems " +
-                    "ADD COLUMN CoordsZ TEXT; "
     );
 
     private final String statement;

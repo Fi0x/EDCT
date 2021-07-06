@@ -58,7 +58,7 @@ public class Main
 
     public static String getDBURL()
     {
-        return localStorage.getPath() + File.separator + "Trades-v2.db";
+        return localStorage.getPath() + File.separator + "Trades-v3.db";
     }
 
     private static void setupLocalFiles()

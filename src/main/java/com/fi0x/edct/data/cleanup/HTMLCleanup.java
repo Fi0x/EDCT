@@ -1,8 +1,9 @@
 package com.fi0x.edct.data.cleanup;
 
 import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
-import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -76,9 +77,9 @@ public class HTMLCleanup
         return nameAverageMap;
     }
 
-    public static ArrayList<STATION_OLD> getCommodityPrices(String inputHTML)
+    public static ArrayList<TRADE> getCommodityPrices(int commodityID, String inputHTML, boolean isSeller)
     {
-        ArrayList<STATION_OLD> stations = new ArrayList<>();
+        ArrayList<TRADE> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
 
         Element table = doc.getElementsByClass("tablesorterintab").first();
@@ -99,12 +100,22 @@ public class HTMLCleanup
             Element quantityElement = tradeElements.first().getAllElements().first();
 
             String quantityText = quantityElement.getAllElements().first().ownText().replace(",", "");
-            int quantity = 0;
-            if(quantityText.length() > 0) quantity = Integer.parseInt(quantityText);
 
             String priceText = tradeElements.last().ownText().replace(",", "");
-            int price = 0;
-            if(priceText.length() > 0) price = Integer.parseInt(priceText);
+
+            int supply = 0;
+            int demand = 0;
+            int buyPrice = 0;
+            int sellPrice = 0;
+            if(isSeller)
+            {
+                supply = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
+                sellPrice = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
+            } else
+            {
+                demand = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
+                buyPrice = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
+            }
 
             STATIONTYPE type;
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
@@ -134,51 +145,12 @@ public class HTMLCleanup
                 inara_time = System.currentTimeMillis();
             }
 
-            STATION_OLD station = new STATION_OLD(system, stationName, PADSIZE.getFromString(padSizeName), quantity, price, type, inara_time);
-            stations.add(station);
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), type);
+            TRADE trade = new TRADE(station, commodityID, inara_time, supply, demand, buyPrice, sellPrice);
+            stations.add(trade);
         }
 
         return stations;
-    }
-
-    public static double getSystemDistance(String inputHTML)
-    {
-        Document doc = Jsoup.parse(inputHTML);
-
-        Elements bodies = doc.getElementsByClass("body-outer");
-        if(bodies.size() == 0) return 0;
-
-        Elements containers = bodies.first().getElementsByClass("container body-content");
-        if(containers.size() == 0) return 0;
-
-        Elements panels = containers.first().getElementsByClass("panel panel-primary panel-success");
-        if(panels.size() == 0) return 0;
-
-        Elements tables = panels.first().getElementsByClass("table-responsive");
-        if(tables.size() == 0) return 0;
-
-        Elements innerTables = tables.first().getElementsByClass("table table-condensed table-striped table-bordered");
-        if(innerTables.size() == 0) return 0;
-
-        Elements rows = innerTables.first().getElementsByTag("tr");
-        if(rows.size() == 0) return 0;
-
-        for(Element row : rows)
-        {
-            if(!row.toString().contains("td")) continue;
-
-            Elements rowEntries = row.getElementsByTag("td");
-            for(Element entry : rowEntries)
-            {
-                if(entry.ownText().contains("-")) continue;
-                if(entry.ownText().length() == 0) continue;
-                if(entry.toString().contains("<td>")) continue;
-
-                return Double.parseDouble(entry.ownText());
-            }
-        }
-
-        return 0;
     }
 
     @Nullable
