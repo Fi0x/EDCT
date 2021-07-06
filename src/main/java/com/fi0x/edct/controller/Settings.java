@@ -14,13 +14,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import org.apache.commons.io.FileUtils;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class Settings implements Initializable
@@ -166,11 +163,10 @@ public class Settings implements Initializable
         MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-logs"));
         try
         {
-            List<String> fileContent = new ArrayList<>();
-            Files.write(Main.errors.toPath(), fileContent, StandardCharsets.UTF_8);
+            FileUtils.cleanDirectory(Main.errors.getParentFile());
         } catch(IOException e)
         {
-            Logger.WARNING("Could not clear log-file", e);
+            Logger.WARNING("Could not clear the log files", e);
         }
     }
     @FXML
