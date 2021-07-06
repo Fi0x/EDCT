@@ -2,7 +2,10 @@ package com.fi0x.edct.data.localstorage.db;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.controller.Settings;
-import com.fi0x.edct.data.structures.*;
+import com.fi0x.edct.data.structures.PADSIZE;
+import com.fi0x.edct.data.structures.STATION;
+import com.fi0x.edct.data.structures.STATIONTYPE;
+import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
 import com.sun.javafx.geom.Vec3d;
 
@@ -49,8 +52,6 @@ public class DBHandler
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
         sendStatement(SQLSTATEMENTS.CreateTrades.getStatement());
 
-        sendStatement(SQLSTATEMENTS.UpdateSystems.getStatement());
-
         Logger.INFO("Finished setup of local DB");
     }
 
@@ -95,7 +96,9 @@ public class DBHandler
                 "ON CONFLICT (StationName, SystemName, InaraID) " +
                 "DO UPDATE SET " +
                 "Age = " + makeSQLValid(String.valueOf(trade.AGE)) + ", " +
-                (trade.SELL_PRICE > 0 ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
+                (trade.SELL_PRICE > 0
+                        ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE
+                        : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
     }
 
     public static void setSystemCoordinates(String systemName, Vec3d coords)
@@ -107,7 +110,7 @@ public class DBHandler
                 coords.z + ") " +
                 "ON CONFLICT (SystemName) " +
                 "DO UPDATE SET " +
-                "CoordsX = " + coords.x + ", CoordsY = " + coords.y + "CoordsZ = " + coords.z);
+                "CoordsX = " + coords.x + ", CoordsY = " + coords.y + ", CoordsZ = " + coords.z);
     }
 
     public static void setSystemDistance(String system1, String system2, double distance)
@@ -324,40 +327,6 @@ public class DBHandler
         return stationList;
     }
 
-    @Deprecated
-    public static ArrayList<STATION_OLD> getCommodityInformation(int commodityID, boolean isSelling)
-    {
-        ArrayList<STATION_OLD> stationList = new ArrayList<>();
-
-        ResultSet trades = getQueryResults("SELECT t.*, s.* " +
-                "FROM Trades t " +
-                "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
-                "WHERE InaraID = " + commodityID + " " +
-                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 ");
-        if(trades == null) return stationList;
-
-        try
-        {
-            while(trades.next())
-            {
-                String system = trades.getString("SystemName");
-                String name = trades.getString("StationName");
-                PADSIZE pad = PADSIZE.getFromString(trades.getString("PadSize"));
-                int quantity = Math.max(trades.getInt("Supply"), trades.getInt("Demand"));
-                int price = Math.max(trades.getInt("BuyPrice"), trades.getInt("SellPrice"));
-                STATIONTYPE type = STATIONTYPE.getFromString(trades.getString("StationType"));
-                long updateTime = Long.parseLong(trades.getString("Age"));
-
-                stationList.add(new STATION_OLD(system, name, pad, quantity, price, type, updateTime));
-            }
-        } catch(Exception e)
-        {
-            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
-        }
-
-        return stationList;
-    }
-
     @Nullable
     public static STATION getStation(String systemName, String stationName)
     {
@@ -415,8 +384,8 @@ public class DBHandler
     {
         ResultSet results = getQueryResults("SELECT Distance " +
                 "FROM Distances " +
-                "WHERE (System1 = '" + system1 + "' AND System2 = '" + system2 + "') " +
-                "OR (System1 = '" + system2 + "' AND System2 = '" + system1 + "')");
+                "WHERE (System1 = " + makeSQLValid(system1) + " AND System2 = " + makeSQLValid(system2) + ") " +
+                "OR (System1 = " + makeSQLValid(system2) + " AND System2 = " + makeSQLValid(system1) + ")");
 
         try
         {
@@ -461,7 +430,7 @@ public class DBHandler
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending an SQL statement", e);
+            Logger.WARNING("Something went wrong when sending an SQL statement. Statement: " + command, e);
         }
     }
     @Nullable
@@ -473,7 +442,7 @@ public class DBHandler
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending a SQL query", e);
+            Logger.WARNING("Something went wrong when sending a SQL query. Query: " + query, e);
         }
         return null;
     }

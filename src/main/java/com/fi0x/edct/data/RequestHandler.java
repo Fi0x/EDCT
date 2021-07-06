@@ -79,9 +79,11 @@ public class RequestHandler
 
     private static boolean canRequest(boolean ignore429) throws IOException, InterruptedException
     {
-        List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
         if(!ignore429)
         {
+            if(!Main.errors.exists()) return true;
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
+
             for(int i = fileContent.size() - 1; i >= 0; i--)
             {
                 String error = fileContent.get(i);
@@ -149,12 +151,11 @@ public class RequestHandler
 
     private static URL cleanUpUrl(String endpoint) throws MalformedURLException
     {
-        URL url = new URL(endpoint
+
+        return new URL(endpoint
                 .replace(" ", "%20")
                 .replace("'", "%27")
                 .replace("`", "%60")
         );
-
-        return url;
     }
 }

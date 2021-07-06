@@ -43,7 +43,6 @@ public class Filters implements Initializable
                 SettingsHandler.storeValue("quantity", txtQuantity.getText());
                 MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
             }
-
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) ->
         {

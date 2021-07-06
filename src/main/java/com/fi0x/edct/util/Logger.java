@@ -71,6 +71,7 @@ public class Logger
         {
             try
             {
+                if(!Main.errors.exists()) Main.createLogFile();
                 List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
 
                 fileContent.add(time + prefix + errorCode + text);

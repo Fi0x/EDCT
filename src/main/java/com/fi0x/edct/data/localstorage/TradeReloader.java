@@ -3,7 +3,6 @@ package com.fi0x.edct.data.localstorage;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
@@ -42,10 +41,6 @@ public class TradeReloader implements Runnable
         INT_CONTROLLER.sellPrices = new HashMap<>();
         INT_CONTROLLER.buyPrices = new HashMap<>();
 
-        //TODO: Remove when new STATION is implemented
-        INT_CONTROLLER.sellPrices_OLD = new HashMap<>();
-        INT_CONTROLLER.buyPrices_OLD = new HashMap<>();
-
         for(int id : DBHandler.getCommodityIDs(false))
         {
             String commodityName = DBHandler.getCommodityNameByID(id);
@@ -55,12 +50,6 @@ public class TradeReloader implements Runnable
 
             trade = DBHandler.getTradeInformation(id, true);
             INT_CONTROLLER.buyPrices.put(commodityName, trade);
-
-            //TODO: Remove when new STATION is implemented
-            ArrayList<STATION_OLD> tmp = DBHandler.getCommodityInformation(id, false);
-            INT_CONTROLLER.sellPrices_OLD.put(commodityName, tmp);
-            tmp = DBHandler.getCommodityInformation(id, true);
-            INT_CONTROLLER.buyPrices_OLD.put(commodityName, tmp);
         }
     }
 }

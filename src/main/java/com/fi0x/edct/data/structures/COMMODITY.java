@@ -8,10 +8,10 @@ public class COMMODITY
     public final String NAME;
     public final long GALACTIC_AVERAGE;
     public long profit;
-    public final ArrayList<STATION_OLD> SELL_PRICES;
-    public final ArrayList<STATION_OLD> BUY_PRICES;
+    public final ArrayList<TRADE> SELL_PRICES;
+    public final ArrayList<TRADE> BUY_PRICES;
 
-    public COMMODITY(String name, ArrayList<STATION_OLD> sellPrices, ArrayList<STATION_OLD> buyPrices, long galacticAverage)
+    public COMMODITY(String name, ArrayList<TRADE> sellPrices, ArrayList<TRADE> buyPrices, long galacticAverage)
     {
         NAME = name;
         GALACTIC_AVERAGE = galacticAverage;
@@ -27,7 +27,7 @@ public class COMMODITY
             for(int i = 1; i < SELL_PRICES.size(); i++)
             {
                 int j = i - 1;
-                while(SELL_PRICES.get(j + 1).PRICE > SELL_PRICES.get(j).PRICE)
+                while(SELL_PRICES.get(j + 1).BUY_PRICE > SELL_PRICES.get(j).BUY_PRICE)
                 {
                     Collections.swap(SELL_PRICES, j + 1, j);
 
@@ -42,7 +42,7 @@ public class COMMODITY
             for(int i = 1; i < BUY_PRICES.size(); i++)
             {
                 int j = i - 1;
-                while(BUY_PRICES.get(j + 1).PRICE < BUY_PRICES.get(j).PRICE)
+                while(BUY_PRICES.get(j + 1).SELL_PRICE < BUY_PRICES.get(j).SELL_PRICE)
                 {
                     Collections.swap(BUY_PRICES, j + 1, j);
 
@@ -63,8 +63,8 @@ public class COMMODITY
             return;
         }
 
-        long buy = BUY_PRICES.get(0).PRICE;
-        long sell = SELL_PRICES.get(0).PRICE;
+        long buy = BUY_PRICES.get(0).SELL_PRICE;
+        long sell = SELL_PRICES.get(0).BUY_PRICE;
         profit = sell - buy;
     }
 }

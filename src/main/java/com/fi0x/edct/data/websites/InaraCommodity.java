@@ -4,8 +4,8 @@ import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.HTMLCleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.STATION;
-import com.fi0x.edct.data.structures.STATION_OLD;
 import com.fi0x.edct.data.structures.TRADE;
+import com.sun.javafx.geom.Vec3d;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,23 +35,76 @@ public class InaraCommodity
 
         String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
-        ArrayList<STATION_OLD> sellStations = HTMLCleanup.getCommodityPrices(html);
+        ArrayList<TRADE> sellStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, true);
         html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
-        ArrayList<STATION_OLD> buyStations = HTMLCleanup.getCommodityPrices(html);
+        ArrayList<TRADE> buyStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, false);
 
-        for(STATION_OLD seller : sellStations)
+        for(TRADE seller : sellStations)
         {
-            STATION s = new STATION(seller.SYSTEM, seller.NAME, seller.PAD, seller.TYPE);
-            TRADE t = new TRADE(s, commodityRefID, seller.UPDATE_TIME, seller.QUANTITY, 0, 0, seller.PRICE);
-            DBHandler.setStationData(s); //TODO: Only set station data if station is new and then also add system coordinates
+            STATION s = DBHandler.getStation(seller.STATION.SYSTEM, seller.STATION.NAME);
+            if(s == null)
+            {
+                s = new STATION(seller.STATION.SYSTEM, seller.STATION.NAME, seller.STATION.PAD, seller.STATION.TYPE);
+                DBHandler.setStationData(s);
+                if(DBHandler.getSystemCoords(seller.STATION.SYSTEM) == null)
+                {
+                    Thread t = new Thread()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            super.run();
+                            Vec3d coordinates;
+                            try
+                            {
+                                coordinates = EDSM.getSystemCoordinates(seller.STATION.SYSTEM);
+                            } catch(InterruptedException ignored)
+                            {
+                                return;
+                            }
+                            if(coordinates != null) DBHandler.setSystemCoordinates(seller.STATION.SYSTEM, coordinates);
+                        }
+                    };
+                    t.start();
+                }
+            }
+
+            TRADE t = new TRADE(s, commodityRefID, seller.AGE, seller.SUPPLY, 0, 0, seller.SELL_PRICE);
             DBHandler.setTradeData(t);
         }
-        for(STATION_OLD buyer : buyStations)
+        for(TRADE buyer : buyStations)
         {
-            STATION s = new STATION(buyer.SYSTEM, buyer.NAME, buyer.PAD, buyer.TYPE);
-            TRADE t = new TRADE(s, commodityRefID, buyer.UPDATE_TIME, 0, buyer.QUANTITY, buyer.PRICE, 0);
-            DBHandler.setStationData(s); //TODO: Only set station data if station is new and then also add system coordinates
+            STATION s = DBHandler.getStation(buyer.STATION.SYSTEM, buyer.STATION.NAME);
+            if(s == null)
+            {
+                s = new STATION(buyer.STATION.SYSTEM, buyer.STATION.NAME, buyer.STATION.PAD, buyer.STATION.TYPE);
+                DBHandler.setStationData(s);
+                if(DBHandler.getSystemCoords(buyer.STATION.SYSTEM) == null)
+                {
+                    Thread t = new Thread()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            super.run();
+                            Vec3d coordinates;
+                            try
+                            {
+                                coordinates = EDSM.getSystemCoordinates(buyer.STATION.SYSTEM);
+                            } catch(InterruptedException ignored)
+                            {
+                                return;
+                            }
+                            if(coordinates != null) DBHandler.setSystemCoordinates(buyer.STATION.SYSTEM, coordinates);
+                        }
+                    };
+                    t.start();
+                }
+            }
+
+            TRADE t = new TRADE(s, commodityRefID, buyer.AGE, 0, buyer.DEMAND, buyer.BUY_PRICE, 0);
+            DBHandler.setStationData(s);
             DBHandler.setTradeData(t);
         }
 

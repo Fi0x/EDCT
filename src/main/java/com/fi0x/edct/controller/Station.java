@@ -1,7 +1,7 @@
 package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.structures.STATION_OLD;
+import com.fi0x.edct.data.structures.TRADE;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -65,9 +65,9 @@ public class Station
     @FXML
     private void removeStation()
     {
-        STATION_OLD s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);
-        DBHandler.removeStationEntry(commodityID, s.NAME, s.SYSTEM, !isBuying);
+        DBHandler.removeStationEntry(commodityID, s.STATION.NAME, s.STATION.SYSTEM, !isBuying);
 
         resultsController.removeStationFromCurrentTrade(s);
 
@@ -83,17 +83,17 @@ public class Station
         resultsController.displayResults();
     }
 
-    public void setStation(STATION_OLD station, boolean hasPrev, boolean hasNext)
+    public void setStation(TRADE station, boolean hasPrev, boolean hasNext)
     {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
-        lblSystem.setText("System:\t " + station.SYSTEM);
-        lblStationName.setText("Station:\t " + station.NAME);
-        lblType.setText("Type:\t " + station.TYPE);
-        lblPad.setText("Pad:\t\t " + station.PAD);
-        lblPrice.setText("Price:\t " + df.format(station.PRICE) + " credits");
-        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format(station.QUANTITY) + " tons");
+        lblSystem.setText("System:\t " + station.STATION.SYSTEM);
+        lblStationName.setText("Station:\t " + station.STATION.NAME);
+        lblType.setText("Type:\t " + station.STATION.TYPE);
+        lblPad.setText("Pad:\t\t " + station.STATION.PAD);
+        lblPrice.setText("Price:\t " + df.format((isBuying ? station.BUY_PRICE : station.SELL_PRICE)) + " credits");
+        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? station.DEMAND : station.SUPPLY)) + " tons");
         lblAge.setText("Data age:\t " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);

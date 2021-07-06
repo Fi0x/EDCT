@@ -20,4 +20,14 @@ public class TRADE
         BUY_PRICE = buyPrice;
         SELL_PRICE = sellPrice;
     }
+
+    public String getUpdateAge()
+    {
+        long age = System.currentTimeMillis() - AGE;
+        age /= 1000;
+        if(age > 60 * 60 * 24) return age / 60 / 60 / 24 + "d";
+        else if(age > 60 * 60) return age / 60 / 60 + "h";
+        else if(age > 60) return age / 60 / 60 + "min";
+        else return age + "s";
+    }
 }

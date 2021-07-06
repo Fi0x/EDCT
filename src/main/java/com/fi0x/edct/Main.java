@@ -9,6 +9,8 @@ import com.fi0x.edct.util.SettingsHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -23,7 +25,7 @@ public class Main
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final String version = "1.2.5.4";//All.GUI.Logic.Hotfix
+    public static final String version = "1.2.6.4";//All.GUI.Logic.Hotfix
 
     public static void main(String[] args)
     {
@@ -58,7 +60,12 @@ public class Main
 
     public static String getDBURL()
     {
-        return localStorage.getPath() + File.separator + "Trades-v2.db";
+        return localStorage.getPath() + File.separator + "Trades-v3.db";
+    }
+
+    public static void createLogFile()
+    {
+        createFileIfNotExists(errors, true);
     }
 
     private static void setupLocalFiles()
@@ -69,8 +76,8 @@ public class Main
             System.exit(-1);
         }
 
-        errors = new File(localStorage.getPath() + File.separator + "carrier_trader.log");
-        createFileIfNotExists(errors, true);
+        createFileIfNotExists(new File(localStorage.getPath() + File.separator + "Logs"), false);
+        errors = new File(localStorage.getPath() + File.separator + "Logs" + File.separator + getDateString() + ".log");
 
         settings = new File(localStorage.getPath() + File.separator + "settings.txt");
         createFileIfNotExists(settings, true);
@@ -94,5 +101,12 @@ public class Main
         } else return false;
 
         return true;
+    }
+    private static String getDateString()
+    {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
+        LocalDateTime now = LocalDateTime.now();
+
+        return dtf.format(now);
     }
 }

@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 <VBox id="filters" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Filters">
-    <HBox id="quantity">
+    <HBox id="labeltxt">
         <Label text="Min quantity">
             <tooltip>
                 <Tooltip text="The lowest demand / supply a station should have for a commodity" />
