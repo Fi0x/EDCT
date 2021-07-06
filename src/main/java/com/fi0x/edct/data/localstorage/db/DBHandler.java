@@ -96,7 +96,9 @@ public class DBHandler
                 "ON CONFLICT (StationName, SystemName, InaraID) " +
                 "DO UPDATE SET " +
                 "Age = " + makeSQLValid(String.valueOf(trade.AGE)) + ", " +
-                (trade.SELL_PRICE > 0 ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
+                (trade.SELL_PRICE > 0
+                        ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE
+                        : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
     }
 
     public static void setSystemCoordinates(String systemName, Vec3d coords)

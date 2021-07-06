@@ -35,10 +35,10 @@ public class InaraCommodity
 
         String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
-        ArrayList<TRADE> sellStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, false);
+        ArrayList<TRADE> sellStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, true);
         html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
-        ArrayList<TRADE> buyStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, true);
+        ArrayList<TRADE> buyStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, false);
 
         for(TRADE seller : sellStations)
         {
