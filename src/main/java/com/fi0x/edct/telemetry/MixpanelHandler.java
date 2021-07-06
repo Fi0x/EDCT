@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
+import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -47,6 +48,9 @@ public class MixpanelHandler implements Runnable
         try
         {
             new MixpanelAPI().deliver(delivery);
+        } catch(SocketException ignored)
+        {
+            Logger.WARNING(995, "Could not establish a connection to mixpanel");
         } catch(IOException e)
         {
             Logger.WARNING("Could not send messages to mixpanel", e);

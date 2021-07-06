@@ -2,7 +2,7 @@
     -fx-padding: 10;
     -fx-background-color: rgba(0, 255, 0, 0.1);
 }
-#quantity {
+#labeltxt {
     -fx-alignment: CENTER-LEFT;
 }
 .label {
