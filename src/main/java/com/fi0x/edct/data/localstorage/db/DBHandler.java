@@ -12,6 +12,7 @@ import com.sun.javafx.geom.Vec3d;
 import javax.annotation.Nullable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -430,7 +431,8 @@ public class DBHandler
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            Logger.WARNING(994, "Something went wrong when sending an SQL statement. Statement: " + command, e);
+            if(Arrays.toString(e.getStackTrace()).contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of thread locking", e);
+            else Logger.WARNING(994, "Something went wrong when sending an SQL statement. Statement: " + command, e);
         }
     }
     @Nullable
@@ -442,7 +444,8 @@ public class DBHandler
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            Logger.WARNING(994, "Something went wrong when sending a SQL query. Query: " + query, e);
+            if(Arrays.toString(e.getStackTrace()).contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of thread locking", e);
+            else Logger.WARNING(994, "Something went wrong when sending a SQL query. Query: " + query, e);
         }
         return null;
     }
