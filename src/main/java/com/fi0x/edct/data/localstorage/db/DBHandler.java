@@ -422,7 +422,7 @@ public class DBHandler
         sendStatement("DELETE FROM Trades");
     }
 
-    private static void sendStatement(String command)
+    private static synchronized void sendStatement(String command)
     {
         try
         {
@@ -430,11 +430,11 @@ public class DBHandler
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending an SQL statement. Statement: " + command, e);
+            Logger.WARNING(994, "Something went wrong when sending an SQL statement. Statement: " + command, e);
         }
     }
     @Nullable
-    private static ResultSet getQueryResults(String query)
+    private static synchronized ResultSet getQueryResults(String query)
     {
         try
         {
@@ -442,7 +442,7 @@ public class DBHandler
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            Logger.WARNING("Something went wrong when sending a SQL query. Query: " + query, e);
+            Logger.WARNING(994, "Something went wrong when sending a SQL query. Query: " + query, e);
         }
         return null;
     }

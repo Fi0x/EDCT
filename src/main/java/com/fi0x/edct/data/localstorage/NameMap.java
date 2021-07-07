@@ -62,6 +62,7 @@ public class NameMap
         COMMODITY_NAMES.put("Technical Blueprints", "usscargotechnicalblueprints");
         COMMODITY_NAMES.put("Prototype Tech", "usscargoprototypetech");
         COMMODITY_NAMES.put("Political Prisoners", "politicalprisoner");
+        COMMODITY_NAMES.put("Trade Data", "usscargotradedata");
 
         RARE_NAMES.add("aerialedenapple");
         RARE_NAMES.add("alacarakmoskinart");

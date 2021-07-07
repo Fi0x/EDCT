@@ -174,7 +174,10 @@ public class Settings implements Initializable
     {
         MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-DB"));
         DBHandler.removeTradeData();
+
+        if(Main.eddn != null) Main.eddn.interrupt();
         if(Main.updater != null) Main.updater.interrupt();
+
         Main.updater = new Thread(new Updater());
         Main.updater.start();
     }
