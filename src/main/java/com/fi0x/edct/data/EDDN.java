@@ -32,8 +32,6 @@ public class EDDN implements Runnable
     @Override
     public void run()
     {
-        NameMap.initializeNames();
-
         ZContext ctx = new ZContext();
         ZMQ.Socket client = ctx.createSocket(ZMQ.SUB);
         client.subscribe("".getBytes());
