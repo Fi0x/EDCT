@@ -2,10 +2,10 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
-import com.fi0x.edct.data.websites.GitHub;
 import com.fi0x.edct.telemetry.EVENT;
 import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.Logger;
+import com.fi0x.edct.versioncontrol.GitHub;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -30,7 +31,8 @@ public class ProgramInfo implements Initializable
     public Stage settingsStage;
 
     private int errorCode = 0;
-    private String updateUrl = "https://github.com/Fi0x/EDCT/releases";
+    private String updateUrl = "https://github.com/Fi0x/EDCT/releases/latest";
+    private String assetUrl = null;
 
     @FXML
     private Label lblError;
@@ -77,6 +79,7 @@ public class ProgramInfo implements Initializable
     {
         MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("download-new-version"));
         openWebsite(updateUrl);
+        if(assetUrl != null) openWebsite(assetUrl);
     }
     @FXML
     private void openSettings()
@@ -121,10 +124,11 @@ public class ProgramInfo implements Initializable
 
     public void checkForUpdates()
     {
-        String url = GitHub.checkForVersionUpdates();
-        if(url != null)
+        ArrayList<String> url = GitHub.checkForVersionUpdates();
+        if(url != null && url.size() > 0)
         {
-            updateUrl = url;
+            updateUrl = url.get(0);
+            if(url.size() >= 3) assetUrl = url.get((Main.portable ? 1 : 2));
             btnUpdate.setVisible(true);
             btnBugReport.setVisible(false);
         }

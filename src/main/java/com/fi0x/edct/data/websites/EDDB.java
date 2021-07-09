@@ -1,7 +1,7 @@
 package com.fi0x.edct.data.websites;
 
 import com.fi0x.edct.data.RequestHandler;
-import com.fi0x.edct.data.cleanup.HTMLCleanup;
+import com.fi0x.edct.data.cleanup.EDDBCleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ public class EDDB
 
         if(html == null) return false;
 
-        Map<String, Integer> averages = HTMLCleanup.getCommodityAveragePrice(html);
+        Map<String, Integer> averages = EDDBCleanup.getCommodityAveragePrice(html);
 
         for(Map.Entry<String, Integer> entry : averages.entrySet())
         {

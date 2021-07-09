@@ -1,7 +1,7 @@
 package com.fi0x.edct.data.websites;
 
 import com.fi0x.edct.data.RequestHandler;
-import com.fi0x.edct.data.cleanup.HTMLCleanup;
+import com.fi0x.edct.data.cleanup.INARACleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.TRADE;
@@ -19,7 +19,7 @@ public class InaraCommodity
         Map<String, Integer> commodities;
         String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
         if(html == null) return false;
-        commodities = HTMLCleanup.getCommodityIDs(html);
+        commodities = INARACleanup.getCommodityIDs(html);
 
         for(Map.Entry<String, Integer> entry : commodities.entrySet())
         {
@@ -35,10 +35,10 @@ public class InaraCommodity
 
         String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
-        ArrayList<TRADE> sellStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, true);
+        ArrayList<TRADE> sellStations = INARACleanup.getCommodityPrices(commodityRefID, html, true);
         html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
-        ArrayList<TRADE> buyStations = HTMLCleanup.getCommodityPrices(commodityRefID, html, false);
+        ArrayList<TRADE> buyStations = INARACleanup.getCommodityPrices(commodityRefID, html, false);
 
         for(TRADE seller : sellStations)
         {

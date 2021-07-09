@@ -26,6 +26,7 @@ public class Main
     public static File settings;
     //TODO: Update version information
     public static final String version = "1.2.6.5";//All.GUI.Logic.Hotfix
+    public static final boolean portable = false;
 
     public static void main(String[] args)
     {

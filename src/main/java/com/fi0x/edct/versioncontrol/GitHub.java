@@ -1,8 +1,8 @@
-package com.fi0x.edct.data.websites;
+package com.fi0x.edct.versioncontrol;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.data.RequestHandler;
-import com.fi0x.edct.data.cleanup.JSONCleanup;
+import com.fi0x.edct.data.websites.ENDPOINTS;
 import com.fi0x.edct.util.Logger;
 
 import javax.annotation.Nullable;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class GitHub
 {
     @Nullable
-    public static String checkForVersionUpdates()
+    public static ArrayList<String> checkForVersionUpdates()
     {
         Map<String, String> params = new HashMap<>();
         try
@@ -27,10 +27,10 @@ public class GitHub
             {
             }
             if(response == null || response.equals("")) return null;
-            Map<String, String> releases = JSONCleanup.getReleases(response);
+            Map<String, ArrayList<String>> releases = ReleaseCleanup.getReleases(response);
 
             String newestVersion = Main.version;
-            for(Map.Entry<String, String> version : releases.entrySet())
+            for(Map.Entry<String, ArrayList<String>> version : releases.entrySet())
             {
                 if(isNewer(newestVersion, version.getKey())) newestVersion = version.getKey();
             }

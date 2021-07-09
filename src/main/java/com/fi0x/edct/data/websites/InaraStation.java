@@ -1,7 +1,7 @@
 package com.fi0x.edct.data.websites;
 
 import com.fi0x.edct.data.RequestHandler;
-import com.fi0x.edct.data.cleanup.HTMLCleanup;
+import com.fi0x.edct.data.cleanup.INARACleanup;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -18,7 +18,7 @@ public class InaraStation
 
         if(html == null) return null;
 
-        return HTMLCleanup.getStationID(html, stationName, systemName);
+        return INARACleanup.getStationID(html, stationName, systemName);
     }
 
     public static String getStationHtml(String stationID) throws InterruptedException

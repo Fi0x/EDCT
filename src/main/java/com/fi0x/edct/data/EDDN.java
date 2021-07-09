@@ -1,8 +1,7 @@
 package com.fi0x.edct.data;
 
 import com.fi0x.edct.MainWindow;
-import com.fi0x.edct.data.cleanup.HTMLCleanup;
-import com.fi0x.edct.data.cleanup.JSONCleanup;
+import com.fi0x.edct.data.cleanup.EDDNCleanup;
 import com.fi0x.edct.data.localstorage.NameMap;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.PADSIZE;
@@ -90,8 +89,8 @@ public class EDDN implements Runnable
     private void retrieveStationInterrupted(String outputString)
     {
         Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(true));
-        String stationName = JSONCleanup.getStationName(outputString);
-        String systemName = JSONCleanup.getSystemName(outputString);
+        String stationName = EDDNCleanup.getStationName(outputString);
+        String systemName = EDDNCleanup.getSystemName(outputString);
         if(stationName == null || systemName == null)
         {
             Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
@@ -132,8 +131,8 @@ public class EDDN implements Runnable
                 return;
             }
 
-            padsize = HTMLCleanup.getStationPad(html);
-            stationtype = HTMLCleanup.getStationType(html);
+            padsize = EDDNCleanup.getStationPad(html);
+            stationtype = EDDNCleanup.getStationType(html);
 
             if(stationtype == null || padsize == null)
             {
@@ -147,13 +146,13 @@ public class EDDN implements Runnable
             stationtype = station.TYPE;
         }
 
-        for(String trade : JSONCleanup.getTrades(outputString))
+        for(String trade : EDDNCleanup.getTrades(outputString))
         {
             int commodityID = getInaraIDForCommodity(trade);
             if(commodityID == -1) continue;
 
 
-            TRADE station_old = JSONCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, false);
+            TRADE station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, false);
             if(station_old != null)
             {
                 STATION s = DBHandler.getStation(systemName, stationName);
@@ -166,7 +165,7 @@ public class EDDN implements Runnable
                 DBHandler.setTradeData(t);
             }
 
-            station_old = JSONCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, true);
+            station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, true);
             if(station_old != null)
             {
                 STATION s = DBHandler.getStation(systemName, stationName);

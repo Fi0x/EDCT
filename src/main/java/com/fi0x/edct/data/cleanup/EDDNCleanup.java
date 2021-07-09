@@ -5,43 +5,17 @@ import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.STATIONTYPE;
 import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.Logger;
-import com.sun.javafx.geom.Vec3d;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.jsoup.nodes.Element;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class JSONCleanup
+public class EDDNCleanup
 {
-    public static Map<String, String> getReleases(String jsonString)
-    {
-        Map<String, String> releaseDates = new HashMap<>();
-
-        try
-        {
-            JSONArray jsonReleases = (JSONArray) new JSONParser().parse(jsonString);
-            for(Object release : jsonReleases)
-            {
-                if((boolean) ((JSONObject) release).get("prerelease")) continue;
-                if((boolean) ((JSONObject) release).get("draft")) continue;
-
-                String tag = ((JSONObject) release).get("tag_name").toString();
-                String url = ((JSONObject) release).get("html_url").toString();
-                releaseDates.put(tag, url);
-            }
-        } catch(ParseException e)
-        {
-            Logger.WARNING("Could not convert release-json: " + jsonString, e);
-        }
-
-        return releaseDates;
-    }
-
     @Nullable
     public static String getStationName(String jsonString)
     {
@@ -123,50 +97,51 @@ public class JSONCleanup
     }
 
     @Nullable
-    public static Vec3d getSystemCoordinates(String jsonString)
+    public static PADSIZE getStationPad(String inputHTML)
     {
-        Vec3d vector = null;
+        PADSIZE padsize = PADSIZE.NONE;
 
-        if(jsonString.contains("coords"))
+        Element details = HTMLCleanup.getStationDetails(inputHTML);
+        if(details == null) return null;
+
+        for(Element pair : details.getElementsByClass("itempaircontainer"))
         {
-            try
+            String pairText = pair.toString().toLowerCase();
+            if(pairText.contains("landing pad"))
             {
-                JSONObject json = (JSONObject) new JSONParser().parse(jsonString);
-                JSONObject coordinates = (JSONObject) json.get("coords");
-
-                double x;
-                double y;
-                double z;
-
-                try
-                {
-                    x = (double) coordinates.get("x");
-                } catch(ClassCastException ignored)
-                {
-                    x = (long) coordinates.get("x");
-                }
-                try
-                {
-                    y = (double) coordinates.get("y");
-                } catch(ClassCastException ignored)
-                {
-                    y = (long) coordinates.get("y");
-                }
-                try
-                {
-                    z = (double) coordinates.get("z");
-                } catch(ClassCastException ignored)
-                {
-                    z = (long) coordinates.get("z");
-                }
-
-                vector = new Vec3d(x, y, z);
-            } catch(ParseException | ClassCastException e)
-            {
-                Logger.WARNING("Could not parse the coordinates for a system. JSON: " + jsonString, e);
+                if(pairText.contains("large")) padsize = PADSIZE.L;
+                else if(pairText.contains("medium")) padsize = PADSIZE.M;
+                else if(pairText.contains("small")) padsize = PADSIZE.S;
+                break;
             }
         }
 
-        return vector;
+        return padsize;
+    }
+
+    @Nullable
+    public static STATIONTYPE getStationType(String inputHTML)
+    {
+        STATIONTYPE type = STATIONTYPE.UNKNOWN;
+
+        Element details = HTMLCleanup.getStationDetails(inputHTML);
+        if(details == null) return null;
+
+        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        {
+            if(pair.toString().toLowerCase().contains("station type"))
+            {
+                String typeName = pair.getElementsByClass("itempairvalue").first().ownText().toLowerCase();
+                if(typeName.contains("odyssey")) type = STATIONTYPE.ODYSSEY;
+                else if(typeName.contains("fleet") || typeName.contains("carrier")) type = STATIONTYPE.CARRIER;
+                else if(typeName.contains("surface")) type = STATIONTYPE.SURFACE;
+                else if(typeName.contains("starport") ||
+                        typeName.contains("outpost") ||
+                        typeName.contains("asteroid") ||
+                        typeName.contains("megaship")) type = STATIONTYPE.ORBIT;
+            }
+        }
+
+        return type;
     }
 }

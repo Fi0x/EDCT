@@ -1,7 +1,7 @@
 package com.fi0x.edct.data.websites;
 
 import com.fi0x.edct.data.RequestHandler;
-import com.fi0x.edct.data.cleanup.JSONCleanup;
+import com.fi0x.edct.data.cleanup.EDSMCleanup;
 import com.sun.javafx.geom.Vec3d;
 
 import javax.annotation.Nullable;
@@ -21,6 +21,6 @@ public class EDSM
 
         if(html == null) return null;
 
-        return JSONCleanup.getSystemCoordinates(html);
+        return EDSMCleanup.getSystemCoordinates(html);
     }
 }
