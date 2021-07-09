@@ -10,9 +10,9 @@ import com.fi0x.edct.util.Logger;
 import com.sun.javafx.geom.Vec3d;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -427,11 +427,12 @@ public class DBHandler
     {
         try
         {
+            dbLockCheck();
             Statement statement = getInstance().dbConnection.createStatement();
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            if(Arrays.toString(e.getStackTrace()).contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of thread locking", e);
+            if(e.toString().contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of locking", e);
             else Logger.WARNING(994, "Something went wrong when sending an SQL statement. Statement: " + command, e);
         }
     }
@@ -440,14 +441,28 @@ public class DBHandler
     {
         try
         {
+            dbLockCheck();
             Statement statement = getInstance().dbConnection.createStatement();
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            if(Arrays.toString(e.getStackTrace()).contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of thread locking", e);
+            if(e.toString().contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of locking", e);
             else Logger.WARNING(994, "Something went wrong when sending a SQL query. Query: " + query, e);
         }
         return null;
+    }
+    private static void dbLockCheck()
+    {
+        if(new File(Main.getDBURL()).canWrite())
+        {
+            try
+            {
+                Thread.sleep(250);
+            } catch(InterruptedException e)
+            {
+                Thread.currentThread().stop();
+            }
+        }
     }
     private static String makeSQLValid(String s)
     {
