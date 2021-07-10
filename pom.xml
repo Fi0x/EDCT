@@ -106,7 +106,12 @@
                             <classPath>
                                 <mainClass>com.fi0x.edct.Main</mainClass>
                             </classPath>
+                            <singleInstance>
+                                <mutexName>EliteDangerousCarrierTrader</mutexName>
+                                <windowTitle>Elite: Dangerous Carrier Trader</windowTitle>
+                            </singleInstance>
                             <jre>
+                                <!-- TODO: Also change type in Main class -->
                                 <path>jre</path>
 <!--                                <minVersion>13.0.1</minVersion>-->
                             </jre>
