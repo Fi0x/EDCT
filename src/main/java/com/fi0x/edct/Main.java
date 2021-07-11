@@ -25,7 +25,7 @@ public class Main
     public static File errors;
     public static File settings;
     //TODO: Update version information
-    public static final String version = "1.2.6.5";//All.GUI.Logic.Hotfix
+    public static final String version = "1.2.6.6";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
 
     public static void main(String[] args)
@@ -50,10 +50,10 @@ public class Main
 
     public static void stopProgram()
     {
-        if(updater != null) updater.interrupt();
-        if(reloader != null) reloader.interrupt();
-        if(eddn != null) eddn.interrupt();
-        if(mixpanel != null) mixpanel.interrupt();
+        if(updater != null) updater.stop();
+        if(reloader != null) reloader.stop();
+        if(eddn != null) eddn.stop();
+        if(mixpanel != null) mixpanel.stop();
 
         MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
