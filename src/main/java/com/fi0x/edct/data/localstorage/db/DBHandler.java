@@ -453,7 +453,7 @@ public class DBHandler
     }
     private static void dbLockCheck()
     {
-        if(new File(Main.getDBURL()).canWrite())
+        if(!(new File(Main.getDBURL()).canWrite()))
         {
             try
             {
