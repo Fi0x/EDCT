@@ -33,6 +33,7 @@ public class TradeReloader implements Runnable
         });
 
         MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
+        MainWindow.getInstance().interactionController.storageController.lblReloadStatus.setVisible(false);
         Logger.INFO("Trade Reloader Thread finished");
     }
 

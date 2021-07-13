@@ -22,12 +22,15 @@ public class Datastorage
     @FXML
     private Label lblEDDNStatus;
     @FXML
+    public Label lblReloadStatus;
+    @FXML
     private Tooltip ttBackgroundStatus;
 
     @FXML
     private void calculate()
     {
         btnStart.setVisible(false);
+        lblReloadStatus.setVisible(true);
         lblDataAge.setText("Loading data from storage");
 
         MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("trade-reloader"));

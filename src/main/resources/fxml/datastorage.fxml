@@ -5,11 +5,11 @@
 <?import java.net.URL?>
 <GridPane id="datastorage" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Datastorage">
     <rowConstraints>
-        <RowConstraints />
-        <RowConstraints />
-        <RowConstraints />
+        <RowConstraints/>
+        <RowConstraints/>
+        <RowConstraints/>
         <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints />
+        <RowConstraints/>
     </rowConstraints>
     <Label fx:id="lblDataAge" text="Local data age: ---" GridPane.rowIndex="0" GridPane.halignment="CENTER">
         <tooltip>
@@ -26,11 +26,18 @@
             <Tooltip text="This indicates weather or not an EDDN message gets processed right now"/>
         </tooltip>
     </Label>
-    <Button id="start" fx:id="btnStart" onMouseClicked="#calculate" text="Reload Trades" visible="false" GridPane.rowIndex="4" GridPane.halignment="CENTER">
-        <tooltip>
-            <Tooltip text="Re-loads the results. Can also be done by changing a filter setting"/>
-        </tooltip>
-    </Button>
+    <GridPane GridPane.rowIndex="4" GridPane.halignment="CENTER">
+        <Label fx:id="lblReloadStatus" text="Reloading trade data..." GridPane.halignment="CENTER">
+            <tooltip>
+                <Tooltip text="The tool is loading data to display"/>
+            </tooltip>
+        </Label>
+        <Button id="start" fx:id="btnStart" onMouseClicked="#calculate" text="Reload Trades" visible="false" GridPane.halignment="CENTER">
+            <tooltip>
+                <Tooltip text="Re-loads the results. Can also be done by changing a filter setting"/>
+            </tooltip>
+        </Button>
+    </GridPane>
     <stylesheets>
         <URL value="@../css/datastorage.css"/>
     </stylesheets>
