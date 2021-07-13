@@ -27,6 +27,8 @@ public class Filters implements Initializable
     private CheckBox cbDemand;
     @FXML
     private CheckBox cbOdyssey;
+    @FXML
+    private TextField txtGalacticAverage;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -74,12 +76,24 @@ public class Filters implements Initializable
             SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
+        txtGalacticAverage.textProperty().addListener((observable, oldValue, newValue) ->
+        {
+            if(newValue.length() > 9) txtGalacticAverage.setText(oldValue);
+            else if(!newValue.matches("\\d*")) txtGalacticAverage.setText(newValue.replaceAll("[^\\d]", ""));
+            else
+            {
+                updateFilters();
+                SettingsHandler.storeValue("quantity", txtGalacticAverage.getText());
+                MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            }
+        });
     }
 
     public void updateFilters()
     {
         int amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
-        mainController.updateFilters(amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected());
+        long avg = Integer.parseInt(txtGalacticAverage.getText().length() > 0 ? txtGalacticAverage.getText() : "0");
+        mainController.updateFilters(avg, amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected());
     }
 
     public void setMainController(Main controller)
@@ -95,5 +109,6 @@ public class Filters implements Initializable
         cbLandingPad.setSelected(SettingsHandler.loadBoolean("pad", false));
         cbDemand.setSelected(SettingsHandler.loadBoolean("demand", true));
         cbOdyssey.setSelected(SettingsHandler.loadBoolean("odyssey", false));
+        txtGalacticAverage.setText(String.valueOf(SettingsHandler.loadInt("average", 2000)));
     }
 }

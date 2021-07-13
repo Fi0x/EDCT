@@ -38,6 +38,14 @@
             <Tooltip text="If stations from odyssey should be displayed" />
         </tooltip>
     </CheckBox>
+    <HBox id="labeltxt">
+        <Label text="Min gal.Avg.">
+            <tooltip>
+                <Tooltip text="The lowest galactic average price a commodity may have" />
+            </tooltip>
+        </Label>
+        <TextField fx:id="txtGalacticAverage" alignment="CENTER_RIGHT" text="2000" />
+    </HBox>
     <stylesheets>
         <URL value="@../css/filters.css" />
     </stylesheets>

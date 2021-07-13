@@ -249,6 +249,7 @@ public class SettingsHandler
                     case "pad":
                     case "demand":
                     case "odyssey":
+                    case "average":
                         props.put("filter" + setting[0], setting[1]);
                         break;
                 }

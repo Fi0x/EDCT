@@ -24,22 +24,24 @@ public class Main
         interactionController = controller;
     }
 
-    public void updateFilters(int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
+    public void updateFilters(long galacticAverage, int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
     {
-        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
-        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
+        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
+        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
 
-    private Map<String, ArrayList<TRADE>> applyFilters(int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, Map<String, ArrayList<TRADE>> inputPrices)
+    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, Map<String, ArrayList<TRADE>> inputPrices)
     {
         Map<String, ArrayList<TRADE>> filteredPrices = new HashMap<>();
 
         for(Map.Entry<String, ArrayList<TRADE>> trades : inputPrices.entrySet())
         {
+            if(DBHandler.getCommodityAverage(trades.getKey()) < average) continue;
+
             ArrayList<TRADE> filteredStations = new ArrayList<>();
             for(TRADE trade : trades.getValue())
             {
