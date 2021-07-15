@@ -9,10 +9,13 @@ import com.fi0x.edct.util.SettingsHandler;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main
 {
@@ -24,6 +27,7 @@ public class Main
     private static File localStorage;
     public static File errors;
     public static File settings;
+    public static File blacklist;
     //TODO: Update version information
     public static final String version = "1.3.6.6";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
@@ -50,13 +54,15 @@ public class Main
 
     public static void stopProgram()
     {
-        if(updater != null) updater.stop();
-        if(reloader != null) reloader.stop();
-        if(eddn != null) eddn.stop();
-        if(mixpanel != null) mixpanel.stop();
+        if(updater != null) updater.interrupt();
+        if(reloader != null) reloader.interrupt();
+        if(eddn != null) eddn.interrupt();
+        if(mixpanel != null) mixpanel.interrupt();
 
         MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
+
+        System.exit(0);
     }
 
     public static String getDBURL()
@@ -82,6 +88,10 @@ public class Main
 
         settings = new File(localStorage.getPath() + File.separator + "settings.txt");
         createFileIfNotExists(settings, true);
+
+        blacklist = new File(localStorage.getPath() + File.separator + "blacklist.txt");
+        createFileIfNotExists(blacklist, true);
+        fillBlacklistIfEmpty();
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)
@@ -102,6 +112,28 @@ public class Main
         } else return false;
 
         return true;
+    }
+    private static void fillBlacklistIfEmpty()
+    {
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(blacklist.toPath(), StandardCharsets.UTF_8));
+
+            if(fileContent.size() <= 0)
+            {
+                fileContent.add("This blacklist is used to store system-names that should not appear in the trade results.");
+                fileContent.add("If you want to add a system, just put it's name inside curly brackets {}.");
+                fileContent.add("Each system needs to be in a new row. See examples below:");
+                fileContent.add("");
+                fileContent.add("{SAGITTARIUS A*}");
+                fileContent.add("{SOL}");
+            }
+
+            Files.write(blacklist.toPath(), fileContent, StandardCharsets.UTF_8);
+        } catch(IOException e)
+        {
+            Logger.WARNING(996, "Could not write default entry to blacklist", e);
+        }
     }
     private static String getDateString()
     {

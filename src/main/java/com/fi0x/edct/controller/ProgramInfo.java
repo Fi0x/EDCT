@@ -142,7 +142,7 @@ public class ProgramInfo implements Initializable
             desktop.browse(new URI(url));
         } catch(IOException | URISyntaxException e)
         {
-            Logger.WARNING("Could not open url in browser", e);
+            Logger.ERROR(992, "Could not open url in browser", e);
         }
     }
 }

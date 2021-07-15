@@ -119,6 +119,18 @@
             </Label>
             <TextField fx:id="txtUnloadingTonProfit"/>
         </HBox>
+        <GridPane id="gridButtons">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <Button text="Open Blacklist" onAction="#openBlacklist" GridPane.columnIndex="1">
+                <tooltip>
+                    <Tooltip text="This opens the blacklist in the Windows-editor"/>
+                </tooltip>
+            </Button>
+        </GridPane>
     </VBox>
     <stylesheets>
         <URL value="@../css/settings.css"/>

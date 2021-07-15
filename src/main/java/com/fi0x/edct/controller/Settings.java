@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FileUtils;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -180,6 +181,20 @@ public class Settings implements Initializable
 
         Main.updater = new Thread(new Updater());
         Main.updater.start();
+    }
+    @FXML
+    private void openBlacklist()
+    {
+        if(Desktop.isDesktopSupported())
+        {
+            try
+            {
+                Desktop.getDesktop().edit(Main.blacklist);
+            } catch(IOException e)
+            {
+                Logger.ERROR(992, "Could not open blacklist in editor");
+            }
+        }
     }
 
     public static void loadSettings()

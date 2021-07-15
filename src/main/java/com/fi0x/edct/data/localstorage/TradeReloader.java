@@ -4,6 +4,8 @@ import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.TRADE;
+import com.fi0x.edct.telemetry.EVENT;
+import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.Logger;
 import javafx.application.Platform;
 
@@ -35,6 +37,7 @@ public class TradeReloader implements Runnable
         MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
         MainWindow.getInstance().interactionController.storageController.lblReloadStatus.setVisible(false);
         Logger.INFO("Trade Reloader Thread finished");
+        MixpanelHandler.addMessage(EVENT.TRADES_LOADED, null);
     }
 
     private void updatePrices()
