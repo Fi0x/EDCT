@@ -4,6 +4,7 @@ import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.TRADE;
+import com.fi0x.edct.util.BlacklistHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,15 +27,17 @@ public class Main
 
     public void updateFilters(long galacticAverage, int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
     {
-        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.sellPrices);
-        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, interactionController.buyPrices);
+        ArrayList<String> blacklist = BlacklistHandler.getBlacklistSystems();
+
+        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, blacklist, interactionController.sellPrices);
+        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, blacklist, interactionController.buyPrices);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
 
-    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, Map<String, ArrayList<TRADE>> inputPrices)
+    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, ArrayList<String> blacklist, Map<String, ArrayList<TRADE>> inputPrices)
     {
         Map<String, ArrayList<TRADE>> filteredPrices = new HashMap<>();
 
@@ -45,25 +48,24 @@ public class Main
             ArrayList<TRADE> filteredStations = new ArrayList<>();
             for(TRADE trade : trades.getValue())
             {
-                boolean validStation = (!noSmall && trade.STATION.PAD != PADSIZE.NONE) || trade.STATION.PAD == PADSIZE.L;
+                if(blacklist.contains(trade.STATION.SYSTEM)) continue;
                 switch(trade.STATION.TYPE)
                 {
                     case CARRIER:
-                        if(noCarrier) validStation = false;
+                        if(noCarrier) continue;
                         break;
                     case SURFACE:
-                        if(noSurface) validStation = false;
+                        if(noSurface) continue;
                         break;
                     case ODYSSEY:
-                        if(noOdyssey) validStation = false;
+                        if(noOdyssey) continue;
                         break;
                     case UNKNOWN:
-                        validStation = false;
-                        break;
+                        continue;
                 }
-                if(amount > Math.max(trade.SUPPLY, trade.DEMAND)) validStation = false;
+                if(amount > Math.max(trade.SUPPLY, trade.DEMAND)) continue;
 
-                if(validStation) filteredStations.add(trade);
+                if((!noSmall && trade.STATION.PAD != PADSIZE.NONE) || trade.STATION.PAD == PADSIZE.L) filteredStations.add(trade);
             }
             filteredPrices.put(trades.getKey(), filteredStations);
         }

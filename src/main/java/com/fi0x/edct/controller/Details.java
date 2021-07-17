@@ -46,9 +46,9 @@ public class Details
         lblCarrierProfitTotal.setText(df.format(profitTotal / 1000000) + "mil credits");
 
         lblLoadProfitTon.setText(df.format(loadProfit) + " credits/t");
-        lblLoadProfitTotal.setText(df.format( loadProfit * Settings.shipCargoSpace / 1000) + "k credits");
+        lblLoadProfitTotal.setText(df.format( loadProfit * Settings.shipCargoSpace / 1000) + "k credits/trip");
         lblUnloadProfitTon.setText(df.format(unloadProfit) + " credits/t");
-        lblUnloadProfitTotal.setText(df.format(unloadProfit * Settings.shipCargoSpace / 1000) + "k credits");
+        lblUnloadProfitTotal.setText(df.format(unloadProfit * Settings.shipCargoSpace / 1000) + "k credits/trip");
 
         Color color;
 
