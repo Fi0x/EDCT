@@ -300,7 +300,8 @@ public class DBHandler
                 "FROM Trades t " +
                 "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
                 "WHERE InaraID = " + commodityID + " " +
-                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 ");
+                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 " +
+                "ORDER BY " + (isSelling ? "SellPrice" : "BuyPrice DESC"));
         if(trades == null) return stationList;
 
         try

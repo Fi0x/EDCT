@@ -1,7 +1,6 @@
 package com.fi0x.edct.data.structures;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class COMMODITY
 {
@@ -21,41 +20,6 @@ public class COMMODITY
     }
 
     public void sortPrices()
-    {
-        if(SELL_PRICES != null)
-        {
-            for(int i = 1; i < SELL_PRICES.size(); i++)
-            {
-                int j = i - 1;
-                while(SELL_PRICES.get(j + 1).BUY_PRICE > SELL_PRICES.get(j).BUY_PRICE)
-                {
-                    Collections.swap(SELL_PRICES, j + 1, j);
-
-                    if(j == 0) break;
-                    j--;
-                }
-            }
-        }
-
-        if(BUY_PRICES != null)
-        {
-            for(int i = 1; i < BUY_PRICES.size(); i++)
-            {
-                int j = i - 1;
-                while(BUY_PRICES.get(j + 1).SELL_PRICE < BUY_PRICES.get(j).SELL_PRICE)
-                {
-                    Collections.swap(BUY_PRICES, j + 1, j);
-
-                    if(j == 0) break;
-                    j--;
-                }
-            }
-        }
-
-        calculateBestProfit();
-    }
-
-    private void calculateBestProfit()
     {
         if(BUY_PRICES == null || SELL_PRICES == null || BUY_PRICES.size() == 0 || SELL_PRICES.size() == 0)
         {
