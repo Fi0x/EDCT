@@ -1,5 +1,6 @@
 package com.fi0x.edct.data;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.MainWindow;
 import com.fi0x.edct.data.cleanup.EDDNCleanup;
 import com.fi0x.edct.data.localstorage.NameMap;
@@ -63,7 +64,7 @@ public class EDDN implements Runnable
 
                             if(outputString.contains(SCHEMA_KEY))
                             {
-                                Thread t = new Thread()
+                                Thread secretThread = new Thread()
                                 {
                                     @Override
                                     public void run()
@@ -72,7 +73,8 @@ public class EDDN implements Runnable
                                         retrieveStationInterrupted(outputString);
                                     }
                                 };
-                                t.start();
+                                secretThread.start();
+                                Main.addAnonymousThread(secretThread);
                             }
                         } catch(DataFormatException e)
                         {

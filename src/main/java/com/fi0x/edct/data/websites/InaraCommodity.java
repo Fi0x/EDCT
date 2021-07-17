@@ -1,5 +1,6 @@
 package com.fi0x.edct.data.websites;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.INARACleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
@@ -49,7 +50,7 @@ public class InaraCommodity
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(seller.STATION.SYSTEM) == null)
                 {
-                    Thread t = new Thread()
+                    Thread secretThread = new Thread()
                     {
                         @Override
                         public void run()
@@ -66,7 +67,8 @@ public class InaraCommodity
                             if(coordinates != null) DBHandler.setSystemCoordinates(seller.STATION.SYSTEM, coordinates);
                         }
                     };
-                    t.start();
+                    secretThread.start();
+                    Main.addAnonymousThread(secretThread);
                 }
             }
 
@@ -82,7 +84,7 @@ public class InaraCommodity
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(buyer.STATION.SYSTEM) == null)
                 {
-                    Thread t = new Thread()
+                    Thread secretThread = new Thread()
                     {
                         @Override
                         public void run()
@@ -99,7 +101,8 @@ public class InaraCommodity
                             if(coordinates != null) DBHandler.setSystemCoordinates(buyer.STATION.SYSTEM, coordinates);
                         }
                     };
-                    t.start();
+                    secretThread.start();
+                    Main.addAnonymousThread(secretThread);
                 }
             }
 

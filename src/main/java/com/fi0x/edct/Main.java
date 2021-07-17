@@ -24,6 +24,7 @@ public class Main
     public static Thread reloader;
     public static Thread eddn;
     private static Thread mixpanel;
+    private static final ArrayList<Thread> ANONYMOUS_THREADS = new ArrayList<>();
 
     private static File localStorage;
     public static File errors;
@@ -56,9 +57,13 @@ public class Main
     public static void stopProgram()
     {
         if(updater != null) updater.interrupt();
-        if(reloader != null) reloader.interrupt();
+        if(reloader != null) reloader.stop();
         if(eddn != null) eddn.interrupt();
         if(mixpanel != null) mixpanel.interrupt();
+        for(Thread t : ANONYMOUS_THREADS)
+        {
+            t.stop();
+        }
 
         MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
@@ -74,6 +79,13 @@ public class Main
     public static void createLogFile()
     {
         createFileIfNotExists(errors, true);
+    }
+
+    //TODO: reduce amount of threads created to avoid out of memory exception
+    public static void addAnonymousThread(Thread threadToAdd)
+    {
+        ANONYMOUS_THREADS.add(threadToAdd);
+        ANONYMOUS_THREADS.removeIf(t -> !t.isAlive());
     }
 
     private static void setupLocalFiles()

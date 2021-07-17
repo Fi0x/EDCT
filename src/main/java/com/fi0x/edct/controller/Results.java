@@ -194,7 +194,12 @@ public class Results implements Initializable
         if(sellStation != null && buyStation != null)
         {
             distance = DBHandler.getSystemDistance(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
-            if(distance == 0) new Thread(new DistanceHandler(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM)).start();
+            if(distance == 0)
+            {
+                Thread secretThread = new Thread(new DistanceHandler(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM));
+                secretThread.start();
+                com.fi0x.edct.Main.addAnonymousThread(secretThread);
+            }
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);
