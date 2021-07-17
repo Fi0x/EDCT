@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 
 public class Interaction implements Initializable
 {
+    public Main mainController;
     public Datastorage storageController;
     public Filters filterController;
 
@@ -72,6 +73,7 @@ public class Interaction implements Initializable
     public void setMainController(Main controller)
     {
         controller.setInteractionController(this);
+        mainController = controller;
         filterController.setMainController(controller);
     }
 }

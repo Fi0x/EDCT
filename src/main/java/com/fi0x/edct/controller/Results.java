@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class Results implements Initializable
 {
+    public Main mainController;
     private Station sellController;
     private Station buyController;
     private Commodity commodityController;
@@ -147,9 +148,7 @@ public class Results implements Initializable
     public void updateResultController(Main controller)
     {
         controller.setResultController(this);
-        Filters filterController = controller.interactionController.filterController;
-        buyController.setFilterController(filterController);
-        sellController.setFilterController(filterController);
+        mainController = controller;
     }
 
     public void setTrades(ArrayList<COMMODITY> newTrades)

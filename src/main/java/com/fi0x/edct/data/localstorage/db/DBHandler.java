@@ -291,6 +291,7 @@ public class DBHandler
         return time;
     }
 
+    //TODO: Speed up / fix it
     public static ArrayList<TRADE> getTradeInformation(int commodityID, boolean isSelling)
     {
         ArrayList<TRADE> stationList = new ArrayList<>();

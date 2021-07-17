@@ -30,7 +30,7 @@ public class TradeReloader implements Runnable
         long oldestFileAge = DBHandler.getOldestUpdateAge();
         Platform.runLater(() ->
         {
-            INT_CONTROLLER.filterController.updateFilters();
+            INT_CONTROLLER.mainController.updateFilters();
             INT_CONTROLLER.storageController.setDataAge(oldestFileAge);
         });
 

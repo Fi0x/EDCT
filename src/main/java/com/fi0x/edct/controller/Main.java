@@ -2,6 +2,7 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.COMMODITY;
+import com.fi0x.edct.data.structures.FILTEROPTIONS;
 import com.fi0x.edct.data.structures.PADSIZE;
 import com.fi0x.edct.data.structures.TRADE;
 import com.fi0x.edct.util.BlacklistHandler;
@@ -25,47 +26,51 @@ public class Main
         interactionController = controller;
     }
 
-    public void updateFilters(long galacticAverage, int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, boolean useBlacklist)
+    public void updateFilters()
     {
         ArrayList<String> blacklist = BlacklistHandler.getBlacklistSystems();
+        Filters filters = Filters.getInstance();
+        if(filters == null) return;
+        FILTEROPTIONS filteroptions = filters.getFilterSettings();
 
-        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, useBlacklist, blacklist, interactionController.sellPrices);
-        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, useBlacklist, blacklist, interactionController.buyPrices);
+        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(filteroptions, blacklist, interactionController.buyPrices);
+        if(filteroptions.demand) filteroptions.amount = 0;
+        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(filteroptions, blacklist, interactionController.sellPrices);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
 
-    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, boolean useBlacklist, ArrayList<String> blacklist, Map<String, ArrayList<TRADE>> inputPrices)
+    private Map<String, ArrayList<TRADE>> applyFilters(FILTEROPTIONS filteroptions, ArrayList<String> blacklist, Map<String, ArrayList<TRADE>> inputPrices)
     {
         Map<String, ArrayList<TRADE>> filteredPrices = new HashMap<>();
 
         for(Map.Entry<String, ArrayList<TRADE>> trades : inputPrices.entrySet())
         {
-            if(DBHandler.getCommodityAverage(trades.getKey()) < average) continue;
+            if(DBHandler.getCommodityAverage(trades.getKey()) < filteroptions.average) continue;
 
             ArrayList<TRADE> filteredStations = new ArrayList<>();
             for(TRADE trade : trades.getValue())
             {
-                if(useBlacklist && blacklist.contains(trade.STATION.SYSTEM)) continue;
+                if(filteroptions.blacklist && blacklist.contains(trade.STATION.SYSTEM)) continue;
                 switch(trade.STATION.TYPE)
                 {
                     case CARRIER:
-                        if(noCarrier) continue;
+                        if(!filteroptions.carrier) continue;
                         break;
                     case SURFACE:
-                        if(noSurface) continue;
+                        if(!filteroptions.surface) continue;
                         break;
                     case ODYSSEY:
-                        if(noOdyssey) continue;
+                        if(!filteroptions.odyssey) continue;
                         break;
                     case UNKNOWN:
                         continue;
                 }
-                if(amount > Math.max(trade.SUPPLY, trade.DEMAND)) continue;
+                if(filteroptions.amount > Math.max(trade.SUPPLY, trade.DEMAND)) continue;
 
-                if((!noSmall && trade.STATION.PAD != PADSIZE.NONE) || trade.STATION.PAD == PADSIZE.L) filteredStations.add(trade);
+                if((filteroptions.landingPad && trade.STATION.PAD != PADSIZE.NONE) || trade.STATION.PAD == PADSIZE.L) filteredStations.add(trade);
             }
             filteredPrices.put(trades.getKey(), filteredStations);
         }
