@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<VBox id="filters" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Filters">
-    <HBox id="labeltxt">
-        <Label text="Min quantity">
+<HBox id="filters" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.controller.Filters">
+    <VBox id="leftFilters">
+        <HBox id="labeltxt">
+            <Label text="Min quantity" minWidth="100">
+                <tooltip>
+                    <Tooltip text="The lowest demand / supply a station should have for a commodity" />
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtQuantity" alignment="CENTER_RIGHT" text="10000" />
+        </HBox>
+        <HBox id="labeltxt">
+            <Label text="Min gal.Avg." minWidth="100">
+                <tooltip>
+                    <Tooltip text="The lowest galactic average price a commodity may have" />
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtGalacticAverage" alignment="CENTER_RIGHT" text="2000" />
+        </HBox>
+        <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand">
             <tooltip>
-                <Tooltip text="The lowest demand / supply a station should have for a commodity" />
+                <Tooltip text="If a station with 0 demand should be displayed" />
             </tooltip>
-        </Label>
-        <TextField fx:id="txtQuantity" alignment="CENTER_RIGHT" text="10000" />
-    </HBox>
-    <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers">
-        <tooltip>
-            <Tooltip text="If fleet carrier markets should be displayed as well" />
-        </tooltip>
-    </CheckBox>
-    <CheckBox fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations">
-        <tooltip>
-            <Tooltip text="If markets from planetary bases should be displayed as well" />
-        </tooltip>
-    </CheckBox>
-    <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads">
-        <tooltip>
-            <Tooltip text="If stations that have no large landing pads should be displayed" />
-        </tooltip>
-    </CheckBox>
-    <CheckBox fx:id="cbDemand" mnemonicParsing="false" selected="true" text="Allow 0 Demand">
-        <tooltip>
-            <Tooltip text="If a station with 0 demand should be displayed" />
-        </tooltip>
-    </CheckBox>
-    <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations">
-        <tooltip>
-            <Tooltip text="If stations from odyssey should be displayed" />
-        </tooltip>
-    </CheckBox>
-    <CheckBox fx:id="cbBlacklist" mnemonicParsing="false" text="Use Blacklist">
-        <tooltip>
-            <Tooltip text="If systems on the blacklist should be hidden" />
-        </tooltip>
-    </CheckBox>
-    <HBox id="labeltxt">
-        <Label text="Min gal.Avg.">
+        </CheckBox>
+        <CheckBox fx:id="cbBlacklist" mnemonicParsing="false" text="Use Blacklist">
             <tooltip>
-                <Tooltip text="The lowest galactic average price a commodity may have" />
+                <Tooltip text="If systems on the blacklist should be hidden" />
             </tooltip>
-        </Label>
-        <TextField fx:id="txtGalacticAverage" alignment="CENTER_RIGHT" text="2000" />
-    </HBox>
+        </CheckBox>
+    </VBox>
+    <VBox id="rightFilters">
+        <CheckBox fx:id="cbCarrier" mnemonicParsing="false" text="Include Fleet Carriers">
+            <tooltip>
+                <Tooltip text="If fleet carrier markets should be displayed as well" />
+            </tooltip>
+        </CheckBox>
+        <CheckBox fx:id="cbSurface" mnemonicParsing="false" text="Include Surface Stations">
+            <tooltip>
+                <Tooltip text="If markets from planetary bases should be displayed as well" />
+            </tooltip>
+        </CheckBox>
+        <CheckBox fx:id="cbLandingPad" mnemonicParsing="false" text="Include small pads">
+            <tooltip>
+                <Tooltip text="If stations that have no large landing pads should be displayed" />
+            </tooltip>
+        </CheckBox>
+        <CheckBox fx:id="cbOdyssey" mnemonicParsing="false" text="Include Odyssey Stations">
+            <tooltip>
+                <Tooltip text="If stations from odyssey should be displayed" />
+            </tooltip>
+        </CheckBox>
+    </VBox>
     <stylesheets>
         <URL value="@../css/filters.css" />
     </stylesheets>
-</VBox>
+</HBox>

@@ -49,7 +49,7 @@ public class Interaction implements Initializable
             return;
         }
 
-        hbInteraction.add(storageBox, 3, 0);
+        hbInteraction.add(storageBox, 2, 0);
     }
     private void loadFilters()
     {
@@ -66,7 +66,7 @@ public class Interaction implements Initializable
             return;
         }
 
-        hbInteraction.add(filterBox, 1, 0);
+        hbInteraction.add(filterBox, 0, 0);
     }
 
     public void setMainController(Main controller)
