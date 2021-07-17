@@ -2,21 +2,31 @@ package com.fi0x.edct.controller;
 
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.TRADE;
+import com.fi0x.edct.util.BlacklistHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
+import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
-public class Station
+public class Station implements Initializable
 {
     private Results resultsController;
+    private Filters filterController;
 
     public int stationID;
     private boolean isBuying;
 
     @FXML
     private Label lblAction;
+    @FXML
+    private Button btnBlacklist;
     @FXML
     private Label lblSystem;
     @FXML
@@ -35,6 +45,13 @@ public class Station
     private Button btnPrevStation;
     @FXML
     private Button btnNextStation;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)
+    {
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/blacklist.png")), 20, 20, false, false);
+        btnBlacklist.setGraphic(new ImageView(img));
+    }
 
     @FXML
     private void nextStation()
@@ -61,6 +78,13 @@ public class Station
         if(!isBuying) resultsController.currentBuyStation = stationID;
         else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
+    }
+    @FXML
+    private void addToBlacklist()
+    {
+        TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        BlacklistHandler.addSystemToBlacklist(s.STATION.SYSTEM);
+        filterController.updateFilters();
     }
     @FXML
     private void removeStation()
@@ -109,5 +133,9 @@ public class Station
             lblAction.setText("Sell at");
             lblAmount.setText("Demand: ---");
         }
+    }
+    public void setFilterController(Filters controller)
+    {
+        filterController = controller;
     }
 }

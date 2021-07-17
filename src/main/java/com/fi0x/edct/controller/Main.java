@@ -14,7 +14,7 @@ import java.util.Map;
 public class Main
 {
     private Results resultsController;
-    private Interaction interactionController;
+    public Interaction interactionController;
 
     public void setResultController(Results controller)
     {

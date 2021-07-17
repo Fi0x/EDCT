@@ -147,6 +147,9 @@ public class Results implements Initializable
     public void updateResultController(Main controller)
     {
         controller.setResultController(this);
+        Filters filterController = controller.interactionController.filterController;
+        buyController.setFilterController(filterController);
+        sellController.setFilterController(filterController);
     }
 
     public void setTrades(ArrayList<COMMODITY> newTrades)
