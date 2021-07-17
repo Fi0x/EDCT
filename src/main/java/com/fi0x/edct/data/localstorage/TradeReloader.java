@@ -1,6 +1,7 @@
 package com.fi0x.edct.data.localstorage;
 
 import com.fi0x.edct.MainWindow;
+import com.fi0x.edct.controller.Filters;
 import com.fi0x.edct.controller.Interaction;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.TRADE;
@@ -44,8 +45,10 @@ public class TradeReloader implements Runnable
     {
         INT_CONTROLLER.sellPrices = new HashMap<>();
         INT_CONTROLLER.buyPrices = new HashMap<>();
+        Filters filters = Filters.getInstance();
+        long minAvg = filters == null ? 0 : filters.getFilterSettings().average;
 
-        for(int id : DBHandler.getCommodityIDs(false))
+        for(int id : DBHandler.getCommodityIDs(false, minAvg))
         {
             String commodityName = DBHandler.getCommodityNameByID(id);
 

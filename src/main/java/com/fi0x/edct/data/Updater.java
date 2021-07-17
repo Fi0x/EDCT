@@ -92,7 +92,7 @@ public class Updater implements Runnable
 
     private boolean loadMissingIDs()
     {
-        ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true);
+        ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true, 0);
 
         int counter = 0;
         for(int id : missingIDs)
