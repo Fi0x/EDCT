@@ -27,6 +27,7 @@ public class SettingsHandler
                     case "carrier":
                     case "demand":
                     case "odyssey":
+                    case "blacklist":
                     case "pad":
                     case "surface":
                         if(!setting[1].equalsIgnoreCase("true") && !setting[1].equalsIgnoreCase("false")) invalidLines.add(line);
@@ -249,6 +250,7 @@ public class SettingsHandler
                     case "pad":
                     case "demand":
                     case "odyssey":
+                    case "blacklist":
                     case "average":
                         props.put("filter" + setting[0], setting[1]);
                         break;

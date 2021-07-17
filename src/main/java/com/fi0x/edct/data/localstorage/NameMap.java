@@ -207,6 +207,12 @@ public class NameMap
             add("animaleffigies");
             add("alieneggs");
             add("advert1");
+            add("wolffesh");
+            add("cd-75kittenbrandcoffee");
+            add("edenapplesofaerial");
+            add("sanumadecorativemeat");
+            add("korokungpellets");
+            add("uzumokulow-gwings");
         }
     };
     public static final ArrayList<String> IGNORED = new ArrayList<>()

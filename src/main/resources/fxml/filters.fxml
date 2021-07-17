@@ -38,6 +38,11 @@
             <Tooltip text="If stations from odyssey should be displayed" />
         </tooltip>
     </CheckBox>
+    <CheckBox fx:id="cbBlacklist" mnemonicParsing="false" text="Use Blacklist">
+        <tooltip>
+            <Tooltip text="If systems on the blacklist should be hidden" />
+        </tooltip>
+    </CheckBox>
     <HBox id="labeltxt">
         <Label text="Min gal.Avg.">
             <tooltip>

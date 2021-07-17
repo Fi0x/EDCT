@@ -4,6 +4,7 @@ import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
 import com.fi0x.edct.telemetry.EVENT;
 import com.fi0x.edct.telemetry.MixpanelHandler;
+import com.fi0x.edct.util.BlacklistHandler;
 import com.fi0x.edct.util.Logger;
 import com.fi0x.edct.util.SettingsHandler;
 
@@ -125,8 +126,7 @@ public class Main
                 fileContent.add("If you want to add a system, just put it's name inside curly brackets {}.");
                 fileContent.add("Each system needs to be in a new row. See examples below:");
                 fileContent.add("");
-                fileContent.add("{SAGITTARIUS A*}");
-                fileContent.add("{SOL}");
+                fileContent.addAll(Arrays.asList(BlacklistHandler.DEFAULT_BLACKLIST));
             }
 
             Files.write(blacklist.toPath(), fileContent, StandardCharsets.UTF_8);

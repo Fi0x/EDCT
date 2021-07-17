@@ -99,7 +99,7 @@ public class RequestHandler
 
                     if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
                     {
-                        Logger.WARNING("HTTP request could not be sent because of a 429 response");
+                        Logger.WARNING(429, "HTTP request could not be sent because of a 429 response");
                         return false;
                     }
                 } else if(error.contains("[995]"))

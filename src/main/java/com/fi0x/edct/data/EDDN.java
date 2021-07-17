@@ -208,7 +208,7 @@ public class EDDN implements Runnable
             if(commodityName.equals(dbName)) return pair.getValue();
         }
 
-        if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName)) Logger.WARNING("Could not find commodity key that matches: " + commodityName);
+        if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName)) Logger.WARNING(991, "Could not find commodity key that matches: " + commodityName);
         return -1;
     }
 }

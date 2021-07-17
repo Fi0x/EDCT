@@ -31,4 +31,34 @@ public class BlacklistHandler
 
         return blacklistedStations;
     }
+
+    public static final String[] DEFAULT_BLACKLIST = new String[] {
+            "{Achenar}",
+            "{Alioth}",
+            "{Beta Hydri}",
+            "{CD-43 11917}",
+            "{Crom}",
+            "{Exbeur}",
+            "{Facece}",
+            "{HIP 54530}",
+            "{Hodack}",
+            "{Hors}",
+            "{Isinor}",
+            "{Jotun}",
+            "{LTT 198}",
+            "{Luyten 347-14}",
+            "{Nastrond}",
+            "{Peregrina}",
+            "{Pi Mensae}",
+            "{PLX 695}",
+            "{Ross 128}",
+            "{Shinrarta Dezhra}",
+            "{Sirius}",
+            "{Sol}",
+            "{Summerland}",
+            "{Terra Mater}",
+            "{Tiliala}",
+            "{van Maanen's Star}",
+            "{Vega}"
+    };
 }

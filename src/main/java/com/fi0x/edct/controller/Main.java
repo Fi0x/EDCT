@@ -25,19 +25,19 @@ public class Main
         interactionController = controller;
     }
 
-    public void updateFilters(long galacticAverage, int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey)
+    public void updateFilters(long galacticAverage, int amount, boolean ignoreDemand, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, boolean useBlacklist)
     {
         ArrayList<String> blacklist = BlacklistHandler.getBlacklistSystems();
 
-        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, blacklist, interactionController.sellPrices);
-        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, blacklist, interactionController.buyPrices);
+        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(galacticAverage, ignoreDemand ? 0 : amount, noSmall, noCarrier, noSurface, noOdyssey, useBlacklist, blacklist, interactionController.sellPrices);
+        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(galacticAverage, amount, noSmall, noCarrier, noSurface, noOdyssey, useBlacklist, blacklist, interactionController.buyPrices);
 
         resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
 
         resultsController.displayResults();
     }
 
-    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, ArrayList<String> blacklist, Map<String, ArrayList<TRADE>> inputPrices)
+    private Map<String, ArrayList<TRADE>> applyFilters(long average, int amount, boolean noSmall, boolean noCarrier, boolean noSurface, boolean noOdyssey, boolean useBlacklist, ArrayList<String> blacklist, Map<String, ArrayList<TRADE>> inputPrices)
     {
         Map<String, ArrayList<TRADE>> filteredPrices = new HashMap<>();
 
@@ -48,7 +48,7 @@ public class Main
             ArrayList<TRADE> filteredStations = new ArrayList<>();
             for(TRADE trade : trades.getValue())
             {
-                if(blacklist.contains(trade.STATION.SYSTEM)) continue;
+                if(useBlacklist && blacklist.contains(trade.STATION.SYSTEM)) continue;
                 switch(trade.STATION.TYPE)
                 {
                     case CARRIER:

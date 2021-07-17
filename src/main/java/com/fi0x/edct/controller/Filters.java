@@ -28,6 +28,8 @@ public class Filters implements Initializable
     @FXML
     private CheckBox cbOdyssey;
     @FXML
+    private CheckBox cbBlacklist;
+    @FXML
     private TextField txtGalacticAverage;
 
     @Override
@@ -76,6 +78,12 @@ public class Filters implements Initializable
             SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
+        cbBlacklist.selectedProperty().addListener((observable, oldValue, newValue) ->
+        {
+            updateFilters();
+            SettingsHandler.storeValue("blacklist", cbBlacklist.isSelected());
+            MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+        });
         txtGalacticAverage.textProperty().addListener((observable, oldValue, newValue) ->
         {
             if(newValue.length() > 9) txtGalacticAverage.setText(oldValue);
@@ -93,7 +101,7 @@ public class Filters implements Initializable
     {
         int amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
         long avg = Integer.parseInt(txtGalacticAverage.getText().length() > 0 ? txtGalacticAverage.getText() : "0");
-        mainController.updateFilters(avg, amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected());
+        mainController.updateFilters(avg, amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected(), cbBlacklist.isSelected());
     }
 
     public void setMainController(Main controller)
@@ -109,6 +117,7 @@ public class Filters implements Initializable
         cbLandingPad.setSelected(SettingsHandler.loadBoolean("pad", false));
         cbDemand.setSelected(SettingsHandler.loadBoolean("demand", true));
         cbOdyssey.setSelected(SettingsHandler.loadBoolean("odyssey", false));
+        cbBlacklist.setSelected(SettingsHandler.loadBoolean("blacklist", true));
         txtGalacticAverage.setText(String.valueOf(SettingsHandler.loadInt("average", 2000)));
     }
 }
