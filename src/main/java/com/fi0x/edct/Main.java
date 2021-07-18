@@ -32,7 +32,7 @@ public class Main
     public static File settings;
     public static File blacklist;
     //TODO: Update version information
-    public static final String version = "1.4.6.6";//All.GUI.Logic.Hotfix
+    public static final String version = "1.4.7.6";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
 
     public static void main(String[] args)
