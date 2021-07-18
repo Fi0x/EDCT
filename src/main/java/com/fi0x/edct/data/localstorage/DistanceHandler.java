@@ -6,36 +6,61 @@ import com.fi0x.edct.data.websites.EDSM;
 import com.sun.javafx.geom.Vec3d;
 import javafx.application.Platform;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class DistanceHandler implements Runnable
 {
-    private final String SYS1;
-    private final String SYS2;
+    private static final Map<String, String> QUEUE = new HashMap<>();
+    private static DistanceHandler instance;
 
-    public DistanceHandler(String system1, String system2)
+    private DistanceHandler()
     {
-        SYS1 = system1;
-        SYS2 = system2;
+    }
+
+    public static DistanceHandler getInstance()
+    {
+        if(instance == null) instance = new DistanceHandler();
+        return instance;
     }
 
     @Override
     public void run()
     {
-        Vec3d coords1 = DBHandler.getSystemCoords(SYS1);
-        Vec3d coords2 = DBHandler.getSystemCoords(SYS2);
+        while(!Thread.interrupted())
+        {
+            if(QUEUE.size() > 0)
+            {
+                Map.Entry<String, String> firstEntry = QUEUE.entrySet().iterator().next();
+                calculateDistance(firstEntry.getKey(), firstEntry.getValue());
+                QUEUE.remove(firstEntry.getKey());
+            }
+        }
+    }
+
+    public static void addDistanceCheck(String system1, String system2)
+    {
+        QUEUE.put(system1, system2);
+    }
+
+    private void calculateDistance(String system1, String system2)
+    {
+        Vec3d coords1 = DBHandler.getSystemCoords(system1);
+        Vec3d coords2 = DBHandler.getSystemCoords(system2);
 
         try
         {
             if(coords1 == null)
             {
-                coords1 = EDSM.getSystemCoordinates(SYS1);
+                coords1 = EDSM.getSystemCoordinates(system1);
                 if(coords1 == null) return;
-                DBHandler.setSystemCoordinates(SYS1, coords1);
+                DBHandler.setSystemCoordinates(system1, coords1);
             }
             if(coords2 == null)
             {
-                coords2 = EDSM.getSystemCoordinates(SYS2);
+                coords2 = EDSM.getSystemCoordinates(system2);
                 if(coords2 == null) return;
-                DBHandler.setSystemCoordinates(SYS2, coords2);
+                DBHandler.setSystemCoordinates(system2, coords2);
             }
         } catch(InterruptedException e)
         {
@@ -47,7 +72,7 @@ public class DistanceHandler implements Runnable
         sum += (coords1.z - coords2.z) * (coords1.z - coords2.z);
 
         double distance = Math.sqrt(sum);
-        DBHandler.setSystemDistance(SYS1, SYS2, distance);
-        Platform.runLater(() -> MainWindow.getInstance().resultsController.updateDistance(SYS1, SYS2, distance));
+        DBHandler.setSystemDistance(system1, system2, distance);
+        Platform.runLater(() -> MainWindow.getInstance().resultsController.updateDistance(system1, system2, distance));
     }
 }

@@ -35,6 +35,7 @@ public class Datastorage
 
         MixpanelHandler.addMessage(EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("trade-reloader"));
 
+        if(Main.reloader != null) Main.reloader.interrupt();
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();
     }

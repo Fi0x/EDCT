@@ -20,6 +20,7 @@ import java.util.ResourceBundle;
 
 public class Results implements Initializable
 {
+    public Main mainController;
     private Station sellController;
     private Station buyController;
     private Commodity commodityController;
@@ -121,11 +122,9 @@ public class Results implements Initializable
 
         currentCommodity++;
         if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
-        else
-        {
-            currentSellStation = 0;
-            currentBuyStation = 0;
-        }
+
+        currentSellStation = 0;
+        currentBuyStation = 0;
 
         displayResults();
     }
@@ -135,11 +134,9 @@ public class Results implements Initializable
 
         currentCommodity--;
         if(currentCommodity < 0) currentCommodity = 0;
-        else
-        {
-            currentSellStation = 0;
-            currentBuyStation = 0;
-        }
+
+        currentSellStation = 0;
+        currentBuyStation = 0;
 
         displayResults();
     }
@@ -147,9 +144,7 @@ public class Results implements Initializable
     public void updateResultController(Main controller)
     {
         controller.setResultController(this);
-        Filters filterController = controller.interactionController.filterController;
-        buyController.setFilterController(filterController);
-        sellController.setFilterController(filterController);
+        mainController = controller;
     }
 
     public void setTrades(ArrayList<COMMODITY> newTrades)
@@ -194,7 +189,10 @@ public class Results implements Initializable
         if(sellStation != null && buyStation != null)
         {
             distance = DBHandler.getSystemDistance(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
-            if(distance == 0) new Thread(new DistanceHandler(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM)).start();
+            if(distance == 0)
+            {
+                DistanceHandler.addDistanceCheck(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
+            }
         }
 
         commodityController.updateDisplay(currentCommodity > 0, currentCommodity < trades.size() - 1, distance);

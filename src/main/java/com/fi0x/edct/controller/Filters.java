@@ -1,5 +1,6 @@
 package com.fi0x.edct.controller;
 
+import com.fi0x.edct.data.structures.FILTEROPTIONS;
 import com.fi0x.edct.telemetry.EVENT;
 import com.fi0x.edct.telemetry.MixpanelHandler;
 import com.fi0x.edct.util.SettingsHandler;
@@ -8,12 +9,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
+import javax.annotation.Nullable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class Filters implements Initializable
 {
     private Main mainController;
+    private static Filters instance;
 
     @FXML
     public TextField txtQuantity;
@@ -35,6 +38,7 @@ public class Filters implements Initializable
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        instance = this;
         loadFilters();
 
         txtQuantity.textProperty().addListener((observable, oldValue, newValue) ->
@@ -43,44 +47,44 @@ public class Filters implements Initializable
             else if(!newValue.matches("\\d*")) txtQuantity.setText(newValue.replaceAll("[^\\d]", ""));
             else
             {
-                updateFilters();
+                mainController.updateFilters();
                 SettingsHandler.storeValue("quantity", txtQuantity.getText());
                 MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
             }
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("carrier", cbCarrier.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbSurface.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("surface", cbSurface.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("pad", cbLandingPad.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbDemand.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("demand", cbDemand.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbOdyssey.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
         cbBlacklist.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
-            updateFilters();
+            mainController.updateFilters();
             SettingsHandler.storeValue("blacklist", cbBlacklist.isSelected());
             MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
         });
@@ -90,23 +94,37 @@ public class Filters implements Initializable
             else if(!newValue.matches("\\d*")) txtGalacticAverage.setText(newValue.replaceAll("[^\\d]", ""));
             else
             {
-                updateFilters();
+                mainController.updateFilters();
                 SettingsHandler.storeValue("quantity", txtGalacticAverage.getText());
                 MixpanelHandler.addMessage(EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
             }
         });
     }
 
-    public void updateFilters()
-    {
-        int amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
-        long avg = Integer.parseInt(txtGalacticAverage.getText().length() > 0 ? txtGalacticAverage.getText() : "0");
-        mainController.updateFilters(avg, amount, cbDemand.isSelected(), !cbLandingPad.isSelected(), !cbCarrier.isSelected(), !cbSurface.isSelected(), !cbOdyssey.isSelected(), cbBlacklist.isSelected());
-    }
-
     public void setMainController(Main controller)
     {
         mainController = controller;
+    }
+
+    @Nullable
+    public static Filters getInstance()
+    {
+        return instance;
+    }
+    public FILTEROPTIONS getFilterSettings()
+    {
+        FILTEROPTIONS fo = new FILTEROPTIONS();
+
+        fo.average = Integer.parseInt(txtGalacticAverage.getText().length() > 0 ? txtGalacticAverage.getText() : "0");
+        fo.amount = Integer.parseInt(txtQuantity.getText().length() > 0 ? txtQuantity.getText() : "0");
+        fo.demand = cbDemand.isSelected();
+        fo.landingPad = cbLandingPad.isSelected();
+        fo.carrier = cbCarrier.isSelected();
+        fo.surface = cbSurface.isSelected();
+        fo.odyssey = cbOdyssey.isSelected();
+        fo.blacklist = cbBlacklist.isSelected();
+
+        return fo;
     }
 
     private void loadFilters()

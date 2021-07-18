@@ -2,11 +2,10 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
+import com.fi0x.edct.data.localstorage.DistanceHandler;
 import com.fi0x.edct.telemetry.EVENT;
 import com.fi0x.edct.telemetry.MixpanelHandler;
-import com.fi0x.edct.util.BlacklistHandler;
-import com.fi0x.edct.util.Logger;
-import com.fi0x.edct.util.SettingsHandler;
+import com.fi0x.edct.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +22,9 @@ public class Main
     public static Thread updater;
     public static Thread reloader;
     public static Thread eddn;
+    private static Thread distance;
+    private static Thread stations;
+    private static Thread eddnHandler;
     private static Thread mixpanel;
 
     private static File localStorage;
@@ -30,7 +32,7 @@ public class Main
     public static File settings;
     public static File blacklist;
     //TODO: Update version information
-    public static final String version = "1.4.6.6";//All.GUI.Logic.Hotfix
+    public static final String version = "1.4.7.6";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
 
     public static void main(String[] args)
@@ -47,8 +49,15 @@ public class Main
         MixpanelHandler.sendMessages();
 
         updater = new Thread(new Updater());
+        distance = new Thread(DistanceHandler.getInstance());
+        stations = new Thread(StationUpdater.getInstance());
+        eddnHandler = new Thread(EDDNHandler.getInstance());
         mixpanel = new Thread(new MixpanelHandler());
+
         mixpanel.start();
+        distance.start();
+        stations.start();
+        eddnHandler.start();
 
         MainWindow.main(args);
     }
@@ -56,8 +65,11 @@ public class Main
     public static void stopProgram()
     {
         if(updater != null) updater.interrupt();
-        if(reloader != null) reloader.interrupt();
+        if(reloader != null) reloader.stop();
         if(eddn != null) eddn.interrupt();
+        if(distance != null) distance.interrupt();
+        if(stations != null) stations.interrupt();
+        if(eddnHandler != null) eddnHandler.interrupt();
         if(mixpanel != null) mixpanel.interrupt();
 
         MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());

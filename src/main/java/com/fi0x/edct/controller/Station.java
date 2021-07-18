@@ -18,7 +18,6 @@ import java.util.ResourceBundle;
 public class Station implements Initializable
 {
     private Results resultsController;
-    private Filters filterController;
 
     public int stationID;
     private boolean isBuying;
@@ -84,7 +83,7 @@ public class Station implements Initializable
     {
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         BlacklistHandler.addSystemToBlacklist(s.STATION.SYSTEM);
-        filterController.updateFilters();
+        resultsController.mainController.updateFilters();
     }
     @FXML
     private void removeStation()
@@ -133,9 +132,5 @@ public class Station implements Initializable
             lblAction.setText("Sell at");
             lblAmount.setText("Demand: ---");
         }
-    }
-    public void setFilterController(Filters controller)
-    {
-        filterController = controller;
     }
 }

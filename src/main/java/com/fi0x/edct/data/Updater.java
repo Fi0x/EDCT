@@ -55,8 +55,9 @@ public class Updater implements Runnable
             MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
         });
 
-        Thread threadReq = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
-        threadReq.start();
+        if(Main.reloader != null) Main.reloader.interrupt();
+        Main.reloader = new Thread(new TradeReloader(MainWindow.getInstance().interactionController));
+        Main.reloader.start();
 
         if(Thread.interrupted()) return;
 
@@ -91,7 +92,7 @@ public class Updater implements Runnable
 
     private boolean loadMissingIDs()
     {
-        ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true);
+        ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true, 0);
 
         int counter = 0;
         for(int id : missingIDs)

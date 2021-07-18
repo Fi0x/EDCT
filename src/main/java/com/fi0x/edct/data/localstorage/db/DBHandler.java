@@ -129,7 +129,7 @@ public class DBHandler
                 "WHERE InaraID = " + inaraID);
     }
 
-    public static ArrayList<Integer> getCommodityIDs(boolean onlyMissing)
+    public static ArrayList<Integer> getCommodityIDs(boolean onlyMissing, long minAverage)
     {
         ArrayList<Integer> ids = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class DBHandler
                     + "FROM Commodities c "
                     + "LEFT JOIN Trades t ON t.InaraID = c.InaraID "
                     + "WHERE t.InaraID IS NULL "
-                    + "AND GalacticAverage > 0");
+                    + "AND GalacticAverage > " + minAverage);
         } else
         {
             results = getQueryResults("SELECT InaraID "
@@ -299,7 +299,8 @@ public class DBHandler
                 "FROM Trades t " +
                 "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
                 "WHERE InaraID = " + commodityID + " " +
-                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 ");
+                "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 " +
+                "ORDER BY " + (isSelling ? "SellPrice" : "BuyPrice DESC"));
         if(trades == null) return stationList;
 
         try
