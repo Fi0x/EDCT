@@ -2,11 +2,10 @@ package com.fi0x.edct;
 
 import com.fi0x.edct.controller.Settings;
 import com.fi0x.edct.data.Updater;
+import com.fi0x.edct.data.localstorage.DistanceHandler;
 import com.fi0x.edct.telemetry.EVENT;
 import com.fi0x.edct.telemetry.MixpanelHandler;
-import com.fi0x.edct.util.BlacklistHandler;
-import com.fi0x.edct.util.Logger;
-import com.fi0x.edct.util.SettingsHandler;
+import com.fi0x.edct.util.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +22,10 @@ public class Main
     public static Thread updater;
     public static Thread reloader;
     public static Thread eddn;
+    private static Thread distance;
+    private static Thread stations;
+    private static Thread eddnHandler;
     private static Thread mixpanel;
-    private static final ArrayList<Thread> ANONYMOUS_THREADS = new ArrayList<>();
 
     private static File localStorage;
     public static File errors;
@@ -48,8 +49,15 @@ public class Main
         MixpanelHandler.sendMessages();
 
         updater = new Thread(new Updater());
+        distance = new Thread(DistanceHandler.getInstance());
+        stations = new Thread(StationUpdater.getInstance());
+        eddnHandler = new Thread(EDDNHandler.getInstance());
         mixpanel = new Thread(new MixpanelHandler());
+
         mixpanel.start();
+        distance.start();
+        stations.start();
+        eddnHandler.start();
 
         MainWindow.main(args);
     }
@@ -59,11 +67,10 @@ public class Main
         if(updater != null) updater.interrupt();
         if(reloader != null) reloader.stop();
         if(eddn != null) eddn.interrupt();
+        if(distance != null) distance.interrupt();
+        if(stations != null) stations.interrupt();
+        if(eddnHandler != null) eddnHandler.interrupt();
         if(mixpanel != null) mixpanel.interrupt();
-        for(Thread t : ANONYMOUS_THREADS)
-        {
-            t.stop();
-        }
 
         MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
@@ -79,13 +86,6 @@ public class Main
     public static void createLogFile()
     {
         createFileIfNotExists(errors, true);
-    }
-
-    //TODO: reduce amount of threads created to avoid out of memory exception
-    public static void addAnonymousThread(Thread threadToAdd)
-    {
-        ANONYMOUS_THREADS.add(threadToAdd);
-        ANONYMOUS_THREADS.removeIf(t -> !t.isAlive());
     }
 
     private static void setupLocalFiles()

@@ -291,7 +291,7 @@ public class DBHandler
         return time;
     }
 
-    //TODO: Speed up / fix it
+    //TODO: Speed up by using filters in sql query
     public static ArrayList<TRADE> getTradeInformation(int commodityID, boolean isSelling)
     {
         ArrayList<TRADE> stationList = new ArrayList<>();

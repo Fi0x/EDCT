@@ -1,12 +1,11 @@
 package com.fi0x.edct.data.websites;
 
-import com.fi0x.edct.Main;
 import com.fi0x.edct.data.RequestHandler;
 import com.fi0x.edct.data.cleanup.INARACleanup;
 import com.fi0x.edct.data.localstorage.db.DBHandler;
 import com.fi0x.edct.data.structures.STATION;
 import com.fi0x.edct.data.structures.TRADE;
-import com.sun.javafx.geom.Vec3d;
+import com.fi0x.edct.util.StationUpdater;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,25 +49,7 @@ public class InaraCommodity
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(seller.STATION.SYSTEM) == null)
                 {
-                    Thread secretThread = new Thread()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            super.run();
-                            Vec3d coordinates;
-                            try
-                            {
-                                coordinates = EDSM.getSystemCoordinates(seller.STATION.SYSTEM);
-                            } catch(InterruptedException ignored)
-                            {
-                                return;
-                            }
-                            if(coordinates != null) DBHandler.setSystemCoordinates(seller.STATION.SYSTEM, coordinates);
-                        }
-                    };
-                    secretThread.start();
-                    Main.addAnonymousThread(secretThread);
+                    StationUpdater.addSystemToQueue(seller.STATION.SYSTEM);
                 }
             }
 
@@ -84,25 +65,7 @@ public class InaraCommodity
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(buyer.STATION.SYSTEM) == null)
                 {
-                    Thread secretThread = new Thread()
-                    {
-                        @Override
-                        public void run()
-                        {
-                            super.run();
-                            Vec3d coordinates;
-                            try
-                            {
-                                coordinates = EDSM.getSystemCoordinates(buyer.STATION.SYSTEM);
-                            } catch(InterruptedException ignored)
-                            {
-                                return;
-                            }
-                            if(coordinates != null) DBHandler.setSystemCoordinates(buyer.STATION.SYSTEM, coordinates);
-                        }
-                    };
-                    secretThread.start();
-                    Main.addAnonymousThread(secretThread);
+                    StationUpdater.addSystemToQueue(buyer.STATION.SYSTEM);
                 }
             }
 

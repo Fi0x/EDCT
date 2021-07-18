@@ -122,11 +122,9 @@ public class Results implements Initializable
 
         currentCommodity++;
         if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
-        else
-        {
-            currentSellStation = 0;
-            currentBuyStation = 0;
-        }
+
+        currentSellStation = 0;
+        currentBuyStation = 0;
 
         displayResults();
     }
@@ -136,11 +134,9 @@ public class Results implements Initializable
 
         currentCommodity--;
         if(currentCommodity < 0) currentCommodity = 0;
-        else
-        {
-            currentSellStation = 0;
-            currentBuyStation = 0;
-        }
+
+        currentSellStation = 0;
+        currentBuyStation = 0;
 
         displayResults();
     }
@@ -195,9 +191,7 @@ public class Results implements Initializable
             distance = DBHandler.getSystemDistance(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
             if(distance == 0)
             {
-                Thread secretThread = new Thread(new DistanceHandler(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM));
-                secretThread.start();
-                com.fi0x.edct.Main.addAnonymousThread(secretThread);
+                DistanceHandler.addDistanceCheck(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
             }
         }
 
