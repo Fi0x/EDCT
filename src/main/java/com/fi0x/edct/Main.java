@@ -1,11 +1,15 @@
 package com.fi0x.edct;
 
-import com.fi0x.edct.controller.Settings;
-import com.fi0x.edct.data.Updater;
-import com.fi0x.edct.data.localstorage.DistanceHandler;
-import com.fi0x.edct.telemetry.EVENT;
-import com.fi0x.edct.telemetry.MixpanelHandler;
-import com.fi0x.edct.util.*;
+import com.fi0x.edct.gui.controller.Settings;
+import com.fi0x.edct.gui.visual.MainWindow;
+import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logic.filesystem.BlacklistHandler;
+import com.fi0x.edct.logic.filesystem.SettingsHandler;
+import com.fi0x.edct.logic.threads.DistanceHandler;
+import com.fi0x.edct.logic.threads.EDDNHandler;
+import com.fi0x.edct.logic.threads.StationUpdater;
+import com.fi0x.edct.logic.threads.Updater;
 
 import java.io.File;
 import java.io.IOException;
@@ -45,7 +49,7 @@ public class Main
         SettingsHandler.verifyIntegrity();
         Settings.loadSettings();
 
-        MixpanelHandler.addMessage(EVENT.INITIALIZATION, MixpanelHandler.getProgramState());
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.INITIALIZATION, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
 
         updater = new Thread(new Updater());
@@ -72,7 +76,7 @@ public class Main
         if(eddnHandler != null) eddnHandler.interrupt();
         if(mixpanel != null) mixpanel.interrupt();
 
-        MixpanelHandler.addMessage(EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.SHUTDOWN, MixpanelHandler.getProgramState());
         MixpanelHandler.sendMessages();
 
         System.exit(0);

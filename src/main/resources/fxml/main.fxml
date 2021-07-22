@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.net.*?>
-<?import javafx.scene.layout.*?>
-
-<VBox fx:id="vbMain" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.controller.Main">
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+<VBox fx:id="vbMain" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="com.fi0x.edct.gui.controller.Main">
     <stylesheets>
         <URL value="@../css/main.css"/>
     </stylesheets>
