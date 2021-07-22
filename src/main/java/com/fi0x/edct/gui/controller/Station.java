@@ -2,6 +2,7 @@ package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
+import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.structures.TRADE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,8 +20,9 @@ public class Station implements Initializable
 {
     private Results resultsController;
 
-    public int stationID;
     private boolean isBuying;
+    public int stationID;
+    private String stationSystem;
 
     @FXML
     private Label lblAction;
@@ -105,13 +107,20 @@ public class Station implements Initializable
 
         resultsController.displayResults();
     }
+    @FXML
+    private void copySystemToClipboard()
+    {
+        ExternalProgram.copyToClipboard(stationSystem);
+    }
 
     public void setStation(TRADE station, boolean hasPrev, boolean hasNext)
     {
+        stationSystem = station.STATION.SYSTEM;
+
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
-        lblSystem.setText("System:\t " + station.STATION.SYSTEM);
+        lblSystem.setText("System:\t " + stationSystem);
         lblStationName.setText("Station:\t " + station.STATION.NAME);
         lblType.setText("Type:\t " + station.STATION.TYPE);
         lblPad.setText("Pad:\t\t " + station.STATION.PAD);

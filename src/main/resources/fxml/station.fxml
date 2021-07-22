@@ -23,9 +23,9 @@
             </tooltip>
         </Button>
     </GridPane>
-    <Label fx:id="lblSystem" text="System: ---">
+    <Label id="lblSystem" fx:id="lblSystem" text="System: ---" onMouseClicked="#copySystemToClipboard">
         <tooltip>
-            <Tooltip text="The system this station is located in"/>
+            <Tooltip text="The system this station is located in. Click to copy"/>
         </tooltip>
     </Label>
     <Label fx:id="lblStationName" text="Station: ---">

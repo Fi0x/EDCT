@@ -10,11 +10,13 @@
 .check-box {
     -fx-text-fill: #eeeeee;
     -fx-focus-traversable: false;
+    -fx-cursor: hand;
 }
 .button {
     -fx-background-color: #eeeeee;
     -fx-text-fill: #1c1c1c;
     -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 .button:hover {
     -fx-background-color: #1c1c1c;

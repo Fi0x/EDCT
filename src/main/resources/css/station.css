@@ -32,3 +32,7 @@
     -fx-text-fill: #aa0000;
     -fx-background-color: rgba(0, 0, 0, 0.2);
 }
+#lblSystem:hover {
+    -fx-opacity: 0.5;
+    -fx-cursor: hand;
+}

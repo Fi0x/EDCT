@@ -3,6 +3,8 @@ package com.fi0x.edct.logic.helper;
 import com.fi0x.edct.logging.Logger;
 
 import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -34,5 +36,12 @@ public class ExternalProgram
                 Logger.ERROR(992, "Could not open blacklist in editor");
             }
         }
+    }
+
+    public static void copyToClipboard(String stringToCopy)
+    {
+        StringSelection content = new StringSelection(stringToCopy);
+        Clipboard clb = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clb.setContents(content, null);
     }
 }
