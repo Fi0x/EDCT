@@ -8,6 +8,8 @@ import java.text.DecimalFormat;
 
 public class Details
 {
+    public static long carrierBuy;
+    public static long carrierSell;
     @FXML
     private Label lblGalAverage;
     @FXML
@@ -39,6 +41,9 @@ public class Details
     {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
+
+        carrierBuy = buyPrice;
+        carrierSell = sellPrice;
 
         lblCarrierBuy.setText(df.format(buyPrice) + " credits");
         lblCarrierSell.setText(df.format(sellPrice) + " credits");

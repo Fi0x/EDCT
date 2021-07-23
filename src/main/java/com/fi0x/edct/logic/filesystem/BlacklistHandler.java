@@ -7,12 +7,13 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BlacklistHandler
 {
-    public static final String[] DEFAULT_BLACKLIST = new String[] {
+    private static final String[] DEFAULT_BLACKLIST = new String[] {
             "{Achenar}",
             "{Alioth}",
             "{Beta Hydri}",
@@ -78,6 +79,28 @@ public class BlacklistHandler
         } catch(IOException e)
         {
             Logger.WARNING(992, "Could not write an entry to the blacklist", e);
+        }
+    }
+
+    public static void fillBlacklistIfEmpty()
+    {
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.blacklist.toPath(), StandardCharsets.UTF_8));
+
+            if(fileContent.size() <= 0)
+            {
+                fileContent.add("This blacklist is used to store system-names that should not appear in the trade results.");
+                fileContent.add("If you want to add a system, just put it's name inside curly brackets {}.");
+                fileContent.add("Each system needs to be in a new row. See examples below:");
+                fileContent.add("");
+                fileContent.addAll(Arrays.asList(BlacklistHandler.DEFAULT_BLACKLIST));
+            }
+
+            Files.write(Main.blacklist.toPath(), fileContent, StandardCharsets.UTF_8);
+        } catch(IOException e)
+        {
+            Logger.WARNING(996, "Could not write default entry to blacklist", e);
         }
     }
 }

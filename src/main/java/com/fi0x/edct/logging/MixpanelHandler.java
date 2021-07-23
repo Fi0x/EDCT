@@ -55,7 +55,7 @@ public class MixpanelHandler implements Runnable
             Logger.WARNING(995, "Could not establish a connection to mixpanel");
         } catch(IOException e)
         {
-            Logger.WARNING("Could not send messages to mixpanel", e);
+            Logger.WARNING(995, "Could not send messages to mixpanel", e);
             return;
         }
 

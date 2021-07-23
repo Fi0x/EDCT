@@ -36,3 +36,12 @@
     -fx-opacity: 0.5;
     -fx-cursor: hand;
 }
+#btnReddit {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #ff4500;
+    -fx-padding: 0 5 0 5;
+}
+#btnReddit:hover {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #ff5700;
+}

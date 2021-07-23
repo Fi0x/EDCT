@@ -87,6 +87,7 @@ public class Logger
                 ex.printStackTrace();
             }
 
+            if(text.equals("Could not send messages to mixpanel")) return;
             if(lvl == LEVEL.ERR)
             {
                 MixpanelHandler.addMessage(MixpanelHandler.EVENT.ERROR, getMixpanelProps(errorCode, text, e));

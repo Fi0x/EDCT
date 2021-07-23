@@ -2,7 +2,7 @@ package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.MixpanelHandler;
-import com.fi0x.edct.logic.helper.NumberConverter;
+import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.threads.TradeReloader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -43,7 +43,7 @@ public class Datastorage
     public void setDataAge(long age)
     {
         if(age == -1) return;
-        lblDataAge.setText(NumberConverter.getAgeText(age));
+        lblDataAge.setText(ConvertToString.ageText(age));
     }
 
     public void setUpdateStatus(String status, BACKGROUND_STATUS phase)

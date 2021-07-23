@@ -1,0 +1,103 @@
+{
+  "Title Structure": "JOB SEPARATOR COMMODITY SEPARATOR PROFIT+",
+  "Text Structure": "+TYPE LINE +CARRIER LINE +PAD LINE +COMMODITY LINE +PROFIT+ LINE +QUANTITY LINE +STATION LINE +SYSTEM LINE +STATION_PRICE+ LINE +CARRIER_PRICE+ LINE LINE TOOL_CREDITS",
+  "Required Variables": {
+    "SEPARATOR": " - ",
+    "CARRIER": "Carrier: [Your carrier name goes here]",
+    "TOOL_CREDITS": "The information for this trade was gathered by the [Elite: Dangerous Carrier Trader](https://github.com/Fi0x/EDCT/releases/latest) tool.",
+    "JOB": {
+      "LOADING": "Carrier Loading Job",
+      "UNLOADING": "Carrier Unloading Job"
+    },
+    "TYPE": {
+      "LOADING": "Type: Loading",
+      "UNLOADING": "Type: Unloading"
+    },
+    "COMMODITY": {
+      "LOADING": {
+        "PREFIX": "Commodity: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "Commodity: ",
+        "SUFFIX": ""
+      }
+    },
+    "PROFIT": {
+      "LOADING": {
+        "PREFIX": "Profit: ",
+        "SUFFIX": "cr/t"
+      },
+      "UNLOADING": {
+        "PREFIX": "Profit: ",
+        "SUFFIX": "cr/t"
+      }
+    },
+    "PAD": {
+      "LOADING": {
+        "PREFIX": "Landing Pad: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "Landing Pad: ",
+        "SUFFIX": ""
+      }
+    },
+    "QUANTITY": {
+      "LOADING": {
+        "PREFIX": "Demand: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "Supply: ",
+        "SUFFIX": ""
+      }
+    },
+    "STATION": {
+      "LOADING": {
+        "PREFIX": "Station: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "Station: ",
+        "SUFFIX": ""
+      }
+    },
+    "SYSTEM": {
+      "LOADING": {
+        "PREFIX": "System: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "System: ",
+        "SUFFIX": ""
+      }
+    },
+    "STATION_PRICE": {
+      "LOADING": {
+        "PREFIX": "Station sell Price: ",
+        "SUFFIX": "cr"
+      },
+      "UNLOADING": {
+        "PREFIX": "Station buy Price: ",
+        "SUFFIX": "cr"
+      }
+    },
+    "CARRIER_PRICE": {
+      "LOADING": {
+        "PREFIX": "Carrier buying at: ",
+        "SUFFIX": "cr"
+      },
+      "UNLOADING": {
+        "PREFIX": "Carrier selling at: ",
+        "SUFFIX": "cr"
+      }
+    }
+  },
+  "Custom Variables": {
+    "CUSTOM_VARIABLE": {
+      "LOADING": "Your custom text for loading the carrier",
+      "UNLOADING": "Your custom text for unloading the carrier"
+    }
+  }
+}

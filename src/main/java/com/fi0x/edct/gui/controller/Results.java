@@ -210,23 +210,8 @@ public class Results implements Initializable
         commodityController.lblDistance.setVisible(normal);
         commodityController.lblDistance.setManaged(normal);
 
-        buyController.lblPad.setVisible(normal);
-        buyController.lblPad.setManaged(normal);
-
-        buyController.lblType.setVisible(normal);
-        buyController.lblType.setManaged(normal);
-
-        buyController.lblAge.setVisible(normal);
-        buyController.lblAge.setManaged(normal);
-
-        sellController.lblPad.setVisible(normal);
-        sellController.lblPad.setManaged(normal);
-
-        sellController.lblType.setVisible(normal);
-        sellController.lblType.setManaged(normal);
-
-        sellController.lblAge.setVisible(normal);
-        sellController.lblAge.setManaged(normal);
+        buyController.setDetailsVisibility(detailed);
+        sellController.setDetailsVisibility(detailed);
 
         detailsBox.setVisible(advanced);
         detailsBox.setManaged(advanced);

@@ -5,6 +5,7 @@ import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.Logger;
 import com.fi0x.edct.logging.MixpanelHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
+import com.fi0x.edct.logic.filesystem.RedditHandler;
 import com.fi0x.edct.logic.filesystem.SettingsHandler;
 import com.fi0x.edct.logic.threads.DistanceHandler;
 import com.fi0x.edct.logic.threads.EDDNHandler;
@@ -13,13 +14,10 @@ import com.fi0x.edct.logic.threads.Updater;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class Main
 {
@@ -35,6 +33,7 @@ public class Main
     public static File errors;
     public static File settings;
     public static File blacklist;
+    public static File reddit;
     //TODO: Update version information
     public static final String version = "1.4.7.6";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
@@ -108,7 +107,11 @@ public class Main
 
         blacklist = new File(localStorage.getPath() + File.separator + "blacklist.txt");
         createFileIfNotExists(blacklist, true);
-        fillBlacklistIfEmpty();
+        BlacklistHandler.fillBlacklistIfEmpty();
+
+        reddit = new File(localStorage.getPath() + File.separator + "reddit.json");
+        createFileIfNotExists(reddit, true);
+        RedditHandler.fillRedditFileIfEmpty();
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)
@@ -129,27 +132,6 @@ public class Main
         } else return false;
 
         return true;
-    }
-    private static void fillBlacklistIfEmpty()
-    {
-        try
-        {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(blacklist.toPath(), StandardCharsets.UTF_8));
-
-            if(fileContent.size() <= 0)
-            {
-                fileContent.add("This blacklist is used to store system-names that should not appear in the trade results.");
-                fileContent.add("If you want to add a system, just put it's name inside curly brackets {}.");
-                fileContent.add("Each system needs to be in a new row. See examples below:");
-                fileContent.add("");
-                fileContent.addAll(Arrays.asList(BlacklistHandler.DEFAULT_BLACKLIST));
-            }
-
-            Files.write(blacklist.toPath(), fileContent, StandardCharsets.UTF_8);
-        } catch(IOException e)
-        {
-            Logger.WARNING(996, "Could not write default entry to blacklist", e);
-        }
     }
     private static String getDateString()
     {

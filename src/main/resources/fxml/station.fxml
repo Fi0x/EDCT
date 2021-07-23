@@ -53,11 +53,22 @@
             <Tooltip text="The amount of the commodity this station buys / sells"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblAge" text="Data age: ---">
-        <tooltip>
-            <Tooltip text="How long ago this data was updated on INARA"/>
-        </tooltip>
-    </Label>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints />
+        </columnConstraints>
+        <Label fx:id="lblAge" text="Data age: ---" GridPane.columnIndex="0">
+            <tooltip>
+                <Tooltip text="How long ago this data was updated on INARA"/>
+            </tooltip>
+        </Label>
+        <Button id="btnReddit" fx:id="btnReddit" text="Reddit" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip fx:id="ttReddit"/>
+            </tooltip>
+        </Button>
+    </GridPane>
     <GridPane>
         <rowConstraints>
             <RowConstraints minHeight="10"/>

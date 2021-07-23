@@ -1,15 +1,19 @@
 package com.fi0x.edct.gui.controller;
 
+import com.fi0x.edct.logging.Logger;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
+import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.structures.TRADE;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -33,15 +37,19 @@ public class Station implements Initializable
     @FXML
     private Label lblStationName;
     @FXML
-    public Label lblType;
+    private Label lblType;
     @FXML
-    public Label lblPad;
+    private Label lblPad;
     @FXML
     private Label lblPrice;
     @FXML
     private Label lblAmount;
     @FXML
-    public Label lblAge;
+    private Label lblAge;
+    @FXML
+    private Button btnReddit;
+    @FXML
+    private Tooltip ttReddit;
     @FXML
     private Button btnPrevStation;
     @FXML
@@ -52,6 +60,23 @@ public class Station implements Initializable
     {
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/blacklist.png")), 20, 20, false, false);
         btnBlacklist.setGraphic(new ImageView(img));
+
+        btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
+        {
+            TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+            String text = ConvertToString.redditTitle(resultsController, station, isBuying);
+            if(e.isSecondaryButtonDown()) text = ConvertToString.redditContent();
+
+            if(text == null)
+            {
+                Logger.ERROR(992, "Something went wrong when creating a reddit String");
+                return;
+            }
+
+            ExternalProgram.copyToClipboard(text);
+        });
+
+        ttReddit.setText("Left click here to copy a title for your reddit post.\nRight click here to copy a text for your reddit post");
     }
 
     @FXML
@@ -130,6 +155,23 @@ public class Station implements Initializable
 
         btnPrevStation.setDisable(!hasPrev);
         btnNextStation.setDisable(!hasNext);
+    }
+    public void setDetailsVisibility(Settings.Details detailLevel)
+    {
+        boolean advanced = detailLevel.equals(Settings.Details.Advanced);
+        boolean normal = detailLevel.equals(Settings.Details.Normal) || advanced;
+
+        lblPad.setVisible(normal);
+        lblPad.setManaged(normal);
+
+        lblType.setVisible(normal);
+        lblType.setManaged(normal);
+
+        lblAge.setVisible(normal);
+        lblAge.setManaged(normal);
+
+        btnReddit.setVisible(advanced);
+        btnReddit.setManaged(advanced);
     }
 
     public void setResultsController(Results controller, boolean isBuying)
