@@ -8,7 +8,7 @@ import com.fi0x.edct.logic.structures.TRADE;
 import org.json.simple.JSONObject;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
+import java.util.Locale;
 
 public class ConvertToString
 {
@@ -36,59 +36,94 @@ public class ConvertToString
         String[] titleParts = titleConfig.split(" ");
         for(String part : titleParts)
         {
-            switch(part)
-            {
-                //TODO: Add additional text if necessary
-                //TODO: Use upper/lower/pascal case
-                case "COMMODITY":
-                    title.append(results.getCurrentTrade().NAME);
-                    break;
-                case "PROFIT":
-                    if(unloading) title.append(Settings.unloadingTonProfit);
-                    else title.append(Settings.loadingTonProfit);
-                    break;
-                case "TYPE":
-                    break;
-                case "LINE":
-                    title.append(System.lineSeparator());
-                    break;
-                case "CARRIER":
-                    break;
-                case "PAD":
-                    title.append("Pad ").append(station.STATION.PAD);
-                    break;
-                case "QUANTITY":
-                    if(unloading) title.append(station.DEMAND);
-                    else title.append(station.SUPPLY);
-                    break;
-                case "STATION":
-                    title.append(station.STATION.NAME);
-                    break;
-                case "STATION_PRICE":
-                    if(unloading) title.append(station.BUY_PRICE);
-                    else title.append(station.SELL_PRICE);
-                    break;
-                case "CARRIER_PRICE":
-                    if(unloading) title.append(Details.carrierSell);
-                    else title.append(Details.carrierBuy);
-                    break;
-            }
+            title.append(transformAndAddKey(part, redditConfig, results, station, unloading));
         }
 
         return title.toString();
     }
     @Nullable
-    public static String redditContent()
+    public static String redditContent(Results results, TRADE station, boolean unloading)
     {
-        ArrayList<String> lines = new ArrayList<>();
-
-        //TODO: Add lines to reddit content
+        JSONObject redditConfig = RedditHandler.getRedditConfig();
+        if(redditConfig == null) return null;
+        RedditHandler.addMissingKeys(redditConfig);
 
         StringBuilder content = new StringBuilder();
-        for(String line : lines)
+
+        String contentConfig = redditConfig.get("Text Structure").toString();
+        String[] contentParts = contentConfig.split(" ");
+        for(String part : contentParts)
         {
-            content.append(line).append("\n");
+            content.append(transformAndAddKey(part, redditConfig, results, station, unloading));
         }
+
         return content.toString();
+    }
+
+    private static String transformAndAddKey(String key, JSONObject redditConfig, Results results, TRADE station, boolean unloading)
+    {
+        boolean prefix = key.charAt(0) == '+';
+        boolean suffix = key.charAt(key.length() - 1) == '+';
+
+        StringBuilder part = new StringBuilder();
+        switch(key.toUpperCase(Locale.ROOT).replace("+", ""))
+        {
+            case "LINE":
+                part.append(System.lineSeparator());
+                break;
+            case "COMMODITY":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "COMMODITY", unloading, "PREFIX"));
+                part.append(results.getCurrentTrade().NAME);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "COMMODITY", unloading, "SUFFIX"));
+                break;
+            case "PROFIT":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "PREFIX"));
+                if(unloading) part.append(Settings.unloadingTonProfit);
+                else part.append(Settings.loadingTonProfit);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "SUFFIX"));
+                break;
+            case "PAD":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "PAD", unloading, "PREFIX"));
+                part.append(station.STATION.PAD);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "PAD", unloading, "SUFFIX"));
+                break;
+            case "QUANTITY":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "PREFIX"));
+                if(unloading) part.append(station.DEMAND);
+                else part.append(station.SUPPLY);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "SUFFIX"));
+                break;
+            case "STATION":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "STATION", unloading, "PREFIX"));
+                part.append(station.STATION.NAME);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "STATION", unloading, "SUFFIX"));
+                break;
+            case "SYSTEM":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "SYSTEM", unloading, "PREFIX"));
+                part.append(station.STATION.SYSTEM);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "SYSTEM", unloading, "SUFFIX"));
+                break;
+            case "STATION_PRICE":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "STATION_PRICE", unloading, "PREFIX"));
+                if(unloading) part.append(station.BUY_PRICE);
+                else part.append(station.SELL_PRICE);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "STATION_PRICE", unloading, "SUFFIX"));
+                break;
+            case "CARRIER_PRICE":
+                if(prefix) part.append(RedditHandler.getValue(redditConfig, "CARRIER_PRICE", unloading, "PREFIX"));
+                if(unloading) part.append(Details.carrierSell);
+                else part.append(Details.carrierBuy);
+                if(suffix) part.append(RedditHandler.getValue(redditConfig, "CARRIER_PRICE", unloading, "SUFFIX"));
+                break;
+            default:
+                part.append(RedditHandler.getValue(redditConfig, key.toUpperCase(Locale.ROOT), unloading, null));
+                break;
+        }
+
+        //TODO: Check upper/lower/pascal case conversion
+        if(Character.isLowerCase(key.charAt(0))) return part.toString().toLowerCase(Locale.ROOT);
+        else if(Character.isUpperCase(key.charAt(1))) return part.toString().toUpperCase(Locale.ROOT);
+
+        return part.toString();
     }
 }

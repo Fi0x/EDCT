@@ -64,8 +64,10 @@ public class Station implements Initializable
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
-            String text = ConvertToString.redditTitle(resultsController, station, isBuying);
-            if(e.isSecondaryButtonDown()) text = ConvertToString.redditContent();
+            String text;
+            //TODO: Fix Secondary button recognition
+            if(e.isSecondaryButtonDown()) text = ConvertToString.redditContent(resultsController, station, isBuying);
+            else text = ConvertToString.redditTitle(resultsController, station, isBuying);
 
             if(text == null)
             {

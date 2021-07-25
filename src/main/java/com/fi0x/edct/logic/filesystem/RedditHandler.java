@@ -20,7 +20,18 @@ public class RedditHandler
 {
     public static void addMissingKeys(JSONObject json)
     {
-        //TODO: If a key is missing, add it from the reddit.json file
+        try
+        {
+            var jsonInput = Main.class.getResourceAsStream("/defaults/reddit.json");
+            JSONObject originalJson = (JSONObject) new JSONParser().parse(jsonInput.toString());
+            for(Object o : originalJson.keySet())
+            {
+                String key = o.toString();
+                if(!json.containsKey(key)) json.put(key, originalJson.get(key));
+            }
+        } catch(ParseException ignored)
+        {
+        }
     }
 
     @Nullable
@@ -38,10 +49,33 @@ public class RedditHandler
         return json;
     }
 
-    public static String getValue(JSONObject json, String key)
+    public static String getValue(JSONObject json, String key, boolean unloading, @Nullable String type)
     {
-        if(json.containsKey(key)) return json.get(key).toString();
-        else return "";
+        JSONObject keyArea = null;
+        if(json.containsKey("Required Variables") && ((JSONObject) json.get("Required Variables")).containsKey(key))
+        {
+            keyArea = (JSONObject) json.get("Required Variables");
+        } else if(json.containsKey("Custom Variables") && ((JSONObject) json.get("Custom Variables")).containsKey(key))
+        {
+            keyArea = (JSONObject) json.get("Custom Variables");
+        }
+        if(keyArea == null) return "";
+
+        String value = keyArea.get(key).toString();
+        if(value.charAt(0) != '{') return value;
+
+        JSONObject keyJson = (JSONObject) keyArea.get(key);
+        if(keyJson.containsKey(unloading ? "UNLOADING" : "LOADING"))
+        {
+            if(type == null) return keyJson.get(unloading ? "UNLOADING" : "LOADING").toString();
+            else
+            {
+                JSONObject loadingJson = (JSONObject) keyJson.get(unloading ? "UNLOADING" : "LOADING");
+                if(loadingJson.containsKey(type)) return loadingJson.get(type).toString();
+            }
+        } else return keyJson.toString();
+
+        return "";
     }
 
     public static void fillRedditFileIfEmpty()
