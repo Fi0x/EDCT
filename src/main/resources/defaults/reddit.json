@@ -4,7 +4,7 @@
   "Required Variables": {
     "SEPARATOR": " - ",
     "CARRIER": "Carrier: [Your carrier name goes here]",
-    "TOOL_CREDITS": "The information for this trade was gathered by the [Elite: Dangerous Carrier Trader](https://github.com/Fi0x/EDCT/releases/latest) tool.",
+    "TOOL_CREDITS": "The information for this trade was gathered by EDCT. You can download the tool here: https://github.com/Fi0x/EDCT/releases/latest.",
     "JOB": {
       "LOADING": "Carrier Loading Job",
       "UNLOADING": "Carrier Unloading Job"

@@ -116,11 +116,10 @@ public class ConvertToString
                 if(suffix) part.append(RedditHandler.getValue(redditConfig, "CARRIER_PRICE", unloading, "SUFFIX"));
                 break;
             default:
-                part.append(RedditHandler.getValue(redditConfig, key.toUpperCase(Locale.ROOT), unloading, null));
+                part.append(RedditHandler.getValue(redditConfig, key.replace("+", "").toUpperCase(Locale.ROOT), unloading, null));
                 break;
         }
 
-        //TODO: Check upper/lower/pascal case conversion
         if(Character.isLowerCase(key.charAt(0))) return part.toString().toLowerCase(Locale.ROOT);
         else if(Character.isUpperCase(key.charAt(1))) return part.toString().toUpperCase(Locale.ROOT);
 

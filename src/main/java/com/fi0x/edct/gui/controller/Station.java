@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
@@ -65,8 +66,7 @@ public class Station implements Initializable
         {
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text;
-            //TODO: Fix Secondary button recognition
-            if(e.isSecondaryButtonDown()) text = ConvertToString.redditContent(resultsController, station, isBuying);
+            if(e.getButton() == MouseButton.SECONDARY) text = ConvertToString.redditContent(resultsController, station, isBuying);
             else text = ConvertToString.redditTitle(resultsController, station, isBuying);
 
             if(text == null)
