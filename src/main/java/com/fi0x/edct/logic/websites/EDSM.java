@@ -1,5 +1,6 @@
 package com.fi0x.edct.logic.websites;
 
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.EDSMCleanup;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
@@ -18,7 +19,13 @@ public class EDSM
         parameters.put(ENDPOINTS.EDSMCoordinates.parameter[0], systemName);
         parameters.put(ENDPOINTS.EDSMCoordinates.parameter[1], "1");
 
-        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.EDSMCoordinates.url, ENDPOINTS.EDSMCoordinates.type, parameters);
+        String html = null;
+        try
+        {
+            html = RequestHandler.sendHTTPRequest(ENDPOINTS.EDSMCoordinates.url, ENDPOINTS.EDSMCoordinates.type, parameters);
+        } catch(HtmlConnectionException ignored)
+        {
+        }
 
         if(html == null) return null;
 

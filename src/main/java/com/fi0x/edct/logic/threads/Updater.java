@@ -5,6 +5,7 @@ import com.fi0x.edct.gui.controller.Datastorage;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.websites.EDDB;
 import com.fi0x.edct.logic.websites.InaraCommodity;
@@ -71,12 +72,20 @@ public class Updater implements Runnable
             int oldestID = DBHandler.getOldestCommodityID();
             if(oldestID == 0) continue;
 
-            try
+            int counter = 0;
+            while(counter < 3)
             {
-                InaraCommodity.updateCommodityPrices(oldestID);
-            } catch(InterruptedException ignored)
-            {
-                return;
+                counter++;
+                try
+                {
+                    InaraCommodity.updateCommodityPrices(oldestID);
+                    break;
+                } catch(InterruptedException ignored)
+                {
+                    return;
+                } catch(HtmlConnectionException ignored)
+                {
+                }
             }
             long age = System.currentTimeMillis() - DBHandler.getOldestUpdateAge() * 1000L;
 
@@ -104,15 +113,24 @@ public class Updater implements Runnable
                 MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), Datastorage.BACKGROUND_STATUS.INITIALIZING);
             });
             if(sleepInterrupted(250)) return true;
-            try
+
+            int counter2 = 0;
+            while(counter2 < 2)
             {
-                while(!InaraCommodity.updateCommodityPrices(id))
+                counter2++;
+                try
                 {
-                    if(sleepInterrupted(500)) return true;
+                    while(!InaraCommodity.updateCommodityPrices(id))
+                    {
+                        if(sleepInterrupted(500)) return true;
+                    }
+                    break;
+                } catch(InterruptedException ignored)
+                {
+                    return true;
+                } catch(HtmlConnectionException ignored)
+                {
                 }
-            } catch(InterruptedException ignored)
-            {
-                return true;
             }
         }
         return false;

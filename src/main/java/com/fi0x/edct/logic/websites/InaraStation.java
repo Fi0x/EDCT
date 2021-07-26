@@ -1,5 +1,6 @@
 package com.fi0x.edct.logic.websites;
 
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.INARACleanup;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
@@ -11,7 +12,7 @@ import java.util.Map;
 public class InaraStation
 {
     @Nullable
-    public static String getInaraStationID(String stationName, String systemName) throws InterruptedException
+    public static String getInaraStationID(String stationName, String systemName) throws InterruptedException, HtmlConnectionException
     {
         Map<String, String> parameters = getRefinedParameters(ENDPOINTS.StationSearch.parameter, stationName);
 
@@ -22,7 +23,7 @@ public class InaraStation
         return INARACleanup.getStationID(html, stationName, systemName);
     }
 
-    public static String getStationHtml(String stationID) throws InterruptedException
+    public static String getStationHtml(String stationID) throws InterruptedException, HtmlConnectionException
     {
         Map<String, String> parameters = new HashMap<>();
 

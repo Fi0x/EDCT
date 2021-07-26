@@ -2,6 +2,7 @@ package com.fi0x.edct.logic.threads;
 
 import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.NameMap;
 import com.fi0x.edct.logic.cleanup.EDDNCleanup;
 import com.fi0x.edct.logic.database.DBHandler;
@@ -70,7 +71,7 @@ public class EDDNHandler implements Runnable
 
         if(station == null)
         {
-            String html;
+            String html = null;
             try
             {
                 if(DBHandler.getSystemCoords(systemName) == null)
@@ -79,14 +80,37 @@ public class EDDNHandler implements Runnable
                     if(coordinates != null) DBHandler.setSystemCoordinates(systemName, coordinates);
                 }
 
-                String stationID = InaraStation.getInaraStationID(stationName, systemName);
+                String stationID = null;
+                int counter = 0;
+                while(counter < 2)
+                {
+                    counter++;
+                    try
+                    {
+                        stationID = InaraStation.getInaraStationID(stationName, systemName);
+                        break;
+                    } catch(HtmlConnectionException ignored)
+                    {
+                    }
+                }
                 if(stationID == null)
                 {
                     Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                     return;
                 }
 
-                html = InaraStation.getStationHtml(stationID);
+                counter = 0;
+                while(counter < 2)
+                {
+                    counter++;
+                    try
+                    {
+                        html = InaraStation.getStationHtml(stationID);
+                        break;
+                    } catch(HtmlConnectionException ignored)
+                    {
+                    }
+                }
                 if(html == null)
                 {
                     Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));

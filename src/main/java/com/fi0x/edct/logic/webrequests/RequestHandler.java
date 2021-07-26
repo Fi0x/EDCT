@@ -2,6 +2,7 @@ package com.fi0x.edct.logic.webrequests;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class RequestHandler
 {
     @Nullable
-    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws InterruptedException
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws InterruptedException, HtmlConnectionException
     {
         try
         {
@@ -32,7 +33,7 @@ public class RequestHandler
         }
     }
     @Nullable
-    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException, InterruptedException
+    public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException, InterruptedException, HtmlConnectionException
     {
         if(!canRequest(ignore429)) return null;
 
@@ -51,6 +52,7 @@ public class RequestHandler
         } catch(IOException e)
         {
             Logger.WARNING(995, "Could not establish a connection to the server");
+            throw new HtmlConnectionException();
         }
         StringBuilder content = new StringBuilder();
         if(status == 200)

@@ -1,5 +1,6 @@
 package com.fi0x.edct.logic.websites;
 
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.INARACleanup;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
@@ -18,7 +19,21 @@ public class InaraCommodity
     {
         Map<String, String> parameters = new HashMap<>();
         Map<String, Integer> commodities;
-        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
+        String html = null;
+
+        int counter = 0;
+        while(counter < 3)
+        {
+            counter++;
+            try
+            {
+                html = RequestHandler.sendHTTPRequest(ENDPOINTS.Commodities.url, ENDPOINTS.Commodities.type, parameters);
+                break;
+            } catch(HtmlConnectionException ignored)
+            {
+            }
+        }
+
         if(html == null) return false;
         commodities = INARACleanup.getCommodityIDs(html);
 
@@ -29,7 +44,7 @@ public class InaraCommodity
         return true;
     }
 
-    public static boolean updateCommodityPrices(int commodityRefID) throws InterruptedException
+    public static boolean updateCommodityPrices(int commodityRefID) throws InterruptedException, HtmlConnectionException
     {
         Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "buymin");
         Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "sellmax");
