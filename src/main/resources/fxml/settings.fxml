@@ -124,10 +124,17 @@
                 <ColumnConstraints hgrow="ALWAYS"/>
                 <ColumnConstraints/>
                 <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
             <Button text="Open Blacklist" onAction="#openBlacklist" GridPane.columnIndex="1">
                 <tooltip>
                     <Tooltip text="This opens the blacklist in the Windows-editor"/>
+                </tooltip>
+            </Button>
+            <Button text="Open Reddit Config" onAction="#openRedditConfig" GridPane.columnIndex="3">
+                <tooltip>
+                    <Tooltip fx:id="ttReddit"/>
                 </tooltip>
             </Button>
         </GridPane>

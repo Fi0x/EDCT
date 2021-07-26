@@ -13,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FileUtils;
 
@@ -55,6 +56,8 @@ public class Settings implements Initializable
     private TextField txtLoadingTonProfit;
     @FXML
     private TextField txtUnloadingTonProfit;
+    @FXML
+    private Tooltip ttReddit;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -143,6 +146,8 @@ public class Settings implements Initializable
         txtUnloadingTonProfit.setText(String.valueOf(unloadingTonProfit));
 
         btnDetails.setText(detailedResults.name() + " Results");
+
+        ttReddit.setText("This opens the config file for reddit-texts in the Windows-editor.\nYou can find out how to configure the file correctly in the wiki");
     }
 
     @FXML
@@ -185,6 +190,11 @@ public class Settings implements Initializable
     private void openBlacklist()
     {
         ExternalProgram.openNotepad(Main.blacklist);
+    }
+    @FXML
+    private void openRedditConfig()
+    {
+        ExternalProgram.openNotepad(Main.reddit);
     }
 
     public static void loadSettings()
