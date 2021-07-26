@@ -1,6 +1,7 @@
 package com.fi0x.edct.logic.helper;
 
 import com.fi0x.edct.gui.controller.Details;
+import com.fi0x.edct.gui.controller.Filters;
 import com.fi0x.edct.gui.controller.Results;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.logic.filesystem.RedditHandler;
@@ -78,8 +79,8 @@ public class ConvertToString
                 break;
             case "PROFIT":
                 if(prefix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "PREFIX"));
-                if(unloading) part.append(Settings.unloadingTonProfit);
-                else part.append(Settings.loadingTonProfit);
+                if(unloading) part.append(Settings.unloadingTonProfit / 1000).append("k");
+                else part.append(Settings.loadingTonProfit / 1000).append("k");
                 if(suffix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "SUFFIX"));
                 break;
             case "PAD":
@@ -88,9 +89,9 @@ public class ConvertToString
                 if(suffix) part.append(RedditHandler.getValue(redditConfig, "PAD", unloading, "SUFFIX"));
                 break;
             case "QUANTITY":
+                assert Filters.getInstance() != null;
                 if(prefix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "PREFIX"));
-                if(unloading) part.append(station.DEMAND);
-                else part.append(station.SUPPLY);
+                part.append(Integer.parseInt(Filters.getInstance().txtQuantity.getText()) / 1000).append("k");
                 if(suffix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "SUFFIX"));
                 break;
             case "STATION":
