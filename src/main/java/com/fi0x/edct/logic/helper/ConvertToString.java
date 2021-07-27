@@ -121,6 +121,8 @@ public class ConvertToString
                 break;
         }
 
+        key = key.replace("+", "");
+
         if(Character.isLowerCase(key.charAt(0))) return part.toString().toLowerCase(Locale.ROOT);
         else if(Character.isUpperCase(key.charAt(1))) return part.toString().toUpperCase(Locale.ROOT);
 

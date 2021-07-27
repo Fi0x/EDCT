@@ -93,7 +93,7 @@ public class RedditHandler
             Files.write(Main.reddit.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING(996, "Could not write default entry to blacklist", e);
+            Logger.WARNING(996, "Could not write default entry to reddit config", e);
         }
     }
 }
