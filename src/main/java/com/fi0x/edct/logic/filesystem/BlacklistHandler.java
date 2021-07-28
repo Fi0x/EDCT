@@ -3,11 +3,12 @@ package com.fi0x.edct.logic.filesystem;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.Logger;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,7 +68,6 @@ public class BlacklistHandler
 
     public static void addSystemToBlacklist(String systemName)
     {
-        ArrayList<String> blacklistedStations = new ArrayList<>();
         try
         {
             List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.blacklist.toPath(), StandardCharsets.UTF_8));
@@ -90,11 +90,8 @@ public class BlacklistHandler
 
             if(fileContent.size() <= 0)
             {
-                fileContent.add("This blacklist is used to store system-names that should not appear in the trade results.");
-                fileContent.add("If you want to add a system, just put it's name inside curly brackets {}.");
-                fileContent.add("Each system needs to be in a new row. See examples below:");
-                fileContent.add("");
-                fileContent.addAll(Arrays.asList(BlacklistHandler.DEFAULT_BLACKLIST));
+                var jsonInput = Main.class.getResourceAsStream("/defaults/blacklist.txt");
+                fileContent = new BufferedReader(new InputStreamReader(jsonInput, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             }
 
             Files.write(Main.blacklist.toPath(), fileContent, StandardCharsets.UTF_8);

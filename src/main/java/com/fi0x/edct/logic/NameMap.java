@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class NameMap
 {
-    public static final Map<String, String> COMMODITY_NAMES = new HashMap<>()
+    private static final Map<String, String> COMMODITY_NAMES = new HashMap<>()
     {
         {
             put("Low Temperature Diamonds", "lowtemperaturediamond");
@@ -62,7 +62,7 @@ public class NameMap
             put("Trade Data", "usscargotradedata");
         }
     };
-    public static final ArrayList<String> RARE_NAMES = new ArrayList<>()
+    private static final ArrayList<String> RARE_NAMES = new ArrayList<>()
     {
         {
             add("aerialedenapple");
@@ -216,7 +216,7 @@ public class NameMap
             add("onionheadc");
         }
     };
-    public static final ArrayList<String> IGNORED = new ArrayList<>()
+    private static final ArrayList<String> IGNORED = new ArrayList<>()
     {
         {
             add("thargoidtissuesampletype1");
