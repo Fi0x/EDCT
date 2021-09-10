@@ -31,7 +31,8 @@ public class MixpanelHandler implements Runnable
     {
         while(!Thread.interrupted())
         {
-            if(delivery != null) sendMessages();
+            addMessage(EVENT.HEARTBEAT, null);
+            sendMessages();
 
             try
             {
@@ -157,6 +158,7 @@ public class MixpanelHandler implements Runnable
         SETTINGS_CLOSED,
         FILTERS_CHANGE,
         BUTTON_CLICKED,
-        TRADES_LOADED
+        TRADES_LOADED,
+        HEARTBEAT
     }
 }
