@@ -80,7 +80,8 @@ public class DBHandler
                 makeSQLValid(station.NAME) + ", " +
                 makeSQLValid(station.SYSTEM) + ", " +
                 makeSQLValid(station.PAD.toString()) + ", " +
-                makeSQLValid(station.TYPE.toString()) + ")");
+                makeSQLValid(station.TYPE.toString()) + ", " +
+                station.DISTANCE_TO_STAR + ")");
     }
 
     public static void setTradeData(TRADE trade)
@@ -311,7 +312,9 @@ public class DBHandler
                 String stationName = trades.getString("StationName");
                 PADSIZE pad = PADSIZE.getFromString(trades.getString("PadSize"));
                 STATIONTYPE type = STATIONTYPE.getFromString(trades.getString("StationType"));
-                STATION station = new STATION(systemName, stationName, pad, type);
+                double starDistance = trades.getDouble("StarDistance");
+
+                STATION station = new STATION(systemName, stationName, pad, type, starDistance);
 
                 int supply = trades.getInt("Supply");
                 int demand = trades.getInt("Demand");
@@ -344,8 +347,9 @@ public class DBHandler
             {
                 PADSIZE pad = PADSIZE.getFromString(stations.getString("PadSize"));
                 STATIONTYPE type = STATIONTYPE.getFromString(stations.getString("StationType"));
+                double starDistance = stations.getDouble("StarDistance");
 
-                station = new STATION(systemName, stationName, pad, type);
+                station = new STATION(systemName, stationName, pad, type, starDistance);
             }
         } catch(SQLException e)
         {

@@ -61,7 +61,7 @@ public class InaraCommodity
             STATION s = DBHandler.getStation(seller.STATION.SYSTEM, seller.STATION.NAME);
             if(s == null)
             {
-                s = new STATION(seller.STATION.SYSTEM, seller.STATION.NAME, seller.STATION.PAD, seller.STATION.TYPE);
+                s = new STATION(seller.STATION.SYSTEM, seller.STATION.NAME, seller.STATION.PAD, seller.STATION.TYPE, seller.STATION.DISTANCE_TO_STAR);
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(seller.STATION.SYSTEM) == null)
                 {
@@ -77,7 +77,7 @@ public class InaraCommodity
             STATION s = DBHandler.getStation(buyer.STATION.SYSTEM, buyer.STATION.NAME);
             if(s == null)
             {
-                s = new STATION(buyer.STATION.SYSTEM, buyer.STATION.NAME, buyer.STATION.PAD, buyer.STATION.TYPE);
+                s = new STATION(buyer.STATION.SYSTEM, buyer.STATION.NAME, buyer.STATION.PAD, buyer.STATION.TYPE, buyer.STATION.DISTANCE_TO_STAR);
                 DBHandler.setStationData(s);
                 if(DBHandler.getSystemCoords(buyer.STATION.SYSTEM) == null)
                 {

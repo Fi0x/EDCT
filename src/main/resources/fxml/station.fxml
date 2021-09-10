@@ -53,6 +53,11 @@
             <Tooltip text="The amount of the commodity this station buys / sells"/>
         </tooltip>
     </Label>
+    <Label fx:id="lblStarDistance" text="Star Distance: ---">
+        <tooltip>
+            <Tooltip text="The distance from the main start to this station"/>
+        </tooltip>
+    </Label>
     <GridPane>
         <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS"/>

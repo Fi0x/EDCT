@@ -46,6 +46,8 @@ public class Station implements Initializable
     @FXML
     private Label lblAmount;
     @FXML
+    private Label lblStarDistance;
+    @FXML
     private Label lblAge;
     @FXML
     private Button btnReddit;
@@ -153,6 +155,7 @@ public class Station implements Initializable
         lblPad.setText("Pad:\t\t " + station.STATION.PAD);
         lblPrice.setText("Price:\t " + df.format((isBuying ? station.BUY_PRICE : station.SELL_PRICE)) + " credits");
         lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? station.DEMAND : station.SUPPLY)) + " tons");
+        lblStarDistance.setText("Star Distance:\t " + station.STATION.DISTANCE_TO_STAR);
         lblAge.setText("Data age:\t " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
@@ -163,11 +166,14 @@ public class Station implements Initializable
         boolean advanced = detailLevel.equals(Settings.Details.Advanced);
         boolean normal = detailLevel.equals(Settings.Details.Normal) || advanced;
 
+        lblType.setVisible(normal);
+        lblType.setManaged(normal);
+
         lblPad.setVisible(normal);
         lblPad.setManaged(normal);
 
-        lblType.setVisible(normal);
-        lblType.setManaged(normal);
+        lblStarDistance.setVisible(normal);
+        lblStarDistance.setManaged(normal);
 
         lblAge.setVisible(normal);
         lblAge.setManaged(normal);

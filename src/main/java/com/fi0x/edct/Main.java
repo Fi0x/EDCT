@@ -83,7 +83,7 @@ public class Main
 
     public static String getDBURL()
     {
-        return localStorage.getPath() + File.separator + "Trades-v3.db";
+        return localStorage.getPath() + File.separator + "Trades-v4.db";
     }
 
     public static void createLogFile()

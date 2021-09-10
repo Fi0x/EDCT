@@ -29,6 +29,7 @@ public enum SQLSTATEMENTS
                     "SystemName TEXT NOT NULL, " +
                     "PadSize TEXT, " +
                     "StationType TEXT, " +
+                    "StarDistance INT NOT NULL, " +
                     "PRIMARY KEY (StationName, SystemName), " +
                     "FOREIGN KEY (SystemName) REFERENCES Systems (SystemName))"
     ),

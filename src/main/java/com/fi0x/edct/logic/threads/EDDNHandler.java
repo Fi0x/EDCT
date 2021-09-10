@@ -66,6 +66,7 @@ public class EDDNHandler implements Runnable
 
         PADSIZE padsize;
         STATIONTYPE stationtype;
+        double starDistance;
 
         STATION station = DBHandler.getStation(systemName, stationName);
 
@@ -123,17 +124,19 @@ public class EDDNHandler implements Runnable
 
             padsize = EDDNCleanup.getStationPad(html);
             stationtype = EDDNCleanup.getStationType(html);
+            starDistance = EDDNCleanup.getStarDistance(html);
 
-            if(stationtype == null || padsize == null)
+            if(stationtype == null || padsize == null || starDistance < 0)
             {
                 Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " - html: " + html);
+                Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " starDistance=" + starDistance + " - html: " + html);
                 return;
             }
         } else
         {
             padsize = station.PAD;
             stationtype = station.TYPE;
+            starDistance = station.DISTANCE_TO_STAR;
         }
 
         for(String trade : EDDNCleanup.getTrades(outputString))
@@ -142,26 +145,26 @@ public class EDDNHandler implements Runnable
             if(commodityID == -1) continue;
 
 
-            TRADE station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, false);
+            TRADE station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, starDistance, trade, false);
             if(station_old != null)
             {
                 STATION s = DBHandler.getStation(systemName, stationName);
                 if(s == null)
                 {
-                    s = new STATION(systemName, stationName, padsize, stationtype);
+                    s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
                 TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.BUY_PRICE, 0);
                 DBHandler.setTradeData(t);
             }
 
-            station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, trade, true);
+            station_old = EDDNCleanup.getStationTrade(commodityID, systemName, stationName, padsize, stationtype, starDistance, trade, true);
             if(station_old != null)
             {
                 STATION s = DBHandler.getStation(systemName, stationName);
                 if(s == null)
                 {
-                    s = new STATION(systemName, stationName, padsize, stationtype);
+                    s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
                 TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.SELL_PRICE);

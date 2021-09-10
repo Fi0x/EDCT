@@ -13,6 +13,7 @@ import org.jsoup.nodes.Element;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class EDDNCleanup
 {
@@ -65,7 +66,7 @@ public class EDDNCleanup
         return trades;
     }
     @Nullable
-    public static TRADE getStationTrade(int commodityID, String system, String station, PADSIZE pad, STATIONTYPE type, String jsonTrade, boolean isSelling)
+    public static TRADE getStationTrade(int commodityID, String system, String station, PADSIZE pad, STATIONTYPE type, double starDistance, String jsonTrade, boolean isSelling)
     {
         long supply = 0;
         long demand = 0;
@@ -92,7 +93,7 @@ public class EDDNCleanup
 
         if(sellPrice == 0 && buyPrice == 0) return null;
 
-        STATION s = new STATION(system, station, pad, type);
+        STATION s = new STATION(system, station, pad, type, starDistance);
         return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, buyPrice, sellPrice);
     }
 
@@ -131,7 +132,7 @@ public class EDDNCleanup
         {
             if(pair.toString().toLowerCase().contains("station type"))
             {
-                String typeName = pair.getElementsByClass("itempairvalue").first().ownText().toLowerCase();
+                String typeName = Objects.requireNonNull(pair.getElementsByClass("itempairvalue").first()).ownText().toLowerCase();
                 if(typeName.contains("odyssey")) type = STATIONTYPE.ODYSSEY;
                 else if(typeName.contains("fleet") || typeName.contains("carrier")) type = STATIONTYPE.CARRIER;
                 else if(typeName.contains("surface")) type = STATIONTYPE.SURFACE;
@@ -143,5 +144,24 @@ public class EDDNCleanup
         }
 
         return type;
+    }
+
+    public static double getStarDistance(String inputHTML)
+    {
+        double starDistance = -1;
+
+        Element details = HTMLCleanup.getStationDetails(inputHTML);
+        if(details == null) return -1;
+
+        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        {
+            if(pair.toString().toLowerCase().contains("station distance"))
+            {
+                String distanceText = Objects.requireNonNull(pair.getElementsByClass("itempairvalue").first()).ownText();
+                starDistance = Double.parseDouble(distanceText.replace(",", "").replace(" Ls", "").replace("-", ""));
+            }
+        }
+
+        return starDistance;
     }
 }

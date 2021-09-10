@@ -13,6 +13,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class INARACleanup
 {
@@ -24,7 +25,7 @@ public class INARACleanup
         Element body = doc.body();
         Element table = body.getElementsByClass("tablesorter").first();
         if(table == null) return commodities;
-        Elements entries = table.getElementsByTag("tbody").first().getElementsByTag("tr");
+        Elements entries = Objects.requireNonNull(table.getElementsByTag("tbody").first()).getElementsByTag("tr");
         entries.remove(0);
 
         for(Element entry : entries)
@@ -33,7 +34,7 @@ public class INARACleanup
             if(commodityInfo == null) continue;
 
             String commodityName = commodityInfo.text();
-            String commodityIDText = commodityInfo.getElementsByTag("a").first().attr("href").replace("commodity", "").replace("/", "");
+            String commodityIDText = Objects.requireNonNull(commodityInfo.getElementsByTag("a").first()).attr("href").replace("commodity", "").replace("/", "");
             int commodityID = Integer.parseInt(commodityIDText);
 
             commodities.put(commodityName, commodityID);
@@ -50,37 +51,30 @@ public class INARACleanup
         Element table = doc.getElementsByClass("tablesorterintab").first();
         if(table == null) return stations;
         Element tbody = table.getElementsByTag("tbody").first();
-        Elements entries = tbody.getElementsByTag("tr");
+        Elements entries = Objects.requireNonNull(tbody).getElementsByTag("tr");
 
         for(Element entry : entries)
         {
-            Element stationDescriptor = entry.getElementsByClass("wrap").first().getElementsByClass("inverse").first();
-            String system = stationDescriptor.getElementsByClass("uppercase").first().ownText();
-            String stationName = stationDescriptor.getElementsByClass("normal").first().ownText();
+            Element stationDescriptor = Objects.requireNonNull(entry.getElementsByClass("wrap").first()).getElementsByClass("inverse").first();
+            String system = Objects.requireNonNull(Objects.requireNonNull(stationDescriptor).getElementsByClass("uppercase").first()).ownText();
+            String stationName = Objects.requireNonNull(stationDescriptor.getElementsByClass("normal").first()).ownText();
             if(stationName.length() > 2) stationName = stationName.substring(0, stationName.length() - 2);
 
-            String padSizeName = entry.getElementsByClass("minor").first().ownText();
+            String padSizeName = Objects.requireNonNull(entry.getElementsByClass("minor").first()).ownText();
 
             Elements tradeElements = entry.getElementsByClass("alignright lineright");
-            Element quantityElement = tradeElements.first().getAllElements().first();
+            Element quantityElement = Objects.requireNonNull(tradeElements.first()).getAllElements().first();
 
-            String quantityText = quantityElement.getAllElements().first().ownText().replace(",", "");
+            String quantityText = Objects.requireNonNull(Objects.requireNonNull(quantityElement).getAllElements().first()).ownText().replace(",", "");
 
-            String priceText = tradeElements.last().ownText().replace(",", "");
+            String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
 
-            int supply = 0;
-            int demand = 0;
-            int buyPrice = 0;
-            int sellPrice = 0;
-            if(isSeller)
-            {
-                supply = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
-                sellPrice = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
-            } else
-            {
-                demand = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
-                buyPrice = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
-            }
+            var q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
+            var p = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
+            int supply = isSeller ? q : 0;
+            int demand = isSeller ? 0 : q;
+            int buyPrice = isSeller ? 0 : p;
+            int sellPrice = isSeller ? p : 0;
 
             STATIONTYPE type;
             if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
@@ -88,8 +82,12 @@ public class INARACleanup
             else if(entry.hasClass("filterable4")) type = STATIONTYPE.ODYSSEY;
             else type = STATIONTYPE.ORBIT;
 
+            Element starDistanceElement = entry.getElementsByClass("minor alignright lineright").first();
+            String starDistanceText = Objects.requireNonNull(starDistanceElement).ownText();
+            double starDistance = Double.parseDouble(starDistanceText.replace(",", "").replace(" Ls", "").replace("---", "-1"));
+
             long inara_time = 0;
-            String[] dataAgeString = entry.getElementsByClass("minor alignright smaller").first().ownText().split(" ");
+            String[] dataAgeString = Objects.requireNonNull(entry.getElementsByClass("minor alignright smaller").first()).ownText().split(" ");
             if(dataAgeString.length == 3)
             {
                 inara_time = Long.parseLong(dataAgeString[0]);
@@ -110,7 +108,7 @@ public class INARACleanup
                 inara_time = System.currentTimeMillis();
             }
 
-            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), type);
+            STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), type, starDistance);
             TRADE trade = new TRADE(station, commodityID, inara_time, supply, demand, buyPrice, sellPrice);
             stations.add(trade);
         }
