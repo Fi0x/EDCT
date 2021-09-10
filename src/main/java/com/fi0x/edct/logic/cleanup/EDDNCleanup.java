@@ -158,7 +158,8 @@ public class EDDNCleanup
             if(pair.toString().toLowerCase().contains("station distance"))
             {
                 String distanceText = Objects.requireNonNull(pair.getElementsByClass("itempairvalue").first()).ownText();
-                starDistance = Double.parseDouble(distanceText.replace(",", "").replace(" Ls", "").replace("-", ""));
+                distanceText = distanceText.replace(",", "").replace(" Ls", "").replace("-", "");
+                starDistance = Double.parseDouble(distanceText.length() > 0 ? distanceText : "-1");
             }
         }
 

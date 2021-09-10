@@ -155,7 +155,10 @@ public class Station implements Initializable
         lblPad.setText("Pad:\t\t " + station.STATION.PAD);
         lblPrice.setText("Price:\t " + df.format((isBuying ? station.BUY_PRICE : station.SELL_PRICE)) + " credits");
         lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? station.DEMAND : station.SUPPLY)) + " tons");
-        lblStarDistance.setText("Star Distance:\t " + station.STATION.DISTANCE_TO_STAR);
+
+        df.setMaximumFractionDigits(0);
+
+        lblStarDistance.setText("Star Distance:\t " + df.format(station.STATION.DISTANCE_TO_STAR) + " Ls");
         lblAge.setText("Data age:\t " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
