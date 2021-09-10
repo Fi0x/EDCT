@@ -176,7 +176,7 @@ public class Station implements Initializable
 
         df.setMaximumFractionDigits(0);
 
-        lblStarDistance.setText("Star Distance:\t " + df.format(station.STATION.DISTANCE_TO_STAR) + " Ls");
+        lblStarDistance.setText("Star Distance:\t " + (station.STATION.DISTANCE_TO_STAR < 0 ? "---" : df.format(station.STATION.DISTANCE_TO_STAR) + " Ls"));
         lblAge.setText("Data age:\t " + station.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
