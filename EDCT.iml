@@ -19,7 +19,7 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:win:13.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:13.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:win:13.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.13.1" level="project" />
+    <orderEntry type="library" name="Maven: org.jsoup:jsoup:1.14.2" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: junit:junit:4.10" level="project" />
     <orderEntry type="library" name="Maven: org.hamcrest:hamcrest-core:1.1" level="project" />
