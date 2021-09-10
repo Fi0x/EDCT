@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RedditHandler
+public class DiscordHandler
 {
     public static void addMissingKeys(JSONObject json)
     {
         try
         {
-            var jsonInput = Main.class.getResourceAsStream("/defaults/reddit.json");
+            var jsonInput = Main.class.getResourceAsStream("/defaults/discord.json");
             JSONObject originalJson = (JSONObject) new JSONParser().parse(jsonInput.toString());
             for(Object o : originalJson.keySet())
             {
@@ -35,12 +35,12 @@ public class RedditHandler
     }
 
     @Nullable
-    public static JSONObject getRedditConfig()
+    public static JSONObject getDiscordConfig()
     {
         JSONObject json = null;
         try
         {
-            String fileContent = Files.readString(Main.reddit.toPath());
+            String fileContent = Files.readString(Main.discord.toPath());
             json = (JSONObject) new JSONParser().parse(fileContent);
         } catch(IOException | ParseException ignored)
         {
@@ -49,22 +49,22 @@ public class RedditHandler
         return json;
     }
 
-    public static void fillRedditFileIfEmpty()
+    public static void fillDiscordFileIfEmpty()
     {
         try
         {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.reddit.toPath(), StandardCharsets.UTF_8));
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.discord.toPath(), StandardCharsets.UTF_8));
 
             if(fileContent.size() <= 0)
             {
-                var jsonInput = Main.class.getResourceAsStream("/defaults/reddit.json");
+                var jsonInput = Main.class.getResourceAsStream("/defaults/discord.json");
                 fileContent = new BufferedReader(new InputStreamReader(jsonInput, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             }
 
-            Files.write(Main.reddit.toPath(), fileContent, StandardCharsets.UTF_8);
+            Files.write(Main.discord.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING(996, "Could not write default entry to reddit config", e);
+            Logger.WARNING(996, "Could not write default entry to discord config", e);
         }
     }
 }

@@ -1,6 +1,5 @@
 {
-  "Title Structure": "JOB SEPARATOR COMMODITY SEPARATOR PROFIT+",
-  "Text Structure": "Type LINE +System LINE Carrier LINE +Station LINE +Commodity LINE +Profit+ LINE +Quantity LINE +Station_Price+ LINE +Carrier_Price+ LINE +Pad +Star_Distance+ LINE LINE Tool_credits",
+  "Text Structure": "JOB LINE LINE +System LINE Carrier LINE +Station LINE +Commodity LINE +Profit+ LINE +Quantity LINE +Station_Price+ LINE +Carrier_Price+ LINE +Pad LINE +Star_Distance+ LINE LINE Tool_credits",
   "Required Variables": {
     "SEPARATOR": " - ",
     "CARRIER": "Carrier: [Your carrier name goes here]",

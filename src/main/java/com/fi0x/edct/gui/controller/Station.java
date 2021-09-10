@@ -50,6 +50,10 @@ public class Station implements Initializable
     @FXML
     private Label lblAge;
     @FXML
+    private Button btnDiscord;
+    @FXML
+    private Tooltip ttDiscord;
+    @FXML
     private Button btnReddit;
     @FXML
     private Tooltip ttReddit;
@@ -79,8 +83,22 @@ public class Station implements Initializable
 
             ExternalProgram.copyToClipboard(text);
         });
+        btnDiscord.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
+        {
+            TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+            String text = ConvertToString.discordText(resultsController, station, isBuying);
+
+            if(text == null)
+            {
+                Logger.ERROR(992, "Something went wrong when creating a discord String");
+                return;
+            }
+
+            ExternalProgram.copyToClipboard(text);
+        });
 
         ttReddit.setText("Left click here to copy a title for your reddit post.\nRight click here to copy a text for your reddit post");
+        ttDiscord.setText("Click here to copy a text that you can publish on discord");
     }
 
     @FXML
@@ -183,6 +201,9 @@ public class Station implements Initializable
 
         btnReddit.setVisible(advanced);
         btnReddit.setManaged(advanced);
+
+        btnDiscord.setVisible(advanced);
+        btnDiscord.setManaged(advanced);
     }
 
     public void setResultsController(Results controller, boolean isBuying)

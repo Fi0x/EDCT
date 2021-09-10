@@ -58,6 +58,8 @@ public class Settings implements Initializable
     private TextField txtUnloadingTonProfit;
     @FXML
     private Tooltip ttReddit;
+    @FXML
+    private Tooltip ttDiscord;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
@@ -148,6 +150,7 @@ public class Settings implements Initializable
         btnDetails.setText(detailedResults.name() + " Results");
 
         ttReddit.setText("This opens the config file for reddit-texts in the Windows-editor.\nYou can find out how to configure the file correctly in the wiki");
+        ttDiscord.setText("This opens the config file for discord-texts in the Windows-editor.\nYou can find out how to configure the file correctly in the wiki");
     }
 
     @FXML
@@ -195,6 +198,11 @@ public class Settings implements Initializable
     private void openRedditConfig()
     {
         ExternalProgram.openNotepad(Main.reddit);
+    }
+    @FXML
+    private void openDiscordConfig()
+    {
+        ExternalProgram.openNotepad(Main.discord);
     }
 
     public static void loadSettings()

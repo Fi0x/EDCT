@@ -126,6 +126,8 @@
                 <ColumnConstraints hgrow="ALWAYS"/>
                 <ColumnConstraints/>
                 <ColumnConstraints hgrow="ALWAYS"/>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
             </columnConstraints>
             <Button text="Open Blacklist" onAction="#openBlacklist" GridPane.columnIndex="1">
                 <tooltip>
@@ -135,6 +137,11 @@
             <Button text="Open Reddit Config" onAction="#openRedditConfig" GridPane.columnIndex="3">
                 <tooltip>
                     <Tooltip fx:id="ttReddit"/>
+                </tooltip>
+            </Button>
+            <Button text="Open Discord Config" onAction="#openDiscordConfig" GridPane.columnIndex="5">
+                <tooltip>
+                    <Tooltip fx:id="ttDiscord"/>
                 </tooltip>
             </Button>
         </GridPane>

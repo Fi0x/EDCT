@@ -4,6 +4,8 @@ import com.fi0x.edct.gui.controller.Details;
 import com.fi0x.edct.gui.controller.Filters;
 import com.fi0x.edct.gui.controller.Results;
 import com.fi0x.edct.gui.controller.Settings;
+import com.fi0x.edct.logic.filesystem.ConfigHandler;
+import com.fi0x.edct.logic.filesystem.DiscordHandler;
 import com.fi0x.edct.logic.filesystem.RedditHandler;
 import com.fi0x.edct.logic.structures.TRADE;
 import org.json.simple.JSONObject;
@@ -60,8 +62,26 @@ public class ConvertToString
 
         return content.toString();
     }
+    @Nullable
+    public static String discordText(Results results, TRADE station, boolean unloading)
+    {
+        JSONObject discordConfig = DiscordHandler.getDiscordConfig();
+        if(discordConfig == null) return null;
+        DiscordHandler.addMissingKeys(discordConfig);
 
-    private static String transformAndAddKey(String key, JSONObject redditConfig, Results results, TRADE station, boolean unloading)
+        StringBuilder content = new StringBuilder();
+
+        String contentConfig = discordConfig.get("Text Structure").toString();
+        String[] contentParts = contentConfig.split(" ");
+        for(String part : contentParts)
+        {
+            content.append(transformAndAddKey(part, discordConfig, results, station, unloading));
+        }
+
+        return content.toString();
+    }
+
+    private static String transformAndAddKey(String key, JSONObject config, Results results, TRADE station, boolean unloading)
     {
         boolean prefix = key.charAt(0) == '+';
         boolean suffix = key.charAt(key.length() - 1) == '+';
@@ -73,51 +93,56 @@ public class ConvertToString
                 part.append(System.lineSeparator());
                 break;
             case "COMMODITY":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "COMMODITY", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "COMMODITY", unloading, "PREFIX"));
                 part.append(results.getCurrentTrade().NAME);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "COMMODITY", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "COMMODITY", unloading, "SUFFIX"));
                 break;
             case "PROFIT":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "PROFIT", unloading, "PREFIX"));
                 if(unloading) part.append(Settings.unloadingTonProfit / 1000).append("k");
                 else part.append(Settings.loadingTonProfit / 1000).append("k");
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "PROFIT", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "PROFIT", unloading, "SUFFIX"));
                 break;
             case "PAD":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "PAD", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "PAD", unloading, "PREFIX"));
                 part.append(station.STATION.PAD);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "PAD", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "PAD", unloading, "SUFFIX"));
+                break;
+            case "STAR_DISTANCE":
+                if(prefix) part.append(ConfigHandler.getValue(config, "STAR_DISTANCE", unloading, "PREFIX"));
+                part.append(station.STATION.DISTANCE_TO_STAR);
+                if(suffix) part.append(ConfigHandler.getValue(config, "STAR_DISTANCE", unloading, "SUFFIX"));
                 break;
             case "QUANTITY":
                 assert Filters.getInstance() != null;
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "QUANTITY", unloading, "PREFIX"));
                 part.append(Integer.parseInt(Filters.getInstance().txtQuantity.getText()) / 1000).append("k");
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "QUANTITY", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "QUANTITY", unloading, "SUFFIX"));
                 break;
             case "STATION":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "STATION", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "STATION", unloading, "PREFIX"));
                 part.append(station.STATION.NAME);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "STATION", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "STATION", unloading, "SUFFIX"));
                 break;
             case "SYSTEM":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "SYSTEM", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "SYSTEM", unloading, "PREFIX"));
                 part.append(station.STATION.SYSTEM);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "SYSTEM", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "SYSTEM", unloading, "SUFFIX"));
                 break;
             case "STATION_PRICE":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "STATION_PRICE", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "PREFIX"));
                 if(unloading) part.append(station.BUY_PRICE);
                 else part.append(station.SELL_PRICE);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "STATION_PRICE", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "SUFFIX"));
                 break;
             case "CARRIER_PRICE":
-                if(prefix) part.append(RedditHandler.getValue(redditConfig, "CARRIER_PRICE", unloading, "PREFIX"));
+                if(prefix) part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "PREFIX"));
                 if(unloading) part.append(Details.carrierSell);
                 else part.append(Details.carrierBuy);
-                if(suffix) part.append(RedditHandler.getValue(redditConfig, "CARRIER_PRICE", unloading, "SUFFIX"));
+                if(suffix) part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "SUFFIX"));
                 break;
             default:
-                part.append(RedditHandler.getValue(redditConfig, key.replace("+", "").toUpperCase(Locale.ROOT), unloading, null));
+                part.append(ConfigHandler.getValue(config, key.replace("+", "").toUpperCase(Locale.ROOT), unloading, null));
                 break;
         }
 

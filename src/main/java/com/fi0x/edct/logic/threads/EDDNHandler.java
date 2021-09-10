@@ -126,7 +126,7 @@ public class EDDNHandler implements Runnable
             stationtype = EDDNCleanup.getStationType(html);
             starDistance = EDDNCleanup.getStarDistance(html);
 
-            if(stationtype == null || padsize == null || starDistance < 0)
+            if(stationtype == null || padsize == null)
             {
                 Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
                 Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " starDistance=" + starDistance + " - html: " + html);

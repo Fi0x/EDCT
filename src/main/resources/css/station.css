@@ -42,6 +42,14 @@
     -fx-padding: 0 5 0 5;
 }
 #btnReddit:hover {
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #000000;
     -fx-background-color: #ff5700;
+}
+#btnDiscord {
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #202225;
+    -fx-padding: 0 5 0 5;
+}
+#btnDiscord:hover {
+    -fx-background-color: #36393f;
 }

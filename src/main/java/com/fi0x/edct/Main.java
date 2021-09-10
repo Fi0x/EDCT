@@ -5,6 +5,7 @@ import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.Logger;
 import com.fi0x.edct.logging.MixpanelHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
+import com.fi0x.edct.logic.filesystem.DiscordHandler;
 import com.fi0x.edct.logic.filesystem.RedditHandler;
 import com.fi0x.edct.logic.filesystem.SettingsHandler;
 import com.fi0x.edct.logic.threads.DistanceHandler;
@@ -34,6 +35,7 @@ public class Main
     public static File settings;
     public static File blacklist;
     public static File reddit;
+    public static File discord;
     //TODO: Update version information
     public static final String version = "1.6.9.7";//All.GUI.Logic.Hotfix
     public static final boolean portable = false;
@@ -112,6 +114,10 @@ public class Main
         reddit = new File(localStorage.getPath() + File.separator + "reddit.json");
         createFileIfNotExists(reddit, true);
         RedditHandler.fillRedditFileIfEmpty();
+
+        discord = new File(localStorage.getPath() + File.separator + "discord.json");
+        createFileIfNotExists(discord, true);
+        DiscordHandler.fillDiscordFileIfEmpty();
     }
 
     private static boolean createFileIfNotExists(File file, boolean isFile)

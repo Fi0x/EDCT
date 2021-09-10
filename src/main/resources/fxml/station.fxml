@@ -58,9 +58,10 @@
             <Tooltip text="The distance from the main start to this station"/>
         </tooltip>
     </Label>
-    <GridPane>
+    <GridPane hgap="5">
         <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints />
             <ColumnConstraints />
         </columnConstraints>
         <Label fx:id="lblAge" text="Data age: ---" GridPane.columnIndex="0">
@@ -68,7 +69,12 @@
                 <Tooltip text="How long ago this data was updated on INARA"/>
             </tooltip>
         </Label>
-        <Button id="btnReddit" fx:id="btnReddit" text="Reddit" GridPane.columnIndex="1">
+        <Button id="btnDiscord" fx:id="btnDiscord" text="Discord" GridPane.columnIndex="1">
+            <tooltip>
+                <Tooltip fx:id="ttDiscord"/>
+            </tooltip>
+        </Button>
+        <Button id="btnReddit" fx:id="btnReddit" text="Reddit" GridPane.columnIndex="2">
             <tooltip>
                 <Tooltip fx:id="ttReddit"/>
             </tooltip>
