@@ -26,6 +26,19 @@ public class ExternalProgram
 
     public static void openNotepad(File fileToOpen)
     {
+        ProcessBuilder processBuilder = new ProcessBuilder("Notepad.exe", fileToOpen.getPath());
+        try
+        {
+            processBuilder.start();
+        } catch(IOException e)
+        {
+            Logger.WARNING(992, "Could not open file with Notepad, trying default editor next", e);
+            openDefaultEditor(fileToOpen);
+        }
+    }
+
+    public static void openDefaultEditor(File fileToOpen)
+    {
         if(Desktop.isDesktopSupported())
         {
             try
