@@ -33,7 +33,7 @@ public class ExternalProgram
                 Desktop.getDesktop().edit(fileToOpen);
             } catch(IOException e)
             {
-                Logger.ERROR(992, "Could not open file (" + fileToOpen.getName() + ") in editor");
+                Logger.ERROR(992, "Could not open file (" + fileToOpen.getName() + ") in editor", e);
             }
         }
     }

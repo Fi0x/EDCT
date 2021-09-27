@@ -187,7 +187,7 @@ public class EDDNHandler implements Runnable
             commodityName = ((String) json.get("name")).toLowerCase();
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not parse an EDDN json for a commodity");
+            Logger.WARNING("Could not parse an EDDN json for a commodity", e);
             return -1;
         }
 
@@ -202,7 +202,10 @@ public class EDDNHandler implements Runnable
             if(commodityName.equals(dbName)) return pair.getValue();
         }
 
-        if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName)) Logger.WARNING(991, "Could not find commodity key that matches: " + commodityName);
+        if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName))
+        {
+            Logger.WARNING(991, "Could not find commodity key that matches: " + commodityName);
+        }
         return -1;
     }
 }

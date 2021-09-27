@@ -24,7 +24,7 @@ public class SettingsWindow extends Stage
             ((Settings) settingsLoader.getController()).infoController = infoController;
         } catch(IOException e)
         {
-            Logger.WARNING(999, "Could not load settings");
+            Logger.WARNING(999, "Could not load settings", e);
             return;
         }
 

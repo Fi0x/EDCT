@@ -116,7 +116,7 @@ public class SettingsHandler
             Logger.WARNING("Could not read an integer from the settings file", e);
         } catch(NumberFormatException e)
         {
-            Logger.WARNING("Could not parse an integer from the settings file");
+            Logger.WARNING("Could not parse an integer from the settings file", e);
         }
 
         verifyIntegrity();
@@ -188,7 +188,7 @@ public class SettingsHandler
             Logger.WARNING("Could not read a boolean from the settings file", e);
         } catch(IllegalArgumentException e)
         {
-            Logger.WARNING("Could not parse the detailed mode from the settings file");
+            Logger.WARNING("Could not parse the detailed mode from the settings file", e);
         }
 
         verifyIntegrity();

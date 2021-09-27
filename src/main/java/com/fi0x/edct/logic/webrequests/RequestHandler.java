@@ -51,7 +51,7 @@ public class RequestHandler
             status = con.getResponseCode();
         } catch(IOException e)
         {
-            Logger.WARNING(995, "Could not establish a connection to the server");
+            Logger.WARNING(995, "Could not establish a connection to the server", e);
             throw new HtmlConnectionException();
         }
         StringBuilder content = new StringBuilder();

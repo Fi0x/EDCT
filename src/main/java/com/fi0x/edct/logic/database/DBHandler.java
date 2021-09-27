@@ -212,7 +212,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get a full list of all stored commodities");
+            Logger.WARNING("Could not get a full list of all stored commodities", e);
         }
 
         return pairs;
@@ -232,7 +232,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the average price for " + commodityName);
+            Logger.WARNING("Could not get the average price for " + commodityName, e);
         }
 
         return 0;

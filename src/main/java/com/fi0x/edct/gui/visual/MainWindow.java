@@ -39,7 +39,7 @@ public class MainWindow extends Application
             root = loader.load();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load MainWindow controller");
+            Logger.ERROR(999, "Could not load MainWindow controller", e);
             System.exit(999);
             return;
         }
@@ -95,7 +95,7 @@ public class MainWindow extends Application
             infoController = loader.getController();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load ProgramInfo controller");
+            Logger.ERROR(999, "Could not load ProgramInfo controller", e);
             return;
         }
 
@@ -117,7 +117,7 @@ public class MainWindow extends Application
             interactionController.setMainController(parentLoader.getController());
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Interaction controller");
+            Logger.ERROR(999, "Could not load Interaction controller", e);
             System.exit(999);
             return;
         }
@@ -137,7 +137,7 @@ public class MainWindow extends Application
             resultsController.updateResultController(parentLoader.getController());
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Results controller");
+            Logger.ERROR(999, "Could not load Results controller", e);
             System.exit(999);
             return;
         }

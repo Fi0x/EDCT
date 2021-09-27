@@ -46,7 +46,7 @@ public class Interaction implements Initializable
             storageController.setInteractionController(this);
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Datastorage controller");
+            Logger.ERROR(999, "Could not load Datastorage controller", e);
             return;
         }
 
@@ -63,7 +63,7 @@ public class Interaction implements Initializable
             filterController = loader.getController();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Filters controller");
+            Logger.ERROR(999, "Could not load Filters controller", e);
             return;
         }
 

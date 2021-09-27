@@ -27,7 +27,7 @@ public class EDDNCleanup
             return (String) message.get("stationName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a station name from a JSON string");
+            Logger.WARNING("Could not retrieve a station name from a JSON string", e);
         }
         return null;
     }
@@ -41,7 +41,7 @@ public class EDDNCleanup
             return (String) message.get("systemName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a system name from a JSON string");
+            Logger.WARNING("Could not retrieve a system name from a JSON string", e);
         }
         return null;
     }
@@ -60,7 +60,7 @@ public class EDDNCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Something went wrong when receiving trade data from EDDN json");
+            Logger.WARNING("Something went wrong when receiving trade data from EDDN json", e);
         }
 
         return trades;
@@ -88,7 +88,7 @@ public class EDDNCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not get trade data from an EDDN json");
+            Logger.WARNING("Could not get trade data from an EDDN json", e);
         }
 
         if(sellPrice == 0 && buyPrice == 0) return null;

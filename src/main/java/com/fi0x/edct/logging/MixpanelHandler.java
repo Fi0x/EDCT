@@ -51,9 +51,9 @@ public class MixpanelHandler implements Runnable
             new MixpanelAPI().deliver(delivery);
         } catch(UnknownHostException ignored)
         {
-        } catch(SocketException ignored)
+        } catch(SocketException e)
         {
-            Logger.WARNING(995, "Could not establish a connection to mixpanel");
+            Logger.WARNING(995, "Could not establish a connection to mixpanel", e);
         } catch(IOException e)
         {
             Logger.WARNING(995, "Could not send messages to mixpanel", e);
