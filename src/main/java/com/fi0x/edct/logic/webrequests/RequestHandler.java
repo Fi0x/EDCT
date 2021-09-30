@@ -28,7 +28,7 @@ public class RequestHandler
             return sendHTTPRequest(endpoint, requestType, parameters, false);
         } catch(IOException e)
         {
-            Logger.WARNING("Some error occurred when sending a HTTP request", e);
+            Logger.WARNING(995, "Some error occurred when sending a HTTP request", e);
             return null;
         }
     }
