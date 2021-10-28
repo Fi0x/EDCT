@@ -110,7 +110,7 @@ public class MixpanelHandler implements Runnable
 
     private static void addDefaultProperties(Map<String, String> props)
     {
-        props.put("version", Main.version);
+        props.put("version", Main.version + (Main.portable ? "-portable" : "-installed"));
         props.put("debug", String.valueOf(debug));
         props.put("settingsMode", String.valueOf(Settings.detailedResults));
     }
