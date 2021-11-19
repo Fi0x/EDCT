@@ -1,5 +1,6 @@
 package com.fi0x.edct.logic.versioncontrol;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -30,13 +31,15 @@ public class ReleaseCleanup
                 String url = releaseJson.get("html_url").toString();
 
                 JSONArray assets = (JSONArray) releaseJson.get("assets");
-                String runExeUrl = getAssetUrl(assets, true);
-                String installUrl = getAssetUrl(assets, false);
+                String runExeUrl = getAssetUrl(assets, Main.VersionType.PORTABLE);
+                String installUrl = getAssetUrl(assets, Main.VersionType.INSTALLER);
+                String jarUrl = getAssetUrl(assets, Main.VersionType.JAR);
 
                 ArrayList<String> urls = new ArrayList<>();
                 urls.add(url);
                 urls.add(runExeUrl);
                 urls.add(installUrl);
+                urls.add(jarUrl);
 
                 releaseDates.put(tag, urls);
             }
@@ -49,13 +52,26 @@ public class ReleaseCleanup
     }
 
     @Nullable
-    private static String getAssetUrl(JSONArray jsonAssets, boolean portable)
+    private static String getAssetUrl(JSONArray jsonAssets, Main.VersionType portable)
     {
         for(Object asset : jsonAssets)
         {
             JSONObject assetJson = (JSONObject) asset;
-            if(portable && assetJson.get("name").equals("EDCT.exe")) return assetJson.get("browser_download_url").toString();
-            else if(!portable && assetJson.get("name").equals("edctsetup.exe")) return assetJson.get("browser_download_url").toString();
+            switch (portable)
+            {
+                case PORTABLE:
+                    if(assetJson.get("name").equals("EDCT.exe"))
+                        return assetJson.get("browser_download_url").toString();
+                    break;
+                case INSTALLER:
+                    if(assetJson.get("name").equals("edctsetup.exe"))
+                        return assetJson.get("browser_download_url").toString();
+                    break;
+                case JAR:
+                    if(assetJson.get("name").equals("EDCT.jar"))
+                        return assetJson.get("browser_download_url").toString();
+                    break;
+            }
         }
 
         return null;

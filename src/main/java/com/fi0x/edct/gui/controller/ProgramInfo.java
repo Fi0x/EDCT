@@ -100,7 +100,21 @@ public class ProgramInfo implements Initializable
         if(url != null && url.size() > 0)
         {
             updateUrl = url.get(0);
-            if(url.size() >= 3) assetUrl = url.get((Main.portable ? 1 : 2));
+            if(url.size() >= 3)
+            {
+                switch (Main.versionType)
+                {
+                    case PORTABLE:
+                        assetUrl = url.get(1);
+                        break;
+                    case INSTALLER:
+                        assetUrl = url.get(2);
+                        break;
+                    case JAR:
+                        assetUrl = url.get(3);
+                        break;
+                }
+            }
             btnUpdate.setVisible(true);
             btnBugReport.setVisible(false);
         }

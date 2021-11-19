@@ -38,7 +38,7 @@ public class Main
     public static File discord;
     //TODO: Update version information
     public static final String version = "1.6.9.8";//All.GUI.Logic.Hotfix
-    public static final boolean portable = false;
+    public static final VersionType versionType = VersionType.INSTALLER;
 
     public static void main(String[] args)
     {
@@ -145,5 +145,12 @@ public class Main
         LocalDateTime now = LocalDateTime.now();
 
         return dtf.format(now);
+    }
+
+    public enum VersionType
+    {
+        PORTABLE,
+        INSTALLER,
+        JAR
     }
 }
