@@ -214,6 +214,7 @@ public class NameMap
             add("korokungpellets");
             add("uzumokulow-gwings");
             add("onionheadc");
+            add("classifiedexperimentalequipment");
         }
     };
     private static final ArrayList<String> IGNORED = new ArrayList<>()
