@@ -1,11 +1,13 @@
 package com.fi0x.edct.gui.controller;
 
+import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.Logger;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.structures.TRADE;
+import com.fi0x.edct.logic.websites.InaraStation;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,6 +30,7 @@ public class Station implements Initializable
     private boolean isBuying;
     public int stationID;
     private String stationSystem;
+    private String stationName;
 
     @FXML
     private Label lblAction;
@@ -134,7 +137,9 @@ public class Station implements Initializable
     @FXML
     private void reloadStation()
     {
-        //TODO: Update station data
+        InaraStation.updateSingleStationTrades(stationName, stationSystem);
+        resultsController.displayResults();
+        //TODO: Check if this is too laggy
     }
     @FXML
     private void addToBlacklist()
@@ -169,24 +174,25 @@ public class Station implements Initializable
         ExternalProgram.copyToClipboard(stationSystem);
     }
 
-    public void setStation(TRADE station, boolean hasPrev, boolean hasNext)
+    public void setStation(TRADE trade, boolean hasPrev, boolean hasNext)
     {
-        stationSystem = station.STATION.SYSTEM;
+        stationSystem = trade.STATION.SYSTEM;
+        stationName = trade.STATION.NAME;
 
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
         lblSystem.setText("System:\t " + stationSystem);
-        lblStationName.setText("Station:\t " + station.STATION.NAME);
-        lblType.setText("Type:\t " + station.STATION.TYPE);
-        lblPad.setText("Pad:\t\t " + station.STATION.PAD);
-        lblPrice.setText("Price:\t " + df.format((isBuying ? station.BUY_PRICE : station.SELL_PRICE)) + " credits");
-        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? station.DEMAND : station.SUPPLY)) + " tons");
+        lblStationName.setText("Station:\t " + stationName);
+        lblType.setText("Type:\t " + trade.STATION.TYPE);
+        lblPad.setText("Pad:\t\t " + trade.STATION.PAD);
+        lblPrice.setText("Price:\t " + df.format((isBuying ? trade.BUY_PRICE : trade.SELL_PRICE)) + " credits");
+        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? trade.DEMAND : trade.SUPPLY)) + " tons");
 
         df.setMaximumFractionDigits(0);
 
-        lblStarDistance.setText("Star Distance:\t " + (station.STATION.DISTANCE_TO_STAR < 0 ? "---" : df.format(station.STATION.DISTANCE_TO_STAR) + " Ls"));
-        lblAge.setText("Data age:\t " + station.getUpdateAge());
+        lblStarDistance.setText("Star Distance:\t " + (trade.STATION.DISTANCE_TO_STAR < 0 ? "---" : df.format(trade.STATION.DISTANCE_TO_STAR) + " Ls"));
+        lblAge.setText("Data age:\t " + trade.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
         btnNextStation.setDisable(!hasNext);
