@@ -192,16 +192,19 @@ public class Settings implements Initializable
     @FXML
     private void openBlacklist()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("open-blacklist"));
         ExternalProgram.openNotepad(Main.blacklist);
     }
     @FXML
     private void openRedditConfig()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("open-reddit-config"));
         ExternalProgram.openNotepad(Main.reddit);
     }
     @FXML
     private void openDiscordConfig()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("open-discord-config"));
         ExternalProgram.openNotepad(Main.discord);
     }
 

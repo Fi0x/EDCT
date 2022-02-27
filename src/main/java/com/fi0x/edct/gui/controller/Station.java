@@ -1,6 +1,7 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.MixpanelHandler;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
@@ -70,6 +71,8 @@ public class Station implements Initializable
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
+            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-reddit-string"));
+
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text;
             if(e.getButton() == MouseButton.SECONDARY) text = ConvertToString.redditContent(resultsController, station, isBuying);
@@ -85,6 +88,8 @@ public class Station implements Initializable
         });
         btnDiscord.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
+            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-discord-string"));
+
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text = ConvertToString.discordText(resultsController, station, isBuying);
 
