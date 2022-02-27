@@ -34,7 +34,7 @@ public class InaraStation
         return RequestHandler.sendHTTPRequest(ENDPOINTS.StationSearch.url + stationID, ENDPOINTS.StationSearch.type, parameters);
     }
 
-    public static void updateSingleStationTrades(String stationName, String systemName)
+    public static void updateSingleStationTrades(String stationName, String systemName, TRADE tradeToUpdate)
     {
         String stationHTML = null;
         try
@@ -49,8 +49,18 @@ public class InaraStation
         {
             ArrayList<TRADE> trades = INARACleanup.getCommodityTradesForStation(stationHTML, systemName, stationName);
             for(TRADE t : trades)
+            {
                 DBHandler.setTradeData(t);
-            //TODO: update loaded information in Results controller
+                if(t.INARA_ID == tradeToUpdate.INARA_ID)
+                {
+                    tradeToUpdate.AGE = t.AGE;
+                    tradeToUpdate.SUPPLY = t.SUPPLY;
+                    tradeToUpdate.DEMAND = t.DEMAND;
+                    tradeToUpdate.BUY_PRICE = t.BUY_PRICE;
+                    tradeToUpdate.SELL_PRICE = t.SELL_PRICE;
+                }
+            }
+
         }
     }
 

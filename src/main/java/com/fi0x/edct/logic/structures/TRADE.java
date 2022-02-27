@@ -4,11 +4,11 @@ public class TRADE
 {
     public final STATION STATION;
     public final int INARA_ID;
-    public final long AGE;
-    public final long SUPPLY;
-    public final long DEMAND;
-    public final long BUY_PRICE;
-    public final long SELL_PRICE;
+    public long AGE;
+    public long SUPPLY;
+    public long DEMAND;
+    public long BUY_PRICE;
+    public long SELL_PRICE;
 
     public TRADE(STATION station, int inaraID, long age, long supply, long demand, long buyPrice, long sellPrice)
     {

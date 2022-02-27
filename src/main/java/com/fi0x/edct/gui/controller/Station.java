@@ -1,6 +1,5 @@
 package com.fi0x.edct.gui.controller;
 
-import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.Logger;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
@@ -137,9 +136,9 @@ public class Station implements Initializable
     @FXML
     private void reloadStation()
     {
-        InaraStation.updateSingleStationTrades(stationName, stationSystem);
+        TRADE currentTrade = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
         resultsController.displayResults();
-        //TODO: Check if this is too laggy
     }
     @FXML
     private void addToBlacklist()
