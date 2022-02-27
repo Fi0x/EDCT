@@ -6,6 +6,18 @@
 #topic {
     -fx-font-weight: bold;
 }
+#btnReloadStation {
+    -fx-padding: 0;
+    -fx-min-height: 0;
+    -fx-min-width: 0;
+    -fx-max-height: 25;
+    -fx-max-width: 25;
+    -fx-text-fill: #000000;
+    -fx-background-color: transparent;
+}
+#btnReloadStation:hover {
+    -fx-background-color: rgba(0, 0, 0, 0.2);
+}
 #btnBlacklist {
     -fx-padding: 0;
     -fx-min-height: 0;

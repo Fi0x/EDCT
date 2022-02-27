@@ -10,14 +10,20 @@
             <ColumnConstraints hgrow="ALWAYS"/>
             <ColumnConstraints/>
             <ColumnConstraints/>
+            <ColumnConstraints/>
         </columnConstraints>
         <Label id="topic" fx:id="lblAction" text="Buy at" GridPane.columnIndex="0"/>
-        <Button id="btnBlacklist" fx:id="btnBlacklist" text="Blacklist" onAction="#addToBlacklist" GridPane.columnIndex="2">
+        <Button id="btnReloadStation" fx:id="btnReloadStation" text="Update" onAction="#reloadStation" GridPane.columnIndex="2">
+            <tooltip>
+                <Tooltip text="Reload the trade information for this station"/>
+            </tooltip>
+        </Button>
+        <Button id="btnBlacklist" fx:id="btnBlacklist" text="Blacklist" onAction="#addToBlacklist" GridPane.columnIndex="3">
             <tooltip>
                 <Tooltip text="Add the system name of this station to the blacklist"/>
             </tooltip>
         </Button>
-        <Button id="btnRemove" text="X" onAction="#removeStation" GridPane.columnIndex="3">
+        <Button id="btnRemove" text="X" onAction="#removeStation" GridPane.columnIndex="4">
             <tooltip>
                 <Tooltip text="Remove this station temporarily from the local database"/>
             </tooltip>
