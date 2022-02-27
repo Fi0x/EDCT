@@ -4,7 +4,6 @@ import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.INARACleanup;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
-import com.fi0x.edct.logic.structures.STATIONTRADE;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
 
