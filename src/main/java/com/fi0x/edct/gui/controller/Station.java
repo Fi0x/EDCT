@@ -32,6 +32,8 @@ public class Station implements Initializable
     @FXML
     private Label lblAction;
     @FXML
+    private Button btnReloadStation;
+    @FXML
     private Button btnBlacklist;
     @FXML
     private Label lblSystem;
@@ -67,6 +69,8 @@ public class Station implements Initializable
     {
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/blacklist.png")), 20, 20, false, false);
         btnBlacklist.setGraphic(new ImageView(img));
+        img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/reload.png")), 20, 20, false, false);
+        btnReloadStation.setGraphic(new ImageView(img));
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
@@ -126,6 +130,11 @@ public class Station implements Initializable
         if(!isBuying) resultsController.currentBuyStation = stationID;
         else resultsController.currentSellStation = stationID;
         resultsController.displayResults();
+    }
+    @FXML
+    private void reloadStation()
+    {
+        //TODO: Update station data
     }
     @FXML
     private void addToBlacklist()
