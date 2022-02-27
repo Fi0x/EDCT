@@ -3,6 +3,7 @@ package com.fi0x.edct.logging;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.logic.filesystem.SettingsHandler;
+import com.fi0x.edct.logic.registry.RegistryWrapper;
 import com.mixpanel.mixpanelapi.ClientDelivery;
 import com.mixpanel.mixpanelapi.MessageBuilder;
 import com.mixpanel.mixpanelapi.MixpanelAPI;
@@ -130,6 +131,7 @@ public class MixpanelHandler implements Runnable
         if(userID == null)
         {
             userID = SettingsHandler.loadString("userID", "");
+            System.out.println("Current User-ID is: " + RegistryWrapper.getUserID(""));
 
             if(userID.length() < 50)
             {
@@ -141,6 +143,7 @@ public class MixpanelHandler implements Runnable
 
                 userID = randomString;
                 SettingsHandler.storeValue("userID", randomString);
+                RegistryWrapper.storeUserID(randomString);
             }
 
             Logger.INFO("UserID: " + userID);
