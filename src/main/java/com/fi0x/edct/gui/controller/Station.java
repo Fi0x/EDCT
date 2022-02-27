@@ -6,6 +6,7 @@ import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.structures.TRADE;
+import com.fi0x.edct.logic.websites.InaraStation;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,9 +29,12 @@ public class Station implements Initializable
     private boolean isBuying;
     public int stationID;
     private String stationSystem;
+    private String stationName;
 
     @FXML
     private Label lblAction;
+    @FXML
+    private Button btnReloadStation;
     @FXML
     private Button btnBlacklist;
     @FXML
@@ -67,6 +71,8 @@ public class Station implements Initializable
     {
         Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/blacklist.png")), 20, 20, false, false);
         btnBlacklist.setGraphic(new ImageView(img));
+        img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/reload.png")), 20, 20, false, false);
+        btnReloadStation.setGraphic(new ImageView(img));
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
@@ -128,6 +134,13 @@ public class Station implements Initializable
         resultsController.displayResults();
     }
     @FXML
+    private void reloadStation()
+    {
+        TRADE currentTrade = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
+        resultsController.displayResults();
+    }
+    @FXML
     private void addToBlacklist()
     {
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
@@ -160,24 +173,25 @@ public class Station implements Initializable
         ExternalProgram.copyToClipboard(stationSystem);
     }
 
-    public void setStation(TRADE station, boolean hasPrev, boolean hasNext)
+    public void setStation(TRADE trade, boolean hasPrev, boolean hasNext)
     {
-        stationSystem = station.STATION.SYSTEM;
+        stationSystem = trade.STATION.SYSTEM;
+        stationName = trade.STATION.NAME;
 
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
 
         lblSystem.setText("System:\t " + stationSystem);
-        lblStationName.setText("Station:\t " + station.STATION.NAME);
-        lblType.setText("Type:\t " + station.STATION.TYPE);
-        lblPad.setText("Pad:\t\t " + station.STATION.PAD);
-        lblPrice.setText("Price:\t " + df.format((isBuying ? station.BUY_PRICE : station.SELL_PRICE)) + " credits");
-        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? station.DEMAND : station.SUPPLY)) + " tons");
+        lblStationName.setText("Station:\t " + stationName);
+        lblType.setText("Type:\t " + trade.STATION.TYPE);
+        lblPad.setText("Pad:\t\t " + trade.STATION.PAD);
+        lblPrice.setText("Price:\t " + df.format((isBuying ? trade.BUY_PRICE : trade.SELL_PRICE)) + " credits");
+        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? trade.DEMAND : trade.SUPPLY)) + " tons");
 
         df.setMaximumFractionDigits(0);
 
-        lblStarDistance.setText("Star Distance:\t " + (station.STATION.DISTANCE_TO_STAR < 0 ? "---" : df.format(station.STATION.DISTANCE_TO_STAR) + " Ls"));
-        lblAge.setText("Data age:\t " + station.getUpdateAge());
+        lblStarDistance.setText("Star Distance:\t " + (trade.STATION.DISTANCE_TO_STAR < 0 ? "---" : df.format(trade.STATION.DISTANCE_TO_STAR) + " Ls"));
+        lblAge.setText("Data age:\t " + trade.getUpdateAge());
 
         btnPrevStation.setDisable(!hasPrev);
         btnNextStation.setDisable(!hasNext);

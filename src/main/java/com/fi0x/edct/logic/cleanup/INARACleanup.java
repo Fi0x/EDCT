@@ -1,9 +1,7 @@
 package com.fi0x.edct.logic.cleanup;
 
-import com.fi0x.edct.logic.structures.PADSIZE;
-import com.fi0x.edct.logic.structures.STATION;
-import com.fi0x.edct.logic.structures.STATIONTYPE;
-import com.fi0x.edct.logic.structures.TRADE;
+import com.fi0x.edct.logic.database.DBHandler;
+import com.fi0x.edct.logic.structures.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -134,5 +132,38 @@ public class INARACleanup
             }
         }
         return stationID;
+    }
+
+    public static ArrayList<TRADE> getCommodityTradesForStation(String inputHTML, String systemName, String stationName)
+    {
+        ArrayList<TRADE> results = new ArrayList<>();
+
+        ArrayList<Element> stationCommodities = HTMLCleanup.getStationTrades(inputHTML);
+        if(stationCommodities == null) return results;
+
+        long currentMillis = System.currentTimeMillis();
+        for(Element commodity : stationCommodities)
+        {
+            Elements cols = commodity.getElementsByTag("td");
+            int inaraID = getIntFromString(Objects.requireNonNull(cols.get(0).getElementsByTag("a").first()).attr("href"));
+            int importPrice = getIntFromString(Objects.requireNonNull(cols.get(1).getElementsByTag("span").first()).ownText());
+            int exportPrice = getIntFromString(Objects.requireNonNull(cols.get(2).getElementsByTag("span").first()).ownText());
+            int demand = getIntFromString(cols.get(3).ownText());
+            int supply = getIntFromString(cols.get(4).ownText());
+
+            STATION s = DBHandler.getStation(systemName, stationName);
+            results.add(new TRADE(s, inaraID, currentMillis, supply, demand, importPrice, exportPrice));
+        }
+
+        return results;
+    }
+
+    private static int getIntFromString(String input)
+    {
+        String cleanString = input.replace("commodity", "").replace("/", "");
+        cleanString = cleanString.replace("-", "0").replace(",", "");
+
+        if(cleanString.equals("")) return 0;
+        return Integer.parseInt(cleanString);
     }
 }
