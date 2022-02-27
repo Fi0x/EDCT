@@ -1,6 +1,7 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.MixpanelHandler;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
@@ -76,6 +77,8 @@ public class Station implements Initializable
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
+            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-reddit-string"));
+
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text;
             if(e.getButton() == MouseButton.SECONDARY) text = ConvertToString.redditContent(resultsController, station, isBuying);
@@ -91,6 +94,8 @@ public class Station implements Initializable
         });
         btnDiscord.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
+            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-discord-string"));
+
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text = ConvertToString.discordText(resultsController, station, isBuying);
 
@@ -136,6 +141,8 @@ public class Station implements Initializable
     @FXML
     private void reloadStation()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("reload-station-data"));
+
         TRADE currentTrade = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
         resultsController.displayResults();
@@ -143,6 +150,8 @@ public class Station implements Initializable
     @FXML
     private void addToBlacklist()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("add-station-to-blacklist"));
+
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         BlacklistHandler.addSystemToBlacklist(s.STATION.SYSTEM);
         resultsController.mainController.updateFilters();
@@ -150,6 +159,8 @@ public class Station implements Initializable
     @FXML
     private void removeStation()
     {
+        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("remove-station-temporary"));
+
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);
         DBHandler.removeStationEntry(commodityID, s.STATION.NAME, s.STATION.SYSTEM, !isBuying);
