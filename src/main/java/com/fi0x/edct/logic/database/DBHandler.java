@@ -423,9 +423,46 @@ public class DBHandler
                 "WHERE Age < " + validTime);
     }
 
+    public static int countStationEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(StarDistance) " +
+                "FROM Stations");
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not count the rows of the Stations table", e);
+        }
+
+        return -1;
+    }
+    public static int countTradeEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(InaraID) " +
+                "FROM Trades");
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.WARNING("Could not count the rows of the Trades table", e);
+        }
+
+        return -1;
+    }
+
     public static void removeTradeData()
     {
         sendStatement("DELETE FROM Trades");
+    }
+    public static void removeStationDATA()
+    {
+        sendStatement("DELETE FROM Stations");
     }
 
     private static synchronized void sendStatement(String command)

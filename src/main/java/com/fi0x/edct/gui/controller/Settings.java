@@ -10,10 +10,7 @@ import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.threads.Updater;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FileUtils;
 
@@ -181,7 +178,23 @@ public class Settings implements Initializable
     private void clearDB()
     {
         MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-DB"));
+
+        int stationEntries = DBHandler.countStationEntries();
+        int tradeEntries = DBHandler.countTradeEntries();
+
+        String alertText = "Are you sure you want to clear the database?";
+        if(stationEntries > 0) alertText += " It contains " + stationEntries + " stations";
+        else if(tradeEntries > 0) alertText += " It contains " + tradeEntries + " trades";
+        if(stationEntries > 0 && tradeEntries > 0) alertText += " and " + tradeEntries + " trades";
+
+        Alert alert = new Alert(Alert.AlertType.WARNING, alertText, ButtonType.YES, ButtonType.CANCEL);
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.CANCEL)
+            return;
+
         DBHandler.removeTradeData();
+        DBHandler.removeStationDATA();
 
         if(Main.eddn != null) Main.eddn.interrupt();
         if(Main.updater != null) Main.updater.interrupt();
