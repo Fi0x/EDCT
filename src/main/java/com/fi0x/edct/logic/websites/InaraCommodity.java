@@ -49,10 +49,10 @@ public class InaraCommodity
         Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "buymin");
         Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "sellmax");
 
-        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
+        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url + commodityRefID + "/#tab_ui-id-2", ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
         ArrayList<TRADE> sellStations = INARACleanup.getCommodityPrices(commodityRefID, html, true);
-        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
+        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url + commodityRefID + "/#tab_ui-id-8", ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
         ArrayList<TRADE> buyStations = INARACleanup.getCommodityPrices(commodityRefID, html, false);
 
