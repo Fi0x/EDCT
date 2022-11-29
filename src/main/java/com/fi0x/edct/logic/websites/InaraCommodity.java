@@ -1,5 +1,6 @@
 package com.fi0x.edct.logic.websites;
 
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.INARACleanup;
 import com.fi0x.edct.logic.database.DBHandler;
@@ -8,6 +9,7 @@ import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.threads.StationUpdater;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
+import io.fi0x.javalogger.logging.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,6 +39,7 @@ public class InaraCommodity
         if(html == null) return false;
         commodities = INARACleanup.getCommodityIDs(html);
 
+        Logger.log("Received " + commodities.size() + " commodities from inara", LogName.VERBOSE);
         for(Map.Entry<String, Integer> entry : commodities.entrySet())
         {
             DBHandler.setCommodityData(entry.getKey(), entry.getValue());

@@ -20,18 +20,18 @@ public class INARACleanup
         Document doc = Jsoup.parse(inputHTML);
 
         Element body = doc.body();
-        Element table = body.getElementsByClass("tablesorter").first();
+        Element table = body.getElementsByClass("tablesortercollapsed").first();
         if(table == null) return commodities;
         Elements entries = Objects.requireNonNull(table.getElementsByTag("tbody").first()).getElementsByTag("tr");
         entries.remove(0);
 
         for(Element entry : entries)
         {
-            Element commodityInfo = entry.getElementsByClass("lineright paddingleft wrap").first();
+            Element commodityInfo = entry.getElementsByClass("lineright wrap").first();
             if(commodityInfo == null) continue;
 
             String commodityName = commodityInfo.text();
-            String commodityIDText = Objects.requireNonNull(commodityInfo.getElementsByTag("a").first()).attr("href").replace("commodity", "").replace("/", "");
+            String commodityIDText = Objects.requireNonNull(commodityInfo.getElementsByTag("a").first()).attr("href").replace("elite/commodity", "").replace("/", "");
             int commodityID = Integer.parseInt(commodityIDText);
 
             commodities.put(commodityName, commodityID);

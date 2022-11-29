@@ -3,9 +3,9 @@ package com.fi0x.edct.logic.structures;
 public enum ENDPOINTS
 {
     Releases("https://api.github.com/repos/Fi0x/EDCT/releases", "GET"),
-    Commodities("https://inara.cz/commodities/", "GET"),
+    Commodities("https://inara.cz/elite/commodities-list/", "GET"),
     EDDNPrices("https://eddb.io/commodity", "GET"),
-    Prices("https://inara.cz/commodity/", "GET"),
+    Prices("https://inara.cz/commodities/", "GET"),
     StationSearch("https://inara.cz/elite/stations/", "GET", "search"),
     EDSMCoordinates("https://www.edsm.net/api-v1/system", "GET", "systemName", "showCoordinates");
 

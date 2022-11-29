@@ -57,7 +57,7 @@ public class MainWindow extends Application
 
         progressbar.setStage(primaryStage);
 
-        Logger.log("GUI loaded", LogName.VERBOSE);
+        Logger.log("GUI loaded", LogName.INFO);
 
         Main.updater.start();
     }
