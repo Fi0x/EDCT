@@ -1,11 +1,12 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.COMMODITY;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.threads.DistanceHandler;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -66,7 +67,7 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Commodity controller", e);
+            Logger.log("Could not load Commodity controller", LogName.ERROR, e, 999);
             return;
         }
 
@@ -91,7 +92,7 @@ public class Results implements Initializable
             }
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Station controller", e);
+            Logger.log("Could not load Station controller", LogName.ERROR, e, 999);
             return;
         }
 
@@ -109,7 +110,7 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Details controller", e);
+            Logger.log("Could not load Details controller", LogName.ERROR, e, 999);
             return;
         }
 

@@ -2,14 +2,14 @@ package com.fi0x.edct.logic.database;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Settings;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.structures.PADSIZE;
 import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.STATIONTYPE;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.sun.javafx.geom.Vec3d;
+import io.fi0x.javalogger.logging.Logger;
 
-import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
@@ -28,11 +28,11 @@ public class DBHandler
         try
         {
             dbConnection = DriverManager.getConnection(url);
-            Logger.INFO("Connected to local DB");
+            Logger.log("Connected to local DB", LogName.INFO);
 
         } catch(SQLException e)
         {
-            Logger.ERROR(998, "Something went wrong when connecting to the local DB", e);
+            Logger.log("Something went wrong when connecting to the local DB", LogName.ERROR, e, 998);
             System.exit(998);
         }
     }
@@ -53,7 +53,7 @@ public class DBHandler
         sendStatement(SQLSTATEMENTS.CreateStations.getStatement());
         sendStatement(SQLSTATEMENTS.CreateTrades.getStatement());
 
-        Logger.INFO("Finished setup of local DB");
+        Logger.log("Finished setup of local DB", LogName.INFO);
     }
 
     public static void setCommodityData(String commodityName, int inaraID)
@@ -156,7 +156,7 @@ public class DBHandler
             }
         } catch(Exception e)
         {
-            Logger.WARNING("Could not get the INARA-ID of a commodity", e);
+            Logger.log("Could not get the INARA-ID of a commodity", LogName.WARNING, e);
         }
         return ids;
     }
@@ -174,7 +174,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the name of a commodity", e);
+            Logger.log("Could not get the name of a commodity", LogName.WARNING, e);
         }
         return "";
     }
@@ -192,7 +192,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the id of a commodity", e);
+            Logger.log("Could not get the id of a commodity", LogName.WARNING, e);
         }
         return -1;
     }
@@ -212,7 +212,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get a full list of all stored commodities", e);
+            Logger.log("Could not get a full list of all stored commodities", LogName.WARNING, e);
         }
 
         return pairs;
@@ -232,7 +232,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the average price for " + commodityName, e);
+            Logger.log("Could not get the average price for " + commodityName, LogName.WARNING, e);
         }
 
         return 0;
@@ -259,7 +259,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the oldest commodity ID", e);
+            Logger.log("Could not get the oldest commodity ID", LogName.WARNING, e);
         }
 
         return id;
@@ -286,7 +286,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the age of the oldest commodity", e);
+            Logger.log("Could not get the age of the oldest commodity", LogName.WARNING, e);
         }
 
         return time;
@@ -326,13 +326,12 @@ public class DBHandler
             }
         } catch(Exception e)
         {
-            Logger.WARNING("Could not get the buy or sell prices for a commodity", e);
+            Logger.log("Could not get the buy or sell prices for a commodity", LogName.WARNING, e);
         }
 
         return stationList;
     }
 
-    @Nullable
     public static STATION getStation(String systemName, String stationName)
     {
         ResultSet stations = getQueryResults("SELECT * " +
@@ -353,13 +352,12 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get some station information", e);
+            Logger.log("Could not get some station information", LogName.WARNING, e);
         }
 
         return station;
     }
 
-    @Nullable
     public static Vec3d getSystemCoords(String systemName)
     {
         ResultSet system = getQueryResults("SELECT * " +
@@ -380,7 +378,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the age of the oldest commodity", e);
+            Logger.log("Could not get the age of the oldest commodity", LogName.WARNING, e);
         }
 
         return coordinates;
@@ -401,7 +399,7 @@ public class DBHandler
             }
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not get the distance between two systems", e);
+            Logger.log("Could not get the distance between two systems", LogName.WARNING, e);
         }
 
         return 0;
@@ -434,7 +432,7 @@ public class DBHandler
                 return results.getInt(1);
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not count the rows of the Stations table", e);
+            Logger.log("Could not count the rows of the Stations table", LogName.WARNING, e);
         }
 
         return -1;
@@ -450,7 +448,7 @@ public class DBHandler
                 return results.getInt(1);
         } catch(SQLException e)
         {
-            Logger.WARNING("Could not count the rows of the Trades table", e);
+            Logger.log("Could not count the rows of the Trades table", LogName.WARNING, e);
         }
 
         return -1;
@@ -474,11 +472,12 @@ public class DBHandler
             statement.executeUpdate(command);
         } catch(SQLException e)
         {
-            if(e.toString().contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of locking", e);
-            else Logger.WARNING(994, "Something went wrong when sending an SQL statement. Statement: " + command, e);
+            if(e.toString().contains("The database file is locked"))
+                Logger.log("Could not access database file because of locking", LogName.ERROR, e, 993);
+            else
+                Logger.log("Something went wrong when sending an SQL statement. Statement: " + command, LogName.WARNING, e, 994);
         }
     }
-    @Nullable
     private static synchronized ResultSet getQueryResults(String query)
     {
         try
@@ -488,8 +487,10 @@ public class DBHandler
             return statement.executeQuery(query);
         } catch(SQLException e)
         {
-            if(e.toString().contains("The database file is locked")) Logger.ERROR(993, "Could not access database file because of locking", e);
-            else Logger.WARNING(994, "Something went wrong when sending a SQL query. Query: " + query, e);
+            if(e.toString().contains("The database file is locked"))
+                Logger.log("Could not access database file because of locking", LogName.ERROR, e, 993);
+            else
+                Logger.log("Something went wrong when sending a SQL query. Query: " + query, LogName.WARNING, e, 994);
         }
         return null;
     }

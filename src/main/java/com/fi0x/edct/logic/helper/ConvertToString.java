@@ -10,7 +10,6 @@ import com.fi0x.edct.logic.filesystem.RedditHandler;
 import com.fi0x.edct.logic.structures.TRADE;
 import org.json.simple.JSONObject;
 
-import javax.annotation.Nullable;
 import java.util.Locale;
 
 public class ConvertToString
@@ -26,7 +25,6 @@ public class ConvertToString
         return text;
     }
 
-    @Nullable
     public static String redditTitle(Results results, TRADE station, boolean unloading)
     {
         JSONObject redditConfig = RedditHandler.getRedditConfig();
@@ -44,7 +42,6 @@ public class ConvertToString
 
         return title.toString();
     }
-    @Nullable
     public static String redditContent(Results results, TRADE station, boolean unloading)
     {
         JSONObject redditConfig = RedditHandler.getRedditConfig();
@@ -62,7 +59,6 @@ public class ConvertToString
 
         return content.toString();
     }
-    @Nullable
     public static String discordText(Results results, TRADE station, boolean unloading)
     {
         JSONObject discordConfig = DiscordHandler.getDiscordConfig();

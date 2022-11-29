@@ -1,7 +1,8 @@
 package com.fi0x.edct.gui.controller;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.structures.TRADE;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -46,7 +47,7 @@ public class Interaction implements Initializable
             storageController.setInteractionController(this);
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Datastorage controller", e);
+            Logger.log("Could not load Datastorage controller", LogName.ERROR, e, 999);
             return;
         }
 
@@ -63,7 +64,7 @@ public class Interaction implements Initializable
             filterController = loader.getController();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Filters controller", e);
+            Logger.log("Could not load Filters controller", LogName.ERROR, e, 999);
             return;
         }
 

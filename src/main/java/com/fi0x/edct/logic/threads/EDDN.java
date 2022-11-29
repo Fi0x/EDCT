@@ -1,6 +1,7 @@
 package com.fi0x.edct.logic.threads;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 
@@ -22,7 +23,7 @@ public class EDDN implements Runnable
         client.setReceiveTimeOut(30000);
 
         client.connect(RELAY);
-        Logger.INFO("Connected to the EDDN relay");
+        Logger.log("Connected to the EDDN relay", LogName.INFO);
 
         ZMQ.Poller poller = ctx.createPoller(2);
         poller.register(client, ZMQ.Poller.POLLIN);
@@ -51,7 +52,7 @@ public class EDDN implements Runnable
                             }
                         } catch(DataFormatException e)
                         {
-                            Logger.WARNING("Something went wrong when retrieving an EDDN message", e);
+                            Logger.log("Something went wrong when retrieving an EDDN message", LogName.WARNING, e);
                         }
                     }
                 }

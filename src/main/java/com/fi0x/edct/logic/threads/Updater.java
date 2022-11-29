@@ -4,11 +4,12 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Datastorage;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.websites.EDDB;
 import com.fi0x.edct.logic.websites.InaraCommodity;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Updater implements Runnable
     @Override
     public void run()
     {
-        Logger.INFO("Updater Thread started");
+        Logger.log("Updater Thread started", LogName.INFO);
         try
         {
             while(!InaraCommodity.updateCommodityIDs())
@@ -42,13 +43,13 @@ public class Updater implements Runnable
             return;
         }
 
-        Logger.INFO("Updated Commodity Average Prices");
+        Logger.log("Updated Commodity Average Prices", LogName.VERBOSE);
 
         DBHandler.removeOldEntries();
 
         if(loadMissingIDs()) return;
 
-        Logger.INFO("All Commodities loaded");
+        Logger.log("All Commodities loaded", LogName.VERBOSE);
         Platform.runLater(() ->
         {
             MainWindow.getInstance().setUpdateStatus(-1);
@@ -95,7 +96,7 @@ public class Updater implements Runnable
                 MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
             });
         }
-        Logger.INFO("Updater Thread stopped");
+        Logger.log("Updater Thread stopped", LogName.INFO);
     }
 
     private boolean loadMissingIDs()

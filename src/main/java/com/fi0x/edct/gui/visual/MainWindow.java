@@ -4,7 +4,8 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Interaction;
 import com.fi0x.edct.gui.controller.ProgramInfo;
 import com.fi0x.edct.gui.controller.Results;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -39,7 +40,7 @@ public class MainWindow extends Application
             root = loader.load();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load MainWindow controller", e);
+            Logger.log("Could not load MainWindow controller", LogName.ERROR, e, 999);
             System.exit(999);
             return;
         }
@@ -56,7 +57,7 @@ public class MainWindow extends Application
 
         progressbar.setStage(primaryStage);
 
-        Logger.INFO("GUI loaded");
+        Logger.log("GUI loaded", LogName.VERBOSE);
 
         Main.updater.start();
     }
@@ -95,7 +96,7 @@ public class MainWindow extends Application
             infoController = loader.getController();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load ProgramInfo controller", e);
+            Logger.log("Could not load ProgramInfo controller", LogName.ERROR, e, 999);
             return;
         }
 
@@ -117,7 +118,7 @@ public class MainWindow extends Application
             interactionController.setMainController(parentLoader.getController());
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Interaction controller", e);
+            Logger.log("Could not load Interaction controller", LogName.ERROR, e, 999);
             System.exit(999);
             return;
         }
@@ -137,7 +138,7 @@ public class MainWindow extends Application
             resultsController.updateResultController(parentLoader.getController());
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Results controller", e);
+            Logger.log("Could not load Results controller", LogName.ERROR, e, 999);
             System.exit(999);
             return;
         }

@@ -3,13 +3,11 @@ package com.fi0x.edct.logic.versioncontrol;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.logic.webrequests.GitHubRequests;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Map;
 
 public class GitHub
 {
-    @Nullable
     public static ArrayList<String> getNewerVersion()
     {
         String response = GitHubRequests.getReleases();

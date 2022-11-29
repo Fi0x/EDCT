@@ -5,13 +5,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class HTMLCleanup
 {
-    @Nullable
     public static Element getStationDetails(String inputHTML)
     {
         Elements mainconten1s = getStationMaincontent1(inputHTML);
@@ -29,7 +27,6 @@ public class HTMLCleanup
         return null;
     }
 
-    @Nullable
     public static ArrayList<Element> getStationTrades(String inputHTML)
     {
         ArrayList<Element> stationTrades = new ArrayList<>();
@@ -57,7 +54,6 @@ public class HTMLCleanup
         return stationTrades;
     }
 
-    @Nullable
     private static Elements getStationMaincontent1(String inputHTML)
     {
         Document doc = Jsoup.parse(inputHTML);

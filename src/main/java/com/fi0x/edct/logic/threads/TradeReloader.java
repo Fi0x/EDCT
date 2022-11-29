@@ -3,10 +3,12 @@ package com.fi0x.edct.logic.threads;
 import com.fi0x.edct.gui.controller.Filters;
 import com.fi0x.edct.gui.controller.Interaction;
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.TRADE;
+import io.fi0x.javalogger.logging.Logger;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
@@ -24,7 +26,7 @@ public class TradeReloader implements Runnable
     @Override
     public void run()
     {
-        Logger.INFO("Trade Reloader Thread started");
+        Logger.log("Trade Reloader Thread started", LogName.VERBOSE);
         updatePrices();
 
         long oldestFileAge = DBHandler.getOldestUpdateAge();
@@ -36,8 +38,8 @@ public class TradeReloader implements Runnable
 
         MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
         MainWindow.getInstance().interactionController.storageController.lblReloadStatus.setVisible(false);
-        Logger.INFO("Trade Reloader Thread finished");
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.TRADES_LOADED, null);
+        Logger.log("Trade Reloader Thread finished", LogName.VERBOSE);
+        MixpanelHandler.addMessage(MixpanelEvents.TRADES_LOADED.name(), null);
     }
 
     private void updatePrices()

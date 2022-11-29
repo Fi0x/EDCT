@@ -1,23 +1,22 @@
 package com.fi0x.edct.logic.cleanup;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.structures.PADSIZE;
 import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.STATIONTYPE;
 import com.fi0x.edct.logic.structures.TRADE;
+import io.fi0x.javalogger.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.nodes.Element;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class EDDNCleanup
 {
-    @Nullable
     public static String getStationName(String jsonString)
     {
         try
@@ -27,11 +26,10 @@ public class EDDNCleanup
             return (String) message.get("stationName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a station name from a JSON string", e);
+            Logger.log("Could not retrieve a station name from a JSON string", LogName.WARNING, e);
         }
         return null;
     }
-    @Nullable
     public static String getSystemName(String jsonString)
     {
         try
@@ -41,7 +39,7 @@ public class EDDNCleanup
             return (String) message.get("systemName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a system name from a JSON string", e);
+            Logger.log("Could not retrieve a system name from a JSON string", LogName.WARNING, e);
         }
         return null;
     }
@@ -60,12 +58,11 @@ public class EDDNCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Something went wrong when receiving trade data from EDDN json", e);
+            Logger.log("Something went wrong when receiving trade data from EDDN json", LogName.WARNING, e);
         }
 
         return trades;
     }
-    @Nullable
     public static TRADE getStationTrade(int commodityID, String system, String station, PADSIZE pad, STATIONTYPE type, double starDistance, String jsonTrade, boolean isSelling)
     {
         long supply = 0;
@@ -88,7 +85,7 @@ public class EDDNCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not get trade data from an EDDN json", e);
+            Logger.log("Could not get trade data from an EDDN json", LogName.WARNING, e);
         }
 
         if(sellPrice == 0 && buyPrice == 0) return null;
@@ -97,7 +94,6 @@ public class EDDNCleanup
         return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, buyPrice, sellPrice);
     }
 
-    @Nullable
     public static PADSIZE getStationPad(String inputHTML)
     {
         PADSIZE padsize = PADSIZE.NONE;
@@ -120,7 +116,6 @@ public class EDDNCleanup
         return padsize;
     }
 
-    @Nullable
     public static STATIONTYPE getStationType(String inputHTML)
     {
         STATIONTYPE type = STATIONTYPE.UNKNOWN;

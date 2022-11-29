@@ -1,12 +1,12 @@
 package com.fi0x.edct.logic.filesystem;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +23,7 @@ public class RedditHandler
         try
         {
             var jsonInput = Main.class.getResourceAsStream("/defaults/reddit.json");
+            assert jsonInput != null;
             JSONObject originalJson = (JSONObject) new JSONParser().parse(jsonInput.toString());
             for(Object o : originalJson.keySet())
             {
@@ -34,7 +35,6 @@ public class RedditHandler
         }
     }
 
-    @Nullable
     public static JSONObject getRedditConfig()
     {
         JSONObject json = null;
@@ -58,13 +58,14 @@ public class RedditHandler
             if(fileContent.size() <= 0)
             {
                 var jsonInput = Main.class.getResourceAsStream("/defaults/reddit.json");
+                assert jsonInput != null;
                 fileContent = new BufferedReader(new InputStreamReader(jsonInput, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             }
 
             Files.write(Main.reddit.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING(996, "Could not write default entry to reddit config", e);
+            Logger.log("Could not write default entry to reddit config", LogName.WARNING, e, 996);
         }
     }
 }

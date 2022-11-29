@@ -137,6 +137,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>io.github.Fi0x</groupId>
+            <artifactId>JavaLogger</artifactId>
+            <version>1.1.8</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
             <version>19</version>
@@ -159,12 +164,12 @@
         <dependency>
             <groupId>com.akathist.maven.plugins.launch4j</groupId>
             <artifactId>launch4j-maven-plugin</artifactId>
-            <version>2.1.2</version>
+            <version>2.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.39.3.0</version>
+            <version>3.39.4.1</version>
         </dependency>
         <dependency>
             <groupId>org.zeromq</groupId>

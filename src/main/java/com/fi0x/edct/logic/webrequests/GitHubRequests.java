@@ -1,17 +1,16 @@
 package com.fi0x.edct.logic.webrequests;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
+import io.fi0x.javalogger.logging.Logger;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public class GitHubRequests
 {
-    @Nullable
     public static String getReleases()
     {
         Map<String, String> params = new HashMap<>();
@@ -28,7 +27,7 @@ public class GitHubRequests
                 return null;
             } catch(IOException e)
             {
-                Logger.WARNING("Could not find out if there is a newer version", e);
+                Logger.log("Could not find out if there is a newer version", LogName.WARNING, e);
                 return null;
             } catch(HtmlConnectionException ignored)
             {

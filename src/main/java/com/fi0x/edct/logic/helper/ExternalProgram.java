@@ -1,6 +1,7 @@
 package com.fi0x.edct.logic.helper;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -20,7 +21,7 @@ public class ExternalProgram
             desktop.browse(new URI(url));
         } catch(IOException | URISyntaxException e)
         {
-            Logger.ERROR(992, "Could not open url in browser", e);
+            Logger.log("Could not open url in browser", LogName.ERROR, e, 992);
         }
     }
 
@@ -32,7 +33,7 @@ public class ExternalProgram
             processBuilder.start();
         } catch(IOException e)
         {
-            Logger.WARNING(992, "Could not open file with Notepad, trying default editor next", e);
+            Logger.log("Could not open file with Notepad, trying default editor next", LogName.WARNING, e, 992);
             openDefaultEditor(fileToOpen);
         }
     }
@@ -46,7 +47,7 @@ public class ExternalProgram
                 Desktop.getDesktop().edit(fileToOpen);
             } catch(IOException e)
             {
-                Logger.ERROR(992, "Could not open file (" + fileToOpen.getName() + ") in editor", e);
+                Logger.log("Could not open file (" + fileToOpen.getName() + ") in editor", LogName.ERROR, e, 992);
             }
         }
     }

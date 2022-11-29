@@ -2,11 +2,9 @@ package com.fi0x.edct.logic.filesystem;
 
 import org.json.simple.JSONObject;
 
-import javax.annotation.Nullable;
-
 public class ConfigHandler
 {
-    public static String getValue(JSONObject json, String key, boolean unloading, @Nullable String type)
+    public static String getValue(JSONObject json, String key, boolean unloading, String type)
     {
         JSONObject keyArea = null;
         if(json.containsKey("Required Variables") && ((JSONObject) json.get("Required Variables")).containsKey(key))

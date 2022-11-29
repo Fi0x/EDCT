@@ -1,13 +1,13 @@
 package com.fi0x.edct.logic.versioncontrol;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,13 +45,12 @@ public class ReleaseCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not convert release-json: " + jsonString, e);
+            Logger.log("Could not convert release-json: " + jsonString, LogName.WARNING, e);
         }
 
         return releaseDates;
     }
 
-    @Nullable
     private static String getAssetUrl(JSONArray jsonAssets, Main.VersionType portable)
     {
         for(Object asset : jsonAssets)

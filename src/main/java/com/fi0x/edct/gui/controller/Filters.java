@@ -1,14 +1,14 @@
 package com.fi0x.edct.gui.controller;
 
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.filesystem.SettingsHandler;
 import com.fi0x.edct.logic.structures.FILTEROPTIONS;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
-import javax.annotation.Nullable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -48,44 +48,44 @@ public class Filters implements Initializable
             {
                 mainController.updateFilters();
                 SettingsHandler.storeValue("quantity", txtQuantity.getText());
-                MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+                MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
             }
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("carrier", cbCarrier.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbSurface.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("surface", cbSurface.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("pad", cbLandingPad.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbDemand.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("demand", cbDemand.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbOdyssey.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbBlacklist.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
             SettingsHandler.storeValue("blacklist", cbBlacklist.isSelected());
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         txtGalacticAverage.textProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -95,7 +95,7 @@ public class Filters implements Initializable
             {
                 mainController.updateFilters();
                 SettingsHandler.storeValue("quantity", txtGalacticAverage.getText());
-                MixpanelHandler.addMessage(MixpanelHandler.EVENT.FILTERS_CHANGE, MixpanelHandler.getProgramState());
+                MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
             }
         });
     }
@@ -105,7 +105,6 @@ public class Filters implements Initializable
         mainController = controller;
     }
 
-    @Nullable
     public static Filters getInstance()
     {
         return instance;

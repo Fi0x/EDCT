@@ -1,16 +1,14 @@
 package com.fi0x.edct.logic.cleanup;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.sun.javafx.geom.Vec3d;
+import io.fi0x.javalogger.logging.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import javax.annotation.Nullable;
-
 public class EDSMCleanup
 {
-    @Nullable
     public static Vec3d getSystemCoordinates(String jsonString)
     {
         Vec3d vector = null;
@@ -51,7 +49,7 @@ public class EDSMCleanup
                 vector = new Vec3d(x, y, z);
             } catch(ParseException | ClassCastException e)
             {
-                Logger.WARNING("Could not parse the coordinates for a system. JSON: " + jsonString, e);
+                Logger.log("Could not parse the coordinates for a system. JSON: " + jsonString, LogName.WARNING, e);
             }
         }
 

@@ -1,13 +1,15 @@
 package com.fi0x.edct.gui.controller;
 
-import com.fi0x.edct.logging.Logger;
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.websites.InaraStation;
+import io.fi0x.javalogger.logging.Logger;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -20,6 +22,7 @@ import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -77,7 +80,7 @@ public class Station implements Initializable
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-reddit-string"));
+            MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "copy-reddit-string");}});
 
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text;
@@ -86,7 +89,7 @@ public class Station implements Initializable
 
             if(text == null)
             {
-                Logger.ERROR(992, "Something went wrong when creating a reddit String");
+                Logger.log("Something went wrong when creating a reddit String", LogName.ERROR, null, 992);
                 return;
             }
 
@@ -94,14 +97,14 @@ public class Station implements Initializable
         });
         btnDiscord.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
-            MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("copy-discord-string"));
+            MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "copy-discord-string");}});
 
             TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
             String text = ConvertToString.discordText(resultsController, station, isBuying);
 
             if(text == null)
             {
-                Logger.ERROR(992, "Something went wrong when creating a discord String");
+                Logger.log("Something went wrong when creating a discord String", LogName.ERROR, null, 992);
                 return;
             }
 
@@ -141,7 +144,7 @@ public class Station implements Initializable
     @FXML
     private void reloadStation()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("reload-station-data"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "reload-station-data");}});
 
         TRADE currentTrade = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
@@ -150,7 +153,7 @@ public class Station implements Initializable
     @FXML
     private void addToBlacklist()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("add-station-to-blacklist"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "add-station-to-blacklist");}});
 
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         BlacklistHandler.addSystemToBlacklist(s.STATION.SYSTEM);
@@ -159,7 +162,7 @@ public class Station implements Initializable
     @FXML
     private void removeStation()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("remove-station-temporary"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "remove-station-temporary");}});
 
         TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);

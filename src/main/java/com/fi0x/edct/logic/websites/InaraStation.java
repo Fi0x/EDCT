@@ -7,14 +7,12 @@ import com.fi0x.edct.logic.structures.ENDPOINTS;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InaraStation
 {
-    @Nullable
     public static String getInaraStationID(String stationName, String systemName) throws InterruptedException, HtmlConnectionException
     {
         Map<String, String> parameters = getRefinedParameters(ENDPOINTS.StationSearch.parameter, stationName);

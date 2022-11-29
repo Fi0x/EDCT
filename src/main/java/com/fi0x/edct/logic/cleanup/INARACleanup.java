@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -114,7 +113,6 @@ public class INARACleanup
         return stations;
     }
 
-    @Nullable
     public static String getStationID(String inputHTML, String stationName, String systemName)
     {
         String stationID = null;
