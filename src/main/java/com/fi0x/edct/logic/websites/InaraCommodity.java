@@ -49,13 +49,14 @@ public class InaraCommodity
 
     public static boolean updateCommodityPrices(int commodityRefID) throws InterruptedException, HtmlConnectionException
     {
-        Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "buymin");
-        Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "sellmax");
+        Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "2");
+        Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "1");
 
-        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url + commodityRefID + "/#tab_ui-id-2", ENDPOINTS.Prices.type, parameters1);
+        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
         if(html == null) return false;
         ArrayList<TRADE> sellStations = INARACleanup.getCommodityPrices(commodityRefID, html, true);
-        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url + commodityRefID + "/#tab_ui-id-8", ENDPOINTS.Prices.type, parameters2);
+
+        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
         if(html == null) return false;
         ArrayList<TRADE> buyStations = INARACleanup.getCommodityPrices(commodityRefID, html, false);
 
@@ -105,17 +106,30 @@ public class InaraCommodity
         {
             switch(param)
             {
-                case "act":
-                    parameters.put(param, "goodsdata");
-                    break;
-                case "refname":
+                case "pi1":
                     parameters.put(param, sellParam);
                     break;
-                case "refid":
+                case "pi2":
                     parameters.put(param, String.valueOf(commRefID));
                     break;
-                case "refid2":
-                    parameters.put(param, "1261");
+                case "pi3":
+                case "pi4":
+                case "pi8":
+                case "pi10":
+                    parameters.put(param, "1");
+                    break;
+                case "pi7":
+                case "pi12":
+                    parameters.put(param, "0");
+                    break;
+                case "pi5":
+                    parameters.put(param, "168");
+                    break;
+                case "pi9":
+                    parameters.put(param, "100000");
+                    break;
+                case "pi11":
+                    parameters.put(param, "5000");
                     break;
                 default:
                     break;
