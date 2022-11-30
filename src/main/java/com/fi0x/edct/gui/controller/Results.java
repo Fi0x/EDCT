@@ -67,7 +67,7 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.log("Could not load Commodity controller", LogName.ERROR, e, 999);
+            Logger.log("Could not load Commodity controller", LogName.getError(999), e, 999);
             return;
         }
 
@@ -92,7 +92,7 @@ public class Results implements Initializable
             }
         } catch(IOException e)
         {
-            Logger.log("Could not load Station controller", LogName.ERROR, e, 999);
+            Logger.log("Could not load Station controller", LogName.getError(999), e, 999);
             return;
         }
 
@@ -110,7 +110,7 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.log("Could not load Details controller", LogName.ERROR, e, 999);
+            Logger.log("Could not load Details controller", LogName.getError(999), e, 999);
             return;
         }
 

@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -99,9 +100,14 @@ public class EDDNCleanup
         PADSIZE padsize = PADSIZE.NONE;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        if(details == null)
+            return null;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return null;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
-        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        for(Element pair : pairs)
         {
             String pairText = pair.toString().toLowerCase();
             if(pairText.contains("landing pad"))
@@ -121,9 +127,14 @@ public class EDDNCleanup
         STATIONTYPE type = STATIONTYPE.UNKNOWN;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        if(details == null)
+            return null;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return null;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
-        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        for(Element pair : pairs)
         {
             if(pair.toString().toLowerCase().contains("station type"))
             {
@@ -146,7 +157,12 @@ public class EDDNCleanup
         double starDistance = -1;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return -1;
+        if(details == null)
+            return -1;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return -1;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
         for(Element pair : details.getElementsByClass("itempaircontainer"))
         {

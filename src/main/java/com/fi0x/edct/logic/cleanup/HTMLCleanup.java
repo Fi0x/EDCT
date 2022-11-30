@@ -10,31 +10,17 @@ import java.util.Objects;
 
 public class HTMLCleanup
 {
-    public static Element getStationDetails(String inputHTML)
-    {
-        Elements mainconten1s = getStationMaincontent1(inputHTML);
-        if(mainconten1s == null || mainconten1s.size() == 0) return null;
-
-        Elements mainblocks = Objects.requireNonNull(mainconten1s.first()).getElementsByClass("mainblock");
-        if(mainblocks.size() == 0) return null;
-
-        for(Element block : mainblocks)
-        {
-            String blockText = block.toString().toLowerCase();
-            if(blockText.contains("class=\"mainblock\"") && (blockText.contains("landing pad") || blockText.contains("station type") || blockText.contains("href=\"/station/")))
-                return block;
-        }
-        return null;
-    }
-
     public static ArrayList<Element> getStationTrades(String inputHTML)
     {
+        //TODO: Adjust for new inara
         ArrayList<Element> stationTrades = new ArrayList<>();
 
-        Elements mainconten1s = getStationMaincontent1(inputHTML);
-        if(mainconten1s == null || mainconten1s.size() == 0) return null;
+        Document doc = Jsoup.parse(inputHTML);
 
-        Elements mainblocks = Objects.requireNonNull(mainconten1s.first()).getElementsByClass("mainblock maintable");
+        Element mainconten1s = doc.getElementsByClass("maincontainer").first();
+
+        assert mainconten1s != null;
+        Elements mainblocks = mainconten1s.getElementsByClass("mainblock maintable");
         if(mainblocks.size() == 0) return null;
 
         Elements tables = Objects.requireNonNull(mainblocks.first()).getElementsByTag("table");
@@ -54,22 +40,49 @@ public class HTMLCleanup
         return stationTrades;
     }
 
-    private static Elements getStationMaincontent1(String inputHTML)
+    public static Element getStationDetails(String inputHTML)
     {
         Document doc = Jsoup.parse(inputHTML);
 
-        Elements maincons = doc.getElementsByClass("maincon");
-        if(maincons.size() == 0) return null;
+        Elements mainContainers = doc.getElementsByClass("maincontainer");
+        if(mainContainers.size() == 0)
+            return null;
+        Elements mainContents = Objects.requireNonNull(mainContainers.first()).getElementsByClass("maincontent0");
+        if(mainContents.size() == 0)
+            return null;
+        Elements subContents = Objects.requireNonNull(mainContents.first()).getElementsByClass("subcontent0 smallgaps");
+        if(subContents.size() == 0)
+            return null;
+        Elements mainBlocks = Objects.requireNonNull(subContents.first()).getElementsByClass("mainblock illustrationleftsmall");
+        if(mainBlocks.size() == 0)
+            return null;
+        Elements columns = Objects.requireNonNull(mainBlocks.first()).getElementsByClass("incontent grid2columns columnseparator");
+        if(columns.size() == 0)
+            return null;
 
-        Elements containermains = Objects.requireNonNull(maincons.first()).getElementsByClass("containermain");
-        if(containermains.size() == 0) return null;
+        return Objects.requireNonNull(columns.first()).getElementsByTag("div").first();
+    }
 
-        Elements maincontentcontainers = Objects.requireNonNull(containermains.first()).getElementsByClass("maincontentcontainer");
-        if(maincontentcontainers.size() == 0) return null;
+    public static Elements getStationNameAndSystem(String inputHTML)
+    {
+        Document doc = Jsoup.parse(inputHTML);
 
-        Elements mainconten1s = Objects.requireNonNull(maincontentcontainers.first()).getElementsByClass("maincontent1");
-        if(mainconten1s.size() == 0) return null;
+        Elements mainContainers = doc.getElementsByClass("maincontainer");
+        if(mainContainers.size() == 0)
+            return null;
 
-        return mainconten1s;
+        Elements mainContents = Objects.requireNonNull(mainContainers.first()).getElementsByClass("maincontent1 fullwidth");
+        if(mainContents.size() == 0)
+            return null;
+
+        Elements mainBlocks = Objects.requireNonNull(mainContents.first()).getElementsByClass("mainblock");
+        if(mainBlocks.size() == 0)
+            return null;
+
+        Elements table = Objects.requireNonNull(mainBlocks.first()).getElementsByClass("incontentlist columns3");
+        if(table.size() == 0)
+            return null;
+
+        return Objects.requireNonNull(table.first()).getElementsByTag("a");
     }
 }

@@ -32,7 +32,7 @@ public class DBHandler
 
         } catch(SQLException e)
         {
-            Logger.log("Something went wrong when connecting to the local DB", LogName.ERROR, e, 998);
+            Logger.log("Something went wrong when connecting to the local DB", LogName.getError(998), e, 998);
             System.exit(998);
         }
     }
@@ -473,7 +473,7 @@ public class DBHandler
         } catch(SQLException e)
         {
             if(e.toString().contains("The database file is locked"))
-                Logger.log("Could not access database file because of locking", LogName.ERROR, e, 993);
+                Logger.log("Could not access database file because of locking", LogName.getError(993), e, 993);
             else
                 Logger.log("Something went wrong when sending an SQL statement. Statement: " + command, LogName.WARNING, e, 994);
         }
@@ -488,7 +488,7 @@ public class DBHandler
         } catch(SQLException e)
         {
             if(e.toString().contains("The database file is locked"))
-                Logger.log("Could not access database file because of locking", LogName.ERROR, e, 993);
+                Logger.log("Could not access database file because of locking", LogName.getError(993), e, 993);
             else
                 Logger.log("Something went wrong when sending a SQL query. Query: " + query, LogName.WARNING, e, 994);
         }

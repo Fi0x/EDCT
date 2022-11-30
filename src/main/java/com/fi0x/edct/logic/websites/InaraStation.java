@@ -26,13 +26,12 @@ public class InaraStation
 
     public static String getStationHtml(String stationID) throws InterruptedException, HtmlConnectionException
     {
-        Map<String, String> parameters = new HashMap<>();
-
-        return RequestHandler.sendHTTPRequest(ENDPOINTS.StationSearch.url + stationID, ENDPOINTS.StationSearch.type, parameters);
+        return RequestHandler.sendHTTPRequest(ENDPOINTS.StationInfo.url + stationID, ENDPOINTS.StationInfo.type, new HashMap<>());
     }
 
     public static void updateSingleStationTrades(String stationName, String systemName, TRADE tradeToUpdate)
     {
+        //TODO: Update for new inara
         String stationHTML = null;
         try
         {

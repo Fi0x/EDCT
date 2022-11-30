@@ -21,7 +21,7 @@ public class ExternalProgram
             desktop.browse(new URI(url));
         } catch(IOException | URISyntaxException e)
         {
-            Logger.log("Could not open url in browser", LogName.ERROR, e, 992);
+            Logger.log("Could not open url in browser", LogName.getError(992), e, 992);
         }
     }
 
@@ -47,7 +47,7 @@ public class ExternalProgram
                 Desktop.getDesktop().edit(fileToOpen);
             } catch(IOException e)
             {
-                Logger.log("Could not open file (" + fileToOpen.getName() + ") in editor", LogName.ERROR, e, 992);
+                Logger.log("Could not open file (" + fileToOpen.getName() + ") in editor", LogName.getError(992), e, 992);
             }
         }
     }

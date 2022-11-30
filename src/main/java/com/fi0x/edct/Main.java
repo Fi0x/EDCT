@@ -39,7 +39,7 @@ public class Main
     public static File reddit;
     public static File discord;
     //TODO: Update version information
-    public static final String version = "1.7.11.9";//All.GUI.Logic.Hotfix
+    public static final String version = "2.0.0.0";//All.GUI.Logic.Hotfix
     public static final VersionType versionType = VersionType.INSTALLER;
 
     public static void main(String[] args)
@@ -181,7 +181,7 @@ public class Main
                     if(file.createNewFile()) return false;
                 } catch(IOException e)
                 {
-                    Logger.log("Could not create file: " + file, LogName.ERROR, e, 997);
+                    Logger.log("Could not create file: " + file, LogName.getError(997), e, 997);
                     System.exit(997);
                 }
             } else return !file.mkdir();

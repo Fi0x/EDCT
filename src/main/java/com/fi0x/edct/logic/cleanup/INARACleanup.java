@@ -1,7 +1,9 @@
 package com.fi0x.edct.logic.cleanup;
 
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.*;
+import io.fi0x.javalogger.logging.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -20,18 +22,18 @@ public class INARACleanup
         Document doc = Jsoup.parse(inputHTML);
 
         Element body = doc.body();
-        Element table = body.getElementsByClass("tablesorter").first();
+        Element table = body.getElementsByClass("tablesortercollapsed").first();
         if(table == null) return commodities;
         Elements entries = Objects.requireNonNull(table.getElementsByTag("tbody").first()).getElementsByTag("tr");
         entries.remove(0);
 
         for(Element entry : entries)
         {
-            Element commodityInfo = entry.getElementsByClass("lineright paddingleft wrap").first();
+            Element commodityInfo = entry.getElementsByClass("lineright wrap").first();
             if(commodityInfo == null) continue;
 
             String commodityName = commodityInfo.text();
-            String commodityIDText = Objects.requireNonNull(commodityInfo.getElementsByTag("a").first()).attr("href").replace("commodity", "").replace("/", "");
+            String commodityIDText = Objects.requireNonNull(commodityInfo.getElementsByTag("a").first()).attr("href").replace("elite/commodity", "").replace("/", "");
             int commodityID = Integer.parseInt(commodityIDText);
 
             commodities.put(commodityName, commodityID);
@@ -45,25 +47,25 @@ public class INARACleanup
         ArrayList<TRADE> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
 
-        Element table = doc.getElementsByClass("tablesorterintab").first();
-        if(table == null) return stations;
+        Element table = doc.getElementsByClass("tablesortercollapsed").first();
+        if(table == null)
+            return stations;
+
         Element tbody = table.getElementsByTag("tbody").first();
         Elements entries = Objects.requireNonNull(tbody).getElementsByTag("tr");
 
         for(Element entry : entries)
         {
-            Element stationDescriptor = Objects.requireNonNull(entry.getElementsByClass("wrap").first()).getElementsByClass("inverse").first();
-            String system = Objects.requireNonNull(Objects.requireNonNull(stationDescriptor).getElementsByClass("uppercase").first()).ownText();
-            String stationName = Objects.requireNonNull(stationDescriptor.getElementsByClass("normal").first()).ownText();
-            if(stationName.length() > 2) stationName = stationName.substring(0, stationName.length() - 2);
+            Element stationDescriptor = Objects.requireNonNull(entry.getElementsByClass("wrap").first()).getElementsByTag("a").first();
+            String system = Objects.requireNonNull(Objects.requireNonNull(stationDescriptor).getElementsByClass("uppercase nowrap").first()).ownText();
+            String stationName = Objects.requireNonNull(stationDescriptor.getElementsByClass("standardcase standardcolor nowrap").first()).ownText();
+            if(stationName.length() > 2)
+                stationName = stationName.substring(0, stationName.length() - 2);
 
-            String padSizeName = Objects.requireNonNull(entry.getElementsByClass("minor").first()).ownText();
+            String padSizeName = Objects.requireNonNull(entry.getElementsByClass("alignright minor").first()).ownText();
 
             Elements tradeElements = entry.getElementsByClass("alignright lineright");
-            Element quantityElement = Objects.requireNonNull(tradeElements.first()).getAllElements().first();
-
-            String quantityText = Objects.requireNonNull(Objects.requireNonNull(quantityElement).getAllElements().first()).ownText().replace(",", "");
-
+            String quantityText = Objects.requireNonNull(tradeElements.first()).ownText().replace(",", "");
             String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
 
             var q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
@@ -73,18 +75,30 @@ public class INARACleanup
             int buyPrice = isSeller ? 0 : p;
             int sellPrice = isSeller ? p : 0;
 
+            //TODO: Maybe make this part useful again
             STATIONTYPE type;
-            if(entry.hasClass("filterable1")) type = STATIONTYPE.CARRIER;
-            else if(entry.hasClass("filterable3")) type = STATIONTYPE.SURFACE;
-            else if(entry.hasClass("filterable4")) type = STATIONTYPE.ODYSSEY;
-            else type = STATIONTYPE.ORBIT;
+            if(entry.hasClass("filterable1"))
+                type = STATIONTYPE.CARRIER;
+            else if(entry.hasClass("filterable3"))
+                type = STATIONTYPE.SURFACE;
+            else if(entry.hasClass("filterable4"))
+                type = STATIONTYPE.ODYSSEY;
+            else
+                type = STATIONTYPE.ORBIT;
 
             Element starDistanceElement = entry.getElementsByClass("minor alignright lineright").first();
             String starDistanceText = Objects.requireNonNull(starDistanceElement).ownText();
-            double starDistance = Double.parseDouble(starDistanceText.replace(",", "").replace(" Ls", "").replace("---", "-1"));
+            double starDistance = -1;
+            try
+            {
+                starDistance = Double.parseDouble(starDistanceText.replace(",", "").replace(" Ls", "").replace("-", "-1"));
+            } catch(NumberFormatException e)
+            {
+                Logger.log("Could not parse the star-distance for station '" + stationName + "'", LogName.WARNING);
+            }
 
             long inara_time = 0;
-            String[] dataAgeString = Objects.requireNonNull(entry.getElementsByClass("minor alignright smaller").first()).ownText().split(" ");
+            String[] dataAgeString = Objects.requireNonNull(entry.getElementsByClass("minor alignright small").first()).ownText().split(" ");
             if(dataAgeString.length == 3)
             {
                 inara_time = Long.parseLong(dataAgeString[0]);
@@ -117,15 +131,16 @@ public class INARACleanup
     {
         String stationID = null;
 
-        Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        Elements stations = HTMLCleanup.getStationNameAndSystem(inputHTML);
+        if(stations == null)
+            return null;
 
-        for(Element station : details.getElementsByTag("a"))
+        for(Element station : stations)
         {
             String stationEntry = station.toString();
             if(stationEntry.contains(stationName) && stationEntry.contains(systemName))
             {
-                stationID = station.attr("href").replace("station", "").replace("/", "");
+                stationID = station.attr("href").replace("elite/station", "").replace("/", "");
                 break;
             }
         }
