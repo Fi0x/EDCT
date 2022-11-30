@@ -20,6 +20,7 @@ public class NameMap
             put("H.E. Suits", "hazardousenvironmentsuits");
             put("Hostages", "hostage");
             put("Occupied Escape Pod", "occupiedcryopod");
+            put("Damaged Escape Pod", "damagedescapepod");
             put("Skimmer Components", "skimercomponents");
             put("Agri-Medicines", "agriculturalmedicines");
             put("Guardian Casket", "ancientcasket");
@@ -224,12 +225,16 @@ public class NameMap
             add("thargoidtissuesampletype2");
             add("thargoidtissuesampletype3");
             add("thargoidtissuesampletype4");
+            add("thargoidtissuesampletype5");
+            add("thargoidgeneratortissuesample");
             add("unknownartifact");
             add("unknownartifact2");
             add("unknownartifact3");
             add("s6_tissuesample_cells");
             add("s6_tissuesample_coenosarc");
             add("s_tissuesample_cells");
+            add("ancientrelictg");
+            add("unocuppiedescapepod");
         }
     };
 
