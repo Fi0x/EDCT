@@ -181,7 +181,7 @@ public class Main
                     if(file.createNewFile()) return false;
                 } catch(IOException e)
                 {
-                    Logger.log("Could not create file: " + file, LogName.ERROR, e, 997);
+                    Logger.log("Could not create file: " + file, LogName.getError(997), e, 997);
                     System.exit(997);
                 }
             } else return !file.mkdir();

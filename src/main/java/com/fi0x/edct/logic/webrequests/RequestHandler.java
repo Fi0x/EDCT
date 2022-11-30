@@ -65,8 +65,11 @@ public class RequestHandler
                 Logger.log("A http request timed out", LogName.WARNING, e);
             }
             in.close();
-        } else if(status == 429) Logger.log("Received a 429 status code from a website", LogName.ERROR, null, 429);
-        else if(status != 0) Logger.log("Received a bad HTTP response: " + status, LogName.WARNING);
+        }
+        else if(status == 429)
+            Logger.log("Received a 429 status code from a website", LogName.getError(492), null, 429);
+        else if(status != 0)
+            Logger.log("Received a bad HTTP response: " + status, LogName.WARNING);
 
         con.disconnect();
 

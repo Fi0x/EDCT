@@ -89,7 +89,7 @@ public class Station implements Initializable
 
             if(text == null)
             {
-                Logger.log("Something went wrong when creating a reddit String", LogName.ERROR, null, 992);
+                Logger.log("Something went wrong when creating a reddit String", LogName.getError(992), null, 992);
                 return;
             }
 
@@ -104,7 +104,7 @@ public class Station implements Initializable
 
             if(text == null)
             {
-                Logger.log("Something went wrong when creating a discord String", LogName.ERROR, null, 992);
+                Logger.log("Something went wrong when creating a discord String", LogName.getError(992), null, 992);
                 return;
             }
 
