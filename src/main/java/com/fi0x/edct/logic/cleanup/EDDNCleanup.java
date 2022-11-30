@@ -96,6 +96,7 @@ public class EDDNCleanup
 
     public static PADSIZE getStationPad(String inputHTML)
     {
+        //TODO: Adjust for new inara
         PADSIZE padsize = PADSIZE.NONE;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
@@ -118,6 +119,7 @@ public class EDDNCleanup
 
     public static STATIONTYPE getStationType(String inputHTML)
     {
+        //TODO: Adjust for new inara
         STATIONTYPE type = STATIONTYPE.UNKNOWN;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
@@ -143,6 +145,7 @@ public class EDDNCleanup
 
     public static double getStarDistance(String inputHTML)
     {
+        //TODO: Adjust for new inara
         double starDistance = -1;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);

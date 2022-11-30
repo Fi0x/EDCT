@@ -131,15 +131,16 @@ public class INARACleanup
     {
         String stationID = null;
 
-        Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        Elements stations = HTMLCleanup.getStationNameAndSystem(inputHTML);
+        if(stations == null)
+            return null;
 
-        for(Element station : details.getElementsByTag("a"))
+        for(Element station : stations)
         {
             String stationEntry = station.toString();
             if(stationEntry.contains(stationName) && stationEntry.contains(systemName))
             {
-                stationID = station.attr("href").replace("station", "").replace("/", "");
+                stationID = station.attr("href").replace("elite/station", "").replace("/", "");
                 break;
             }
         }
