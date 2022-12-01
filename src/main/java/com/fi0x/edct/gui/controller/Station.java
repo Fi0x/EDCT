@@ -1,11 +1,13 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
+import com.fi0x.edct.logic.structures.ENDPOINTS;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.websites.InaraStation;
 import io.fi0x.javalogger.logging.Logger;
@@ -32,6 +34,7 @@ public class Station implements Initializable
 
     private boolean isImportStation;
     public int stationID;
+    private String inaraID;
     private String stationSystem;
     private String stationName;
 
@@ -190,11 +193,23 @@ public class Station implements Initializable
     {
         ExternalProgram.copyToClipboard(stationSystem);
     }
+    @FXML
+    private void openStationOnInara()
+    {
+        ExternalProgram.openWebsite(ENDPOINTS.StationInfo.url + inaraID);
+    }
 
     public void setStation(TRADE trade, boolean hasPrev, boolean hasNext)
     {
         stationSystem = trade.STATION.SYSTEM;
         stationName = trade.STATION.NAME;
+        try
+        {
+            inaraID = InaraStation.getInaraStationID(stationName, stationSystem);
+        } catch(InterruptedException | HtmlConnectionException e)
+        {
+            Logger.log("Could not get the correct inaraID for a station: " + stationName + " | " + stationSystem, LogName.WARNING);
+        }
 
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
