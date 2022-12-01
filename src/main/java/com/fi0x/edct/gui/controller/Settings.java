@@ -2,23 +2,24 @@ package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.SettingsHandler;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.threads.Updater;
+import io.fi0x.javalogger.logging.Logger;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import org.apache.commons.io.FileUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 public class Settings implements Initializable
@@ -168,20 +169,36 @@ public class Settings implements Initializable
     @FXML
     private void clearLogs()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-logs"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "clear-logs");}});
         try
         {
-            FileUtils.cleanDirectory(Main.errors.getParentFile());
+            Main.clearLogs();
         } catch(IOException e)
         {
-            Logger.WARNING("Could not clear the log files", e);
+            Logger.log("Could not clear the log files", LogName.WARNING, e);
         }
     }
     @FXML
     private void clearDB()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("clear-DB"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "clear-DB");}});
+
+        int stationEntries = DBHandler.countStationEntries();
+        int tradeEntries = DBHandler.countTradeEntries();
+
+        String alertText = "Are you sure you want to clear the database?";
+        if(stationEntries > 0) alertText += " It contains " + stationEntries + " stations";
+        else if(tradeEntries > 0) alertText += " It contains " + tradeEntries + " trades";
+        if(stationEntries > 0 && tradeEntries > 0) alertText += " and " + tradeEntries + " trades";
+
+        Alert alert = new Alert(Alert.AlertType.WARNING, alertText, ButtonType.YES, ButtonType.CANCEL);
+        alert.showAndWait();
+
+        if(alert.getResult() == ButtonType.CANCEL)
+            return;
+
         DBHandler.removeTradeData();
+        DBHandler.removeStationDATA();
 
         if(Main.eddn != null) Main.eddn.interrupt();
         if(Main.updater != null) Main.updater.interrupt();
@@ -192,16 +209,19 @@ public class Settings implements Initializable
     @FXML
     private void openBlacklist()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "open-blacklist");}});
         ExternalProgram.openNotepad(Main.blacklist);
     }
     @FXML
     private void openRedditConfig()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "open-reddit-config");}});
         ExternalProgram.openNotepad(Main.reddit);
     }
     @FXML
     private void openDiscordConfig()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "open-discord-config");}});
         ExternalProgram.openNotepad(Main.discord);
     }
 

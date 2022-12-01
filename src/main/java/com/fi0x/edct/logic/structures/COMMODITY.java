@@ -7,28 +7,28 @@ public class COMMODITY
     public final String NAME;
     public final long GALACTIC_AVERAGE;
     public long profit;
-    public final ArrayList<TRADE> SELL_PRICES;
-    public final ArrayList<TRADE> BUY_PRICES;
+    public final ArrayList<TRADE> IMPORT_PRICES;
+    public final ArrayList<TRADE> EXPORT_PRICES;
 
-    public COMMODITY(String name, ArrayList<TRADE> sellPrices, ArrayList<TRADE> buyPrices, long galacticAverage)
+    public COMMODITY(String name, ArrayList<TRADE> importPrices, ArrayList<TRADE> exportPrices, long galacticAverage)
     {
         NAME = name;
         GALACTIC_AVERAGE = galacticAverage;
         profit = 0;
-        SELL_PRICES = sellPrices;
-        BUY_PRICES = buyPrices;
+        IMPORT_PRICES = importPrices;
+        EXPORT_PRICES = exportPrices;
     }
 
     public void sortPrices()
     {
-        if(BUY_PRICES == null || SELL_PRICES == null || BUY_PRICES.size() == 0 || SELL_PRICES.size() == 0)
+        if(EXPORT_PRICES == null || IMPORT_PRICES == null || EXPORT_PRICES.size() == 0 || IMPORT_PRICES.size() == 0)
         {
             profit = 0;
             return;
         }
 
-        long buy = BUY_PRICES.get(0).SELL_PRICE;
-        long sell = SELL_PRICES.get(0).BUY_PRICE;
-        profit = sell - buy;
+        long exporterPrice = EXPORT_PRICES.get(0).EXPORT_PRICE;
+        long importerPrice = IMPORT_PRICES.get(0).IMPORT_PRICE;
+        profit = importerPrice - exporterPrice;
     }
 }

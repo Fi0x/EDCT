@@ -1,23 +1,23 @@
 package com.fi0x.edct.logic.cleanup;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.structures.PADSIZE;
 import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.STATIONTYPE;
 import com.fi0x.edct.logic.structures.TRADE;
+import io.fi0x.javalogger.logging.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class EDDNCleanup
 {
-    @Nullable
     public static String getStationName(String jsonString)
     {
         try
@@ -27,11 +27,10 @@ public class EDDNCleanup
             return (String) message.get("stationName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a station name from a JSON string", e);
+            Logger.log("Could not retrieve a station name from a JSON string", LogName.WARNING, e);
         }
         return null;
     }
-    @Nullable
     public static String getSystemName(String jsonString)
     {
         try
@@ -41,7 +40,7 @@ public class EDDNCleanup
             return (String) message.get("systemName");
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not retrieve a system name from a JSON string", e);
+            Logger.log("Could not retrieve a system name from a JSON string", LogName.WARNING, e);
         }
         return null;
     }
@@ -60,18 +59,17 @@ public class EDDNCleanup
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Something went wrong when receiving trade data from EDDN json", e);
+            Logger.log("Something went wrong when receiving trade data from EDDN json", LogName.WARNING, e);
         }
 
         return trades;
     }
-    @Nullable
     public static TRADE getStationTrade(int commodityID, String system, String station, PADSIZE pad, STATIONTYPE type, double starDistance, String jsonTrade, boolean isSelling)
     {
         long supply = 0;
         long demand = 0;
-        long buyPrice = 0;
-        long sellPrice = 0;
+        long importPrice = 0;
+        long exportPrice = 0;
 
         try
         {
@@ -79,33 +77,37 @@ public class EDDNCleanup
             if(isSelling)
             {
                 supply = (long) json.get("stock");
-                sellPrice = (long) json.get("buyPrice");
+                exportPrice = (long) json.get("buyPrice");
             }
             else
             {
                 demand = (long) json.get("demand");
-                buyPrice = (long) json.get("sellPrice");
+                importPrice = (long) json.get("sellPrice");
             }
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not get trade data from an EDDN json", e);
+            Logger.log("Could not get trade data from an EDDN json", LogName.WARNING, e);
         }
 
-        if(sellPrice == 0 && buyPrice == 0) return null;
+        if(exportPrice == 0 && importPrice == 0) return null;
 
         STATION s = new STATION(system, station, pad, type, starDistance);
-        return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, buyPrice, sellPrice);
+        return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, importPrice, exportPrice);
     }
 
-    @Nullable
     public static PADSIZE getStationPad(String inputHTML)
     {
         PADSIZE padsize = PADSIZE.NONE;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        if(details == null)
+            return null;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return null;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
-        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        for(Element pair : pairs)
         {
             String pairText = pair.toString().toLowerCase();
             if(pairText.contains("landing pad"))
@@ -120,15 +122,19 @@ public class EDDNCleanup
         return padsize;
     }
 
-    @Nullable
     public static STATIONTYPE getStationType(String inputHTML)
     {
         STATIONTYPE type = STATIONTYPE.UNKNOWN;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return null;
+        if(details == null)
+            return null;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return null;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
-        for(Element pair : details.getElementsByClass("itempaircontainer"))
+        for(Element pair : pairs)
         {
             if(pair.toString().toLowerCase().contains("station type"))
             {
@@ -151,7 +157,12 @@ public class EDDNCleanup
         double starDistance = -1;
 
         Element details = HTMLCleanup.getStationDetails(inputHTML);
-        if(details == null) return -1;
+        if(details == null)
+            return -1;
+        Element div = details.getElementsByTag("div").first();
+        if(div == null)
+            return -1;
+        Elements pairs = div.getElementsByClass("itempaircontainer");
 
         for(Element pair : details.getElementsByClass("itempaircontainer"))
         {

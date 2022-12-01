@@ -2,16 +2,17 @@ package com.fi0x.edct.logic.websites;
 
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.cleanup.INARACleanup;
+import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.ENDPOINTS;
+import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.webrequests.RequestHandler;
 
-import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InaraStation
 {
-    @Nullable
     public static String getInaraStationID(String stationName, String systemName) throws InterruptedException, HtmlConnectionException
     {
         Map<String, String> parameters = getRefinedParameters(ENDPOINTS.StationSearch.parameter, stationName);
@@ -23,11 +24,38 @@ public class InaraStation
         return INARACleanup.getStationID(html, stationName, systemName);
     }
 
-    public static String getStationHtml(String stationID) throws InterruptedException, HtmlConnectionException
+    public static String getStationInfoHtml(String stationID) throws InterruptedException, HtmlConnectionException
     {
-        Map<String, String> parameters = new HashMap<>();
+        return RequestHandler.sendHTTPRequest(ENDPOINTS.StationInfo.url + stationID, ENDPOINTS.StationInfo.type, new HashMap<>());
+    }
 
-        return RequestHandler.sendHTTPRequest(ENDPOINTS.StationSearch.url + stationID, ENDPOINTS.StationSearch.type, parameters);
+    public static void updateSingleStationTrades(String stationName, String systemName, TRADE tradeToUpdate)
+    {
+        String stationHTML = null;
+        try
+        {
+            String inaraID = getInaraStationID(stationName, systemName);
+            stationHTML = RequestHandler.sendHTTPRequest(ENDPOINTS.StationMarket.url + inaraID, ENDPOINTS.StationMarket.type, new HashMap<>());
+        } catch(InterruptedException | HtmlConnectionException ignored)
+        {
+        }
+
+        if(stationHTML != null)
+        {
+            ArrayList<TRADE> trades = INARACleanup.getCommodityTradesForStation(stationHTML, systemName, stationName);
+            for(TRADE t : trades)
+            {
+                DBHandler.setTradeData(t);
+                if(t.INARA_ID == tradeToUpdate.INARA_ID)
+                {
+                    tradeToUpdate.AGE = t.AGE;
+                    tradeToUpdate.SUPPLY = t.SUPPLY;
+                    tradeToUpdate.DEMAND = t.DEMAND;
+                    tradeToUpdate.IMPORT_PRICE = t.IMPORT_PRICE;
+                    tradeToUpdate.EXPORT_PRICE = t.EXPORT_PRICE;
+                }
+            }
+        }
     }
 
     private static Map<String, String> getRefinedParameters(String[] parameter, String stationName)

@@ -6,7 +6,6 @@ import org.bridj.Pointer;
 import org.bridj.cpp.com.COMRuntime;
 import org.bridj.cpp.com.shell.ITaskbarList3;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
@@ -28,7 +27,7 @@ public class ProgressBar
         instantiateITaskbarList();
     }
 
-    public synchronized void setStage(@Nonnull Stage stage)
+    public synchronized void setStage(Stage stage)
     {
         this.stage.set(stage);
     }
@@ -55,7 +54,7 @@ public class ProgressBar
         }
     }
 
-    public void showCustomProgress(double startValue, @Nonnull Type type)
+    public void showCustomProgress(double startValue, Type type)
     {
         if(validate(stage.get()))
         {
@@ -68,7 +67,7 @@ public class ProgressBar
         }
     }
 
-    public void setProgressType(@Nonnull Type type)
+    public void setProgressType(Type type)
     {
         if(!validate(stage.get())) return;
         setProgressState(stage.get(), type);

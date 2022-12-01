@@ -34,6 +34,14 @@
     -fx-background-color: #479c2d;
     -fx-text-fill: #021802;
 }
+#btnWiki {
+    -fx-background-color: #87ff63;
+    -fx-text-fill: #021802;
+}
+#btnWiki:hover {
+    -fx-background-color: #479c2d;
+    -fx-text-fill: #021802;
+}
 #btnSettings {
     -fx-background-color: transparent;
     -fx-max-width: 15;

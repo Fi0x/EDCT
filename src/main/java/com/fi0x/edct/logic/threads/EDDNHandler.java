@@ -1,7 +1,7 @@
 package com.fi0x.edct.logic.threads;
 
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logic.NameMap;
 import com.fi0x.edct.logic.cleanup.EDDNCleanup;
@@ -13,6 +13,7 @@ import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.websites.EDSM;
 import com.fi0x.edct.logic.websites.InaraStation;
 import com.sun.javafx.geom.Vec3d;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.application.Platform;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -106,7 +107,7 @@ public class EDDNHandler implements Runnable
                     counter++;
                     try
                     {
-                        html = InaraStation.getStationHtml(stationID);
+                        html = InaraStation.getStationInfoHtml(stationID);
                         break;
                     } catch(HtmlConnectionException ignored)
                     {
@@ -129,7 +130,7 @@ public class EDDNHandler implements Runnable
             if(stationtype == null || padsize == null)
             {
                 Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setEDDNStatus(false));
-                Logger.WARNING("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " starDistance=" + starDistance + " - html: " + html);
+                Logger.log("Aborted station update for " + stationName + " type=" + stationtype + " pad=" + padsize + " starDistance=" + starDistance + " - html: " + html, LogName.WARNING);
                 return;
             }
         } else
@@ -154,7 +155,7 @@ public class EDDNHandler implements Runnable
                     s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
-                TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.BUY_PRICE, 0);
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.IMPORT_PRICE, 0);
                 DBHandler.setTradeData(t);
             }
 
@@ -167,7 +168,7 @@ public class EDDNHandler implements Runnable
                     s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
-                TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.SELL_PRICE);
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.EXPORT_PRICE);
                 DBHandler.setTradeData(t);
             }
         }
@@ -187,7 +188,8 @@ public class EDDNHandler implements Runnable
             commodityName = ((String) json.get("name")).toLowerCase();
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not parse an EDDN json for a commodity", e);
+
+            Logger.log("Could not parse an EDDN json for a commodity", LogName.WARNING, e);
             return -1;
         }
 
@@ -204,7 +206,7 @@ public class EDDNHandler implements Runnable
 
         if(!NameMap.isRare(commodityName) && !NameMap.isIgnored(commodityName))
         {
-            Logger.WARNING(991, "Could not find commodity key that matches: " + commodityName);
+            Logger.log("Could not find commodity key that matches: " + commodityName, LogName.WARNING, null, 991);
         }
         return -1;
     }

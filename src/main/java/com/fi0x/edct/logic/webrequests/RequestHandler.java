@@ -1,26 +1,21 @@
 package com.fi0x.edct.logic.webrequests;
 
-import com.fi0x.edct.Main;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
+import io.fi0x.javalogger.logging.Logger;
 
-import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class RequestHandler
 {
-    @Nullable
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters) throws InterruptedException, HtmlConnectionException
     {
         try
@@ -28,11 +23,10 @@ public class RequestHandler
             return sendHTTPRequest(endpoint, requestType, parameters, false);
         } catch(IOException e)
         {
-            Logger.WARNING(995, "Some error occurred when sending a HTTP request", e);
+            Logger.log("Some error occurred when sending a HTTP request", LogName.WARNING, e, 995);
             return null;
         }
     }
-    @Nullable
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException, InterruptedException, HtmlConnectionException
     {
         if(!canRequest(ignore429)) return null;
@@ -51,7 +45,7 @@ public class RequestHandler
             status = con.getResponseCode();
         } catch(IOException e)
         {
-            Logger.WARNING(995, "Could not establish a connection to the server", e);
+            Logger.log("Could not establish a connection to the server for request: " + endpoint, LogName.WARNING, e, 995);
             throw new HtmlConnectionException();
         }
         StringBuilder content = new StringBuilder();
@@ -68,11 +62,14 @@ public class RequestHandler
             }
             catch(SocketTimeoutException e)
             {
-                Logger.WARNING("A http request timed out", e);
+                Logger.log("A http request timed out", LogName.WARNING, e);
             }
             in.close();
-        } else if(status == 429) Logger.ERROR(429, "Received a 429 status code from a website");
-        else if(status != 0) Logger.WARNING("Received a bad HTTP response: " + status);
+        }
+        else if(status == 429)
+            Logger.log("Received a 429 status code from a website", LogName.getError(492), null, 429);
+        else if(status != 0)
+            Logger.log("Received a bad HTTP response: " + status, LogName.WARNING);
 
         con.disconnect();
 
@@ -81,44 +78,44 @@ public class RequestHandler
 
     private static boolean canRequest(boolean ignore429) throws IOException, InterruptedException
     {
-        if(!ignore429)
-        {
-            if(!Main.errors.exists()) return true;
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
-
-            for(int i = fileContent.size() - 1; i >= 0; i--)
-            {
-                String error = fileContent.get(i);
-                if(!error.contains("[ERR]") && !error.contains("[WRN]")) continue;
-
-                if(error.contains("[429]"))
-                {
-                    String[] logEntry = error.split("]");
-                    String errorTimeString = logEntry[0].replace("[", "");
-
-                    Date errorDate = getDateFromString(errorTimeString);
-                    if(errorDate == null) return true;
-
-                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
-                    {
-                        Logger.WARNING(429, "HTTP request could not be sent because of a 429 response");
-                        return false;
-                    }
-                } else if(error.contains("[995]"))
-                {
-                    String[] logEntry = error.split("]");
-                    String errorTimeString = logEntry[0].replace("[", "");
-
-                    Date errorDate = getDateFromString(errorTimeString);
-                    if(errorDate == null) return true;
-
-                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 10)
-                    {
-                        Thread.sleep(1000 * 10);
-                    }
-                }
-            }
-        }
+//        if(!ignore429)
+//        {
+//            if(!Main.errors.exists()) return true;
+//            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.errors.toPath(), StandardCharsets.UTF_8));
+//
+//            for(int i = fileContent.size() - 1; i >= 0; i--)
+//            {
+//                String error = fileContent.get(i);
+//                if(!error.contains("[ERR]") && !error.contains("[WRN]")) continue;
+//
+//                if(error.contains("[429]"))
+//                {
+//                    String[] logEntry = error.split("]");
+//                    String errorTimeString = logEntry[0].replace("[", "");
+//
+//                    Date errorDate = getDateFromString(errorTimeString);
+//                    if(errorDate == null) return true;
+//
+//                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 60 * 60)
+//                    {
+//                        Logger.log("HTTP request could not be sent because of a 429 response", LogName.WARNING, null, 429);
+//                        return false;
+//                    }
+//                } else if(error.contains("[995]"))
+//                {
+//                    String[] logEntry = error.split("]");
+//                    String errorTimeString = logEntry[0].replace("[", "");
+//
+//                    Date errorDate = getDateFromString(errorTimeString);
+//                    if(errorDate == null) return true;
+//
+//                    if(System.currentTimeMillis() <= errorDate.getTime() + 1000 * 10)
+//                    {
+//                        Thread.sleep(1000 * 10);
+//                    }
+//                }
+//            }
+//        }
 
         return true;
     }
@@ -146,7 +143,7 @@ public class RequestHandler
             return new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").parse(input);
         } catch(ParseException e)
         {
-            Logger.WARNING("Could not parse a date: " + input, e);
+            Logger.log("Could not parse a date: " + input, LogName.WARNING, e);
             return null;
         }
     }

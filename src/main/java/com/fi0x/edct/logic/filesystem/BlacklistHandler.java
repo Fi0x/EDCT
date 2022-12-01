@@ -1,7 +1,8 @@
 package com.fi0x.edct.logic.filesystem;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,36 +15,6 @@ import java.util.stream.Collectors;
 
 public class BlacklistHandler
 {
-    private static final String[] DEFAULT_BLACKLIST = new String[] {
-            "{Achenar}",
-            "{Alioth}",
-            "{Beta Hydri}",
-            "{CD-43 11917}",
-            "{Crom}",
-            "{Exbeur}",
-            "{Facece}",
-            "{HIP 54530}",
-            "{Hodack}",
-            "{Hors}",
-            "{Isinor}",
-            "{Jotun}",
-            "{LTT 198}",
-            "{Luyten 347-14}",
-            "{Nastrond}",
-            "{Peregrina}",
-            "{Pi Mensae}",
-            "{PLX 695}",
-            "{Ross 128}",
-            "{Shinrarta Dezhra}",
-            "{Sirius}",
-            "{Sol}",
-            "{Summerland}",
-            "{Terra Mater}",
-            "{Tiliala}",
-            "{van Maanen's Star}",
-            "{Vega}"
-    };
-
     public static ArrayList<String> getBlacklistSystems()
     {
         ArrayList<String> blacklistedStations = new ArrayList<>();
@@ -60,7 +31,7 @@ public class BlacklistHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING(992, "Could not read the blacklist", e);
+            Logger.log("Could not read the blacklist", LogName.WARNING, e, 992);
         }
 
         return blacklistedStations;
@@ -78,7 +49,7 @@ public class BlacklistHandler
             Files.write(Main.blacklist.toPath(), contentWithoutDuplicates, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING(992, "Could not write an entry to the blacklist", e);
+            Logger.log("Could not write an entry to the blacklist", LogName.WARNING, e, 992);
         }
     }
 
@@ -91,13 +62,14 @@ public class BlacklistHandler
             if(fileContent.size() <= 0)
             {
                 var jsonInput = Main.class.getResourceAsStream("/defaults/blacklist.txt");
+                assert jsonInput != null;
                 fileContent = new BufferedReader(new InputStreamReader(jsonInput, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             }
 
             Files.write(Main.blacklist.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING(996, "Could not write default entry to blacklist", e);
+            Logger.log("Could not write default entry to blacklist", LogName.WARNING, e, 996);
         }
     }
 }

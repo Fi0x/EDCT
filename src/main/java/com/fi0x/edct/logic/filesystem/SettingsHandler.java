@@ -1,7 +1,8 @@
 package com.fi0x.edct.logic.filesystem;
 
 import com.fi0x.edct.gui.controller.Settings;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -68,9 +69,9 @@ public class SettingsHandler
             Files.write(com.fi0x.edct.Main.settings.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING("Could not remove an entry in the settings file", e);
+            Logger.log("Could not remove an entry in the settings file", LogName.WARNING, e);
         }
-        Logger.INFO("Verified integrity of settings file");
+        Logger.log("Verified integrity of settings file", LogName.VERBOSE);
     }
 
     public static void storeValue(String key, Object value)
@@ -94,7 +95,7 @@ public class SettingsHandler
             Files.write(com.fi0x.edct.Main.settings.toPath(), fileContent, StandardCharsets.UTF_8);
         } catch(IOException e)
         {
-            Logger.WARNING("Could not write an entry to the settings file", e);
+            Logger.log("Could not write an entry to the settings file", LogName.WARNING, e);
         }
     }
 
@@ -113,10 +114,10 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read an integer from the settings file", e);
+            Logger.log("Could not read an integer from the settings file", LogName.WARNING, e);
         } catch(NumberFormatException e)
         {
-            Logger.WARNING("Could not parse an integer from the settings file", e);
+            Logger.log("Could not parse an integer from the settings file", LogName.WARNING, e);
         }
 
         verifyIntegrity();
@@ -139,7 +140,7 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read a boolean from the settings file", e);
+            Logger.log("Could not read a boolean from the settings file", LogName.WARNING, e);
         }
 
         verifyIntegrity();
@@ -162,7 +163,7 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read a boolean from the settings file", e);
+            Logger.log("Could not read a boolean from the settings file", LogName.WARNING, e);
         }
 
         verifyIntegrity();
@@ -185,10 +186,10 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read a boolean from the settings file", e);
+            Logger.log("Could not read a boolean from the settings file", LogName.WARNING, e);
         } catch(IllegalArgumentException e)
         {
-            Logger.WARNING("Could not parse the detailed mode from the settings file", e);
+            Logger.log("Could not parse the detailed mode from the settings file", LogName.WARNING, e);
         }
 
         verifyIntegrity();
@@ -226,7 +227,7 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read the content of the settings file", e);
+            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
         }
     }
 
@@ -259,7 +260,7 @@ public class SettingsHandler
             }
         } catch(IOException e)
         {
-            Logger.WARNING("Could not read the content of the settings file", e);
+            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
         }
     }
 }

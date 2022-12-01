@@ -2,7 +2,8 @@ package com.fi0x.edct.gui.visual;
 
 import com.fi0x.edct.gui.controller.ProgramInfo;
 import com.fi0x.edct.gui.controller.Settings;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
@@ -24,7 +25,7 @@ public class SettingsWindow extends Stage
             ((Settings) settingsLoader.getController()).infoController = infoController;
         } catch(IOException e)
         {
-            Logger.WARNING(999, "Could not load settings", e);
+            Logger.log("Could not load settings", LogName.WARNING, e, 999);
             return;
         }
 

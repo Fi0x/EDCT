@@ -20,6 +20,7 @@ public class NameMap
             put("H.E. Suits", "hazardousenvironmentsuits");
             put("Hostages", "hostage");
             put("Occupied Escape Pod", "occupiedcryopod");
+            put("Damaged Escape Pod", "damagedescapepod");
             put("Skimmer Components", "skimercomponents");
             put("Agri-Medicines", "agriculturalmedicines");
             put("Guardian Casket", "ancientcasket");
@@ -224,12 +225,34 @@ public class NameMap
             add("thargoidtissuesampletype2");
             add("thargoidtissuesampletype3");
             add("thargoidtissuesampletype4");
+            add("thargoidtissuesampletype5");
+            add("thargoidgeneratortissuesample");
             add("unknownartifact");
             add("unknownartifact2");
             add("unknownartifact3");
             add("s6_tissuesample_cells");
             add("s6_tissuesample_coenosarc");
             add("s_tissuesample_cells");
+            add("ancientrelictg");
+            add("unocuppiedescapepod");
+        }
+    };
+    private static final ArrayList<Integer> IGNORED_IDS = new ArrayList<>()
+    {
+        {
+            add(10161);
+            add(54);
+            add(124);
+            add(10234);
+            add(91);
+            add(186);
+            add(10226);
+            add(10167);
+            add(126);
+            add(89);
+            add(10220);
+            add(135);
+            add(177);
         }
     };
 
@@ -246,5 +269,9 @@ public class NameMap
     public static boolean isIgnored(String eddnName)
     {
         return IGNORED.contains(eddnName);
+    }
+    public static boolean isIgnored(int id)
+    {
+        return IGNORED_IDS.contains(id);
     }
 }

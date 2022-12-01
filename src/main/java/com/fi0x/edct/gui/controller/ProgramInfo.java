@@ -2,10 +2,11 @@ package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.visual.SettingsWindow;
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.helper.ExternalProgram;
 import com.fi0x.edct.logic.versioncontrol.GitHub;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -16,6 +17,7 @@ import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -35,6 +37,8 @@ public class ProgramInfo implements Initializable
     private Button btnBugReport;
     @FXML
     private Button btnUpdate;
+    @FXML
+    private Button btnWiki;
     @FXML
     private Button btnSettings;
 
@@ -57,32 +61,38 @@ public class ProgramInfo implements Initializable
     @FXML
     private void openErrorPage()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("error-label"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "error-label");}});
         ExternalProgram.openWebsite("https://github.com/Fi0x/EDCT/wiki/Errors#" + errorCode);
         lblError.setVisible(false);
     }
     @FXML
     private void reportBug()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("bug-report"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "bug-report");}});
         ExternalProgram.openWebsite("https://github.com/Fi0x/EDCT/issues");
     }
     @FXML
     private void updateVersion()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("download-new-version"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "download-new-version");}});
         ExternalProgram.openWebsite(updateUrl);
         if(assetUrl != null) ExternalProgram.openWebsite(assetUrl);
     }
     @FXML
+    private void openWikiPage()
+    {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "wiki-page");}});
+        ExternalProgram.openWebsite("https://github.com/Fi0x/EDCT/wiki");
+    }
+    @FXML
     private void openSettings()
     {
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("open-settings"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "open-settings");}});
 
         settingsStage = new SettingsWindow(this);
         settingsStage.showAndWait();
 
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.SETTINGS_CLOSED, MixpanelHandler.getProgramState());
+        MixpanelHandler.addMessage(MixpanelEvents.SETTINGS_CLOSED.name(), Main.getProgramState());
 
         DBHandler.removeOldEntries();
     }

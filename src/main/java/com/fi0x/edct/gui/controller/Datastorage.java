@@ -1,13 +1,16 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
-import com.fi0x.edct.logging.MixpanelHandler;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.threads.TradeReloader;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+
+import java.util.HashMap;
 
 public class Datastorage
 {
@@ -33,7 +36,7 @@ public class Datastorage
         lblReloadStatus.setVisible(true);
         lblDataAge.setText("Loading data from storage");
 
-        MixpanelHandler.addMessage(MixpanelHandler.EVENT.BUTTON_CLICKED, MixpanelHandler.getButtonProperty("trade-reloader"));
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "trade-reloader");}});
 
         if(Main.reloader != null) Main.reloader.interrupt();
         Main.reloader = new Thread(new TradeReloader(interactionController));

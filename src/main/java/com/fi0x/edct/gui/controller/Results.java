@@ -1,11 +1,12 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.gui.visual.MainWindow;
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.structures.COMMODITY;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.threads.DistanceHandler;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,15 +22,15 @@ import java.util.ResourceBundle;
 public class Results implements Initializable
 {
     public Main mainController;
-    private Station sellController;
-    private Station buyController;
+    private Station exportStationController;
+    private Station importStationController;
     private Commodity commodityController;
     private Details detailsController;
 
     private ArrayList<COMMODITY> trades;
     private int currentCommodity;
-    public int currentSellStation;
-    public int currentBuyStation;
+    public int currentImportStation;
+    public int currentExportStation;
 
     private Pane detailsBox;
 
@@ -42,8 +43,8 @@ public class Results implements Initializable
     public void initialize(URL location, ResourceBundle resources)
     {
         currentCommodity = 0;
-        currentSellStation = 0;
-        currentBuyStation = 0;
+        currentImportStation = 0;
+        currentExportStation = 0;
 
         loadCommodity();
         loadStation(false);
@@ -66,13 +67,13 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Commodity controller", e);
+            Logger.log("Could not load Commodity controller", LogName.getError(999), e, 999);
             return;
         }
 
         vbResults.getChildren().add(1, commodityBox);
     }
-    private void loadStation(boolean isBuying)
+    private void loadStation(boolean isImportStation)
     {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/station.fxml"));
         Pane stationBox;
@@ -80,22 +81,22 @@ public class Results implements Initializable
         try
         {
             stationBox = loader.load();
-            if(isBuying)
+            if(isImportStation)
             {
-                buyController = loader.getController();
-                buyController.setResultsController(this, true);
+                importStationController = loader.getController();
+                importStationController.setResultsController(this, true);
             } else
             {
-                sellController = loader.getController();
-                sellController.setResultsController(this, false);
+                exportStationController = loader.getController();
+                exportStationController.setResultsController(this, false);
             }
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Station controller", e);
+            Logger.log("Could not load Station controller", LogName.getError(999), e, 999);
             return;
         }
 
-        hbStations.add(stationBox, isBuying ? 2 : 0, 0);
+        hbStations.add(stationBox, isImportStation ? 2 : 0, 0);
     }
 
     private void loadDetails()
@@ -109,7 +110,7 @@ public class Results implements Initializable
 
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Details controller", e);
+            Logger.log("Could not load Details controller", LogName.getError(999), e, 999);
             return;
         }
 
@@ -123,8 +124,8 @@ public class Results implements Initializable
         currentCommodity++;
         if(currentCommodity >= trades.size()) currentCommodity = trades.size() - 1;
 
-        currentSellStation = 0;
-        currentBuyStation = 0;
+        currentImportStation = 0;
+        currentExportStation = 0;
 
         displayResults();
     }
@@ -135,8 +136,8 @@ public class Results implements Initializable
         currentCommodity--;
         if(currentCommodity < 0) currentCommodity = 0;
 
-        currentSellStation = 0;
-        currentBuyStation = 0;
+        currentImportStation = 0;
+        currentExportStation = 0;
 
         displayResults();
     }
@@ -152,8 +153,8 @@ public class Results implements Initializable
         trades = newTrades;
 
         currentCommodity = 0;
-        currentSellStation = 0;
-        currentBuyStation = 0;
+        currentImportStation = 0;
+        currentExportStation = 0;
     }
 
     public void displayResults()
@@ -165,33 +166,34 @@ public class Results implements Initializable
         }
 
         int profit = 0;
-        TRADE sellStation = null;
-        TRADE buyStation = null;
+        TRADE exportStation = null;
+        TRADE importStation = null;
 
-        if(trades.get(currentCommodity).BUY_PRICES != null && trades.get(currentCommodity).BUY_PRICES.size() > currentBuyStation)
+        if(trades.get(currentCommodity).EXPORT_PRICES != null && trades.get(currentCommodity).EXPORT_PRICES.size() > currentExportStation)
         {
-            sellStation = trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
-            sellController.setStation(sellStation, currentBuyStation > 0, currentBuyStation < trades.get(currentCommodity).BUY_PRICES.size() - 1);
+            exportStation = trades.get(currentCommodity).EXPORT_PRICES.get(currentExportStation);
+            exportStationController.setStation(exportStation, currentExportStation > 0, currentExportStation < trades.get(currentCommodity).EXPORT_PRICES.size() - 1);
 
-            profit -= sellStation.SELL_PRICE;
+            profit -= exportStation.EXPORT_PRICE;
         }
 
-        if(trades.get(currentCommodity).SELL_PRICES != null && trades.get(currentCommodity).SELL_PRICES.size() > currentSellStation)
+        if(trades.get(currentCommodity).IMPORT_PRICES != null && trades.get(currentCommodity).IMPORT_PRICES.size() > currentImportStation)
         {
-            buyStation = trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
-            buyController.setStation(buyStation, currentSellStation > 0, currentSellStation < trades.get(currentCommodity).SELL_PRICES.size() - 1);
+            importStation = trades.get(currentCommodity).IMPORT_PRICES.get(currentImportStation);
+            importStationController.setStation(importStation, currentImportStation > 0, currentImportStation < trades.get(currentCommodity).IMPORT_PRICES.size() - 1);
 
-            if(profit < 0) profit += buyStation.BUY_PRICE;
+            if(profit < 0)
+                profit += importStation.IMPORT_PRICE;
         }
 
         trades.get(currentCommodity).profit = profit;
         double distance = 0;
-        if(sellStation != null && buyStation != null)
+        if(exportStation != null && importStation != null)
         {
-            distance = DBHandler.getSystemDistance(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
+            distance = DBHandler.getSystemDistance(exportStation.STATION.SYSTEM, importStation.STATION.SYSTEM);
             if(distance == 0)
             {
-                DistanceHandler.addDistanceCheck(sellStation.STATION.SYSTEM, buyStation.STATION.SYSTEM);
+                DistanceHandler.addDistanceCheck(exportStation.STATION.SYSTEM, importStation.STATION.SYSTEM);
             }
         }
 
@@ -210,8 +212,8 @@ public class Results implements Initializable
         commodityController.lblDistance.setVisible(normal);
         commodityController.lblDistance.setManaged(normal);
 
-        buyController.setDetailsVisibility(detailed);
-        sellController.setDetailsVisibility(detailed);
+        importStationController.setDetailsVisibility(detailed);
+        exportStationController.setDetailsVisibility(detailed);
 
         detailsBox.setVisible(advanced);
         detailsBox.setManaged(advanced);
@@ -222,8 +224,8 @@ public class Results implements Initializable
     public void updateDistance(String system1, String system2, double distance)
     {
         if(distance == 0) return;
-        if(!trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation).STATION.SYSTEM.equals(system1)) return;
-        if(!trades.get(currentCommodity).SELL_PRICES.get(currentSellStation).STATION.SYSTEM.equals(system2)) return;
+        if(!trades.get(currentCommodity).EXPORT_PRICES.get(currentExportStation).STATION.SYSTEM.equals(system1)) return;
+        if(!trades.get(currentCommodity).IMPORT_PRICES.get(currentImportStation).STATION.SYSTEM.equals(system2)) return;
 
         commodityController.setDistance(distance);
     }
@@ -237,38 +239,38 @@ public class Results implements Initializable
         trades.remove(currentCommodity);
         if(currentCommodity >= trades.size()) currentCommodity--;
     }
-    public TRADE getCurrentSellStation()
+    public TRADE getCurrentExportStation()
     {
-        return trades.get(currentCommodity).BUY_PRICES.get(currentBuyStation);
+        return trades.get(currentCommodity).EXPORT_PRICES.get(currentExportStation);
     }
-    public TRADE getCurrentBuyStation()
+    public TRADE getCurrentImportStation()
     {
-        return trades.get(currentCommodity).SELL_PRICES.get(currentSellStation);
+        return trades.get(currentCommodity).IMPORT_PRICES.get(currentImportStation);
     }
     public void removeStationFromCurrentTrade(TRADE station)
     {
-        getCurrentTrade().SELL_PRICES.remove(station);
-        getCurrentTrade().BUY_PRICES.remove(station);
+        getCurrentTrade().IMPORT_PRICES.remove(station);
+        getCurrentTrade().EXPORT_PRICES.remove(station);
     }
 
     private void setHiddenDetails()
     {
         detailsController.setGalacticAverage(getCurrentTrade().GALACTIC_AVERAGE);
 
-        long buyPrice = getCurrentTrade().BUY_PRICES.get(currentBuyStation).SELL_PRICE + Settings.loadingTonProfit;
-        buyPrice = Math.max(buyPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
-        buyPrice = Math.min(buyPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
+        long carrierBuyPrice = getCurrentTrade().EXPORT_PRICES.get(currentExportStation).EXPORT_PRICE + Settings.loadingTonProfit;
+        carrierBuyPrice = Math.max(carrierBuyPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
+        carrierBuyPrice = Math.min(carrierBuyPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
 
-        long sellPrice = getCurrentTrade().SELL_PRICES.get(currentSellStation).BUY_PRICE - Settings.unloadingTonProfit;
-        sellPrice = Math.max(sellPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
-        sellPrice = Math.min(sellPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
+        long carrierSellPrice = getCurrentTrade().IMPORT_PRICES.get(currentImportStation).IMPORT_PRICE - Settings.unloadingTonProfit;
+        carrierSellPrice = Math.max(carrierSellPrice, (long) (getCurrentTrade().GALACTIC_AVERAGE * 0.05));
+        carrierSellPrice = Math.min(carrierSellPrice, getCurrentTrade().GALACTIC_AVERAGE * 10);
 
-        long carrierProfitTon = sellPrice - buyPrice;
+        long carrierProfitTon = carrierSellPrice - carrierBuyPrice;
         long carrierProfitTotal = carrierProfitTon * Integer.parseInt(MainWindow.getInstance().interactionController.filterController.txtQuantity.getText());
 
-        long loadProfit = buyPrice - getCurrentTrade().BUY_PRICES.get(currentBuyStation).SELL_PRICE;
-        long unloadProfit = getCurrentTrade().SELL_PRICES.get(currentSellStation).BUY_PRICE - sellPrice;
+        long loadProfit = carrierBuyPrice - getCurrentTrade().EXPORT_PRICES.get(currentExportStation).EXPORT_PRICE;
+        long unloadProfit = getCurrentTrade().IMPORT_PRICES.get(currentImportStation).IMPORT_PRICE - carrierSellPrice;
 
-        detailsController.setCarrierStats(carrierProfitTon, carrierProfitTotal, buyPrice, sellPrice, loadProfit, unloadProfit);
+        detailsController.setCarrierStats(carrierProfitTon, carrierProfitTotal, carrierBuyPrice, carrierSellPrice, loadProfit, unloadProfit);
     }
 }

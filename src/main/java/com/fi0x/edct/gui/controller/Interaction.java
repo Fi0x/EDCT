@@ -1,7 +1,8 @@
 package com.fi0x.edct.gui.controller;
 
-import com.fi0x.edct.logging.Logger;
+import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.structures.TRADE;
+import io.fi0x.javalogger.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,8 +22,8 @@ public class Interaction implements Initializable
     public Datastorage storageController;
     public Filters filterController;
 
-    public Map<String, ArrayList<TRADE>> sellPrices = new HashMap<>();
-    public Map<String, ArrayList<TRADE>> buyPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> importPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> exportPrices = new HashMap<>();
 
     @FXML
     private GridPane hbInteraction;
@@ -46,7 +47,7 @@ public class Interaction implements Initializable
             storageController.setInteractionController(this);
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Datastorage controller", e);
+            Logger.log("Could not load Datastorage controller", LogName.getError(999), e, 999);
             return;
         }
 
@@ -63,7 +64,7 @@ public class Interaction implements Initializable
             filterController = loader.getController();
         } catch(IOException e)
         {
-            Logger.ERROR(999, "Could not load Filters controller", e);
+            Logger.log("Could not load Filters controller", LogName.getError(999), e, 999);
             return;
         }
 
