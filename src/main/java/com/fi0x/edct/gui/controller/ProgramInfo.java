@@ -38,6 +38,8 @@ public class ProgramInfo implements Initializable
     @FXML
     private Button btnUpdate;
     @FXML
+    private Button btnWiki;
+    @FXML
     private Button btnSettings;
 
     @Override
@@ -75,6 +77,12 @@ public class ProgramInfo implements Initializable
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "download-new-version");}});
         ExternalProgram.openWebsite(updateUrl);
         if(assetUrl != null) ExternalProgram.openWebsite(assetUrl);
+    }
+    @FXML
+    private void openWikiPage()
+    {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "wiki-page");}});
+        ExternalProgram.openWebsite("https://github.com/Fi0x/EDCT/wiki");
     }
     @FXML
     private void openSettings()
