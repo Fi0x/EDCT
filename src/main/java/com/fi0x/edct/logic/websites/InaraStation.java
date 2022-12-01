@@ -24,19 +24,18 @@ public class InaraStation
         return INARACleanup.getStationID(html, stationName, systemName);
     }
 
-    public static String getStationHtml(String stationID) throws InterruptedException, HtmlConnectionException
+    public static String getStationInfoHtml(String stationID) throws InterruptedException, HtmlConnectionException
     {
         return RequestHandler.sendHTTPRequest(ENDPOINTS.StationInfo.url + stationID, ENDPOINTS.StationInfo.type, new HashMap<>());
     }
 
     public static void updateSingleStationTrades(String stationName, String systemName, TRADE tradeToUpdate)
     {
-        //TODO: Update for new inara
         String stationHTML = null;
         try
         {
             String inaraID = getInaraStationID(stationName, systemName);
-            stationHTML = getStationHtml(inaraID);
+            stationHTML = RequestHandler.sendHTTPRequest(ENDPOINTS.StationMarket.url + inaraID, ENDPOINTS.StationMarket.type, new HashMap<>());
         } catch(InterruptedException | HtmlConnectionException ignored)
         {
         }
@@ -56,7 +55,6 @@ public class InaraStation
                     tradeToUpdate.EXPORT_PRICE = t.EXPORT_PRICE;
                 }
             }
-
         }
     }
 

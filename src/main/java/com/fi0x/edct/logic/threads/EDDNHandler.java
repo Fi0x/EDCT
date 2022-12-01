@@ -107,7 +107,7 @@ public class EDDNHandler implements Runnable
                     counter++;
                     try
                     {
-                        html = InaraStation.getStationHtml(stationID);
+                        html = InaraStation.getStationInfoHtml(stationID);
                         break;
                     } catch(HtmlConnectionException ignored)
                     {

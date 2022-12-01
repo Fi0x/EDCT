@@ -12,28 +12,33 @@ public class HTMLCleanup
 {
     public static ArrayList<Element> getStationTrades(String inputHTML)
     {
-        //TODO: Adjust for new inara
         ArrayList<Element> stationTrades = new ArrayList<>();
 
         Document doc = Jsoup.parse(inputHTML);
+        Element mainContainer = doc.getElementsByClass("maincontainer").first();
 
-        Element mainconten1s = doc.getElementsByClass("maincontainer").first();
+        Elements mainContents = Objects.requireNonNull(mainContainer).getElementsByClass("maincontent0");
+        if(mainContents.size() == 0)
+            return null;
 
-        assert mainconten1s != null;
-        Elements mainblocks = mainconten1s.getElementsByClass("mainblock maintable");
-        if(mainblocks.size() == 0) return null;
+        Elements mainBlocks = Objects.requireNonNull(mainContents.first()).getElementsByClass("mainblock");
+        if(mainBlocks.size() == 0)
+            return null;
 
-        Elements tables = Objects.requireNonNull(mainblocks.first()).getElementsByTag("table");
-        if(tables.size() == 0) return null;
+        Elements tables = Objects.requireNonNull(mainBlocks.last()).getElementsByTag("table");
+        if(tables.size() == 0)
+            return null;
 
         Elements bodies = Objects.requireNonNull(tables.first()).getElementsByTag("tbody");
-        if(bodies.size() == 0) return null;
+        if(bodies.size() == 0)
+            return null;
 
         Elements rows = Objects.requireNonNull(bodies.first()).getElementsByTag("tr");
 
         for(Element row : rows)
         {
-            if(row.hasClass("subheader")) continue;
+            if(row.className().contains("subheader"))
+                continue;
             stationTrades.add(row);
         }
 

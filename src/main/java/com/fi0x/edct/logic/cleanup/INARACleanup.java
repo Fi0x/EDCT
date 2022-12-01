@@ -161,7 +161,8 @@ public class INARACleanup
         ArrayList<TRADE> results = new ArrayList<>();
 
         ArrayList<Element> stationCommodities = HTMLCleanup.getStationTrades(inputHTML);
-        if(stationCommodities == null) return results;
+        if(stationCommodities == null)
+            return results;
 
         long currentMillis = System.currentTimeMillis();
         for(Element commodity : stationCommodities)
@@ -169,8 +170,8 @@ public class INARACleanup
             Elements cols = commodity.getElementsByTag("td");
             int inaraID = getIntFromString(Objects.requireNonNull(cols.get(0).getElementsByTag("a").first()).attr("href"));
             int importPrice = getIntFromString(Objects.requireNonNull(cols.get(1).getElementsByTag("span").first()).ownText());
-            int exportPrice = getIntFromString(Objects.requireNonNull(cols.get(2).getElementsByTag("span").first()).ownText());
-            int demand = getIntFromString(cols.get(3).ownText());
+            int demand = getIntFromString(cols.get(2).ownText());
+            int exportPrice = getIntFromString(Objects.requireNonNull(cols.get(3).getElementsByTag("span").first()).ownText());
             int supply = getIntFromString(cols.get(4).ownText());
 
             STATION s = DBHandler.getStation(systemName, stationName);
@@ -182,8 +183,9 @@ public class INARACleanup
 
     private static int getIntFromString(String input)
     {
-        String cleanString = input.replace("commodity", "").replace("/", "");
+        String cleanString = input.replace("elite/commodity", "").replace("/", "");
         cleanString = cleanString.replace("-", "0").replace(",", "");
+        cleanString = cleanString.replace("Cr", "");
 
         if(cleanString.equals("")) return 0;
         return Integer.parseInt(cleanString);
