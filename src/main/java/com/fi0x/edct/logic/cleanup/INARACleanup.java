@@ -64,13 +64,21 @@ public class INARACleanup
 
             String padSizeName = Objects.requireNonNull(entry.getElementsByClass("alignright minor").first()).ownText();
 
+            int q = 0;
+            int p = 0;
             Elements tradeElements = entry.getElementsByClass("alignright lineright");
-            String quantityText = Objects.requireNonNull(tradeElements.first()).ownText().replace(",", "");
-            String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
+            if(tradeElements.size() < 2)
+                tradeElements.addAll(entry.getElementsByClass("alignright lineright wrap"));
+            if(tradeElements.size() == 2)
+            {
+                String quantityText = Objects.requireNonNull(tradeElements.first()).ownText().replace(",", "");
+                String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
+                q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
+                p = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
+            }
+            else
+                Logger.log("Trade elements for commodity " + DBHandler.getCommodityNameByID(commodityID) + " are not 2 but: " + tradeElements.size() + " in entry: " + entry, LogName.WARNING);
 
-            //TODO: Fix this again
-            var q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
-            var p = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
             int supply = isExportStation ? q : 0;
             int demand = isExportStation ? 0 : q;
             int importStationPrice = isExportStation ? 0 : p;
