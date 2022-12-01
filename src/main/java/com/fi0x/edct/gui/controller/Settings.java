@@ -5,8 +5,8 @@ import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
-import com.fi0x.edct.logic.filesystem.SettingsHandler;
 import com.fi0x.edct.logic.helper.ExternalProgram;
+import com.fi0x.edct.logic.registry.RegistryWrapper;
 import com.fi0x.edct.logic.threads.Updater;
 import io.fi0x.javalogger.logging.Logger;
 import io.fi0x.javalogger.mixpanel.MixpanelHandler;
@@ -14,9 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -162,7 +160,7 @@ public class Settings implements Initializable
         updateSecretVisibility(detailedResults == Details.Advanced);
         infoController.settingsStage.sizeToScene();
 
-        SettingsHandler.storeValue("detailedResults", detailedResults);
+        RegistryWrapper.storeString("detailedResults", detailedResults.name());
 
         MainWindow.getInstance().resultsController.updateDetails(detailedResults);
     }
@@ -227,14 +225,14 @@ public class Settings implements Initializable
 
     public static void loadSettings()
     {
-        lowProfitBorder = SettingsHandler.loadInt("lowProfit", 10000);
-        highProfitBorder = SettingsHandler.loadInt("highProfit", 30000);
-        maxDataAge = SettingsHandler.loadInt("dataAge", 1000 * 60 * 60 * 24 * 4);
-        inaraDelay = SettingsHandler.loadInt("inaraDelay", 1000 * 15);
-        detailedResults = SettingsHandler.loadDetails("detailedResults", Details.Advanced);
-        shipCargoSpace = SettingsHandler.loadInt("shipCargoSpace", 790);
-        loadingTonProfit = SettingsHandler.loadInt("loadingProfit", 10000);
-        unloadingTonProfit = SettingsHandler.loadInt("unloadingProfit", 10000);
+        lowProfitBorder = RegistryWrapper.getInt("lowProfit", 10000);
+        highProfitBorder = RegistryWrapper.getInt("highProfit", 30000);
+        maxDataAge = RegistryWrapper.getInt("dataAge", 1000 * 60 * 60 * 24 * 4);
+        inaraDelay = RegistryWrapper.getInt("inaraDelay", 1000 * 15);
+        detailedResults = Settings.Details.valueOf(RegistryWrapper.getString("detailedResults", Details.Advanced.name()));
+        shipCargoSpace = RegistryWrapper.getInt("shipCargoSpace", 790);
+        loadingTonProfit = RegistryWrapper.getInt("loadingProfit", 10000);
+        unloadingTonProfit = RegistryWrapper.getInt("unloadingProfit", 10000);
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
@@ -248,8 +246,8 @@ public class Settings implements Initializable
         if(txtLowProfit.getText().length() > 0) lowProfitBorder = Integer.parseInt(txtLowProfit.getText());
         if(txtHighProfit.getText().length() > 0) highProfitBorder = Integer.parseInt(txtHighProfit.getText());
 
-        SettingsHandler.storeValue("lowProfit", lowProfitBorder);
-        SettingsHandler.storeValue("highProfit", highProfitBorder);
+        RegistryWrapper.storeInt("lowProfit", lowProfitBorder);
+        RegistryWrapper.storeInt("highProfit", highProfitBorder);
     }
     private void updateAgeSettings()
     {
@@ -264,8 +262,8 @@ public class Settings implements Initializable
             if(cbInaraDelay.getValue().equals("minutes")) inaraDelay *= 60;
         }
 
-        SettingsHandler.storeValue("dataAge", maxDataAge);
-        SettingsHandler.storeValue("inaraDelay", inaraDelay);
+        RegistryWrapper.storeInt("dataAge", maxDataAge);
+        RegistryWrapper.storeInt("inaraDelay", inaraDelay);
     }
     private void setCorrectAgeFields()
     {
@@ -291,13 +289,16 @@ public class Settings implements Initializable
     }
     private void updateSecretSettings()
     {
-        if(txtShipCargoSpace.getText().length() > 0) shipCargoSpace = Integer.parseInt(txtShipCargoSpace.getText());
-        if(txtLoadingTonProfit.getText().length() > 0) loadingTonProfit = Integer.parseInt(txtLoadingTonProfit.getText());
-        if(txtUnloadingTonProfit.getText().length() > 0) unloadingTonProfit = Integer.parseInt(txtUnloadingTonProfit.getText());
+        if(txtShipCargoSpace.getText().length() > 0)
+            shipCargoSpace = Integer.parseInt(txtShipCargoSpace.getText());
+        if(txtLoadingTonProfit.getText().length() > 0)
+            loadingTonProfit = Integer.parseInt(txtLoadingTonProfit.getText());
+        if(txtUnloadingTonProfit.getText().length() > 0)
+            unloadingTonProfit = Integer.parseInt(txtUnloadingTonProfit.getText());
 
-        SettingsHandler.storeValue("shipCargoSpace", shipCargoSpace);
-        SettingsHandler.storeValue("loadingProfit", loadingTonProfit);
-        SettingsHandler.storeValue("unloadingProfit", unloadingTonProfit);
+        RegistryWrapper.storeInt("shipCargoSpace", shipCargoSpace);
+        RegistryWrapper.storeInt("loadingProfit", loadingTonProfit);
+        RegistryWrapper.storeInt("unloadingProfit", unloadingTonProfit);
     }
     private void updateSecretVisibility(boolean visible)
     {
