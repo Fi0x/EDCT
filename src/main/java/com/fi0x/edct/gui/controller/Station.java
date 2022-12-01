@@ -48,6 +48,8 @@ public class Station implements Initializable
     @FXML
     private Label lblType;
     @FXML
+    private Label lblTypeIcon;
+    @FXML
     private Label lblPad;
     @FXML
     private Label lblPrice;
@@ -77,6 +79,8 @@ public class Station implements Initializable
         btnBlacklist.setGraphic(new ImageView(img));
         img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/reload.png")), 20, 20, false, false);
         btnReloadStation.setGraphic(new ImageView(img));
+        img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/station_orbit.png")), 20, 20, false, false);
+        lblTypeIcon.setGraphic(new ImageView(img));
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
@@ -198,6 +202,20 @@ public class Station implements Initializable
         lblSystem.setText("System:\t " + stationSystem);
         lblStationName.setText("Station:\t " + stationName);
         lblType.setText("Type:\t " + trade.STATION.TYPE);
+        String typeIcon = "/images/station_orbit.png";
+        switch(trade.STATION.TYPE)
+        {
+            case CARRIER:
+                typeIcon = "/images/station_carrier.png";
+                break;
+            case SURFACE:
+            case ODYSSEY:typeIcon = "/images/station_surface.png";
+                break;
+            default:
+                break;
+        }
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(typeIcon)), 20, 20, false, false);
+        lblTypeIcon.setGraphic(new ImageView(img));
         lblPad.setText("Pad:\t\t " + trade.STATION.PAD);
         lblPrice.setText("Price:\t " + df.format((isImportStation ? trade.IMPORT_PRICE : trade.EXPORT_PRICE)) + " credits");
         lblAmount.setText((isImportStation ? "Demand:\t " : "Supply:\t ") + df.format((isImportStation ? trade.DEMAND : trade.SUPPLY)) + " tons");
