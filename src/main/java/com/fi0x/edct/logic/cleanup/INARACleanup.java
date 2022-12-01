@@ -84,16 +84,7 @@ public class INARACleanup
             int importStationPrice = isExportStation ? 0 : p;
             int exportStationPrice = isExportStation ? p : 0;
 
-            //TODO: Maybe make this part useful again
-            STATIONTYPE type;
-            if(entry.hasClass("filterable1"))
-                type = STATIONTYPE.CARRIER;
-            else if(entry.hasClass("filterable3"))
-                type = STATIONTYPE.SURFACE;
-            else if(entry.hasClass("filterable4"))
-                type = STATIONTYPE.ODYSSEY;
-            else
-                type = STATIONTYPE.ORBIT;
+            STATIONTYPE type = STATIONTYPE.ORBIT;
 
             Element starDistanceElement = entry.getElementsByClass("minor alignright lineright").first();
             String starDistanceText = Objects.requireNonNull(starDistanceElement).ownText();
