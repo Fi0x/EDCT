@@ -3,6 +3,7 @@ package com.fi0x.edct.logic.database;
 import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logic.NameMap;
 import com.fi0x.edct.logic.structures.PADSIZE;
 import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.STATIONTYPE;
@@ -152,7 +153,10 @@ public class DBHandler
         {
             while(results != null && results.next())
             {
-                ids.add(results.getInt("InaraID"));
+                int id = results.getInt("InaraID");
+                if(NameMap.isIgnored(id))
+                    continue;
+                ids.add(id);
             }
         } catch(Exception e)
         {

@@ -102,6 +102,8 @@ public class Updater implements Runnable
     private boolean loadMissingIDs()
     {
         ArrayList<Integer> missingIDs = DBHandler.getCommodityIDs(true, 0);
+        if(missingIDs.size() > 0)
+            Logger.log("Loading " + missingIDs.size() + " missing commodities.", LogName.VERBOSE);
 
         int counter = 0;
         for(int id : missingIDs)
