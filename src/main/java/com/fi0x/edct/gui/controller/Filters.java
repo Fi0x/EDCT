@@ -1,7 +1,7 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
-import com.fi0x.edct.logic.filesystem.SettingsHandler;
+import com.fi0x.edct.logic.registry.RegistryWrapper;
 import com.fi0x.edct.logic.structures.FILTEROPTIONS;
 import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
@@ -47,44 +47,44 @@ public class Filters implements Initializable
             else
             {
                 mainController.updateFilters();
-                SettingsHandler.storeValue("quantity", txtQuantity.getText());
+                RegistryWrapper.storeInt("quantity", Integer.parseInt(txtQuantity.getText()));
                 MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
             }
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("carrier", cbCarrier.isSelected());
+            RegistryWrapper.storeBool("carrier", cbCarrier.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbSurface.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("surface", cbSurface.isSelected());
+            RegistryWrapper.storeBool("surface", cbSurface.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbLandingPad.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("pad", cbLandingPad.isSelected());
+            RegistryWrapper.storeBool("pad", cbLandingPad.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbDemand.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("demand", cbDemand.isSelected());
+            RegistryWrapper.storeBool("demand", cbDemand.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbOdyssey.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("odyssey", cbOdyssey.isSelected());
+            RegistryWrapper.storeBool("odyssey", cbOdyssey.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbBlacklist.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
             mainController.updateFilters();
-            SettingsHandler.storeValue("blacklist", cbBlacklist.isSelected());
+            RegistryWrapper.storeBool("blacklist", cbBlacklist.isSelected());
             MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         txtGalacticAverage.textProperty().addListener((observable, oldValue, newValue) ->
@@ -94,7 +94,7 @@ public class Filters implements Initializable
             else
             {
                 mainController.updateFilters();
-                SettingsHandler.storeValue("quantity", txtGalacticAverage.getText());
+                RegistryWrapper.storeInt("average", Integer.parseInt(txtGalacticAverage.getText()));
                 MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
             }
         });
@@ -127,13 +127,13 @@ public class Filters implements Initializable
 
     private void loadFilters()
     {
-        txtQuantity.setText(String.valueOf(SettingsHandler.loadInt("quantity", 10000)));
-        cbCarrier.setSelected(SettingsHandler.loadBoolean("carrier", false));
-        cbSurface.setSelected(SettingsHandler.loadBoolean("surface", false));
-        cbLandingPad.setSelected(SettingsHandler.loadBoolean("pad", false));
-        cbDemand.setSelected(SettingsHandler.loadBoolean("demand", true));
-        cbOdyssey.setSelected(SettingsHandler.loadBoolean("odyssey", false));
-        cbBlacklist.setSelected(SettingsHandler.loadBoolean("blacklist", true));
-        txtGalacticAverage.setText(String.valueOf(SettingsHandler.loadInt("average", 2000)));
+        txtQuantity.setText(String.valueOf(RegistryWrapper.getInt("quantity", 10000)));
+        cbCarrier.setSelected(RegistryWrapper.getBool("carrier", false));
+        cbSurface.setSelected(RegistryWrapper.getBool("surface", false));
+        cbLandingPad.setSelected(RegistryWrapper.getBool("pad", false));
+        cbDemand.setSelected(RegistryWrapper.getBool("demand", true));
+        cbOdyssey.setSelected(RegistryWrapper.getBool("odyssey", false));
+        cbBlacklist.setSelected(RegistryWrapper.getBool("blacklist", true));
+        txtGalacticAverage.setText(String.valueOf(RegistryWrapper.getInt("average", 2000)));
     }
 }

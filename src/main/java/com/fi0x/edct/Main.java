@@ -7,7 +7,7 @@ import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.filesystem.DiscordHandler;
 import com.fi0x.edct.logic.filesystem.RedditHandler;
-import com.fi0x.edct.logic.filesystem.SettingsHandler;
+import com.fi0x.edct.logic.registry.RegistryWrapper;
 import com.fi0x.edct.logic.threads.DistanceHandler;
 import com.fi0x.edct.logic.threads.EDDNHandler;
 import com.fi0x.edct.logic.threads.StationUpdater;
@@ -19,8 +19,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.*;
 
 public class Main
@@ -49,7 +49,6 @@ public class Main
         setupLocalFiles();
         initializeMixpanelSettings(arguments);
 
-        SettingsHandler.verifyIntegrity();
         Settings.loadSettings();
 
         MixpanelHandler.addMessage(MixpanelEvents.INITIALIZATION.name(), getProgramState());
@@ -135,7 +134,7 @@ public class Main
     {
         if(userID == null)
         {
-            userID = SettingsHandler.loadString("userID", "");
+            userID = RegistryWrapper.getString("userID", "");
 
             if(userID.length() < 50)
             {
@@ -146,10 +145,10 @@ public class Main
                         .toString();
 
                 userID = randomString;
-                SettingsHandler.storeValue("userID", randomString);
+                RegistryWrapper.storeString("userID", randomString);
             }
 
-            io.fi0x.javalogger.logging.Logger.log("UserID: " + userID, LogName.VERBOSE);
+            Logger.log("UserID: " + userID, LogName.VERBOSE);
         }
 
         return userID;
@@ -159,8 +158,8 @@ public class Main
     {
         Map<String, String> props = new HashMap<>();
 
-        SettingsHandler.addFiltersToMap(props);
-        SettingsHandler.addSettingsToMap(props);
+        addFiltersToMap(props);
+        addSettingsToMap(props);
 
         return props;
     }
@@ -189,12 +188,66 @@ public class Main
 
         return true;
     }
-    private static String getDateString()
-    {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH-mm-ss");
-        LocalDateTime now = LocalDateTime.now();
 
-        return dtf.format(now);
+    private static void addSettingsToMap(Map<String, String> props)
+    {
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(settings.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                String[] setting = line.split("=");
+                if(setting.length < 2) continue;
+
+                switch(setting[0])
+                {
+                    case "lowProfit":
+                    case "highProfit":
+                    case "dataAge":
+                    case "inaraDelay":
+                    case "detailedResults":
+                    case "shipCargoSpace":
+                    case "loadingProfit":
+                    case "unloadingProfit":
+                        props.put("setting" + setting[0], setting[1]);
+                        break;
+                }
+            }
+        } catch(IOException e)
+        {
+            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
+        }
+    }
+    private static void addFiltersToMap(Map<String, String> props)
+    {
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(settings.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                String[] setting = line.split("=");
+                if(setting.length < 2) continue;
+
+                switch(setting[0])
+                {
+                    case "quantity":
+                    case "carrier":
+                    case "surface":
+                    case "pad":
+                    case "demand":
+                    case "odyssey":
+                    case "blacklist":
+                    case "average":
+                        props.put("filter" + setting[0], setting[1]);
+                        break;
+                }
+            }
+        } catch(IOException e)
+        {
+            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
+        }
     }
 
     public enum VersionType
