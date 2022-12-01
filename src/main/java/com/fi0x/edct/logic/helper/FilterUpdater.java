@@ -25,11 +25,11 @@ public class FilterUpdater
         if(filters == null) return;
         FILTEROPTIONS filteroptions = filters.getFilterSettings();
 
-        Map<String, ArrayList<TRADE>> filteredBuyPrices = applyFilters(filteroptions, blacklist, interactionController.buyPrices);
+        Map<String, ArrayList<TRADE>> filteredExportPrices = applyFilters(filteroptions, blacklist, interactionController.exportPrices);
         if(filteroptions.demand) filteroptions.amount = 0;
-        Map<String, ArrayList<TRADE>> filteredSellPrices = applyFilters(filteroptions, blacklist, interactionController.sellPrices);
+        Map<String, ArrayList<TRADE>> filteredImportPrices = applyFilters(filteroptions, blacklist, interactionController.importPrices);
 
-        resultsController.setTrades(getTrades(filteredSellPrices, filteredBuyPrices));
+        resultsController.setTrades(getTrades(filteredImportPrices, filteredExportPrices));
 
         resultsController.displayResults();
     }
@@ -70,14 +70,14 @@ public class FilterUpdater
         return filteredPrices;
     }
 
-    private static ArrayList<COMMODITY> getTrades(Map<String, ArrayList<TRADE>> sellPrices, Map<String, ArrayList<TRADE>> buyPrices)
+    private static ArrayList<COMMODITY> getTrades(Map<String, ArrayList<TRADE>> importPrices, Map<String, ArrayList<TRADE>> exportPrices)
     {
         ArrayList<COMMODITY> trades = new ArrayList<>();
 
-        for(Map.Entry<String, ArrayList<TRADE>> commodity : sellPrices.entrySet())
+        for(Map.Entry<String, ArrayList<TRADE>> commodity : importPrices.entrySet())
         {
             long galAvg = DBHandler.getCommodityAverage(commodity.getKey());
-            COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), buyPrices.get(commodity.getKey()), galAvg);
+            COMMODITY commodityTrade = new COMMODITY(commodity.getKey(), commodity.getValue(), exportPrices.get(commodity.getKey()), galAvg);
             commodityTrade.sortPrices();
 
             if(commodityTrade.profit > 0) trades.add(commodityTrade);

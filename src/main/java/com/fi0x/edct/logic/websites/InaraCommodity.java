@@ -49,47 +49,47 @@ public class InaraCommodity
 
     public static boolean updateCommodityPrices(int commodityRefID) throws InterruptedException, HtmlConnectionException
     {
-        Map<String, String> parameters1 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "2");
-        Map<String, String> parameters2 = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "1");
+        Map<String, String> exportStationParameters = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "1");
+        Map<String, String> importStationParameters = getRefinedParameters(ENDPOINTS.Prices.parameter, commodityRefID, "2");
 
-        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters1);
+        String html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, exportStationParameters);
         if(html == null) return false;
-        ArrayList<TRADE> sellStations = INARACleanup.getCommodityPrices(commodityRefID, html, true);
+        ArrayList<TRADE> exportStations = INARACleanup.getCommodityPrices(commodityRefID, html, true);
 
-        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, parameters2);
+        html = RequestHandler.sendHTTPRequest(ENDPOINTS.Prices.url, ENDPOINTS.Prices.type, importStationParameters);
         if(html == null) return false;
-        ArrayList<TRADE> buyStations = INARACleanup.getCommodityPrices(commodityRefID, html, false);
+        ArrayList<TRADE> importStations = INARACleanup.getCommodityPrices(commodityRefID, html, false);
 
-        for(TRADE seller : sellStations)
+        for(TRADE exporter : exportStations)
         {
-            STATION s = DBHandler.getStation(seller.STATION.SYSTEM, seller.STATION.NAME);
+            STATION s = DBHandler.getStation(exporter.STATION.SYSTEM, exporter.STATION.NAME);
             if(s == null)
             {
-                s = new STATION(seller.STATION.SYSTEM, seller.STATION.NAME, seller.STATION.PAD, seller.STATION.TYPE, seller.STATION.DISTANCE_TO_STAR);
+                s = new STATION(exporter.STATION.SYSTEM, exporter.STATION.NAME, exporter.STATION.PAD, exporter.STATION.TYPE, exporter.STATION.DISTANCE_TO_STAR);
                 DBHandler.setStationData(s);
-                if(DBHandler.getSystemCoords(seller.STATION.SYSTEM) == null)
+                if(DBHandler.getSystemCoords(exporter.STATION.SYSTEM) == null)
                 {
-                    StationUpdater.addSystemToQueue(seller.STATION.SYSTEM);
+                    StationUpdater.addSystemToQueue(exporter.STATION.SYSTEM);
                 }
             }
 
-            TRADE t = new TRADE(s, commodityRefID, seller.AGE, seller.SUPPLY, 0, 0, seller.SELL_PRICE);
+            TRADE t = new TRADE(s, commodityRefID, exporter.AGE, exporter.SUPPLY, 0, 0, exporter.EXPORT_PRICE);
             DBHandler.setTradeData(t);
         }
-        for(TRADE buyer : buyStations)
+        for(TRADE importer : importStations)
         {
-            STATION s = DBHandler.getStation(buyer.STATION.SYSTEM, buyer.STATION.NAME);
+            STATION s = DBHandler.getStation(importer.STATION.SYSTEM, importer.STATION.NAME);
             if(s == null)
             {
-                s = new STATION(buyer.STATION.SYSTEM, buyer.STATION.NAME, buyer.STATION.PAD, buyer.STATION.TYPE, buyer.STATION.DISTANCE_TO_STAR);
+                s = new STATION(importer.STATION.SYSTEM, importer.STATION.NAME, importer.STATION.PAD, importer.STATION.TYPE, importer.STATION.DISTANCE_TO_STAR);
                 DBHandler.setStationData(s);
-                if(DBHandler.getSystemCoords(buyer.STATION.SYSTEM) == null)
+                if(DBHandler.getSystemCoords(importer.STATION.SYSTEM) == null)
                 {
-                    StationUpdater.addSystemToQueue(buyer.STATION.SYSTEM);
+                    StationUpdater.addSystemToQueue(importer.STATION.SYSTEM);
                 }
             }
 
-            TRADE t = new TRADE(s, commodityRefID, buyer.AGE, 0, buyer.DEMAND, buyer.BUY_PRICE, 0);
+            TRADE t = new TRADE(s, commodityRefID, importer.AGE, 0, importer.DEMAND, importer.IMPORT_PRICE, 0);
             DBHandler.setStationData(s);
             DBHandler.setTradeData(t);
         }
@@ -98,7 +98,7 @@ public class InaraCommodity
         return true;
     }
 
-    private static Map<String, String> getRefinedParameters(String[] parameter, int commRefID, String sellParam)
+    private static Map<String, String> getRefinedParameters(String[] parameter, int commRefID, String importExportParam)
     {
         Map<String, String> parameters = new HashMap<>();
 
@@ -107,7 +107,7 @@ public class InaraCommodity
             switch(param)
             {
                 case "pi1":
-                    parameters.put(param, sellParam);
+                    parameters.put(param, importExportParam);
                     break;
                 case "pi2":
                     parameters.put(param, String.valueOf(commRefID));

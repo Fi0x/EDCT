@@ -44,8 +44,8 @@ public class TradeReloader implements Runnable
 
     private void updatePrices()
     {
-        INT_CONTROLLER.sellPrices = new HashMap<>();
-        INT_CONTROLLER.buyPrices = new HashMap<>();
+        INT_CONTROLLER.importPrices = new HashMap<>();
+        INT_CONTROLLER.exportPrices = new HashMap<>();
         Filters filters = Filters.getInstance();
         long minAvg = filters == null ? 0 : filters.getFilterSettings().average;
 
@@ -54,10 +54,10 @@ public class TradeReloader implements Runnable
             String commodityName = DBHandler.getCommodityNameByID(id);
 
             ArrayList<TRADE> trade = DBHandler.getTradeInformation(id, false);
-            INT_CONTROLLER.sellPrices.put(commodityName, trade);
+            INT_CONTROLLER.importPrices.put(commodityName, trade);
 
             trade = DBHandler.getTradeInformation(id, true);
-            INT_CONTROLLER.buyPrices.put(commodityName, trade);
+            INT_CONTROLLER.exportPrices.put(commodityName, trade);
         }
     }
 }

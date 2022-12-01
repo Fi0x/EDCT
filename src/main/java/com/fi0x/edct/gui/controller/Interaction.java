@@ -22,8 +22,8 @@ public class Interaction implements Initializable
     public Datastorage storageController;
     public Filters filterController;
 
-    public Map<String, ArrayList<TRADE>> sellPrices = new HashMap<>();
-    public Map<String, ArrayList<TRADE>> buyPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> importPrices = new HashMap<>();
+    public Map<String, ArrayList<TRADE>> exportPrices = new HashMap<>();
 
     @FXML
     private GridPane hbInteraction;

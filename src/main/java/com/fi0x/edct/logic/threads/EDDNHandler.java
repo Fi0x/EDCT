@@ -155,7 +155,7 @@ public class EDDNHandler implements Runnable
                     s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
-                TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.BUY_PRICE, 0);
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, 0, station_old.DEMAND, station_old.IMPORT_PRICE, 0);
                 DBHandler.setTradeData(t);
             }
 
@@ -168,7 +168,7 @@ public class EDDNHandler implements Runnable
                     s = new STATION(systemName, stationName, padsize, stationtype, starDistance);
                     DBHandler.setStationData(s);
                 }
-                TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.SELL_PRICE);
+                TRADE t = new TRADE(s, commodityID, station_old.AGE, station_old.SUPPLY, 0, 0, station_old.EXPORT_PRICE);
                 DBHandler.setTradeData(t);
             }
         }

@@ -68,8 +68,8 @@ public class EDDNCleanup
     {
         long supply = 0;
         long demand = 0;
-        long buyPrice = 0;
-        long sellPrice = 0;
+        long importPrice = 0;
+        long exportPrice = 0;
 
         try
         {
@@ -77,22 +77,22 @@ public class EDDNCleanup
             if(isSelling)
             {
                 supply = (long) json.get("stock");
-                sellPrice = (long) json.get("buyPrice");
+                exportPrice = (long) json.get("buyPrice");
             }
             else
             {
                 demand = (long) json.get("demand");
-                buyPrice = (long) json.get("sellPrice");
+                importPrice = (long) json.get("sellPrice");
             }
         } catch(ParseException e)
         {
             Logger.log("Could not get trade data from an EDDN json", LogName.WARNING, e);
         }
 
-        if(sellPrice == 0 && buyPrice == 0) return null;
+        if(exportPrice == 0 && importPrice == 0) return null;
 
         STATION s = new STATION(system, station, pad, type, starDistance);
-        return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, buyPrice, sellPrice);
+        return new TRADE(s, commodityID, System.currentTimeMillis(), supply, demand, importPrice, exportPrice);
     }
 
     public static PADSIZE getStationPad(String inputHTML)

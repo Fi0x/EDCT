@@ -94,14 +94,14 @@ public class DBHandler
                 makeSQLValid(String.valueOf(trade.AGE)) + ", " +
                 trade.SUPPLY + ", " +
                 trade.DEMAND + ", " +
-                trade.BUY_PRICE + ", " +
-                trade.SELL_PRICE + ") " +
+                trade.IMPORT_PRICE + ", " +
+                trade.EXPORT_PRICE + ") " +
                 "ON CONFLICT (StationName, SystemName, InaraID) " +
                 "DO UPDATE SET " +
                 "Age = " + makeSQLValid(String.valueOf(trade.AGE)) + ", " +
-                (trade.SELL_PRICE > 0
-                        ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.SELL_PRICE
-                        : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.BUY_PRICE));
+                (trade.EXPORT_PRICE > 0
+                        ? "Supply = " + trade.SUPPLY + ", SellPrice = " + trade.EXPORT_PRICE
+                        : "Demand = " + trade.DEMAND + ", BuyPrice = " + trade.IMPORT_PRICE));
     }
 
     public static void setSystemCoordinates(String systemName, Vec3d coords)
@@ -322,11 +322,11 @@ public class DBHandler
 
                 int supply = trades.getInt("Supply");
                 int demand = trades.getInt("Demand");
-                int buyPrice = trades.getInt("BuyPrice");
-                int sellPrice = trades.getInt("SellPrice");
+                int importStationPrice = trades.getInt("BuyPrice");
+                int exportStationPrice = trades.getInt("SellPrice");
                 long updateTime = Long.parseLong(trades.getString("Age"));
 
-                stationList.add(new TRADE(station, commodityID, updateTime, supply, demand, buyPrice, sellPrice));
+                stationList.add(new TRADE(station, commodityID, updateTime, supply, demand, importStationPrice, exportStationPrice));
             }
         } catch(Exception e)
         {

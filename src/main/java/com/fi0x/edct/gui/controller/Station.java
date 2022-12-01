@@ -30,7 +30,7 @@ public class Station implements Initializable
 {
     private Results resultsController;
 
-    private boolean isBuying;
+    private boolean isImportStation;
     public int stationID;
     private String stationSystem;
     private String stationName;
@@ -82,10 +82,10 @@ public class Station implements Initializable
         {
             MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "copy-reddit-string");}});
 
-            TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+            TRADE station = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
             String text;
-            if(e.getButton() == MouseButton.SECONDARY) text = ConvertToString.redditContent(resultsController, station, isBuying);
-            else text = ConvertToString.redditTitle(resultsController, station, isBuying);
+            if(e.getButton() == MouseButton.SECONDARY) text = ConvertToString.redditContent(resultsController, station, isImportStation);
+            else text = ConvertToString.redditTitle(resultsController, station, isImportStation);
 
             if(text == null)
             {
@@ -99,8 +99,8 @@ public class Station implements Initializable
         {
             MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "copy-discord-string");}});
 
-            TRADE station = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
-            String text = ConvertToString.discordText(resultsController, station, isBuying);
+            TRADE station = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
+            String text = ConvertToString.discordText(resultsController, station, isImportStation);
 
             if(text == null)
             {
@@ -119,16 +119,16 @@ public class Station implements Initializable
     private void nextStation()
     {
         stationID++;
-        if(!isBuying && stationID >= resultsController.getCurrentTrade().BUY_PRICES.size())
+        if(!isImportStation && stationID >= resultsController.getCurrentTrade().EXPORT_PRICES.size())
         {
-            stationID = resultsController.getCurrentTrade().BUY_PRICES.size() - 1;
-        } else if(isBuying && stationID >= resultsController.getCurrentTrade().SELL_PRICES.size())
+            stationID = resultsController.getCurrentTrade().EXPORT_PRICES.size() - 1;
+        } else if(isImportStation && stationID >= resultsController.getCurrentTrade().IMPORT_PRICES.size())
         {
-            stationID = resultsController.getCurrentTrade().SELL_PRICES.size() - 1;
+            stationID = resultsController.getCurrentTrade().IMPORT_PRICES.size() - 1;
         }
 
-        if(!isBuying) resultsController.currentBuyStation = stationID;
-        else resultsController.currentSellStation = stationID;
+        if(!isImportStation) resultsController.currentExportStation = stationID;
+        else resultsController.currentImportStation = stationID;
         resultsController.displayResults();
     }
     @FXML
@@ -137,8 +137,8 @@ public class Station implements Initializable
         stationID--;
         if(stationID < 0) stationID = 0;
 
-        if(!isBuying) resultsController.currentBuyStation = stationID;
-        else resultsController.currentSellStation = stationID;
+        if(!isImportStation) resultsController.currentExportStation = stationID;
+        else resultsController.currentImportStation = stationID;
         resultsController.displayResults();
     }
     @FXML
@@ -146,7 +146,7 @@ public class Station implements Initializable
     {
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "reload-station-data");}});
 
-        TRADE currentTrade = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        TRADE currentTrade = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
         InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
         resultsController.displayResults();
     }
@@ -155,7 +155,7 @@ public class Station implements Initializable
     {
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "add-station-to-blacklist");}});
 
-        TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        TRADE s = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
         BlacklistHandler.addSystemToBlacklist(s.STATION.SYSTEM);
         resultsController.mainController.updateFilters();
     }
@@ -164,20 +164,20 @@ public class Station implements Initializable
     {
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "remove-station-temporary");}});
 
-        TRADE s = isBuying ? resultsController.getCurrentBuyStation() : resultsController.getCurrentSellStation();
+        TRADE s = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
         int commodityID = DBHandler.getCommodityIDByName(resultsController.getCurrentTrade().NAME);
-        DBHandler.removeStationEntry(commodityID, s.STATION.NAME, s.STATION.SYSTEM, !isBuying);
+        DBHandler.removeStationEntry(commodityID, s.STATION.NAME, s.STATION.SYSTEM, !isImportStation);
 
         resultsController.removeStationFromCurrentTrade(s);
 
-        if(!isBuying && stationID >= resultsController.getCurrentTrade().BUY_PRICES.size()) stationID = resultsController.getCurrentTrade().BUY_PRICES.size() - 1;
-        else if(isBuying && stationID >= resultsController.getCurrentTrade().SELL_PRICES.size()) stationID = resultsController.getCurrentTrade().SELL_PRICES.size() - 1;
+        if(!isImportStation && stationID >= resultsController.getCurrentTrade().EXPORT_PRICES.size()) stationID = resultsController.getCurrentTrade().EXPORT_PRICES.size() - 1;
+        else if(isImportStation && stationID >= resultsController.getCurrentTrade().IMPORT_PRICES.size()) stationID = resultsController.getCurrentTrade().IMPORT_PRICES.size() - 1;
 
-        if(!isBuying) resultsController.currentBuyStation = stationID;
-        else resultsController.currentSellStation = stationID;
+        if(!isImportStation) resultsController.currentExportStation = stationID;
+        else resultsController.currentImportStation = stationID;
         resultsController.displayResults();
 
-        if(resultsController.getCurrentTrade().BUY_PRICES.size() == 0 || resultsController.getCurrentTrade().SELL_PRICES.size() == 0) resultsController.removeCurrentTrade();
+        if(resultsController.getCurrentTrade().EXPORT_PRICES.size() == 0 || resultsController.getCurrentTrade().IMPORT_PRICES.size() == 0) resultsController.removeCurrentTrade();
 
         resultsController.displayResults();
     }
@@ -199,8 +199,8 @@ public class Station implements Initializable
         lblStationName.setText("Station:\t " + stationName);
         lblType.setText("Type:\t " + trade.STATION.TYPE);
         lblPad.setText("Pad:\t\t " + trade.STATION.PAD);
-        lblPrice.setText("Price:\t " + df.format((isBuying ? trade.BUY_PRICE : trade.SELL_PRICE)) + " credits");
-        lblAmount.setText((isBuying ? "Demand:\t " : "Supply:\t ") + df.format((isBuying ? trade.DEMAND : trade.SUPPLY)) + " tons");
+        lblPrice.setText("Price:\t " + df.format((isImportStation ? trade.IMPORT_PRICE : trade.EXPORT_PRICE)) + " credits");
+        lblAmount.setText((isImportStation ? "Demand:\t " : "Supply:\t ") + df.format((isImportStation ? trade.DEMAND : trade.SUPPLY)) + " tons");
 
         df.setMaximumFractionDigits(0);
 
@@ -234,11 +234,11 @@ public class Station implements Initializable
         btnDiscord.setManaged(advanced);
     }
 
-    public void setResultsController(Results controller, boolean isBuying)
+    public void setResultsController(Results controller, boolean isImportStation)
     {
         resultsController = controller;
-        this.isBuying = isBuying;
-        if(isBuying)
+        this.isImportStation = isImportStation;
+        if(isImportStation)
         {
             lblAction.setText("Sell at");
             lblAmount.setText("Demand: ---");

@@ -7,18 +7,18 @@ public class TRADE
     public long AGE;
     public long SUPPLY;
     public long DEMAND;
-    public long BUY_PRICE;
-    public long SELL_PRICE;
+    public long IMPORT_PRICE;
+    public long EXPORT_PRICE;
 
-    public TRADE(STATION station, int inaraID, long age, long supply, long demand, long buyPrice, long sellPrice)
+    public TRADE(STATION station, int inaraID, long age, long supply, long demand, long importStationPrice, long exportStationPrice)
     {
         STATION = station;
         INARA_ID = inaraID;
         AGE = age;
         SUPPLY = supply;
         DEMAND = demand;
-        BUY_PRICE = buyPrice;
-        SELL_PRICE = sellPrice;
+        IMPORT_PRICE = importStationPrice;
+        EXPORT_PRICE = exportStationPrice;
     }
 
     public String getUpdateAge()

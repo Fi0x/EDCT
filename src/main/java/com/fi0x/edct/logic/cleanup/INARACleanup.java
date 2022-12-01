@@ -42,7 +42,7 @@ public class INARACleanup
         return commodities;
     }
 
-    public static ArrayList<TRADE> getCommodityPrices(int commodityID, String inputHTML, boolean isSeller)
+    public static ArrayList<TRADE> getCommodityPrices(int commodityID, String inputHTML, boolean isExportStation)
     {
         ArrayList<TRADE> stations = new ArrayList<>();
         Document doc = Jsoup.parse(inputHTML);
@@ -68,12 +68,13 @@ public class INARACleanup
             String quantityText = Objects.requireNonNull(tradeElements.first()).ownText().replace(",", "");
             String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
 
+            //TODO: Fix this again
             var q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
             var p = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
-            int supply = isSeller ? q : 0;
-            int demand = isSeller ? 0 : q;
-            int buyPrice = isSeller ? 0 : p;
-            int sellPrice = isSeller ? p : 0;
+            int supply = isExportStation ? q : 0;
+            int demand = isExportStation ? 0 : q;
+            int importStationPrice = isExportStation ? 0 : p;
+            int exportStationPrice = isExportStation ? p : 0;
 
             //TODO: Maybe make this part useful again
             STATIONTYPE type;
@@ -120,7 +121,7 @@ public class INARACleanup
             }
 
             STATION station = new STATION(system, stationName, PADSIZE.getFromString(padSizeName), type, starDistance);
-            TRADE trade = new TRADE(station, commodityID, inara_time, supply, demand, buyPrice, sellPrice);
+            TRADE trade = new TRADE(station, commodityID, inara_time, supply, demand, importStationPrice, exportStationPrice);
             stations.add(trade);
         }
 

@@ -127,8 +127,8 @@ public class ConvertToString
                 break;
             case "STATION_PRICE":
                 if(prefix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "PREFIX"));
-                if(unloading) part.append(station.BUY_PRICE);
-                else part.append(station.SELL_PRICE);
+                if(unloading) part.append(station.IMPORT_PRICE);
+                else part.append(station.EXPORT_PRICE);
                 if(suffix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "SUFFIX"));
                 break;
             case "CARRIER_PRICE":

@@ -52,8 +52,8 @@ public class InaraStation
                     tradeToUpdate.AGE = t.AGE;
                     tradeToUpdate.SUPPLY = t.SUPPLY;
                     tradeToUpdate.DEMAND = t.DEMAND;
-                    tradeToUpdate.BUY_PRICE = t.BUY_PRICE;
-                    tradeToUpdate.SELL_PRICE = t.SELL_PRICE;
+                    tradeToUpdate.IMPORT_PRICE = t.IMPORT_PRICE;
+                    tradeToUpdate.EXPORT_PRICE = t.EXPORT_PRICE;
                 }
             }
 
