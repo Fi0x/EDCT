@@ -1,6 +1,7 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.gui.visual.CustomAlert;
 import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
@@ -18,6 +19,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class Settings implements Initializable
@@ -153,6 +155,53 @@ public class Settings implements Initializable
     }
 
     @FXML
+    private void provideFeedback()
+    {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "feedback");}});
+
+        Map<String, String> results = new HashMap<>();
+        boolean noFlag = false;
+
+        Alert alertUseful = new CustomAlert(Alert.AlertType.NONE, "Do you think this tool is useful?", ButtonType.YES, ButtonType.NO);
+        alertUseful.showAndWait();
+        results.put("usefulTool", alertUseful.getResult() == ButtonType.YES ? "Yes" : "No");
+        if(alertUseful.getResult() == ButtonType.NO)
+            noFlag = true;
+
+        Alert alertEasyUse = new CustomAlert(Alert.AlertType.NONE, "Is the tool easy to use and understand?", ButtonType.YES, ButtonType.NO);
+        alertEasyUse.showAndWait();
+        results.put("easyUse", alertEasyUse.getResult() == ButtonType.YES ? "Yes" : "No");
+        if(alertEasyUse.getResult() == ButtonType.NO)
+            noFlag = true;
+
+        Alert alertCorrectInfo = new CustomAlert(Alert.AlertType.NONE, "Is the provided information always correct?", ButtonType.YES, ButtonType.NO);
+        alertCorrectInfo.showAndWait();
+        results.put("correctInformation", alertCorrectInfo.getResult() == ButtonType.YES ? "Yes" : "No");
+        if(alertCorrectInfo.getResult() == ButtonType.NO)
+            noFlag = true;
+
+        Alert alertMissingFilter = new CustomAlert(Alert.AlertType.NONE, "Is there a filter-option missing you would like to use?", ButtonType.YES, ButtonType.NO);
+        alertMissingFilter.showAndWait();
+        results.put("missingFilter", alertMissingFilter.getResult() == ButtonType.YES ? "Yes" : "No");
+        if(alertMissingFilter.getResult() == ButtonType.YES)
+            noFlag = true;
+
+        if(noFlag)
+        {
+            Alert alertGithub = new CustomAlert(Alert.AlertType.NONE, "Would you like to provide more information and create a GitHub issue?", ButtonType.YES, ButtonType.NO);
+            alertGithub.showAndWait();
+            results.put("githubIssue", alertGithub.getResult() == ButtonType.YES ? "Yes" : "No");
+            if(alertGithub.getResult() == ButtonType.YES)
+                ExternalProgram.openWebsite("https://github.com/Fi0x/EDCT/issues/new/choose");
+        }
+
+        MixpanelHandler.addMessage(MixpanelEvents.FEEDBACK.name(), results);
+
+        Alert alertThanks = new CustomAlert(Alert.AlertType.INFORMATION, "Your feedback was sent to the developer", ButtonType.CLOSE);
+        alertThanks.setHeaderText("Thank you!");
+        alertThanks.showAndWait();
+    }
+    @FXML
     private void changeDetailMode()
     {
         detailedResults = Details.values()[(detailedResults.ordinal() + 1 ) % Details.values().length];
@@ -171,6 +220,7 @@ public class Settings implements Initializable
         try
         {
             Main.clearLogs();
+            new CustomAlert(Alert.AlertType.NONE, "Log files cleared", ButtonType.CLOSE).showAndWait();
         } catch(IOException e)
         {
             Logger.log("Could not clear the log files", LogName.WARNING, e);
@@ -189,7 +239,7 @@ public class Settings implements Initializable
         else if(tradeEntries > 0) alertText += " It contains " + tradeEntries + " trades";
         if(stationEntries > 0 && tradeEntries > 0) alertText += " and " + tradeEntries + " trades";
 
-        Alert alert = new Alert(Alert.AlertType.WARNING, alertText, ButtonType.YES, ButtonType.CANCEL);
+        Alert alert = new CustomAlert(Alert.AlertType.WARNING, alertText, ButtonType.YES, ButtonType.CANCEL);
         alert.showAndWait();
 
         if(alert.getResult() == ButtonType.CANCEL)

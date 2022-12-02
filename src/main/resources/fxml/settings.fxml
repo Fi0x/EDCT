@@ -6,14 +6,27 @@
 <?import java.lang.String?>
 <?import java.net.URL?>
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.fi0x.edct.gui.controller.Settings">
-    <HBox id="hbox">
-        <Label id="description" text="Low Profit Border">
-            <tooltip>
-                <Tooltip text="The profit at which the text starts to be red"/>
-            </tooltip>
-        </Label>
-        <TextField fx:id="txtLowProfit"/>
-    </HBox>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS"/>
+            <ColumnConstraints/>
+        </columnConstraints>
+        <HBox id="hbox" GridPane.columnIndex="0">
+            <Label id="description" text="Low Profit Border">
+                <tooltip>
+                    <Tooltip text="The profit at which the text starts to be red"/>
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtLowProfit"/>
+        </HBox>
+        <HBox id="hbox" GridPane.columnIndex="1">
+            <Button id="btnFeedback" text="Feedback" onAction="#provideFeedback">
+                <tooltip>
+                    <Tooltip text="Give the developer some feedback"/>
+                </tooltip>
+            </Button>
+        </HBox>
+    </GridPane>
     <HBox id="hbox">
         <Label id="description" text="High Profit Border">
             <tooltip>
