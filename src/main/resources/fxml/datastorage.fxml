@@ -27,7 +27,7 @@
         </tooltip>
     </Label>
     <GridPane GridPane.rowIndex="4" GridPane.halignment="CENTER">
-        <Label fx:id="lblReloadStatus" text="Reloading trade data..." GridPane.halignment="CENTER">
+        <Label fx:id="lblReloadStatus" text="Reloading trade data" GridPane.halignment="CENTER">
             <tooltip>
                 <Tooltip text="The tool is loading data to display"/>
             </tooltip>

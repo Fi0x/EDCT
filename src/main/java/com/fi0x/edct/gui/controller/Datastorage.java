@@ -9,12 +9,17 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Datastorage
 {
     private Interaction interactionController;
+
+    private final Image loadingGif = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/loading.gif")), 15, 15, false, false);
 
     @FXML
     public Button btnStart;
@@ -34,6 +39,7 @@ public class Datastorage
     {
         btnStart.setVisible(false);
         lblReloadStatus.setVisible(true);
+        lblReloadStatus.setGraphic(new ImageView(loadingGif));
         lblDataAge.setText("Loading data from storage");
 
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "trade-reloader");}});
@@ -49,9 +55,14 @@ public class Datastorage
         lblDataAge.setText(ConvertToString.ageText(age));
     }
 
-    public void setUpdateStatus(String status, BACKGROUND_STATUS phase)
+    public void setUpdateStatus(String status, BACKGROUND_STATUS phase, boolean updateGif)
     {
         lblUpdateStatus.setText(status);
+        if(updateGif)
+            lblUpdateStatus.setGraphic(new ImageView(loadingGif));
+        else
+            lblUpdateStatus.setGraphic(null);
+
         switch(phase)
         {
             case INITIALIZING:
@@ -64,7 +75,16 @@ public class Datastorage
     }
     public void setEDDNStatus(boolean updating)
     {
-        lblEDDNStatus.setText(updating ? "Storing EDDN information..." : "EDDN information stored");
+        if(updating)
+        {
+            lblEDDNStatus.setText("Storing EDDN information");
+            lblEDDNStatus.setGraphic(new ImageView(loadingGif));
+        }
+        else
+        {
+            lblEDDNStatus.setText("EDDN information stored");
+            lblEDDNStatus.setGraphic(null);
+        }
     }
 
     public void setInteractionController(Interaction controller)

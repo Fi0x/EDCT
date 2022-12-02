@@ -53,7 +53,7 @@ public class Updater implements Runnable
         Platform.runLater(() ->
         {
             MainWindow.getInstance().setUpdateStatus(-1);
-            MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
+            MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED, false);
         });
 
         if(Main.reloader != null) Main.reloader.interrupt();
@@ -68,7 +68,7 @@ public class Updater implements Runnable
         while(!Thread.interrupted())
         {
             if(sleepInterrupted((long) (Math.random() * 5000) + Settings.inaraDelay - 5000)) return;
-            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating...", Datastorage.BACKGROUND_STATUS.INITIALIZED));
+            Platform.runLater(() -> MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updating", Datastorage.BACKGROUND_STATUS.INITIALIZED, true));
 
             int oldestID = DBHandler.getOldestCommodityID();
             if(oldestID == 0) continue;
@@ -93,7 +93,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().interactionController.storageController.setDataAge(age);
-                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED);
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Updated", Datastorage.BACKGROUND_STATUS.INITIALIZED, false);
             });
         }
         Logger.log("Updater Thread stopped", LogName.INFO);
@@ -113,7 +113,7 @@ public class Updater implements Runnable
             Platform.runLater(() ->
             {
                 MainWindow.getInstance().setUpdateStatus((float)finalCounter / (float)missingIDs.size());
-                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), Datastorage.BACKGROUND_STATUS.INITIALIZING);
+                MainWindow.getInstance().interactionController.storageController.setUpdateStatus("Initializing " + finalCounter + "/" + missingIDs.size(), Datastorage.BACKGROUND_STATUS.INITIALIZING, true);
             });
             if(sleepInterrupted(250)) return true;
 
