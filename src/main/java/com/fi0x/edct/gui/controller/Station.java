@@ -1,11 +1,13 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.helper.ExternalProgram;
+import com.fi0x.edct.logic.structures.ENDPOINTS;
 import com.fi0x.edct.logic.structures.TRADE;
 import com.fi0x.edct.logic.websites.InaraStation;
 import io.fi0x.javalogger.logging.Logger;
@@ -32,6 +34,7 @@ public class Station implements Initializable
 
     private boolean isImportStation;
     public int stationID;
+    private String inaraID;
     private String stationSystem;
     private String stationName;
 
@@ -47,6 +50,8 @@ public class Station implements Initializable
     private Label lblStationName;
     @FXML
     private Label lblType;
+    @FXML
+    private Label lblTypeIcon;
     @FXML
     private Label lblPad;
     @FXML
@@ -77,6 +82,8 @@ public class Station implements Initializable
         btnBlacklist.setGraphic(new ImageView(img));
         img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/reload.png")), 20, 20, false, false);
         btnReloadStation.setGraphic(new ImageView(img));
+        img = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/images/station_orbit.png")), 20, 20, false, false);
+        lblTypeIcon.setGraphic(new ImageView(img));
 
         btnReddit.addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
         {
@@ -186,11 +193,23 @@ public class Station implements Initializable
     {
         ExternalProgram.copyToClipboard(stationSystem);
     }
+    @FXML
+    private void openStationOnInara()
+    {
+        ExternalProgram.openWebsite(ENDPOINTS.StationInfo.url + inaraID);
+    }
 
     public void setStation(TRADE trade, boolean hasPrev, boolean hasNext)
     {
         stationSystem = trade.STATION.SYSTEM;
         stationName = trade.STATION.NAME;
+        try
+        {
+            inaraID = InaraStation.getInaraStationID(stationName, stationSystem);
+        } catch(InterruptedException | HtmlConnectionException e)
+        {
+            Logger.log("Could not get the correct inaraID for a station: " + stationName + " | " + stationSystem, LogName.WARNING);
+        }
 
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(1);
@@ -198,6 +217,20 @@ public class Station implements Initializable
         lblSystem.setText("System:\t " + stationSystem);
         lblStationName.setText("Station:\t " + stationName);
         lblType.setText("Type:\t " + trade.STATION.TYPE);
+        String typeIcon = "/images/station_orbit.png";
+        switch(trade.STATION.TYPE)
+        {
+            case CARRIER:
+                typeIcon = "/images/station_carrier.png";
+                break;
+            case SURFACE:
+            case ODYSSEY:typeIcon = "/images/station_surface.png";
+                break;
+            default:
+                break;
+        }
+        Image img = new Image(Objects.requireNonNull(getClass().getResourceAsStream(typeIcon)), 20, 20, false, false);
+        lblTypeIcon.setGraphic(new ImageView(img));
         lblPad.setText("Pad:\t\t " + trade.STATION.PAD);
         lblPrice.setText("Price:\t " + df.format((isImportStation ? trade.IMPORT_PRICE : trade.EXPORT_PRICE)) + " credits");
         lblAmount.setText((isImportStation ? "Demand:\t " : "Supply:\t ") + df.format((isImportStation ? trade.DEMAND : trade.SUPPLY)) + " tons");

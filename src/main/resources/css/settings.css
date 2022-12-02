@@ -32,7 +32,7 @@
 }
 #hbox {
     -fx-alignment: CENTER-LEFT;
-    -fx-padding: 5 0 5 0;
+    -fx-padding: 5 5 5 0;
 }
 #description {
     -fx-text-fill: #eeeeee;
@@ -54,8 +54,33 @@
     -fx-background-color: #b71616;
     -fx-text-fill: #333333;
 }
+#btnFeedback {
+    -fx-background-color: #87ff63;
+    -fx-text-fill: #021802;
+}
+#btnFeedback:hover {
+    -fx-background-color: #479c2d;
+    -fx-text-fill: #021802;
+}
 #selector {
-    -fx-min-width: 110;
+    -fx-min-width: 120;
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #1c1c1c;
+    -fx-font-weight: bold;
+    -fx-padding: 0 5 0 5;
+    -fx-cursor: hand;
+}
+#selector:hover {
+    -fx-background-color: #1c1c1c;
+    -fx-text-fill: #eeeeee;
+}
+#selector .menu-item {
+    -fx-background-color: #eeeeee;
+    -fx-text-fill: #1c1c1c;
+}
+#selector .menu-item:hover {
+    -fx-background-color: #1c1c1c;
+    -fx-text-fill: #eeeeee;
 }
 #vbSecretSettings {
     -fx-background-color: #4e4e4e;

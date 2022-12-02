@@ -34,16 +34,23 @@
             <Tooltip text="The system this station is located in. Click to copy"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblStationName" text="Station: ---">
+    <Label id="lblSystem" fx:id="lblStationName" text="Station: ---" onMouseClicked="#openStationOnInara">
         <tooltip>
-            <Tooltip text="The name of the station"/>
+            <Tooltip text="The name of the station. Click to show on inara"/>
         </tooltip>
     </Label>
-    <Label fx:id="lblType" text="Type: ---">
-        <tooltip>
-            <Tooltip text="Weather this station is a carrier, surface or normal station"/>
-        </tooltip>
-    </Label>
+    <GridPane>
+        <columnConstraints>
+            <ColumnConstraints/>
+            <ColumnConstraints hgrow="ALWAYS"/>
+        </columnConstraints>
+        <Label fx:id="lblType" text="Type: ---" GridPane.columnIndex="0">
+            <tooltip>
+                <Tooltip text="Weather this station is a carrier, surface or normal station"/>
+            </tooltip>
+        </Label>
+        <Label fx:id="lblTypeIcon" GridPane.columnIndex="1"/>
+    </GridPane>
     <Label fx:id="lblPad" text="Landing Pad: ---">
         <tooltip>
             <Tooltip text="The size of the largest landing pad"/>

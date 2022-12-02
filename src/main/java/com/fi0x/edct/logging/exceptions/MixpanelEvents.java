@@ -10,5 +10,5 @@ public enum MixpanelEvents
     FILTERS_CHANGE,
     BUTTON_CLICKED,
     TRADES_LOADED,
-    HEARTBEAT
+    FEEDBACK
 }
