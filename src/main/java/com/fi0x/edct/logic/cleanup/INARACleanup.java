@@ -155,7 +155,32 @@ public class INARACleanup
         if(stationCommodities == null)
             return results;
 
-        long currentMillis = System.currentTimeMillis();
+        String marketTime = HTMLCleanup.getStationAge(inputHTML);
+        long updateTime = 0;
+        if(marketTime != null)
+        {
+            if(marketTime.contains("now"))
+            {
+                updateTime = System.currentTimeMillis();
+            }
+            else
+            {
+                updateTime = Long.parseLong(marketTime.split(" ")[0]);
+                switch(marketTime.split(" ")[1])
+                {
+                    case "days":
+                        updateTime *= 24;
+                    case "hours":
+                        updateTime *= 60;
+                    case "minutes":
+                        updateTime *= 60;
+                    default:
+                        updateTime *= 1000;
+                }
+                updateTime = System.currentTimeMillis() - updateTime;
+            }
+        }
+
         for(Element commodity : stationCommodities)
         {
             Elements cols = commodity.getElementsByTag("td");
@@ -166,7 +191,7 @@ public class INARACleanup
             int supply = getIntFromString(cols.get(4).ownText());
 
             STATION s = DBHandler.getStation(systemName, stationName);
-            results.add(new TRADE(s, inaraID, currentMillis, supply, demand, importPrice, exportPrice));
+            results.add(new TRADE(s, inaraID, updateTime, supply, demand, importPrice, exportPrice));
         }
 
         return results;

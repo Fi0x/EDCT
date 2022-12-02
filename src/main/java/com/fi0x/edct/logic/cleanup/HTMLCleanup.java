@@ -45,6 +45,47 @@ public class HTMLCleanup
         return stationTrades;
     }
 
+    public static String getStationAge(String inputHTML)
+    {
+        Document doc = Jsoup.parse(inputHTML);
+        Element mainContainer = doc.getElementsByClass("maincontainer").first();
+
+        Elements mainContents = Objects.requireNonNull(mainContainer).getElementsByClass("maincontent0");
+        if(mainContents.size() == 0)
+            return null;
+
+        Elements mainBlocks = Objects.requireNonNull(mainContents.first()).getElementsByClass("mainblock");
+        if(mainBlocks.size() == 0)
+            return null;
+
+        Elements incontents = Objects.requireNonNull(mainBlocks.first()).getElementsByClass("incontent");
+        if(incontents.size() == 0)
+            return null;
+
+        Elements gridcolumns = Objects.requireNonNull(incontents.first()).getElementsByClass("grid2columns columnseparator");
+        if(gridcolumns.size() == 0)
+            return null;
+
+        Elements divs = Objects.requireNonNull(gridcolumns.first()).getElementsByTag("div");
+        if(divs.size() == 0)
+            return null;
+
+        Elements itemPairContainers = Objects.requireNonNull(divs.last()).getElementsByClass("itempaircontainer");
+        if(itemPairContainers.size() == 0)
+            return null;
+
+        for(Element pair : itemPairContainers)
+        {
+            if(!pair.toString().contains("Market update"))
+                continue;
+
+            Element value = pair.getElementsByClass("itempairvalue").first();
+            String[] texts = Objects.requireNonNull(value).ownText().split(" ");
+            return texts[0] + " " + texts[1];
+        }
+        return null;
+    }
+
     public static Element getStationDetails(String inputHTML)
     {
         Document doc = Jsoup.parse(inputHTML);
