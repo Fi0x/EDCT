@@ -57,32 +57,18 @@
             </items>
         </ChoiceBox>
     </GridPane>
-    <GridPane>
-        <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-            <ColumnConstraints hgrow="ALWAYS"/>
-            <ColumnConstraints />
-        </columnConstraints>
-        <Label id="description" text="Inara-Update Delay" GridPane.columnIndex="0">
+    <HBox id="hbox">
+        <Label id="description" text="Inara-Update Delay">
             <tooltip>
-                <Tooltip text="The delay between requests to the INARA website"/>
+                <Tooltip text="The seconds between requests to the INARA website"/>
             </tooltip>
         </Label>
-        <TextField fx:id="txtInaraDelay" text="15" GridPane.columnIndex="1">
+        <TextField fx:id="txtInaraDelay">
             <tooltip>
                 <Tooltip text="Minimum: 5 seconds"/>
             </tooltip>
         </TextField>
-        <ChoiceBox id="selector" fx:id="cbInaraDelay" value="seconds" GridPane.columnIndex="3">
-            <items>
-                <FXCollections fx:factory="observableArrayList">
-                    <String fx:value="seconds"/>
-                    <String fx:value="minutes"/>
-                </FXCollections>
-            </items>
-        </ChoiceBox>
-    </GridPane>
+    </HBox>
     <GridPane id="gridButtons">
         <columnConstraints>
             <ColumnConstraints/>

@@ -46,8 +46,6 @@ public class Settings implements Initializable
     @FXML
     private TextField txtInaraDelay;
     @FXML
-    private ChoiceBox<String> cbInaraDelay;
-    @FXML
     private Button btnDetails;
     @FXML
     private VBox vbSecretSettings;
@@ -108,7 +106,6 @@ public class Settings implements Initializable
             else if(!newValue.matches("\\d*")) txtInaraDelay.setText(newValue.replaceAll("[^\\d]", ""));
             else updateAgeSettings();
         });
-        cbInaraDelay.valueProperty().addListener((observable, oldValue, newValue) -> updateAgeSettings());
 
         setCorrectAgeFields();
 
@@ -278,7 +275,7 @@ public class Settings implements Initializable
         lowProfitBorder = RegistryWrapper.getInt("lowProfit", 10000);
         highProfitBorder = RegistryWrapper.getInt("highProfit", 30000);
         maxDataAge = RegistryWrapper.getInt("dataAge", 1000 * 60 * 60 * 24 * 4);
-        inaraDelay = RegistryWrapper.getInt("inaraDelay", 1000 * 15);
+        inaraDelay = RegistryWrapper.getInt("inaraDelay", 15000);
         detailedResults = Settings.Details.valueOf(RegistryWrapper.getString("detailedResults", Details.Advanced.name()));
         shipCargoSpace = RegistryWrapper.getInt("shipCargoSpace", 790);
         loadingTonProfit = RegistryWrapper.getInt("loadingProfit", 10000);
@@ -287,8 +284,9 @@ public class Settings implements Initializable
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
-        inaraDelay = Math.max(inaraDelay, 15000);
-        if(shipCargoSpace < 0) shipCargoSpace = 0;
+        inaraDelay = Math.max(inaraDelay, 5000);
+        if(shipCargoSpace < 0)
+            shipCargoSpace = 0;
     }
 
     private void updateProfitBorder()
@@ -309,7 +307,6 @@ public class Settings implements Initializable
         if(txtInaraDelay.getText().length() > 0)
         {
             inaraDelay = Integer.parseInt(txtInaraDelay.getText()) * 1000;
-            if(cbInaraDelay.getValue().equals("minutes")) inaraDelay *= 60;
         }
 
         RegistryWrapper.storeInt("dataAge", maxDataAge);
@@ -327,15 +324,7 @@ public class Settings implements Initializable
             cbDataAge.setValue("hours");
         }
 
-        if(inaraDelay >= 1000 * 60)
-        {
-            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000 * 60)));
-            cbInaraDelay.setValue("minutes");
-        } else
-        {
-            txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
-            cbInaraDelay.setValue("seconds");
-        }
+        txtInaraDelay.setText(String.valueOf(inaraDelay / (1000)));
     }
     private void updateSecretSettings()
     {
