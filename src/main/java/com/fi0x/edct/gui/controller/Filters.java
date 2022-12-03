@@ -42,14 +42,16 @@ public class Filters implements Initializable
 
         txtQuantity.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if(newValue.length() > 9) txtQuantity.setText(oldValue);
-            else if(!newValue.matches("\\d*")) txtQuantity.setText(newValue.replaceAll("[^\\d]", ""));
-            else
-            {
-                mainController.updateFilters();
-                RegistryWrapper.storeInt("quantity", Integer.parseInt(txtQuantity.getText()));
-                MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
-            }
+            if(newValue.length() > 9)
+                txtQuantity.setText(oldValue);
+            else if(!newValue.matches("\\d*"))
+                txtQuantity.setText(newValue.replaceAll("[^\\d]", ""));
+        });
+        txtQuantity.setOnAction(e ->
+        {
+            mainController.updateFilters();
+            RegistryWrapper.storeInt("quantity", Integer.parseInt(txtQuantity.getText()));
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
         cbCarrier.selectedProperty().addListener((observable, oldValue, newValue) ->
         {
@@ -89,14 +91,16 @@ public class Filters implements Initializable
         });
         txtGalacticAverage.textProperty().addListener((observable, oldValue, newValue) ->
         {
-            if(newValue.length() > 9) txtGalacticAverage.setText(oldValue);
-            else if(!newValue.matches("\\d*")) txtGalacticAverage.setText(newValue.replaceAll("[^\\d]", ""));
-            else
-            {
-                mainController.updateFilters();
-                RegistryWrapper.storeInt("average", Integer.parseInt(txtGalacticAverage.getText()));
-                MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
-            }
+            if(newValue.length() > 9)
+                txtGalacticAverage.setText(oldValue);
+            else if(!newValue.matches("\\d*"))
+                txtGalacticAverage.setText(newValue.replaceAll("[^\\d]", ""));
+        });
+        txtGalacticAverage.setOnAction(e ->
+        {
+            mainController.updateFilters();
+            RegistryWrapper.storeInt("average", Integer.parseInt(txtGalacticAverage.getText()));
+            MixpanelHandler.addMessage(MixpanelEvents.FILTERS_CHANGE.name(), com.fi0x.edct.Main.getProgramState());
         });
     }
 
