@@ -122,11 +122,11 @@ public class Main
         createFileIfNotExists(blacklist, true);
         BlacklistHandler.fillBlacklistIfEmpty();
 
-        reddit = new File(localStorage.getPath() + File.separator + "reddit.json");
+        reddit = new File(localStorage.getPath() + File.separator + "reddit_v2.json");
         createFileIfNotExists(reddit, true);
         RedditHandler.fillRedditFileIfEmpty();
 
-        discord = new File(localStorage.getPath() + File.separator + "discord.json");
+        discord = new File(localStorage.getPath() + File.separator + "discord_v2.json");
         createFileIfNotExists(discord, true);
         DiscordHandler.fillDiscordFileIfEmpty();
     }

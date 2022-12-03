@@ -118,6 +118,14 @@
             </Label>
             <TextField fx:id="txtUnloadingTonProfit"/>
         </HBox>
+        <HBox id="hbox">
+            <Label id="description" text="Carrier Name">
+                <tooltip>
+                    <Tooltip text="The name of your carrier that can be used in the Reddit or Discord Texts"/>
+                </tooltip>
+            </Label>
+            <TextField fx:id="txtCarrierName"/>
+        </HBox>
         <GridPane id="gridButtons">
             <columnConstraints>
                 <ColumnConstraints hgrow="ALWAYS"/>

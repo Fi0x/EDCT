@@ -126,16 +126,31 @@ public class ConvertToString
                 if(suffix) part.append(ConfigHandler.getValue(config, "SYSTEM", unloading, "SUFFIX"));
                 break;
             case "STATION_PRICE":
-                if(prefix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "PREFIX"));
-                if(unloading) part.append(station.IMPORT_PRICE);
-                else part.append(station.EXPORT_PRICE);
-                if(suffix) part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "SUFFIX"));
+                if(prefix)
+                    part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "PREFIX"));
+                if(unloading)
+                    part.append(station.IMPORT_PRICE);
+                else
+                    part.append(station.EXPORT_PRICE);
+                if(suffix)
+                    part.append(ConfigHandler.getValue(config, "STATION_PRICE", unloading, "SUFFIX"));
                 break;
             case "CARRIER_PRICE":
-                if(prefix) part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "PREFIX"));
-                if(unloading) part.append(Details.carrierSell);
-                else part.append(Details.carrierBuy);
-                if(suffix) part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "SUFFIX"));
+                if(prefix)
+                    part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "PREFIX"));
+                if(unloading)
+                    part.append(Details.carrierSell);
+                else
+                    part.append(Details.carrierBuy);
+                if(suffix)
+                    part.append(ConfigHandler.getValue(config, "CARRIER_PRICE", unloading, "SUFFIX"));
+                break;
+            case "CARRIER":
+                if(prefix)
+                    part.append(ConfigHandler.getValue(config, "CARRIER", unloading, "PREFIX"));
+                part.append(Settings.carrierName);
+                if(suffix)
+                    part.append(ConfigHandler.getValue(config, "CARRIER", unloading, "SUFFIX"));
                 break;
             default:
                 part.append(ConfigHandler.getValue(config, key.replace("+", "").toUpperCase(Locale.ROOT), unloading, null));

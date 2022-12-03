@@ -34,6 +34,7 @@ public class Settings implements Initializable
     public static int shipCargoSpace = 790;
     public static int loadingTonProfit = 10000;
     public static int unloadingTonProfit = 10000;
+    public static String carrierName;
 
     @FXML
     private TextField txtLowProfit;
@@ -55,6 +56,8 @@ public class Settings implements Initializable
     private TextField txtLoadingTonProfit;
     @FXML
     private TextField txtUnloadingTonProfit;
+    @FXML
+    private TextField txtCarrierName;
     @FXML
     private Tooltip ttReddit;
     @FXML
@@ -144,6 +147,9 @@ public class Settings implements Initializable
             }
         });
         txtUnloadingTonProfit.setText(String.valueOf(unloadingTonProfit));
+
+        txtCarrierName.textProperty().addListener((observable, oldValue, newValue) -> updateSecretSettings());
+        txtCarrierName.setText(carrierName);
 
         btnDetails.setText(detailedResults.name() + " Results");
 
@@ -280,6 +286,7 @@ public class Settings implements Initializable
         shipCargoSpace = RegistryWrapper.getInt("shipCargoSpace", 790);
         loadingTonProfit = RegistryWrapper.getInt("loadingProfit", 10000);
         unloadingTonProfit = RegistryWrapper.getInt("unloadingProfit", 10000);
+        carrierName = RegistryWrapper.getString("carrierName", "");
 
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
@@ -334,10 +341,13 @@ public class Settings implements Initializable
             loadingTonProfit = Integer.parseInt(txtLoadingTonProfit.getText());
         if(txtUnloadingTonProfit.getText().length() > 0)
             unloadingTonProfit = Integer.parseInt(txtUnloadingTonProfit.getText());
+        if(txtCarrierName.getText().length() > 0)
+            carrierName = txtCarrierName.getText();
 
         RegistryWrapper.storeInt("shipCargoSpace", shipCargoSpace);
         RegistryWrapper.storeInt("loadingProfit", loadingTonProfit);
         RegistryWrapper.storeInt("unloadingProfit", unloadingTonProfit);
+        RegistryWrapper.storeString("carrierName", carrierName);
     }
     private void updateSecretVisibility(boolean visible)
     {

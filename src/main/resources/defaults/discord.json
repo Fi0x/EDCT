@@ -1,8 +1,7 @@
 {
-  "Text Structure": "JOB LINE LINE +System LINE Carrier LINE +Station LINE +Commodity LINE +Profit+ LINE +Quantity LINE +Station_Price+ LINE +Carrier_Price+ LINE +Pad LINE +Star_Distance+ LINE LINE Tool_credits",
+  "Text Structure": "JOB LINE LINE +System LINE +Carrier LINE +Station LINE +Commodity LINE +Profit+ LINE +Quantity LINE +Station_Price+ LINE +Carrier_Price+ LINE +Pad LINE +Star_Distance+ LINE LINE Tool_credits",
   "Required Variables": {
     "SEPARATOR": " - ",
-    "CARRIER": "Carrier: [Your carrier name goes here]",
     "TOOL_CREDITS": "The information for this trade was gathered by EDCT. You can download the tool here: https://github.com/Fi0x/EDCT/releases/latest.",
     "JOB": {
       "LOADING": "Carrier Loading Job",
@@ -11,6 +10,16 @@
     "TYPE": {
       "LOADING": "Type: Loading",
       "UNLOADING": "Type: Unloading"
+    },
+    "CARRIER": {
+      "LOADING": {
+        "PREFIX": "Carrier: ",
+        "SUFFIX": ""
+      },
+      "UNLOADING": {
+        "PREFIX": "Carrier:",
+        "SUFFIX": ""
+      }
     },
     "COMMODITY": {
       "LOADING": {
