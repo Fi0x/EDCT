@@ -50,6 +50,11 @@ public class Datastorage
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();
     }
+    @FXML
+    private void dataAgeClicked()
+    {
+        //TODO: Show popup with data info
+    }
 
     public void setDataAge(long age)
     {
