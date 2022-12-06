@@ -54,9 +54,10 @@ public class Updater implements Runnable
 
         if(loadMissingIDs()) return;
 
-        MixpanelHandler.addMessage(MixpanelEvents.UPDATER_LOADED.name(), new HashMap<>(){{put("time", String.valueOf(System.currentTimeMillis() - time));}});
+        final long finalTime = System.currentTimeMillis() - time;
+        MixpanelHandler.addMessage(MixpanelEvents.UPDATER_LOADED.name(), new HashMap<>(){{put("timeToFinish", String.valueOf(finalTime));}});
 
-        Logger.log("All Commodities loaded", LogName.VERBOSE);
+        Logger.log("All Commodities loaded after " + finalTime + " milliseconds", LogName.TIME);
         Platform.runLater(() ->
         {
             MainWindow.getInstance().setUpdateStatus(-1);

@@ -13,6 +13,7 @@ import javafx.application.Platform;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class TradeReloader implements Runnable
 {
@@ -39,8 +40,10 @@ public class TradeReloader implements Runnable
 
         MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
         MainWindow.getInstance().interactionController.storageController.lblReloadStatus.setVisible(false);
-        Logger.log("Trade Reloader Thread finished", LogName.VERBOSE);
-        MixpanelHandler.addMessage(MixpanelEvents.TRADES_LOADED.name(), new HashMap<>(){{put("time", String.valueOf(System.currentTimeMillis() - time));}});
+
+        final long finalTime = System.currentTimeMillis() - time;
+        MixpanelHandler.addMessage(MixpanelEvents.TRADES_LOADED.name(), new HashMap<>(){{put("timeToFinish", String.valueOf(finalTime));}});
+        Logger.log("Trade Reloader Thread finished after " + finalTime + " milliseconds", LogName.TIME);
     }
 
     private void updatePrices()
@@ -52,7 +55,6 @@ public class TradeReloader implements Runnable
 
         ArrayList<Integer> ids = DBHandler.getCommodityIDs(false, minAvg);
         Logger.log("Starting price updates for " + ids.size() + " commodities", LogName.VERBOSE);
-        long time = System.currentTimeMillis();
         for(int idx = 0; idx < ids.size(); idx++)
         {
             int id = ids.get(idx);
@@ -72,6 +74,5 @@ public class TradeReloader implements Runnable
             });
         }
         Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus(-1));
-        Logger.log("Price updates finished after " + (System.currentTimeMillis() - time) + " milliseconds", LogName.TIME);
     }
 }

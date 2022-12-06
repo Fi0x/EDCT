@@ -19,8 +19,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.*;
 
 public class Main
@@ -34,7 +32,6 @@ public class Main
 
     private static String userID;
     private static File localStorage;
-    public static File settings;
     public static File blacklist;
     public static File reddit;
     public static File discord;
@@ -89,6 +86,7 @@ public class Main
     {
         Logger.getInstance().setDebug(arguments.contains("-d"));
         Logger.getInstance().setVerbose(arguments.contains("-v"));
+        Logger.getInstance().setConsoleExceptions(arguments.contains("-d"));
 
         Logger.createNewTemplate(LogName.VERBOSE, LogColor.WHITE, "", "VER", false, true, false, false, false, "");
         Logger.createNewTemplate(LogName.INFO, LogColor.WHITE_BRIGHT, "", "INF", false, false, false, false, false, "");
@@ -116,9 +114,6 @@ public class Main
         File logFolder = new File(localStorage.getPath() + File.separator + "Logs");
         createFileIfNotExists(logFolder, false);
         io.fi0x.javalogger.logging.Logger.getInstance().setLogFolder(logFolder);
-
-        settings = new File(localStorage.getPath() + File.separator + "settings.txt");
-        createFileIfNotExists(settings, true);
 
         blacklist = new File(localStorage.getPath() + File.separator + "blacklist.txt");
         createFileIfNotExists(blacklist, true);
@@ -193,63 +188,26 @@ public class Main
 
     private static void addSettingsToMap(Map<String, String> props)
     {
-        try
-        {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(settings.toPath(), StandardCharsets.UTF_8));
-
-            for(String line : fileContent)
-            {
-                String[] setting = line.split("=");
-                if(setting.length < 2) continue;
-
-                switch(setting[0])
-                {
-                    case "lowProfit":
-                    case "highProfit":
-                    case "dataAge":
-                    case "inaraDelay":
-                    case "detailedResults":
-                    case "shipCargoSpace":
-                    case "loadingProfit":
-                    case "unloadingProfit":
-                        props.put("setting" + setting[0], setting[1]);
-                        break;
-                }
-            }
-        } catch(IOException e)
-        {
-            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
-        }
+        props.put("settingLowProfit", String.valueOf(Settings.lowProfitBorder));
+        props.put("settingHighProfit", String.valueOf(Settings.highProfitBorder));
+        props.put("settingDataAge", String.valueOf(Settings.maxDataAge));
+        props.put("settingInaraDelay", String.valueOf(Settings.inaraDelay));
+        props.put("settingDetailedResults", String.valueOf(Settings.detailedResults));
+        props.put("settingShipCargoSpace", String.valueOf(Settings.shipCargoSpace));
+        props.put("settingLoadingProfit", String.valueOf(Settings.loadingTonProfit));
+        props.put("settingUnloadingProfit", String.valueOf(Settings.unloadingTonProfit));
+        props.put("settingCarrierName", Settings.carrierName);
     }
     private static void addFiltersToMap(Map<String, String> props)
     {
-        try
-        {
-            List<String> fileContent = new ArrayList<>(Files.readAllLines(settings.toPath(), StandardCharsets.UTF_8));
-
-            for(String line : fileContent)
-            {
-                String[] setting = line.split("=");
-                if(setting.length < 2) continue;
-
-                switch(setting[0])
-                {
-                    case "quantity":
-                    case "carrier":
-                    case "surface":
-                    case "pad":
-                    case "demand":
-                    case "odyssey":
-                    case "blacklist":
-                    case "average":
-                        props.put("filter" + setting[0], setting[1]);
-                        break;
-                }
-            }
-        } catch(IOException e)
-        {
-            Logger.log("Could not read the content of the settings file", LogName.WARNING, e);
-        }
+        props.put("filterQuantity", String.valueOf(RegistryWrapper.getInt("quantity", 10000)));
+        props.put("filterCarrier", String.valueOf(RegistryWrapper.getBool("carrier", false)));
+        props.put("filterSurface", String.valueOf(RegistryWrapper.getBool("surface", false)));
+        props.put("filterPad", String.valueOf(RegistryWrapper.getBool("pad", false)));
+        props.put("filterDemand", String.valueOf(RegistryWrapper.getBool("demand", true)));
+        props.put("filterOdyssey", String.valueOf(RegistryWrapper.getBool("odyssey", false)));
+        props.put("filterBlacklist", String.valueOf(RegistryWrapper.getBool("blacklist", true)));
+        props.put("filterAverage", String.valueOf(RegistryWrapper.getInt("average", 2000)));
     }
 
     public enum VersionType

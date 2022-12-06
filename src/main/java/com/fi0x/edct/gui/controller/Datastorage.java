@@ -55,12 +55,12 @@ public class Datastorage
     {
         StringBuilder info;
         info = new StringBuilder();
-        info.append(String.format("%9s", DBHandler.countSystemEntries())).append(" \tStored Systems\n");
-        info.append(String.format("%9s", DBHandler.countDistanceEntries())).append(" \tStored System-Distances\n");
-        info.append(String.format("%9s", DBHandler.countStationEntries())).append(" \tStored Stations\n");
-        info.append(String.format("%9s", DBHandler.countCommodityEntries())).append(" \tStored Commodities\n");
-        info.append(String.format("%9s", DBHandler.countExportStationEntries())).append(" \tStored Export Prices\n");
-        info.append(String.format("%9s", DBHandler.countImportStationEntries())).append(" \tStored Import Prices");
+        info.append("Stored Systems\t\t").append(DBHandler.countSystemEntries());
+        info.append("\nStored Distances\t\t").append(DBHandler.countDistanceEntries());
+        info.append("\nStored Stations\t\t").append(DBHandler.countStationEntries());
+        info.append("\nStored Commodities\t").append(DBHandler.countCommodityEntries());
+        info.append("\nStored Export Prices\t").append(DBHandler.countExportStationEntries());
+        info.append("\nStored Import Prices\t").append(DBHandler.countImportStationEntries());
         Alert alertDataStats = new CustomAlert(Alert.AlertType.INFORMATION, info.toString(), ButtonType.CLOSE);
         alertDataStats.setHeaderText("Information about your local Database");
         alertDataStats.showAndWait();
