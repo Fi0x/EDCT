@@ -42,7 +42,6 @@ public class InaraStation
 
         if(stationHTML != null)
         {
-            //TODO: Find out why this is not handled correctly
             ArrayList<TRADE> trades = INARACleanup.getCommodityTradesForStation(stationHTML, systemName, stationName);
             for(TRADE t : trades)
             {
