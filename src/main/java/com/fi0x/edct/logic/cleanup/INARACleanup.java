@@ -75,8 +75,7 @@ public class INARACleanup
                 String priceText = Objects.requireNonNull(tradeElements.last()).ownText().replace(",", "");
                 q = quantityText.length() > 0 ? Integer.parseInt(quantityText) : 0;
                 p = priceText.length() > 0 ? Integer.parseInt(priceText) : 0;
-            }
-            else
+            } else
                 Logger.log("Trade elements for commodity " + DBHandler.getCommodityNameByID(commodityID) + " are not 2 but: " + tradeElements.size() + " in entry: " + entry, LogName.WARNING);
 
             int supply = isExportStation ? q : 0;
@@ -156,29 +155,22 @@ public class INARACleanup
             return results;
 
         String marketTime = HTMLCleanup.getStationAge(inputHTML);
-        long updateTime = 0;
-        if(marketTime != null)
+        long updateTime = System.currentTimeMillis();
+        if(marketTime != null && !marketTime.contains("now"))
         {
-            if(marketTime.contains("now"))
+            updateTime = Long.parseLong(marketTime.split(" ")[0]);
+            switch(marketTime.split(" ")[1])
             {
-                updateTime = System.currentTimeMillis();
+                case "days":
+                    updateTime *= 24;
+                case "hours":
+                    updateTime *= 60;
+                case "minutes":
+                    updateTime *= 60;
+                default:
+                    updateTime *= 1000;
             }
-            else
-            {
-                updateTime = Long.parseLong(marketTime.split(" ")[0]);
-                switch(marketTime.split(" ")[1])
-                {
-                    case "days":
-                        updateTime *= 24;
-                    case "hours":
-                        updateTime *= 60;
-                    case "minutes":
-                        updateTime *= 60;
-                    default:
-                        updateTime *= 1000;
-                }
-                updateTime = System.currentTimeMillis() - updateTime;
-            }
+            updateTime = System.currentTimeMillis() - updateTime;
         }
 
         for(Element commodity : stationCommodities)
