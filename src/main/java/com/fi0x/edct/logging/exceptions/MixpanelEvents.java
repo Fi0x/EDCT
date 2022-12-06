@@ -10,5 +10,7 @@ public enum MixpanelEvents
     FILTERS_CHANGE,
     BUTTON_CLICKED,
     TRADES_LOADED,
+    STATION_RELOADED,
+    UPDATER_LOADED,
     FEEDBACK
 }

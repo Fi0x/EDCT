@@ -27,6 +27,7 @@ public class TradeReloader implements Runnable
     public void run()
     {
         Logger.log("Trade Reloader Thread started", LogName.VERBOSE);
+        long time = System.currentTimeMillis();
         updatePrices();
 
         long oldestFileAge = DBHandler.getOldestUpdateAge();
@@ -39,7 +40,7 @@ public class TradeReloader implements Runnable
         MainWindow.getInstance().interactionController.storageController.btnStart.setVisible(true);
         MainWindow.getInstance().interactionController.storageController.lblReloadStatus.setVisible(false);
         Logger.log("Trade Reloader Thread finished", LogName.VERBOSE);
-        MixpanelHandler.addMessage(MixpanelEvents.TRADES_LOADED.name(), null);
+        MixpanelHandler.addMessage(MixpanelEvents.TRADES_LOADED.name(), new HashMap<>(){{put("time", String.valueOf(System.currentTimeMillis() - time));}});
     }
 
     private void updatePrices()

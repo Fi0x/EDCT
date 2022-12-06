@@ -298,8 +298,6 @@ public class DBHandler
 
     public static ArrayList<TRADE> getTradeInformation(int commodityID, boolean isSelling)
     {
-        long time = System.currentTimeMillis();
-
         ArrayList<TRADE> stationList = new ArrayList<>();
 
         //TODO: Make this request MUCH faster (ORDER BY is very slow)
@@ -311,8 +309,6 @@ public class DBHandler
                 "ORDER BY " + (isSelling ? "SellPrice" : "BuyPrice DESC"));
         if(trades == null)
             return stationList;
-        System.out.println("Query results received from DB after " + (System.currentTimeMillis() - time) + " milliseconds");
-        time = System.currentTimeMillis();
 
         try
         {
@@ -340,7 +336,6 @@ public class DBHandler
             Logger.log("Could not get the buy or sell prices for a commodity", LogName.WARNING, e);
         }
 
-        System.out.println("Added all trades to list after " + (System.currentTimeMillis() - time) + " milliseconds");
         return stationList;
     }
 

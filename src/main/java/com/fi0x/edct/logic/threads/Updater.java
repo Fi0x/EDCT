@@ -6,13 +6,16 @@ import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.gui.visual.MainWindow;
 import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logging.exceptions.HtmlConnectionException;
+import com.fi0x.edct.logging.exceptions.MixpanelEvents;
 import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.websites.EDDB;
 import com.fi0x.edct.logic.websites.InaraCommodity;
 import io.fi0x.javalogger.logging.Logger;
+import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.application.Platform;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Updater implements Runnable
 {
@@ -20,6 +23,8 @@ public class Updater implements Runnable
     public void run()
     {
         Logger.log("Updater Thread started", LogName.INFO);
+        long time = System.currentTimeMillis();
+
         try
         {
             while(!InaraCommodity.updateCommodityIDs())
@@ -48,6 +53,8 @@ public class Updater implements Runnable
         DBHandler.removeOldEntries();
 
         if(loadMissingIDs()) return;
+
+        MixpanelHandler.addMessage(MixpanelEvents.UPDATER_LOADED.name(), new HashMap<>(){{put("time", String.valueOf(System.currentTimeMillis() - time));}});
 
         Logger.log("All Commodities loaded", LogName.VERBOSE);
         Platform.runLater(() ->

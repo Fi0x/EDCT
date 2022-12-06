@@ -153,9 +153,11 @@ public class Station implements Initializable
     {
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "reload-station-data");}});
 
+        long time = System.currentTimeMillis();
         TRADE currentTrade = isImportStation ? resultsController.getCurrentImportStation() : resultsController.getCurrentExportStation();
         InaraStation.updateSingleStationTrades(stationName, stationSystem, currentTrade);
         resultsController.displayResults();
+        MixpanelHandler.addMessage(MixpanelEvents.STATION_RELOADED.name(), new HashMap<>(){{put("time", String.valueOf(System.currentTimeMillis() - time));}});
     }
     @FXML
     private void addToBlacklist()
