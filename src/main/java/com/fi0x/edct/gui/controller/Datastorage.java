@@ -53,6 +53,8 @@ public class Datastorage
     @FXML
     private void dataAgeClicked()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "database-details");}});
+
         StringBuilder info;
         info = new StringBuilder();
         info.append("Stored Systems\t\t").append(DBHandler.countSystemEntries());

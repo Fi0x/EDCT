@@ -196,11 +196,13 @@ public class Station implements Initializable
     @FXML
     private void copySystemToClipboard()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "system-to-clipboard");}});
         ExternalProgram.copyToClipboard(stationSystem);
     }
     @FXML
     private void openStationOnInara()
     {
+        MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "open-inara-for-station");}});
         ExternalProgram.openWebsite(ENDPOINTS.StationInfo.url + inaraID);
     }
 
