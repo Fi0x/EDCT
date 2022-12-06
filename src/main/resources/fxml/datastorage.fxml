@@ -11,7 +11,7 @@
         <RowConstraints vgrow="ALWAYS"/>
         <RowConstraints/>
     </rowConstraints>
-    <Label fx:id="lblDataAge" text="Local data age: ---" GridPane.rowIndex="0" GridPane.halignment="CENTER">
+    <Label fx:id="lblDataAge" id="clickableLbl" text="Local data age: ---" onMouseClicked="#dataAgeClicked" GridPane.rowIndex="0" GridPane.halignment="CENTER">
         <tooltip>
             <Tooltip text="The age of the least recently updated database entry"/>
         </tooltip>

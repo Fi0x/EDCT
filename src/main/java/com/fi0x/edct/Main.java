@@ -39,7 +39,7 @@ public class Main
     public static File reddit;
     public static File discord;
     //TODO: Update version information
-    public static final String version = "2.1.1.0";//All.GUI.Logic.Hotfix
+    public static final String version = "2.1.1.1";//All.GUI.Logic.Hotfix
     public static final VersionType versionType = VersionType.INSTALLER;
 
     public static void main(String[] args)

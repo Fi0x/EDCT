@@ -1,14 +1,14 @@
 package com.fi0x.edct.gui.controller;
 
 import com.fi0x.edct.Main;
+import com.fi0x.edct.gui.visual.CustomAlert;
 import com.fi0x.edct.logging.exceptions.MixpanelEvents;
+import com.fi0x.edct.logic.database.DBHandler;
 import com.fi0x.edct.logic.helper.ConvertToString;
 import com.fi0x.edct.logic.threads.TradeReloader;
 import io.fi0x.javalogger.mixpanel.MixpanelHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -49,6 +49,21 @@ public class Datastorage
             Main.reloader.interrupt();
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();
+    }
+    @FXML
+    private void dataAgeClicked()
+    {
+        StringBuilder info;
+        info = new StringBuilder();
+        info.append(String.format("%9s", DBHandler.countSystemEntries())).append(" \tStored Systems\n");
+        info.append(String.format("%9s", DBHandler.countDistanceEntries())).append(" \tStored System-Distances\n");
+        info.append(String.format("%9s", DBHandler.countStationEntries())).append(" \tStored Stations\n");
+        info.append(String.format("%9s", DBHandler.countCommodityEntries())).append(" \tStored Commodities\n");
+        info.append(String.format("%9s", DBHandler.countExportStationEntries())).append(" \tStored Export Prices\n");
+        info.append(String.format("%9s", DBHandler.countImportStationEntries())).append(" \tStored Import Prices");
+        Alert alertDataStats = new CustomAlert(Alert.AlertType.INFORMATION, info.toString(), ButtonType.CLOSE);
+        alertDataStats.setHeaderText("Information about your local Database");
+        alertDataStats.showAndWait();
     }
 
     public void setDataAge(long age)
