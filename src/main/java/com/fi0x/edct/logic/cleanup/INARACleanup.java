@@ -172,6 +172,8 @@ public class INARACleanup
             }
             updateTime = System.currentTimeMillis() - updateTime;
         }
+        else
+            Logger.log("Did not receive a maket update time from station", LogName.WARNING);
 
         for(Element commodity : stationCommodities)
         {

@@ -80,18 +80,10 @@ public class HTMLCleanup
             return null;
         }
 
-        Elements divs = Objects.requireNonNull(gridcolumns.first()).getElementsByTag("div");
-        if(divs.size() == 0)
-        {
-            Logger.log("Could not get stationAge from html data. Did not contain 'div': " + gridcolumns, LogName.WARNING);
-            return null;
-        }
-
-        //TODO: Fix this to no longer return null
-        Elements itemPairContainers = Objects.requireNonNull(divs.last()).getElementsByClass("itempaircontainer");
+        Elements itemPairContainers = Objects.requireNonNull(gridcolumns.first()).getElementsByClass("itempaircontainer");
         if(itemPairContainers.size() == 0)
         {
-            Logger.log("Could not get stationAge from html data. Did not contain 'itempaircontainer': " + divs, LogName.WARNING);
+            Logger.log("Could not get stationAge from html data. Did not contain 'itempaircontainer': " + gridcolumns, LogName.WARNING);
             return null;
         }
 
@@ -102,6 +94,8 @@ public class HTMLCleanup
 
             Element value = pair.getElementsByClass("itempairvalue").first();
             String[] texts = Objects.requireNonNull(value).ownText().split(" ");
+            if(texts.length == 1)
+                return texts[0];
             return texts[0] + " " + texts[1];
         }
 
