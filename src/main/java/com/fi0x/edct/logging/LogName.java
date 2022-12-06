@@ -8,7 +8,8 @@ public enum LogName
     VERBOSE,
     INFO,
     WARNING,
-    ERROR;
+    ERROR,
+    TIME;
 
     public static LogName getError(int errorCode)
     {

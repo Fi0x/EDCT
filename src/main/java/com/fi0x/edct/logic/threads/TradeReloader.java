@@ -49,7 +49,10 @@ public class TradeReloader implements Runnable
         Filters filters = Filters.getInstance();
         long minAvg = filters == null ? 0 : filters.getFilterSettings().average;
 
-        for(int id : DBHandler.getCommodityIDs(false, minAvg))
+        ArrayList<Integer> ids = DBHandler.getCommodityIDs(false, minAvg);
+        Logger.log("Starting price updates for " + ids.size() + " commodities", LogName.VERBOSE);
+        long time = System.currentTimeMillis();
+        for(int id : ids)
         {
             String commodityName = DBHandler.getCommodityNameByID(id);
 
@@ -59,5 +62,6 @@ public class TradeReloader implements Runnable
             trade = DBHandler.getTradeInformation(id, true);
             INT_CONTROLLER.exportPrices.put(commodityName, trade);
         }
+        Logger.log("Price updates finished after " + (System.currentTimeMillis() - time) + " milliseconds", LogName.TIME);
     }
 }

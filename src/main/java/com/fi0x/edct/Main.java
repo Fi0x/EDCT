@@ -75,6 +75,7 @@ public class Main
         if(eddnHandler != null) eddnHandler.interrupt();
 
         MixpanelHandler.addMessage(MixpanelEvents.SHUTDOWN.name(), getProgramState());
+        MixpanelHandler.sendMessages();
 
         System.exit(0);
     }
@@ -93,6 +94,7 @@ public class Main
         Logger.createNewTemplate(LogName.INFO, LogColor.WHITE_BRIGHT, "", "INF", false, false, false, false, false, "");
         Logger.createNewTemplate(LogName.WARNING, LogColor.get(LogColor.Color.YELLOW, LogColor.Design.BOLD, true), "", "WRN", true, false, true, false, true, "WARNING");
         Logger.createNewTemplate(LogName.ERROR, LogColor.get(LogColor.Color.WHITE, LogColor.Design.BOLD, true), LogColor.RED_BACKGROUND, "ERR", true, false, false, false, true, "ERROR");
+        Logger.createNewTemplate(LogName.TIME, LogColor.CYAN, "", "VER", false, true, true, false, false, "");
     }
     private static void initializeMixpanelSettings(ArrayList<String> arguments)
     {

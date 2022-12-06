@@ -298,18 +298,25 @@ public class DBHandler
 
     public static ArrayList<TRADE> getTradeInformation(int commodityID, boolean isSelling)
     {
+        long time = System.currentTimeMillis();
+
         ArrayList<TRADE> stationList = new ArrayList<>();
 
+        //TODO: Make this request MUCH faster (ORDER BY is very slow)
         ResultSet trades = getQueryResults("SELECT t.*, s.* " +
                 "FROM Trades t " +
                 "INNER JOIN Stations s ON s.SystemName = t.SystemName AND s.StationName = t.StationName " +
                 "WHERE InaraID = " + commodityID + " " +
                 "AND " + (isSelling ? "SellPrice" : "BuyPrice") + " > 0 " +
                 "ORDER BY " + (isSelling ? "SellPrice" : "BuyPrice DESC"));
-        if(trades == null) return stationList;
+        if(trades == null)
+            return stationList;
+        System.out.println("Query results received from DB after " + (System.currentTimeMillis() - time) + " milliseconds");
+        time = System.currentTimeMillis();
 
         try
         {
+            //TODO: Find out why this is sometimes very slow
             while(trades.next())
             {
                 String systemName = trades.getString("SystemName");
@@ -333,6 +340,7 @@ public class DBHandler
             Logger.log("Could not get the buy or sell prices for a commodity", LogName.WARNING, e);
         }
 
+        System.out.println("Added all trades to list after " + (System.currentTimeMillis() - time) + " milliseconds");
         return stationList;
     }
 

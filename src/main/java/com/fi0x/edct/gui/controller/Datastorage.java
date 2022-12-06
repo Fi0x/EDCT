@@ -44,7 +44,8 @@ public class Datastorage
 
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "trade-reloader");}});
 
-        if(Main.reloader != null) Main.reloader.interrupt();
+        if(Main.reloader != null)
+            Main.reloader.interrupt();
         Main.reloader = new Thread(new TradeReloader(interactionController));
         Main.reloader.start();
     }
