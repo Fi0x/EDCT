@@ -461,6 +461,89 @@ public class DBHandler
         return -1;
     }
 
+    public static int countSystemEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(SystemName) " +
+                "FROM Systems");
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.log("Could not count the rows of the Systems table", LogName.WARNING, e);
+        }
+
+        return -1;
+    }
+    public static int countDistanceEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(Distance) " +
+                "FROM Distances");
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.log("Could not count the rows of the Distances table", LogName.WARNING, e);
+        }
+
+        return -1;
+    }
+    public static int countCommodityEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(InaraID) " +
+                "FROM Commodities");
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.log("Could not count the rows of the Commodities table", LogName.WARNING, e);
+        }
+
+        return -1;
+    }
+    public static int countImportStationEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(InaraID) " +
+                "FROM Trades " +
+                "WHERE BuyPrice != " + 0);
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.log("Could not count the rows of the Trades table", LogName.WARNING, e);
+        }
+
+        return -1;
+    }
+    public static int countExportStationEntries()
+    {
+        ResultSet results = getQueryResults("SELECT COUNT(InaraID) " +
+                "FROM Trades " +
+                "WHERE SellPrice != " + 0);
+
+        try
+        {
+            if(results != null && results.next())
+                return results.getInt(1);
+        } catch(SQLException e)
+        {
+            Logger.log("Could not count the rows of the Trades table", LogName.WARNING, e);
+        }
+
+        return -1;
+    }
+
     public static void removeTradeData()
     {
         sendStatement("DELETE FROM Trades");
