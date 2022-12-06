@@ -40,6 +40,7 @@ public class Datastorage
         btnStart.setVisible(false);
         lblReloadStatus.setVisible(true);
         lblReloadStatus.setGraphic(new ImageView(loadingGif));
+        lblReloadStatus.setText("Reloading trade data (0%)");
         lblDataAge.setText("Loading data from storage");
 
         MixpanelHandler.addMessage(MixpanelEvents.BUTTON_CLICKED.name(), new HashMap<>(){{put("buttonName", "trade-reloader");}});
@@ -54,6 +55,10 @@ public class Datastorage
     {
         if(age == -1) return;
         lblDataAge.setText(ConvertToString.ageText(age));
+    }
+    public void setTradeReloaderProgress(float percentage)
+    {
+        lblReloadStatus.setText("Reloading trade data (" + (int) (percentage * 100) + "%)");
     }
 
     public void setUpdateStatus(String status, BACKGROUND_STATUS phase, boolean updateGif)

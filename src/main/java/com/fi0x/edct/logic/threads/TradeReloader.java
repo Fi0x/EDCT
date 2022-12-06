@@ -52,8 +52,9 @@ public class TradeReloader implements Runnable
         ArrayList<Integer> ids = DBHandler.getCommodityIDs(false, minAvg);
         Logger.log("Starting price updates for " + ids.size() + " commodities", LogName.VERBOSE);
         long time = System.currentTimeMillis();
-        for(int id : ids)
+        for(int idx = 0; idx < ids.size(); idx++)
         {
+            int id = ids.get(idx);
             String commodityName = DBHandler.getCommodityNameByID(id);
 
             ArrayList<TRADE> trade = DBHandler.getTradeInformation(id, false);
@@ -61,7 +62,15 @@ public class TradeReloader implements Runnable
 
             trade = DBHandler.getTradeInformation(id, true);
             INT_CONTROLLER.exportPrices.put(commodityName, trade);
+
+            float percentage = (float) idx / ids.size();
+            Platform.runLater(() ->
+            {
+                INT_CONTROLLER.storageController.setTradeReloaderProgress(percentage);
+                MainWindow.getInstance().setUpdateStatus(percentage);
+            });
         }
+        Platform.runLater(() -> MainWindow.getInstance().setUpdateStatus(-1));
         Logger.log("Price updates finished after " + (System.currentTimeMillis() - time) + " milliseconds", LogName.TIME);
     }
 }
