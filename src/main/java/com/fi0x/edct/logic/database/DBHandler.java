@@ -4,6 +4,7 @@ import com.fi0x.edct.Main;
 import com.fi0x.edct.gui.controller.Settings;
 import com.fi0x.edct.logging.LogName;
 import com.fi0x.edct.logic.NameMap;
+import com.fi0x.edct.logic.filesystem.BlacklistHandler;
 import com.fi0x.edct.logic.structures.PADSIZE;
 import com.fi0x.edct.logic.structures.STATION;
 import com.fi0x.edct.logic.structures.STATIONTYPE;
@@ -153,10 +154,10 @@ public class DBHandler
         {
             while(results != null && results.next())
             {
-                int id = results.getInt("InaraID");
-                if(NameMap.isIgnored(id))
+                String name = results.getString("CommodityName");
+                if(BlacklistHandler.getBlacklistedCommodities().contains(name))
                     continue;
-                ids.add(id);
+                ids.add(results.getInt("InaraID"));
             }
         } catch(Exception e)
         {

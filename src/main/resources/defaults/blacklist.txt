@@ -1,6 +1,7 @@
-This blacklist is used to store system-names that should not appear in the trade results.
-If you want to add a system, just put it's name inside curly brackets {}.
-Each system needs to be in a new row. See examples below:
+This blacklist is used to store system-names and commodities that should not appear in the trade results.
+If you want to add a system, just put its name inside curly brackets {}.
+To add a commodity, add its name inside normal brackets ().
+Each system and commodity needs to be in a new row. See examples below:
 
 {Achenar}
 {Alioth}
@@ -29,3 +30,6 @@ Each system needs to be in a new row. See examples below:
 {Tiliala}
 {van Maanen's Star}
 {Vega}
+(Rockforth Fertiliser)
+(Hafnium 178)
+(AI Relics)

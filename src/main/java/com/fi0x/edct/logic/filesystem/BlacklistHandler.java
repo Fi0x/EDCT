@@ -24,8 +24,10 @@ public class BlacklistHandler
 
             for(String line : fileContent)
             {
-                if(line.length() == 0) continue;
-                if(line.charAt(0) != '{' || line.charAt(line.length() - 1) != '}') continue;
+                if(line.length() == 0)
+                    continue;
+                if(line.charAt(0) != '{' || line.charAt(line.length() - 1) != '}')
+                    continue;
 
                 blacklistedStations.add(line.substring(1, line.length() - 1));
             }
@@ -35,6 +37,29 @@ public class BlacklistHandler
         }
 
         return blacklistedStations;
+    }
+    public static ArrayList<String> getBlacklistedCommodities()
+    {
+        ArrayList<String> blacklistedCommodities = new ArrayList<>();
+        try
+        {
+            List<String> fileContent = new ArrayList<>(Files.readAllLines(Main.blacklist.toPath(), StandardCharsets.UTF_8));
+
+            for(String line : fileContent)
+            {
+                if(line.length() == 0)
+                    continue;
+                if(line.charAt(0) != '(' || line.charAt(line.length() - 1) != ')')
+                    continue;
+
+                blacklistedCommodities.add(line.substring(1, line.length() - 1));
+            }
+        } catch(IOException e)
+        {
+            Logger.log("Could not read the blacklist", LogName.WARNING, e, 992);
+        }
+
+        return blacklistedCommodities;
     }
 
     public static void addSystemToBlacklist(String systemName)

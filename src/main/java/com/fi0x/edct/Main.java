@@ -115,7 +115,7 @@ public class Main
         createFileIfNotExists(logFolder, false);
         io.fi0x.javalogger.logging.Logger.getInstance().setLogFolder(logFolder);
 
-        blacklist = new File(localStorage.getPath() + File.separator + "blacklist.txt");
+        blacklist = new File(localStorage.getPath() + File.separator + "blacklist_v2.txt");
         createFileIfNotExists(blacklist, true);
         BlacklistHandler.fillBlacklistIfEmpty();
 

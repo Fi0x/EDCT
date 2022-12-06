@@ -237,24 +237,6 @@ public class NameMap
             add("unocuppiedescapepod");
         }
     };
-    private static final ArrayList<Integer> IGNORED_IDS = new ArrayList<>()
-    {
-        {
-            add(10161);
-            add(54);
-            add(124);
-            add(10234);
-            add(91);
-            add(186);
-            add(10226);
-            add(10167);
-            add(126);
-            add(89);
-            add(10220);
-            add(135);
-            add(177);
-        }
-    };
 
     public static String convertDBToEDDN(String localName)
     {
@@ -269,9 +251,5 @@ public class NameMap
     public static boolean isIgnored(String eddnName)
     {
         return IGNORED.contains(eddnName);
-    }
-    public static boolean isIgnored(int id)
-    {
-        return IGNORED_IDS.contains(id);
     }
 }
