@@ -2,6 +2,7 @@ package com.fi0x.edct.logic.filesystem;
 
 import com.fi0x.edct.Main;
 import com.fi0x.edct.logging.LogName;
+import com.fi0x.edct.logic.database.DBHandler;
 import io.fi0x.javalogger.logging.Logger;
 
 import java.io.BufferedReader;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 public class BlacklistHandler
 {
+    private static ArrayList<Integer> BLACKLISTED_IDS = null;
     public static ArrayList<String> getBlacklistSystems()
     {
         ArrayList<String> blacklistedStations = new ArrayList<>();
@@ -38,7 +40,14 @@ public class BlacklistHandler
 
         return blacklistedStations;
     }
-    public static ArrayList<String> getBlacklistedCommodities()
+    public static boolean isIDBlacklisted(int id)
+    {
+        if(BLACKLISTED_IDS == null)
+            generateBlacklistedCommodityIDs();
+        return BLACKLISTED_IDS.contains(id);
+    }
+
+    private static void generateBlacklistedCommodityIDs()
     {
         ArrayList<String> blacklistedCommodities = new ArrayList<>();
         try
@@ -59,7 +68,9 @@ public class BlacklistHandler
             Logger.log("Could not read the blacklist", LogName.WARNING, e, 992);
         }
 
-        return blacklistedCommodities;
+        BLACKLISTED_IDS = new ArrayList<>();
+        for(String commodity : blacklistedCommodities)
+            BLACKLISTED_IDS.add(DBHandler.getCommodityIDByName(commodity));
     }
 
     public static void addSystemToBlacklist(String systemName)

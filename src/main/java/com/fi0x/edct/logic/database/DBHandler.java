@@ -154,10 +154,10 @@ public class DBHandler
         {
             while(results != null && results.next())
             {
-                String name = results.getString("CommodityName");
-                if(BlacklistHandler.getBlacklistedCommodities().contains(name))
+                int id = results.getInt("InaraID");
+                if(BlacklistHandler.isIDBlacklisted(id))
                     continue;
-                ids.add(results.getInt("InaraID"));
+                ids.add(id);
             }
         } catch(Exception e)
         {
