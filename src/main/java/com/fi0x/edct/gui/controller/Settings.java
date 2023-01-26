@@ -291,7 +291,7 @@ public class Settings implements Initializable
         lowProfitBorder = Math.max(lowProfitBorder, 0);
         highProfitBorder = Math.max(highProfitBorder, 0);
         maxDataAge = Math.max(maxDataAge, 0);
-        inaraDelay = Math.max(inaraDelay, 5000);
+        inaraDelay = Math.max(inaraDelay, 15000);
         if(shipCargoSpace < 0)
             shipCargoSpace = 0;
     }

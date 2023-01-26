@@ -29,17 +29,19 @@ public class RequestHandler
     }
     public static String sendHTTPRequest(String endpoint, String requestType, Map<String, String> parameters, boolean ignore429) throws IOException, InterruptedException, HtmlConnectionException
     {
-        if(!canRequest(ignore429)) return null;
+        if(!canRequest(ignore429))
+            return null;
 
         endpoint += getParamsString(parameters);
         URL url = cleanUpUrl(endpoint);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod(requestType);
+        con.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36");
 
         con.setConnectTimeout(5000);
         con.setReadTimeout(5000);
 
-        int status = 0;
+        int status;
         try
         {
             status = con.getResponseCode();
@@ -67,9 +69,9 @@ public class RequestHandler
             in.close();
         }
         else if(status == 429)
-            Logger.log("Received a 429 status code from a website", LogName.getError(492), null, 429);
+            Logger.log("Received a 429 status code from a website\n\tUrl was: " + url, LogName.getError(429), null, 429);
         else if(status != 0)
-            Logger.log("Received a bad HTTP response: " + status, LogName.WARNING);
+            Logger.log("Received a bad HTTP response: " + status + "\n\tFor url: " + url, LogName.WARNING);
 
         con.disconnect();
 
