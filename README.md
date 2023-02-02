@@ -1,3 +1,6 @@
+# ⚠️ WARNING ⚠️
+The tool currently has some issues during its initialization phase, which can cause the **inara-website to get blocked for a while.**
+
 # Elite: Dangerous Carrier Trader
 **EDCT is a tool for large quantity trades in Elite: Dangerous.
 It is very useful for fleet carrier owners to find profitable trades.**
