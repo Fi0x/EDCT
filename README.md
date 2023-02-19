@@ -1,5 +1,6 @@
-# ⚠️ WARNING ⚠️
-The tool currently has some issues during its initialization phase, which can cause the **inara-website to get blocked for a while.**
+# ⚠️ WARNING - Don't use the tool until 3.0.0.0 is released ⚠️
+**The tool uses outdated data-collection-mechanics that currently won't work!**
+There are some issues during its initialization phase, which can cause the **inara-website to get blocked for a while.**
 
 # Elite: Dangerous Carrier Trader
 **EDCT is a tool for large quantity trades in Elite: Dangerous.
