@@ -1,4 +1,4 @@
-# ⚠️ WARNING - Don't use the tool until 3.0.0.0 is released ⚠️
+# ⚠️ WARNING - Development of this tool is discontinued ⚠️
 **The tool uses outdated data-collection-mechanics that currently won't work!**
 There are some issues during its initialization phase, which can cause the **inara-website to get blocked for a while.**
 
